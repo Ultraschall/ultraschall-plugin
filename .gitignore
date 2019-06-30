@@ -2,8 +2,10 @@
 .DS_Store
 
 # linux specific stuff
+_tools/
 
 # win32 specific stuff
 
 # common build directory.
 _build/
+
