@@ -1,0 +1,9 @@
+# macos specific stuff
+.DS_Store
+
+# linux specific stuff
+
+# win32 specific stuff
+
+# common build directory.
+_build/
