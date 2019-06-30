@@ -25,24 +25,24 @@
 ################################################################################
 
 if (Get-Command "cmake.exe" -ErrorAction SilentlyContinue) {
-    $BuildDirectory = "./build"
-    if (Test-Path -PathType Container $BuildDirectory) {
-        Remove-Item -Force -Recurse $BuildDirectory
+  $BuildDirectory = "./_build"
+  if (Test-Path -PathType Container $BuildDirectory) {
+    Remove-Item -Force -Recurse $BuildDirectory
+  }
+  New-Item -ItemType Directory -Force -Path $BuildDirectory | Out-Null
+  Push-Location $BuildDirectory
+  & cmake.exe -G "Visual Studio 16 2019" -D CMAKE_BUILD_TYPE=Debug -A x64 -T host=x64 ../
+  if ($LastExitCode -eq 0) {
+    & cmake.exe --build . --target reaper_ultraschall --config Debug -j
+    if ($LastExitCode -ne 0) {
+      Write-Host -ForegroundColor Red  "The cmake build step failed, status = " $LastExitCode
     }
-    New-Item -ItemType Directory -Force -Path $BuildDirectory | Out-Null
-    Push-Location $BuildDirectory
-    & cmake.exe -G "Visual Studio 16 2019" -D CMAKE_BUILD_TYPE=Debug -A x64 -T host=x64 ../
-    if ($LASTEXITCODE -eq 0) {
-        & cmake.exe --build . --target reaper_ultraschall --config Debug -j
-        if ($LASTEXITCODE -ne 0) {
-            Write-Host -ForegroundColor Red  "The cmake build step failed, status = " $LASTEXITCODE
-        }
-    }
-    else {
-        Write-Host -ForegroundColor Red  "The cmake configure step failed, status = " $LASTEXITCODE
-    }
-    Pop-Location
+  }
+  else {
+    Write-Host -ForegroundColor Red  "The cmake configure step failed, status = " $LastExitCode
+  }
+  Pop-Location
 }
 else {
-    Write-Host -ForegroundColor Red  "cmake not found."
+  Write-Host -ForegroundColor Red  "cmake not found."
 }
