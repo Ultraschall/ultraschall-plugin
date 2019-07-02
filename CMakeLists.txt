@@ -54,6 +54,8 @@ elseif(UNIX)
   endif()
 endif()
 
+include(cmake/GlobalArgs.cmake)
+
 message(STATUS "ULTRASCHALL_TARGET_SYSTEM = " ${ULTRASCHALL_TARGET_SYSTEM})
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${ULTRASCHALL_TARGET_SYSTEM}.cmake)
 
