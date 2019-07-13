@@ -24,47 +24,119 @@
 #
 ################################################################################
 
-$action = ""
-if ($args.Count -gt 0) {
-  $action = $args[0]
-}
-if (Get-Command "cmake.exe" -ErrorAction SilentlyContinue) {
-  $BuildDirectory = "./_build"
-  if (Test-Path -PathType Container $BuildDirectory) {
-    if ($action -eq "--help") {
-      Write-Host "Usage: build.ps1 [--clean|--rebuild]"
-    }
-    elseif ($action -eq "--clean") {
-      Push-Location $BuildDirectory
-      if (Test-Path x64) {
-        Remove-Item -Force -Recurse x64
-      }
-      if (Test-Path reaper_ultraschall) {
-        Remove-Item -Force -Recurse reaper_ultraschall
-      }
-      Pop-Location
-    }
-    elseif ($action -eq "--rebuild") {
-      Push-Location $BuildDirectory
-      & cmake.exe --build . --clean-first --target reaper_ultraschall --config Debug -j
-      if ($LastExitCode -ne 0) {
-        Write-Host -ForegroundColor Red  "The cmake build step failed, status = " $LastExitCode
-      }
-      Pop-Location
-    }
-    else {
-      Push-Location $BuildDirectory
-      & cmake.exe --build . --target reaper_ultraschall --config Debug -j
-      if ($LastExitCode -ne 0) {
-        Write-Host -ForegroundColor Red  "The cmake build step failed, status = " $LastExitCode
-      }
-      Pop-Location
-    }
+. "./scripts/BuildTools.ps1"
+
+$ToolsDirectory = "./_tools"
+$BuildDirectory = "./_build"
+$CMakeExtraArgs = ""
+
+If ($args.Count -gt 0) {
+  If ($args[0] -eq "--help") {
+    Write-Host "Usage: build.ps1 [ --bootstrap | --rebuild | --clean | --clean-all ]"
+    Return
   }
-  else {
-    Write-Host -ForegroundColor Red  "The build environment hasn't been setup correctly. Run the bootstrap script instead."
+  ElseIf ($args[0] -eq "--bootstrap") {
+    Remove-Directory $BuildDirectory
+    Remove-Directory $ToolsDirectory
+    . "bootstrap.ps1"
+    Return
+  }
+  ElseIf ($args[0] -eq "--clean-all") {
+    Remove-Directory $BuildDirectory
+    Remove-Directory $ToolsDirectory
+    Return
+  }
+  ElseIf ($args[0] -eq "--clean") {
+    Remove-Directory $BuildDirectory
+    Return
+  }
+  ElseIf ($args[0] -eq "--rebuild") {
+    $CMakeExtraArgs = "--clean-first"
   }
 }
-else {
-  Write-Host -ForegroundColor Red  "cmake not found."
+
+$LocalCMakeDirectory = $ToolsDirectory + "/cmake"
+$RequiredCMakeVersion = "3.12.0"
+$CMakeFound = $False
+
+Write-Host Looking for CMake $RequiredCMakeVersion"."
+Write-Host Checking system install...
+If ($CMakeFound -eq $False) {
+  $CMakeInstallPath = "cmake.exe"
+  If (Get-Command $CMakeInstallPath -ErrorAction SilentlyContinue) {
+    $CurrentCMakeVersion = Find-CMakeVersion $CMakeInstallPath
+    Write-Host Found CMake version $CurrentCMakeVersion"."
+    $CompareResult = Compare-Versions $CurrentCMakeVersion $RequiredCMakeVersion
+    If ($CompareResult -ne 2) {
+      $CMakeFound = $True
+    }
+  }
 }
+
+If ($CMakeFound -eq $False) {
+  Write-Host CMake $RequiredCMakeVersion does not seem to be installed on this system.
+  Write-Host Checking local install...
+  $CMakeInstallPath = $LocalCMakeDirectory + "/bin/cmake"
+  If (Get-Command $CMakeInstallPath -ErrorAction SilentlyContinue) {
+    $CurrentCMakeVersion = Find-CMakeVersion $CMakeInstallPath
+    Write-Host Found CMake version $CurrentCMakeVersion"."
+    $CompareResult = Compare-Versions $CurrentCMakeVersion $RequiredCMakeVersion
+    If ($CompareResult -ne 2) {
+      $CMakeFound = $True
+    }
+  }
+}
+
+If ($CMakeFound -eq $False) {
+  Write-Host -ForegroundColor Red Failed to find the required CMake version. Only 3.12.0 and higher is supported.
+  Return
+}
+
+$VisualStudioFound = $False
+$CMakeGenerator = "<unknown>"
+
+Write-Host "Looking for Visual Studio 2019 or 2017..."
+If ($VisualStudioFound -eq $False) {
+  $VisualStudioVersion = Find-VisualStudioVersion
+  Write-Host Found Visual Studio $VisualStudioVersion"."
+  If ($VisualStudioVersion -eq "2019") {
+    $CMakeGenerator = "Visual Studio 16 2019"
+    $VisualStudioFound = $True
+  }
+  ElseIf ($VisualStudioVersion -eq "2017") {
+    $CMakeGenerator = "Visual Studio 15 2017"
+    $VisualStudioFound = $True
+  }
+}
+
+If ($VisualStudioFound -eq $False) {
+  Write-Host -ForegroundColor Red "Failed to find the required Visual Studio version. Only '2017' and '2019' are supported."
+  Return
+}
+
+If ((Test-Path -PathType Container $BuildDirectory) -eq $False) {
+  New-Item -ItemType Directory $BuildDirectory | Out-Null
+}
+
+Write-Host Entering build directory"..."
+Push-Location $BuildDirectory | Out-Null
+
+Write-Host Configuring projects using $CMakeGenerator"..."
+& cmake -G"$CMakeGenerator" -DCMAKE_BUILD_TYPE=Debug ../
+If ($LastExitCode -eq 0) {
+  Write-Host Done"."
+  Write-Host Building projects using $CMakeGenerator"..."
+  &cmake --build . $CMakeExtraArgs --target reaper_ultraschall --config Debug -j
+  If ($LastExitCode -eq 0) {
+    Write-Host Done"."
+  }
+  Else {
+    Write-Host -ForegroundColor Red Failed to build projects"."
+  }
+}
+Else {
+  Write-Host -ForegroundColor Red Failed to configure projects"."
+}
+
+Write-Host Leaving build directory"..."
+Pop-Location | Out-Null

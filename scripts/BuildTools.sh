@@ -57,14 +57,7 @@ function CompareVersions () {
   return 0
 }
 
-function ResetBuild () {
-  if [ -d $1 ]; then
-    rm -rf $1
-  fi
-  return 0
-}
-
-function ResetTools () {
+function RemoveDirectory () {
   if [ -d $1 ]; then
     rm -rf $1
   fi

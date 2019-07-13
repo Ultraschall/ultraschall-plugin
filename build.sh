@@ -26,24 +26,26 @@
 #
 ################################################################################
 
-source cmake/BuildTools.sh
+source scripts/BuildTools.sh
 
 TOOLS_DIRECTORY=`pwd`/_tools
 BUILD_DIRECTORY=`pwd`/_build
-
 CMAKE_EXTRA_ARGS=""
 
-if [ "$1" = "--bootstrap" ]; then
-  ResetBuild $BUILD_DIRECTORY
-  ResetTools $TOOLS_DIRECTORY
+if [ "$1" = "--help" ] then
+  echo "Usage: build.sh [ --bootstrap | --rebuild | --clean | --clean-all ]"
+  exit 0
+elif [ "$1" = "--bootstrap" ]; then
+  RemoveDirectory $BUILD_DIRECTORY
+  RemoveDirectory $TOOLS_DIRECTORY
   source ./bootstrap.sh
   exit 0
 elif [ "$1" = "--clean-all" ]; then
-  ResetBuild $BUILD_DIRECTORY
-  ResetTools $TOOLS_DIRECTORY
+  RemoveDirectory $BUILD_DIRECTORY
+  RemoveDirectory $TOOLS_DIRECTORY
   exit 0
 elif [ "$1" = "--clean" ]; then
-  ResetBuild $BUILD_DIRECTORY
+  RemoveDirectory $BUILD_DIRECTORY
   exit 0
 elif [ "$1" == "--rebuild" ]; then
   CMAKE_EXTRA_ARGS="--clean-first"
