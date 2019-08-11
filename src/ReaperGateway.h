@@ -41,6 +41,8 @@ public:
     static const size_t MAX_REAPER_STRING_BUFFER_SIZE = 4096;
     static const double INVALID_POSITION;
 
+    static intptr_t View();
+
     static uint32_t EditMarkerColor();
 
     static UnicodeString ApplicationVersion();

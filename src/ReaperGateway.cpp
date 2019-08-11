@@ -33,6 +33,11 @@ namespace ultraschall { namespace reaper {
 
 const double ReaperGateway::INVALID_POSITION = -1;
 
+intptr_t ReaperGateway::View()
+{
+    return reinterpret_cast<intptr_t>(reaper_api::GetMainHwnd());
+}
+
 uint32_t ReaperGateway::EditMarkerColor()
 {
 #ifdef _WIN32
