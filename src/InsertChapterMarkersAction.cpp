@@ -111,7 +111,7 @@ bool InsertChapterMarkersAction::ConfigureTargets()
                 {
                     UnicodeStringStream os;
                     os << "Line " << (i + 1) << ": Invalid timestamp in '" << lines[i] << "'.";
-                    supervisor.RegisterWarning(os.str());
+                    supervisor.RegisterError(os.str());
                 }
             }
             else
