@@ -45,14 +45,27 @@ Application& Application::Instance()
     return self;
 }
 
-ServiceStatus Application::Start()
+ServiceStatus Application::Start(intptr_t handle)
 {
-    ServiceStatus status = SERVICE_FAILURE;
-    if(HealthCheck() == true)
+    ServiceStatus                         status = SERVICE_FAILURE;
+    std::lock_guard<std::recursive_mutex> cs(lock_);
+    if(handle_ == 0)
     {
-        UpdateBillOfMaterials();
-        UpdateCheck();
-        status = SERVICE_SUCCESS;
+        handle_ = handle;
+        if(HealthCheck() == true)
+        {
+            UpdateBillOfMaterials();
+            UpdateCheck();
+
+            // TODO Remove if message display works
+            UIMessageSupervisor supervisor;
+            supervisor.RegisterFatalError("FATAL_ERROR");
+            supervisor.RegisterError("ERROR");
+            supervisor.RegisterWarning("WARNING");
+            supervisor.RegisterSuccess("SUCCESS");
+
+            status = SERVICE_SUCCESS;
+        }
     }
 
     return status;
@@ -85,7 +98,7 @@ bool Application::OnCustomAction(const int32_t id)
 
 bool Application::HealthCheck()
 {
-    bool ok = true;
+    bool                ok = true;
     UIMessageSupervisor supervisor;
 
     const std::string information1("\
@@ -133,11 +146,12 @@ file that must be removed in order to use the Ultraschall REAPER Extension. Plea
     if((true == ok) && (VersionHandler::SWSVersionCheck() == false))
     {
         supervisor.RegisterError("The installation of the Ultraschall REAPER extension has been corrupted.");
-        supervisor.RegisterError("Please reinstall the Ultraschall REAPER extension using the original or an updated installer.");
+        supervisor.RegisterError(
+            "Please reinstall the Ultraschall REAPER extension using the original or an updated installer.");
         ok = false;
     }
 
-	if(false == ok)
+    if(false == ok)
     {
         supervisor.RegisterFatalError("Ultraschall cannot continue!");
     }

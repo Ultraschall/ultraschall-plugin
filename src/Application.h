@@ -41,16 +41,19 @@ public:
 
     static Application& Instance();
 
-    ServiceStatus Start();
+    ServiceStatus Start(intptr_t handle);
     void          Stop();
 
     template<class CustomActionType> ServiceStatus RegisterCustomAction() const;
+    template<class CustomActionType> void          InvokeCustomAction() const;
+    static bool                                    OnCustomAction(const int32_t id);
 
-    static bool OnCustomAction(const int32_t id);
-
-    template<class CustomActionType> void InvokeCustomAction() const;
+    inline intptr_t Handle() const;
 
 private:
+    intptr_t                     handle_ = 0;
+    mutable std::recursive_mutex lock_;
+
     Application();
 
     static bool HealthCheck();
@@ -108,6 +111,12 @@ template<class T> void Application::InvokeCustomAction() const
         pCustomAction->Execute();
         SafeRelease(pCustomAction);
     }
+}
+
+inline intptr_t Application::Handle() const
+{
+    std::lock_guard<std::recursive_mutex> cs(lock_);
+    return handle_;
 }
 
 }} // namespace ultraschall::reaper
