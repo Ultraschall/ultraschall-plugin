@@ -31,6 +31,30 @@
 
 namespace ultraschall { namespace reaper {
 
+template<class T> inline static T* SafeAlloc()
+{
+    T* ptr = new T();
+    if(ptr != nullptr)
+    {
+        memset(ptr, 0, sizeof(T));
+    }
+    return ptr;
+}
+
+template<class T> inline static T* SafeAllocArray(const size_t itemCount)
+{
+    T* ptr = nullptr;
+    if(itemCount > 0)
+    {
+        ptr = new T[itemCount]();
+        if(ptr != nullptr)
+        {
+            memset(ptr, 0, sizeof(T) * itemCount);
+        }
+    }
+    return ptr;
+}
+
 template<class T> inline static void SafeDeleteArray(T*& ptr)
 {
     delete[] ptr;
