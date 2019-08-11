@@ -9,3 +9,5 @@ _tools/
 # common build directory.
 _build/
 
+.vscode/
+.vs/
