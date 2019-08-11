@@ -57,13 +57,6 @@ ServiceStatus Application::Start(intptr_t handle)
             UpdateBillOfMaterials();
             UpdateCheck();
 
-            // TODO Remove if message display works
-            UIMessageSupervisor supervisor;
-            supervisor.RegisterFatalError("FATAL_ERROR");
-            supervisor.RegisterError("ERROR");
-            supervisor.RegisterWarning("WARNING");
-            supervisor.RegisterSuccess("SUCCESS");
-
             status = SERVICE_SUCCESS;
         }
     }
