@@ -39,9 +39,6 @@ public:
 
     static int Display(const UIMessageArray& items, const UIMessageClass& severityThreshold);
     static int ForceDisplay(const UIMessageArray& items, const UIMessageClass& severityThreshold);
-
-private:
-	static UIMessageClass MaxSeverity(const UIMessageArray& items);
 };
 
 }} // namespace ultraschall::reaper

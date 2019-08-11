@@ -24,16 +24,19 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+// clang-format off
+#include <windows.h>
+#include <commctrl.h>
+// clang-format on
+
+#include "resource.h"
+
 #include "Common.h"
-
+#include "Application.h"
 #include "UIMessageDialog.h"
-
 #include "ReaperEntryPoints.h"
 
-namespace ultraschall
-{
-namespace reaper
-{
+namespace ultraschall { namespace reaper {
 
 #ifdef ULTRASCHALL_BROADCASTER
 static const bool forceDisplay = false;
@@ -44,104 +47,207 @@ static const bool forceDisplay = true;
 class UIMessageDisplay
 {
 public:
-    UIMessageDisplay();
-    UIMessageDisplay(const UIMessageArray &items);
-    ~UIMessageDisplay();
+    UIMessageDisplay(const UIMessageArray& messages);
+
+    void Show();
 
 private:
     static const UnicodeString UI_MESSAGE_DIALOG_CAPTION;
 
+    const UIMessageArray& messages_;
+
+    static INT_PTR DialogProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam);
+
     static UnicodeString StringFromMessageSeverity(const UIMessageClass severity);
-    // static wxColour ColorFromMessageSeverity(const UIMessageClass severity);
+    static COLORREF      ColorFromMessageSeverity(const UIMessageClass severity);
+
+    
+private:
+    static UIMessageClass MaxSeverity(const UIMessageArray* pItems);
 };
 
 const UnicodeString UIMessageDisplay::UI_MESSAGE_DIALOG_CAPTION("Ultraschall");
 
-UIMessageDisplay::UIMessageDisplay() {}
+UIMessageDisplay::UIMessageDisplay(const UIMessageArray& messages) : messages_(messages) {}
 
-UIMessageDisplay::UIMessageDisplay(const UIMessageArray &items)
+void UIMessageDisplay::Show()
 {
-    // static const wxColour background(43, 43, 43);
-    // static const wxColour foreground(244, 247, 255);
-
-    // SetBackgroundColour(background);
-    // SetForegroundColour(background);
-
-    // layout_ = new wxBoxSizer(wxVERTICAL);
-    // closeButton_ = new wxButton(this, wxID_ANY, "Close", wxPoint(10, 435), wxSize(70, 25));
-    // layout_->Add(closeButton_, 1);
-
-    // itemList_ = new wxListView(this, wxID_ANY, wxPoint(10, 10), wxSize(775, 412), wxBORDER | wxLC_REPORT | wxLC_NO_HEADER);
-    // itemList_->SetBackgroundColour(background);
-    // itemList_->SetForegroundColour(foreground);
-    // itemList_->InsertColumn(0, "#", wxLIST_FORMAT_RIGHT, 20);
-    // itemList_->InsertColumn(1, "Severity", wxLIST_FORMAT_LEFT, 100);
-    // itemList_->InsertColumn(2, "Message", wxLIST_FORMAT_LEFT, 200);
-    // layout_->Add(itemList_, 2);
-
-    // itemList_->Hide();
-
-    // for (size_t i = 0; i < items.size(); i++)
-    // {
-    //     UnicodeStringStream os;
-    //     os << (i + 1);
-    //     itemList_->InsertItem(i, os.str(), 0);
-    //     itemList_->SetItemBackgroundColour(i, ColorFromMessageSeverity(items[i].Severity()));
-    //     itemList_->SetItemTextColour(i, wxColour(255, 255, 255));
-    //     itemList_->SetItem(i, 1, StringFromMessageSeverity(items[i].Severity()));
-    //     itemList_->SetItem(i, 2, items[i].Str());
-    // }
-
-    // itemList_->Show();
-
-    // itemList_->SetColumnWidth(0, wxLIST_AUTOSIZE);
-    // itemList_->SetColumnWidth(1, wxLIST_AUTOSIZE);
-    // itemList_->SetColumnWidth(2, wxLIST_AUTOSIZE_USEHEADER);
+    if(messages_.empty() == false)
+    {
+        Application& application = Application::Instance();
+        DialogBoxParam(
+            (HINSTANCE)application.Handle(), MAKEINTRESOURCE(IDD_MESSAGE_DIALOG), 0, (DLGPROC)DialogProc,
+            (LPARAM)&messages_);
+    }
 }
 
-UIMessageDisplay::~UIMessageDisplay()
+INT_PTR UIMessageDisplay::DialogProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    static HWND            hwndDialog        = 0;
+    static HWND            hwndListView      = 0;
+    static HBRUSH          hDialogForeground = 0;
+    static HBRUSH          hDialogBackground = 0;
+    static UIMessageArray* pItems            = 0;
+
+    switch(message)
+    {
+        case WM_INITDIALOG:
+        {
+            hwndDialog   = hwnd;
+            hwndListView = GetDlgItem(hwndDialog, IDC_MESSAGE_LIST);
+            pItems       = (UIMessageArray*)lParam;
+
+            hDialogForeground = CreateSolidBrush(RGB(244, 247, 255));
+            hDialogBackground        = CreateSolidBrush(RGB(43, 43, 43));
+
+            ListView_SetTextColor(hwndListView, RGB(244, 247, 255));
+            COLORREF backgroundColor = ColorFromMessageSeverity(MaxSeverity(pItems));
+            ListView_SetTextBkColor(hwndListView, backgroundColor);
+            //ListView_SetTextBkColor(hwndListView, RGB(43, 43, 43));
+            ListView_SetBkColor(hwndListView, RGB(43, 43, 43));
+
+            int                iColumn                              = 0;
+            static const int   MAX_LIST_VIEW_COLUMNS                = 3;
+            static const LPSTR columnLabels[MAX_LIST_VIEW_COLUMNS]  = {"#", "Severity", "Message"};
+            static const int   columnFormats[MAX_LIST_VIEW_COLUMNS] = {LVCFMT_RIGHT, LVCFMT_LEFT, LVCFMT_LEFT};
+            static const int   columnSizes[MAX_LIST_VIEW_COLUMNS]   = {20, 100, 600};
+            for(int i = 0; i < MAX_LIST_VIEW_COLUMNS; i++)
+            {
+                LVCOLUMN columnHeader = {0};
+                columnHeader.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
+                columnHeader.iSubItem = i;
+                columnHeader.pszText  = columnLabels[i];
+                columnHeader.fmt      = columnFormats[i];
+                columnHeader.cx       = columnSizes[i];
+                ListView_InsertColumn(hwndListView, i, &columnHeader);
+            }
+
+            for(int i = 0; i < (int)pItems->size(); i++)
+            {
+                LVITEM item         = {0};
+                item.mask           = LVIF_TEXT;
+                item.iItem          = i;
+                char itemBuffer[20] = {0};
+                sprintf(itemBuffer, "%d", i);
+                item.pszText = (LPSTR)itemBuffer;
+                ListView_InsertItem(hwndListView, &item);
+
+                std::string severityString = (LPSTR)(U2H(StringFromMessageSeverity((*pItems)[i].Severity()))).c_str();
+                ListView_SetItemText(hwndListView, i, 1, (LPSTR)severityString.c_str());
+
+                std::string messageString = (LPSTR)U2H((*pItems)[i].Str()).c_str();
+                ListView_SetItemText(hwndListView, i, 2, (LPSTR)messageString.c_str());
+            }
+
+            return TRUE;
+        }
+
+        case WM_CTLCOLORDLG:
+            return (INT_PTR)hDialogBackground;
+
+        case WM_CLOSE:
+            DeleteObject(hDialogBackground);
+            hDialogBackground = 0;
+
+            DeleteObject(hDialogForeground);
+            hDialogForeground = 0;
+
+            pItems = 0;
+
+            hwndListView = 0;
+            hwndDialog   = 0;
+
+            DestroyWindow(hwnd);
+
+            return TRUE;
+
+        case WM_COMMAND:
+        {
+            switch(LOWORD(lParam))
+            {
+                case IDOK:
+                case IDCANCEL:
+                    DeleteObject(hDialogBackground);
+                    hDialogBackground = 0;
+
+                    DeleteObject(hDialogForeground);
+                    hDialogForeground = 0;
+
+                    pItems = 0;
+
+                    hwndListView = 0;
+                    hwndDialog   = 0;
+
+                    EndDialog(hwnd, 0);
+                    return TRUE;
+
+                default:
+                    return FALSE;
+            }
+            break;
+        }
+    }
+
+    return FALSE;
 }
 
 UnicodeString UIMessageDisplay::StringFromMessageSeverity(const UIMessageClass severity)
 {
-    switch (severity)
+    switch(severity)
     {
-    case UIMessageClass::MESSAGE_SUCCESS:
-        return "Success";
-    case UIMessageClass::MESSAGE_WARNING:
-        return "Warning";
-    case UIMessageClass::MESSAGE_ERROR:
-        return "Error";
-    case UIMessageClass::MESSAGE_FATAL_ERROR:
-        return "Fatal Error";
-    default:
-        return "<Unknown>";
+        case UIMessageClass::MESSAGE_SUCCESS:
+            return "Success";
+        case UIMessageClass::MESSAGE_WARNING:
+            return "Warning";
+        case UIMessageClass::MESSAGE_ERROR:
+            return "Error";
+        case UIMessageClass::MESSAGE_FATAL_ERROR:
+            return "Fatal Error";
+        default:
+            return "<Unknown>";
     }
 }
 
-// wxColour UIMessageDisplay::ColorFromMessageSeverity(const UIMessageClass severity)
-// {
-//     switch (severity)
-//     {
-//     case UIMessageClass::MESSAGE_SUCCESS:
-//         return wxColour(0, 128, 0);
-//     case UIMessageClass::MESSAGE_WARNING:
-//         return wxColour(255, 140, 0);
-//     case UIMessageClass::MESSAGE_ERROR:
-//         return wxColour(128, 0, 0);
-//     case UIMessageClass::MESSAGE_FATAL_ERROR:
-//         return wxColour(128, 0, 128);
-//     default:
-//         return wxColour(0, 255, 0);
-//     }
-// }
+COLORREF UIMessageDisplay::ColorFromMessageSeverity(const UIMessageClass severity)
+{
+    switch(severity)
+    {
+        case UIMessageClass::MESSAGE_SUCCESS:
+            return RGB(0, 128, 0);
+        case UIMessageClass::MESSAGE_WARNING:
+            return RGB(255, 140, 0);
+        case UIMessageClass::MESSAGE_ERROR:
+            return RGB(128, 0, 0);
+        case UIMessageClass::MESSAGE_FATAL_ERROR:
+            return RGB(128, 0, 128);
+        default:
+            return RGB(0, 0, 0);
+    }
+}
+
+UIMessageClass UIMessageDisplay::MaxSeverity(const UIMessageArray* pItems)
+{
+    PRECONDITION_RETURN(pItems != 0, UIMessageClass::INVALID_MESSAGE_CLASS);
+    PRECONDITION_RETURN(pItems->empty() == false, UIMessageClass::INVALID_MESSAGE_CLASS);
+
+    UIMessageClass maxSeverity = UIMessageClass::MESSAGE_SUCCESS;
+    for(size_t i = 0; i < pItems->size(); i++)
+    {
+        const UIMessage& message = (*pItems)[i];
+        if(message.Severity() > maxSeverity)
+        {
+            maxSeverity = message.Severity();
+        }
+    }
+
+    return maxSeverity;
+}
 
 UIMessageDialog::UIMessageDialog() {}
 
-int UIMessageDialog::Display(const UIMessageArray &items, const UIMessageClass &severityThreshold)
+int UIMessageDialog::Display(const UIMessageArray& items, const UIMessageClass& severityThreshold)
 {
-    if (true == forceDisplay)
+    if(true == forceDisplay)
     {
         return ForceDisplay(items, severityThreshold);
     }
@@ -149,32 +255,13 @@ int UIMessageDialog::Display(const UIMessageArray &items, const UIMessageClass &
     return 0;
 }
 
-int UIMessageDialog::ForceDisplay(const UIMessageArray &items, const UIMessageClass &severityThreshold)
+int UIMessageDialog::ForceDisplay(const UIMessageArray& items, const UIMessageClass& severityThreshold)
 {
     PRECONDITION_RETURN(items.empty() == false, 0);
 
     UIMessageDisplay messageDisplay(items);
-    // messageDisplay.Center();
-    // messageDisplay.ShowModal();
-
+    messageDisplay.Show();
     return 0;
 }
 
-UIMessageClass UIMessageDialog::MaxSeverity(const UIMessageArray &items)
-{
-    PRECONDITION_RETURN(items.empty() == false, UIMessageClass::INVALID_MESSAGE_CLASS);
-
-    UIMessageClass maxSeverity = UIMessageClass::MESSAGE_SUCCESS;
-    for (size_t i = 0; i < items.size(); i++)
-    {
-        if (items[i].Severity() > maxSeverity)
-        {
-            maxSeverity = items[i].Severity();
-        }
-    }
-
-    return maxSeverity;
-}
-
-} // namespace reaper
-} // namespace ultraschall
+}} // namespace ultraschall::reaper

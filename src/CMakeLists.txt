@@ -112,9 +112,7 @@ set(COMMON_SOURCES
   SystemProperties.cpp
   TagWriterFactory.cpp
   UpdateCheck.cpp
-  UIFileDialog.cpp
   UIMessage.cpp
-  UIMessageDialog.cpp
   UIMessageQueue.cpp
   UIMessageSupervisor.cpp
   UnicodeString.cpp
@@ -144,7 +142,11 @@ set(PLATFORM_INLUDES Platform.h)
 
 if(WIN32)
   include_directories(win32)
-  set(PLATFORM_SOURCES win32/Platform.cpp)
+  set(PLATFORM_SOURCES
+    win32/Platform.cpp
+    win32/UIMessageDialog.cpp
+    win32/UIFileDialog.cpp
+  )
 elseif(APPLE)
   include_directories(macos)
   set(PLATFORM_SOURCES macos/Platform.cpp)

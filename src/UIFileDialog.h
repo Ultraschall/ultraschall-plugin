@@ -3,7 +3,7 @@
 // Copyright (c) The Ultraschall Project (http://ultraschall.fm)
 //
 // The MIT License (MIT)
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
@@ -31,11 +31,11 @@
 
 namespace ultraschall { namespace reaper {
 
-class UIFileDialog 
+class UIFileDialog
 {
 public:
     UIFileDialog(const UnicodeString& caption, const UnicodeString& initialDirectory = "");
-    virtual ~UIFileDialog() {}
+    virtual ~UIFileDialog();
 
     UnicodeString BrowseForChapters();
     UnicodeString BrowseForAudio();
@@ -47,7 +47,7 @@ private:
     UnicodeString caption_;
     UnicodeString initialDirectory_;
 
-    UnicodeString BrowseForFile(const UnicodeString& fileExtensions);
+    UnicodeString BrowseForFile(const UnicodeString& filterSpecifications);
 };
 
 }} // namespace ultraschall::reaper
