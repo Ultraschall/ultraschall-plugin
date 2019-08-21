@@ -32,7 +32,7 @@ TOOLS_DIRECTORY=`pwd`/_tools
 BUILD_DIRECTORY=`pwd`/_build
 CMAKE_EXTRA_ARGS=""
 
-if [ "$1" = "--help" ] then
+if [ "$1" = "--help" ]; then
   echo "Usage: build.sh [ --bootstrap | --rebuild | --clean | --clean-all ]"
   exit 0
 elif [ "$1" = "--bootstrap" ]; then

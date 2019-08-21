@@ -24,6 +24,8 @@
 #
 ################################################################################
 
+set(CMAKE_OSX_DEPLOYMENT_TARGET 10.11)
+
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "$ENV{HOME}/Library/Application\ Support/REAPER/UserPlugins")
 
 include(ExternalProject)

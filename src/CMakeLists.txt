@@ -149,10 +149,18 @@ if(WIN32)
   )
 elseif(APPLE)
   include_directories(macos)
-  set(PLATFORM_SOURCES macos/Platform.cpp)
+  set(PLATFORM_SOURCES
+    macos/Platform.cpp
+    macos/UIMessageDialog.cpp
+    macos/UIFileDialog.cpp
+  )
 elseif(UNIX)
   include_directories(linux)
-  set(PLATFORM_SOURCES linux/Platform.cpp)
+  set(PLATFORM_SOURCES
+    linux/Platform.cpp
+    linux/UIMessageDialog.cpp
+    linux/UIFileDialog.cpp
+  )
 endif()
 
 if(WIN32)
