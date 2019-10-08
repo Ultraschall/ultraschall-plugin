@@ -39,8 +39,7 @@
 #include "ReaperEntryPoints.h"
 
 extern "C" {
-REAPER_PLUGIN_DLL_EXPORT int REAPER_PLUGIN_ENTRYPOINT(
-    REAPER_PLUGIN_HINSTANCE handle, reaper_plugin_info_t* pPluginInfo)
+REAPER_PLUGIN_DLL_EXPORT int REAPER_PLUGIN_ENTRYPOINT(REAPER_PLUGIN_HINSTANCE handle, reaper_plugin_info_t* pPluginInfo)
 {
     if(pPluginInfo != 0)
     {
