@@ -51,7 +51,7 @@ public:
         PRECONDITION(key.empty() == false);
         PRECONDITION(value.empty() == false);
 
-        return ReaperGateway::SetValue(section, key, value);
+        ReaperGateway::SetValue(section, key, value);
     }
 
     static void Save(const UnicodeString& section, const UnicodeString& key, const UnicodeString& value)
@@ -60,7 +60,7 @@ public:
         PRECONDITION(key.empty() == false);
         PRECONDITION(value.empty() == false);
 
-        return ReaperGateway::SaveValue(section, key, value);
+        ReaperGateway::SaveValue(section, key, value);
     }
 
     static value_type Get(const UnicodeString& section, const UnicodeString& key);
@@ -70,7 +70,7 @@ public:
         PRECONDITION(section.empty() == false);
         PRECONDITION(key.empty() == false);
 
-        return ReaperGateway::ClearValue(section, key);
+        ReaperGateway::ClearValue(section, key);
     }
 
     static void Delete(const UnicodeString& section, const UnicodeString& key)
@@ -78,7 +78,7 @@ public:
         PRECONDITION(section.empty() == false);
         PRECONDITION(key.empty() == false);
 
-        return ReaperGateway::DeleteValue(section, key);
+        ReaperGateway::DeleteValue(section, key);
     }
 
 private:
