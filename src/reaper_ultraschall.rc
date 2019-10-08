@@ -92,7 +92,6 @@ CAPTION "Ultraschall"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     CONTROL         "", IDC_MESSAGE_LIST, "SysListView32", LVS_REPORT | LVS_SHOWSELALWAYS | WS_BORDER, 3, 3, 494, 294
-//    PUSHBUTTON      "Close", IDCANCEL, 85, 129, 30, 15
 END
 
 #ifndef APSTUDIO_INVOKED
