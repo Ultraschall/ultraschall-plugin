@@ -169,10 +169,8 @@ if(WIN32)
 elseif(APPLE)
   add_compile_options(-mmacosx-version-min=10.11)
   set_source_files_properties(
-    FileManager.cpp
-    VersionHandler.cpp
-    PluginVersionCheck.cpp
     macos/Platform.cpp
+    macos/UIFileDialog.cpp
     PROPERTIES COMPILE_FLAGS "-x objective-c++"
   )
 endif()
