@@ -132,9 +132,9 @@ UnicodeString UIFileDialog::BrowseForDirectory()
         fileDialog.canChooseFiles          = NO;
         fileDialog.allowsMultipleSelection = NO;
         fileDialog.prompt                  = @"Select";
-        fileDialog.title                   = [NSString stringWithUTF8String:title.c_str()];
+        fileDialog.title                   = [NSString stringWithUTF8String:caption_.c_str()];
 
-        NSString* initialPath = [NSString stringWithUTF8String:folder.c_str()];
+        NSString* initialPath = [NSString stringWithUTF8String:initialDirectory_.c_str()];
         if([fileDialog runModalForDirectory:initialPath file:nil types:nil] == NSFileHandlingPanelOKButton)
 #pragma clang diagnostic pop
         {
