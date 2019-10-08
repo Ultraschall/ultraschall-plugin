@@ -28,6 +28,9 @@
 #include "ReaperGateway.h"
 #include "StringUtilities.h"
 
+#import <AppKit/AppKit.h>
+#import <Foundation/Foundation.h>
+
 namespace ultraschall { namespace reaper {
 
 UIFileDialog::UIFileDialog(const UnicodeString& caption, const UnicodeString& initialDirectory) {}
