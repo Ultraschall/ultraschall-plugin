@@ -46,8 +46,6 @@ public:
 private:
     UnicodeString caption_;
     UnicodeString initialDirectory_;
-
-    UnicodeString BrowseForFile(const UnicodeString& filterSpecifications);
 };
 
 }} // namespace ultraschall::reaper
