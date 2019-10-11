@@ -27,12 +27,12 @@
 #include "VersionHandler.h"
 #include "FileManager.h"
 #include "Platform.h"
-#include "StringUtilities.h"
 #include "ReaperGateway.h"
+#include "StringUtilities.h"
 
+#include <cstring>
 #include <unzip.h>
 #include <zlib.h>
-#include <cstring>
 
 namespace ultraschall { namespace reaper {
 
@@ -73,7 +73,7 @@ UnicodeString VersionHandler::ThemeVersion()
                                     decoded       = true;
                                 }
 
-                                free(fileBuffer);
+                                SafeDeleteArray(fileBuffer);
                                 fileBuffer = 0;
                             }
                         }
@@ -113,7 +113,7 @@ UnicodeString VersionHandler::PluginVersion()
     return Platform::ReadFileVersion(Platform::UserDataDirectory() + Platform::PLUGIN_PATH);
 #else  // #ifdef _WIN32
     return "3.2.0";
-// TODO: linux
+// TODO: Linux
 #endif // #ifdef _WIN32
 }
 
@@ -150,7 +150,7 @@ UnicodeString VersionHandler::SWSVersion()
 {
 #ifdef _WIN32
     return Platform::ReadFileVersion(Platform::UserDataDirectory() + Platform::SWS_PATH);
-#else // #ifdef _WIN32
+#else  // #ifdef _WIN32
     return "2.9.7";
 #endif // #ifdef _WIN32
 }
@@ -170,7 +170,7 @@ bool VersionHandler::ReaperVersionCheck()
             const int majorVersion                  = UnicodeStringToInt(tokens[0]);
             const int minorVersion                  = UnicodeStringToInt(tokens[1]);
 
-            if((REQUIRED_REAPER_MAJOR_VERSION == majorVersion) && (REQUIRED_REAPER_MINOR_VERSION <= minorVersion))
+            if((majorVersion >= REQUIRED_REAPER_MAJOR_VERSION) && (minorVersion >= REQUIRED_REAPER_MINOR_VERSION))
             {
                 result = true;
             }
