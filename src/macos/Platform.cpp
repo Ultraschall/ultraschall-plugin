@@ -112,11 +112,8 @@ UnicodeString Platform::ReadFileVersion(const UnicodeString& path)
 
 UnicodeString FindUltraschallPluginDirectory()
 {
-    UnicodeString pluginDirectory;
-
-    // TODO
-
-    return pluginDirectory;
+    UnicodeString userDataDirectory = Platform::UserDataDirectory();
+    return Platform::AppendPath(userDataDirectory, "Library/Application Support/REAPER/UserPlugins");
 }
 
 bool Platform::SWSVersionCheck()
@@ -124,22 +121,16 @@ bool Platform::SWSVersionCheck()
 {
     bool result = false;
 
-    UnicodeString swsPlugin2_8UserPath = Platform::ProgramFilesDirectory() + SWS_PATH;
-    if(Platform::FileExists(swsPlugin2_8UserPath) == false)
+    UnicodeString swsPluginPath = Platform::AppendPath(FindUltraschallPluginDirectory(), "reaper_sws_extension.dylib");
+    if(Platform::FileExists(swsPluginPath) == true)
     {
-        swsPlugin2_8UserPath = Platform::AppendPath(FindUltraschallPluginDirectory(), "reaper_sws64.dylib");
-    }
-
-    if(Platform::FileExists(swsPlugin2_8UserPath) == true)
-    {
-        reaper::BinaryStream* pStream = FileManager::ReadBinaryFile(swsPlugin2_8UserPath);
+        reaper::BinaryStream* pStream = FileManager::ReadBinaryFile(swsPluginPath);
         if(pStream != 0)
 
         {
-            static const uint64_t originalCrc = 355942019; // SWS 2.10.0.1 from 02/2019
-            const uint64_t        crc         = pStream->CRC32();
-            if(originalCrc == crc)
-
+            static const uint64_t originalCrc = 742728096; // SWS 2.10.0.1 from 02/2019
+            const uint64_t        currentCrc  = pStream->CRC32();
+            if(originalCrc == currentCrc)
             {
                 result = true;
             }
