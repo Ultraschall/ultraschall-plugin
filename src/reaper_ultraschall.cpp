@@ -129,4 +129,10 @@ BOOL APIENTRY DllMain(HMODULE, ULONG ul_reason_for_call, LPVOID)
     return TRUE;
 }
 #else  // #ifdef _WIN32
+#include "WDL/swell/swell-dlggen.h"
+#include "reaper_ultraschall.rc_mac_dlg"
+#undef BEGIN
+#undef END
+#include "WDL/swell/swell-menugen.h"
+#include "reaper_ultraschall.rc_mac_menu"
 #endif // #ifdef _WIN32
