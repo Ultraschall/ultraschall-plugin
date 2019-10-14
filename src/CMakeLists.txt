@@ -131,9 +131,25 @@ elseif(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "macos")
   set(EXTERNAL_SOURCES
     ${LIBZ_SOURCE_PATH}/contrib/minizip/ioapi.c
     ${LIBZ_SOURCE_PATH}/contrib/minizip/unzip.c
+    ${LIBWDL_SOURCE_PATH}/WDL/swell/swell.cpp
+    ${LIBWDL_SOURCE_PATH}/WDL/swell/swell-wnd.mm
+    ${LIBWDL_SOURCE_PATH}/WDL/swell/swell-dlg.mm
+    ${LIBWDL_SOURCE_PATH}/WDL/swell/swell-menu.mm
+    ${LIBWDL_SOURCE_PATH}/WDL/swell/swell-kb.mm
+    ${LIBWDL_SOURCE_PATH}/WDL/swell/swell-gdi.mm
+    ${LIBWDL_SOURCE_PATH}/WDL/swell/swell-misc.mm
+    ${LIBWDL_SOURCE_PATH}/WDL/swell/swell-modstub.mm
   )
   set_source_files_properties(${LIBZ_SOURCE_PATH}/contrib/minizip/ioapi.c PROPERTIES GENERATED TRUE)
   set_source_files_properties(${LIBZ_SOURCE_PATH}/contrib/minizip/unzip.c PROPERTIES GENERATED TRUE)
+  set_source_files_properties(${LIBWDL_SOURCE_PATH}/WDL/swell/swell.cpp PROPERTIES GENERATED TRUE)
+  set_source_files_properties(${LIBWDL_SOURCE_PATH}/WDL/swell/swell-wnd.mm PROPERTIES GENERATED TRUE)
+  set_source_files_properties(${LIBWDL_SOURCE_PATH}/WDL/swell/swell-dlg.mm PROPERTIES GENERATED TRUE)
+  set_source_files_properties(${LIBWDL_SOURCE_PATH}/WDL/swell/swell-menu.mm PROPERTIES GENERATED TRUE)
+  set_source_files_properties(${LIBWDL_SOURCE_PATH}/WDL/swell/swell-kb.mm PROPERTIES GENERATED TRUE)
+  set_source_files_properties(${LIBWDL_SOURCE_PATH}/WDL/swell/swell-gdi.mm PROPERTIES GENERATED TRUE)
+  set_source_files_properties(${LIBWDL_SOURCE_PATH}/WDL/swell/swell-misc.mm PROPERTIES GENERATED TRUE)
+  set_source_files_properties(${LIBWDL_SOURCE_PATH}/WDL/swell/swell-modstub.mm PROPERTIES GENERATED TRUE)
 endif()
 
 include_directories(${CMAKE_CURRENT_LIST_DIR})
