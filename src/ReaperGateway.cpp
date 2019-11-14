@@ -341,7 +341,7 @@ bool ReaperGateway::ClearMarkers(ProjectReference projectReference)
     }
 
     return true;
-} // namespace reaper
+}
 
 bool ReaperGateway::InsertMarker(ProjectReference projectReference, const UnicodeString& name, const double position)
 {

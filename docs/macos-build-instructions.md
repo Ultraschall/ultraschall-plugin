@@ -2,8 +2,8 @@
 
 ## CHECK-OUT ULTRASCHALL
 
-```
-$ git clone --recurse-submodules https://github.com/Ultraschall/ultraschall-3.git
+```bash
+git clone --recurse-submodules https://github.com/Ultraschall/ultraschall-3.git
 ```
 
 ## BUILD THE SUBMODULES

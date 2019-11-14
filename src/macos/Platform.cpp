@@ -32,16 +32,13 @@
 #import <AppKit/AppKit.h>
 #import <Foundation/Foundation.h>
 
-#include "Platform.h"
 #include "FileManager.h"
+#include "Platform.h"
 #include "StringUtilities.h"
 
-namespace ultraschall
-{
-namespace reaper
-{
+namespace ultraschall { namespace reaper {
 
-const UnicodeString Platform::THEME_PATH = "/REAPER/ColorThemes/Ultraschall_3.1.ReaperThemeZip";
+const UnicodeString Platform::THEME_PATH = "/REAPER/ColorThemes/Ultraschall_3.2.ReaperThemeZip";
 const UnicodeString Platform::SOUNDBOARD_PATH("/Audio/Plug-Ins/Components/Soundboard.component");
 const UnicodeString Platform::SWS_PATH("/REAPER/UserPlugins/reaper_sws64.dylib");
 const UnicodeString Platform::PLUGIN_PATH("/REAPER/UserPlugins/reaper_ultraschall.dylib");
@@ -63,7 +60,8 @@ UnicodeString Platform::ProgramFilesDirectory()
     UnicodeString directory;
 
     NSURL* applicationSupportDirectory =
-        [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSSystemDomainMask] firstObject];
+        [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSSystemDomainMask]
+            firstObject];
     directory = [applicationSupportDirectory fileSystemRepresentation];
 
     return directory;
@@ -97,11 +95,12 @@ UnicodeString Platform::ReadFileVersion(const UnicodeString& path)
 
     UnicodeString version;
 
-    NSURL*           libraryDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask] firstObject];
-    NSMutableString* filePath         = [NSMutableString stringWithUTF8String:[libraryDirectory fileSystemRepresentation]];
+    NSURL* libraryDirectory =
+        [[[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask] firstObject];
+    NSMutableString* filePath = [NSMutableString stringWithUTF8String:[libraryDirectory fileSystemRepresentation]];
     [filePath appendString:[NSString stringWithUTF8String:path.c_str()]];
     [filePath appendString:@"/Contents/Info.plist"];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
+    if([[NSFileManager defaultManager] fileExistsAtPath:filePath])
     {
         NSDictionary* plist = [[NSDictionary alloc] initWithContentsOfFile:filePath];
         NSString*     value = [plist objectForKey:@"CFBundleShortVersionString"];
@@ -113,11 +112,8 @@ UnicodeString Platform::ReadFileVersion(const UnicodeString& path)
 
 UnicodeString FindUltraschallPluginDirectory()
 {
-    UnicodeString pluginDirectory;
-
-    // TODO
-
-    return pluginDirectory;
+    UnicodeString userDataDirectory = Platform::UserDataDirectory();
+    return Platform::AppendPath(userDataDirectory, "Library/Application Support/REAPER/UserPlugins");
 }
 
 bool Platform::SWSVersionCheck()
@@ -125,22 +121,16 @@ bool Platform::SWSVersionCheck()
 {
     bool result = false;
 
-    UnicodeString swsPlugin2_8UserPath = Platform::ProgramFilesDirectory() + SWS_PATH;
-    if(Platform::FileExists(swsPlugin2_8UserPath) == false)
+    UnicodeString swsPluginPath = Platform::AppendPath(FindUltraschallPluginDirectory(), "reaper_sws_extension.dylib");
+    if(Platform::FileExists(swsPluginPath) == true)
     {
-        swsPlugin2_8UserPath = Platform::AppendPath(FindUltraschallPluginDirectory(), "reaper_sws64.dylib");
-    }
-
-    if(Platform::FileExists(swsPlugin2_8UserPath) == true)
-    {
-        reaper::BinaryStream *pStream = FileManager::ReadBinaryFile(swsPlugin2_8UserPath);
+        reaper::BinaryStream* pStream = FileManager::ReadBinaryFile(swsPluginPath);
         if(pStream != 0)
 
         {
-            static const uint64_t originalCrc = 355942019;  // SWS 2.10.0.1 from 02/2019
-            const uint64_t        crc         = pStream->CRC32();
-            if(originalCrc == crc)
-
+            static const uint64_t originalCrc = 742728096; // SWS 2.10.0.1 from 02/2019
+            const uint64_t        currentCrc  = pStream->CRC32();
+            if(originalCrc == currentCrc)
             {
                 result = true;
             }
@@ -152,6 +142,4 @@ bool Platform::SWSVersionCheck()
     return result;
 }
 
-} // namespace reaper
-} // namespace ultraschall
-
+}} // namespace ultraschall::reaper

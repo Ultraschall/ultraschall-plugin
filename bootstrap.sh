@@ -26,7 +26,7 @@
 #
 ################################################################################
 
-source cmake/BuildTools.sh
+source scripts/BuildTools.sh
 
 TOOLS_DIRECTORY=`pwd`/_tools
 

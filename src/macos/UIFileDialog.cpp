@@ -24,9 +24,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "UIFileDialog.h"
 #include "ReaperGateway.h"
 #include "StringUtilities.h"
-#include "UIFileDialog.h"
+
+#import <AppKit/AppKit.h>
+#import <Foundation/Foundation.h>
 
 namespace ultraschall { namespace reaper {
 
@@ -36,34 +39,112 @@ UIFileDialog::~UIFileDialog() {}
 
 UnicodeString UIFileDialog::BrowseForChapters()
 {
-    return BrowseForFile("MP4 chapters|*.chapters.txt|MP4 chapters|*.mp4chaps");
+    UnicodeString result;
+
+    NSOpenPanel* fileDialog = [NSOpenPanel openPanel];
+    if(nil != fileDialog)
+    {
+        fileDialog.canChooseFiles          = YES;
+        fileDialog.canChooseDirectories    = NO;
+        fileDialog.canCreateDirectories    = NO;
+        fileDialog.allowsMultipleSelection = NO;
+        fileDialog.title                   = [NSString stringWithUTF8String:caption_.c_str()];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        if([fileDialog runModalForTypes:[[NSArray alloc] initWithObjects:@"chapters.txt", @"mp4chaps", @"txt", nil]]
+           == NSFileHandlingPanelOKButton)
+#pragma clang diagnostic pop
+        {
+            result = [[fileDialog URL] fileSystemRepresentation];
+        }
+
+        fileDialog = nil;
+    }
+
+    return result;
 }
 
 UnicodeString UIFileDialog::BrowseForAudio()
 {
-    return BrowseForFile("MP3 file|*.mp3|MP4 file|*.mp4|M4A file|*.m4a");
+    UnicodeString result;
+
+    NSOpenPanel* fileDialog = [NSOpenPanel openPanel];
+    if(nil != fileDialog)
+    {
+        fileDialog.canChooseFiles          = YES;
+        fileDialog.canChooseDirectories    = NO;
+        fileDialog.canCreateDirectories    = NO;
+        fileDialog.allowsMultipleSelection = NO;
+        fileDialog.title                   = [NSString stringWithUTF8String:caption_.c_str()];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        if([fileDialog runModalForTypes:[[NSArray alloc] initWithObjects:@"mp3", @"mp4", @"m4a", nil]]
+           == NSFileHandlingPanelOKButton)
+#pragma clang diagnostic pop
+        {
+            result = [[fileDialog URL] fileSystemRepresentation];
+        }
+
+        fileDialog = nil;
+    }
+
+    return result;
 }
 
 UnicodeString UIFileDialog::BrowseForPicture()
 {
-    return BrowseForFile("JPG file|*.jpg|PNG file|*.png");
+    UnicodeString result;
+
+    NSOpenPanel* fileDialog = [NSOpenPanel openPanel];
+    if(nil != fileDialog)
+    {
+        fileDialog.canChooseFiles          = YES;
+        fileDialog.canChooseDirectories    = NO;
+        fileDialog.canCreateDirectories    = NO;
+        fileDialog.allowsMultipleSelection = NO;
+        fileDialog.title                   = [NSString stringWithUTF8String:caption_.c_str()];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        if([fileDialog runModalForTypes:[[NSArray alloc] initWithObjects:@"png", @"jpg", @"jpeg", nil]]
+           == NSFileHandlingPanelOKButton)
+#pragma clang diagnostic pop
+        {
+            result = [[fileDialog URL] fileSystemRepresentation];
+        }
+
+        fileDialog = nil;
+    }
+
+    return result;
 }
 
 UnicodeString UIFileDialog::BrowseForDirectory()
 {
     UnicodeString result;
 
-    return result;
-}
+    NSOpenPanel* fileDialog = [NSOpenPanel openPanel];
+    if(nil != fileDialog)
+    {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        fileDialog.canCreateDirectories    = YES;
+        fileDialog.canChooseDirectories    = YES;
+        fileDialog.canChooseFiles          = NO;
+        fileDialog.allowsMultipleSelection = NO;
+        fileDialog.prompt                  = @"Select";
+        fileDialog.title                   = [NSString stringWithUTF8String:caption_.c_str()];
 
-UnicodeString UIFileDialog::BrowseForFile(const UnicodeString& fileExtensions)
-{
-    PRECONDITION_RETURN(fileExtensions.empty() == false, "");
+        NSString* initialPath = [NSString stringWithUTF8String:initialDirectory_.c_str()];
+        if([fileDialog runModalForDirectory:initialPath file:nil types:nil] == NSFileHandlingPanelOKButton)
+#pragma clang diagnostic pop
+        {
+            result = [[fileDialog URL] fileSystemRepresentation];
+        }
 
-    UnicodeString result;
+        fileDialog = nil;
+    }
 
     return result;
 }
 
 }} // namespace ultraschall::reaper
-
