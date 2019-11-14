@@ -73,11 +73,9 @@ UnicodeString VersionHandler::ThemeVersion()
                                     decoded       = true;
                                 }
 
-                                free(fileBuffer);
-                                fileBuffer = 0;
+                                SafeDeleteArray(fileBuffer);
                             }
                         }
-
                         unzCloseCurrentFile(themeFile);
                     }
                 }
@@ -113,7 +111,6 @@ UnicodeString VersionHandler::PluginVersion()
     return Platform::ReadFileVersion(Platform::UserDataDirectory() + Platform::PLUGIN_PATH);
 #else  // #ifdef _WIN32
     return "3.2.0";
-// TODO: linux
 #endif // #ifdef _WIN32
 }
 
