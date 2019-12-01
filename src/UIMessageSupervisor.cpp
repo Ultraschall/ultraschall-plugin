@@ -25,15 +25,20 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "UIMessageSupervisor.h"
-#include "UIMessageDialog.h"
+#include "ProjectProperties.h"
 
 namespace ultraschall { namespace reaper {
 
-UIMessageSupervisor::UIMessageSupervisor() {}
+const UnicodeString UIMessageSupervisor::MESSAGES_SECTION_NAME("ultraschall_messages");
+
+UIMessageSupervisor::UIMessageSupervisor() : projectReference_(ReaperGateway::CurrentProject()) {}
 
 UIMessageSupervisor::~UIMessageSupervisor()
 {
-    DisplayMessages();
+    DispatchMessages();
+
+    messageQueue_.Clear();
+    projectReference_ = nullptr;
 }
 
 void UIMessageSupervisor::RegisterMessage(const UIMessageClass severity, const UnicodeString& str)
@@ -41,9 +46,59 @@ void UIMessageSupervisor::RegisterMessage(const UIMessageClass severity, const U
     messageQueue_.Add(severity, str);
 }
 
+void UIMessageSupervisor::DispatchMessages()
+{
+    PRECONDITION(projectReference_ != nullptr);
+    PRECONDITION(messageQueue_.ItemCount() > 0);
+
+    ClearMessages();
+
+    const size_t messageCount = messageQueue_.ItemCount();
+    ProjectProperty<int>::Set(projectReference_, MESSAGES_SECTION_NAME, "message_count", (int)messageCount);
+
+    const UIMessageArray& messages_ = messageQueue_.Items();
+    for(size_t i = 0; i < messages_.size(); ++i)
+    {
+        UnicodeStringStream is;
+        is << "message_" << i;
+        const UnicodeString key = is.str();
+
+        is.clear();
+        switch(messages_[i].Severity())
+        {
+            case MESSAGE_SUCCESS:
+                is << "+";
+                break;
+            case MESSAGE_WARNING:
+                is << "!";
+                break;
+            case MESSAGE_FATAL_ERROR:
+            case MESSAGE_ERROR:
+                is << "-";
+                break;
+            default:
+                is << "?";
+                break;
+        }
+
+        is << ";" << messages_[i].Str();
+        const UnicodeString value = is.str();
+
+        ProjectProperty<UnicodeString>::Set(projectReference_, MESSAGES_SECTION_NAME, key, value);
+    }
+}
+
 void UIMessageSupervisor::DisplayMessages() 
 {
-	UIMessageDialog::Display(messageQueue_.Items(), UIMessageClass::MESSAGE_SUCCESS);
+  //TODO: Call LUA action
+}
+
+void UIMessageSupervisor::ClearMessages()
+{
+    PRECONDITION(projectReference_ != nullptr);
+    PRECONDITION(messageQueue_.ItemCount() > 0);
+
+    ProjectProperty<UnicodeString>::Clear(projectReference_, MESSAGES_SECTION_NAME);
 }
 
 }} // namespace ultraschall::reaper

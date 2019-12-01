@@ -45,11 +45,15 @@ public:
     inline void RegisterFatalError(const UnicodeString& str);
 
 private:
-    void RegisterMessage(const UIMessageClass severity, const UnicodeString& str);
+    static const UnicodeString MESSAGES_SECTION_NAME;
 
+    void RegisterMessage(const UIMessageClass severity, const UnicodeString& str);
+    void DispatchMessages();
     void DisplayMessages();
+    void ClearMessages();
 
     UIMessageQueue messageQueue_;
+    void* projectReference_;
 };
 
 inline void UIMessageSupervisor::RegisterSuccess(const UnicodeString& str)

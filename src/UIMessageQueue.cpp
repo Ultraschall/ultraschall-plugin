@@ -25,7 +25,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "UIMessageQueue.h"
-#include "UIMessageDialog.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -42,10 +41,6 @@ void UIMessageQueue::Add(const UIMessage& message)
 void UIMessageQueue::Add(const UIMessageClass severity, const UnicodeString& str)
 {
     Add(UIMessage(severity, str));
-    //Add(UIMessage(UIMessageClass::MESSAGE_FATAL_ERROR, str));
-    //Add(UIMessage(UIMessageClass::MESSAGE_ERROR, str));
-    //Add(UIMessage(UIMessageClass::MESSAGE_WARNING, str));
-    //Add(UIMessage(UIMessageClass::MESSAGE_SUCCESS, str));
 }
 
 void UIMessageQueue::Clear()
