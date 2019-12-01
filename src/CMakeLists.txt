@@ -33,6 +33,7 @@ include_directories(
   ${LIBMP4V2_INCLUDE_PATH}
   ${LIBJSON11_INCLUDE_PATH}
   ${LIBEXPAT_INCLUDE_PATH}
+  ${LIBWDL_INCLUDE_PATH}
   ${REAPER_INCLUDE_PATH}
 )
 
@@ -230,6 +231,7 @@ add_dependencies(reaper_ultraschall taglib-build)
 add_dependencies(reaper_ultraschall mp4v2-build)
 add_dependencies(reaper_ultraschall json11-build)
 add_dependencies(reaper_ultraschall expat-build)
+add_dependencies(reaper_ultraschall wdl-build)
 
 target_link_libraries(reaper_ultraschall
   ${LIBZ_LIBRARY_PATH}
