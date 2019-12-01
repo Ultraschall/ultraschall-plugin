@@ -24,35 +24,20 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_UI_MESSAGE_QUEUE_H_INCL__
-#define __ULTRASCHALL_REAPER_UI_MESSAGE_QUEUE_H_INCL__
-
-#include "Common.h"
-#include "UIMessage.h"
+#ifndef __ULTRASCHALL_REAPER_MESSAGE_CLASS_H_INCL__
+#define __ULTRASCHALL_REAPER_MESSAGE_CLASS_H_INCL__
 
 namespace ultraschall { namespace reaper {
 
-class UIMessageQueue
-{
-public:
-    UIMessageQueue();
-    ~UIMessageQueue();
-
-    void Add(const UIMessage& message);
-    void Add(const UIMessageClass severity, const UnicodeString& str);
-    void Clear();
-
-    const UIMessageArray& Items() const;
-    size_t ItemCount() const;
-
-private:
-    UIMessageQueue(const UIMessageQueue&) = delete;
-    UIMessageQueue& operator=(const UIMessageQueue&) = delete;
-
-    UIMessageArray items_;
-    std::recursive_mutex   itemsLock_;
-};
+typedef enum {
+    MESSAGE_SUCCESS = 0,
+    MESSAGE_WARNING,
+    MESSAGE_ERROR,
+    MESSAGE_FATAL_ERROR,
+    INVALID_MESSAGE_CLASS,
+    MAX_MESSAGE_CLASS = INVALID_MESSAGE_CLASS
+} MessageClass;
 
 }} // namespace ultraschall::reaper
 
-#endif // #ifndef __ULTRASCHALL_REAPER_UI_MESSAGE_QUEUE_H_INCL__
+#endif // #ifndef __ULTRASCHALL_REAPER_MESSAGE_CLASS_H_INCL__

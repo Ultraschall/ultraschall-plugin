@@ -68,7 +68,7 @@ bool ReaperProject::Validate(const ReaperProject& project)
 UnicodeString ReaperProject::FullPathName() const
 {
     PRECONDITION_RETURN(nativeReference_ != 0, UnicodeString());
-    return ReaperGateway::ProjectPath(nativeReference_);
+    return ReaperGateway::QueryProjectPath(nativeReference_);
 }
 
 UnicodeString ReaperProject::FolderName() const
@@ -133,7 +133,7 @@ UnicodeString ReaperProject::Notes() const
 {
     PRECONDITION_RETURN(nativeReference_ != 0, UnicodeString());
 
-    return ReaperGateway::ProjectNotes(nativeReference_);
+    return ReaperGateway::QueryProjectNotes(nativeReference_);
 }
 
 bool ReaperProject::InsertMarker(const Marker& marker)
@@ -162,14 +162,14 @@ double ReaperProject::CurrentPosition() const
     PRECONDITION_RETURN(nativeReference_ != 0, INVALID_POSITION);
 
     double    currentPosition = INVALID_POSITION;
-    const int playState       = ReaperGateway::PlayState(nativeReference_);
+    const int playState       = ReaperGateway::QueryPlayState(nativeReference_);
     if((playState == 0) || (playState == 2))
     {
-        currentPosition = ReaperGateway::CursorPosition(nativeReference_);
+        currentPosition = ReaperGateway::QueryCursorPosition(nativeReference_);
     }
     else
     {
-        currentPosition = ReaperGateway::PlayPosition(nativeReference_);
+        currentPosition = ReaperGateway::QueryPlayPosition(nativeReference_);
     }
 
     return currentPosition;
@@ -179,14 +179,14 @@ double ReaperProject::MinPosition() const
 {
     PRECONDITION_RETURN(nativeReference_ != 0, INVALID_POSITION);
 
-    return ReaperGateway::MinPosition(nativeReference_);
+    return ReaperGateway::QueryMinPosition(nativeReference_);
 }
 
 double ReaperProject::MaxPosition() const
 {
     PRECONDITION_RETURN(nativeReference_ != 0, INVALID_POSITION);
 
-    return ReaperGateway::MaxPosition(nativeReference_);
+    return ReaperGateway::QueryMaxPosition(nativeReference_);
 }
 
 bool ReaperProject::IsValidPosition(const double position)
@@ -235,7 +235,7 @@ MarkerArray ReaperProject::AllMarkers() const
 {
     PRECONDITION_RETURN(nativeReference_ != 0, MarkerArray());
 
-    return ReaperGateway::AllMarkers(nativeReference_);
+    return ReaperGateway::QueryAllMarkers(nativeReference_);
 }
 
 void ReaperProject::UpdateMarkers()

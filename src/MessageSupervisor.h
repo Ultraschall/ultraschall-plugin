@@ -24,34 +24,58 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#ifndef __ULTRASCHALL_REAPER_MESSAGE_SUPERVISOR_H_INCL__
+#define __ULTRASCHALL_REAPER_MESSAGE_SUPERVISOR_H_INCL__
+
 #include "Common.h"
-#include "Application.h"
-#include "UIMessageDialog.h"
-#include "ReaperEntryPoints.h"
+#include "MessageClass.h"
+#include "MessageQueue.h"
 
 namespace ultraschall { namespace reaper {
 
-#ifdef ULTRASCHALL_BROADCASTER
-static const bool forceDisplay = false;
-#else  // #ifndef ULTRASCHALL_BROADCASTER
-static const bool forceDisplay = true;
-#endif // #ifndef ULTRASCHALL_BROADCASTER
-
-UIMessageDialog::UIMessageDialog() {}
-
-int UIMessageDialog::Display(const UIMessageArray& items, const UIMessageClass& severityThreshold)
+class MessageSupervisor
 {
-    if(true == forceDisplay)
-    {
-        return ForceDisplay(items, severityThreshold);
-    }
+public:
+    MessageSupervisor();
+    ~MessageSupervisor();
 
-    return 0;
+    inline void RegisterSuccess(const UnicodeString& str);
+    inline void RegisterWarning(const UnicodeString& str);
+    inline void RegisterError(const UnicodeString& str);
+    inline void RegisterFatalError(const UnicodeString& str);
+
+private:
+    static const UnicodeString MESSAGES_SECTION_NAME;
+
+    void RegisterMessage(const MessageClass severity, const UnicodeString& str);
+    void DispatchMessages();
+    void DisplayMessages();
+    void ClearMessages();
+
+    MessageQueue messageQueue_;
+    void*          projectReference_;
+};
+
+inline void MessageSupervisor::RegisterSuccess(const UnicodeString& str)
+{
+    RegisterMessage(MessageClass::MESSAGE_SUCCESS, str);
 }
 
-int UIMessageDialog::ForceDisplay(const UIMessageArray& items, const UIMessageClass& severityThreshold)
+inline void MessageSupervisor::RegisterWarning(const UnicodeString& str)
 {
-    return 0;
+    RegisterMessage(MessageClass::MESSAGE_WARNING, str);
+}
+
+inline void MessageSupervisor::RegisterError(const UnicodeString& str)
+{
+    RegisterMessage(MessageClass::MESSAGE_ERROR, str);
+}
+
+inline void MessageSupervisor::RegisterFatalError(const UnicodeString& str)
+{
+    RegisterMessage(MessageClass::MESSAGE_FATAL_ERROR, str);
 }
 
 }} // namespace ultraschall::reaper
+
+#endif // #ifndef __ULTRASCHALL_REAPER_MESSAGE_SUPERVISOR_H_INCL__

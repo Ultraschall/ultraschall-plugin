@@ -29,8 +29,8 @@
 #include "FileManager.h"
 #include "ReaperProjectManager.h"
 #include "StringUtilities.h"
-#include "UIFileDialog.h"
-#include "UIMessageSupervisor.h"
+#include "FileDialog.h"
+#include "MessageSupervisor.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -46,7 +46,7 @@ ServiceStatus InsertChapterMarkersAction::Execute()
     PRECONDITION_RETURN(ValidateChapterMarkers(chapterMarkers_) == true, SERVICE_FAILURE);
 
     ServiceStatus       status = SERVICE_FAILURE;
-    UIMessageSupervisor supervisor;
+    MessageSupervisor supervisor;
 
     ReaperProjectManager& projectManager = ReaperProjectManager::Instance();
     ReaperProject         currentProject = projectManager.CurrentProject();
@@ -79,7 +79,7 @@ ServiceStatus InsertChapterMarkersAction::Execute()
 
 bool InsertChapterMarkersAction::ConfigureTargets()
 {
-    UIMessageSupervisor supervisor;
+    MessageSupervisor supervisor;
 
     chapterMarkers_.clear();
 
@@ -136,7 +136,7 @@ bool InsertChapterMarkersAction::ConfigureSources()
 {
     source_.clear();
 
-    UIFileDialog fileDialog("Import chapter markers");
+    FileDialog fileDialog("Import chapter markers");
     source_ = fileDialog.BrowseForChapters();
     return source_.empty() == false;
 }

@@ -34,15 +34,15 @@
 
 #include "ReaperGateway.h"
 #include "StringUtilities.h"
-#include "UIFileDialog.h"
+#include "FileDialog.h"
 
 namespace ultraschall { namespace reaper {
 
-UIFileDialog::UIFileDialog(const UnicodeString& caption, const UnicodeString& initialDirectory) {}
+FileDialog::FileDialog(const UnicodeString& caption, const UnicodeString& initialDirectory) {}
 
-UIFileDialog::~UIFileDialog() {}
+FileDialog::~FileDialog() {}
 
-UnicodeString UIFileDialog::BrowseForChapters()
+UnicodeString FileDialog::BrowseForChapters()
 {
     static const UnicodeString fileExtensions = "MP4 chapters|*.chapters.txt|MP4 chapters|*.mp4chaps";
     WideUnicodeString          result;
@@ -103,7 +103,7 @@ UnicodeString UIFileDialog::BrowseForChapters()
     return WU2U(result);
 }
 
-UnicodeString UIFileDialog::BrowseForAudio()
+UnicodeString FileDialog::BrowseForAudio()
 {
     static const UnicodeString fileExtensions = "MP3 file|*.mp3|MP4 file|*.mp4|M4A file|*.m4a";
     WideUnicodeString          result;
@@ -164,7 +164,7 @@ UnicodeString UIFileDialog::BrowseForAudio()
     return WU2U(result);
 }
 
-UnicodeString UIFileDialog::BrowseForPicture()
+UnicodeString FileDialog::BrowseForPicture()
 {
     static const UnicodeString fileExtensions = "JPG file|*.jpg|PNG file|*.png";
     WideUnicodeString          result;
@@ -225,7 +225,7 @@ UnicodeString UIFileDialog::BrowseForPicture()
     return WU2U(result);
 }
 
-UnicodeString UIFileDialog::BrowseForDirectory()
+UnicodeString FileDialog::BrowseForDirectory()
 {
     WideUnicodeString result;
 

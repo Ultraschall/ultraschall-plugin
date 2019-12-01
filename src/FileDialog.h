@@ -24,34 +24,30 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#ifndef __ULTRASCHALL_REAPER_FILE_DIALOG_H_INCL__
+#define __ULTRASCHALL_REAPER_FILE_DIALOG_H_INCL__
+
 #include "Common.h"
-#include "Application.h"
-#include "UIMessageDialog.h"
-#include "ReaperEntryPoints.h"
 
 namespace ultraschall { namespace reaper {
 
-#ifdef ULTRASCHALL_BROADCASTER
-static const bool forceDisplay = false;
-#else  // #ifndef ULTRASCHALL_BROADCASTER
-static const bool forceDisplay = true;
-#endif // #ifndef ULTRASCHALL_BROADCASTER
-
-UIMessageDialog::UIMessageDialog() {}
-
-int UIMessageDialog::Display(const UIMessageArray& items, const UIMessageClass& severityThreshold)
+class FileDialog
 {
-    if(true == forceDisplay)
-    {
-        return ForceDisplay(items, severityThreshold);
-    }
+public:
+    FileDialog(const UnicodeString& caption, const UnicodeString& initialDirectory = "");
+    virtual ~FileDialog();
 
-    return 0;
-}
+    UnicodeString BrowseForChapters();
+    UnicodeString BrowseForAudio();
+    UnicodeString BrowseForPicture();
 
-int UIMessageDialog::ForceDisplay(const UIMessageArray& items, const UIMessageClass& severityThreshold)
-{
-    return 0;
-}
+    UnicodeString BrowseForDirectory();
+
+private:
+    UnicodeString caption_;
+    UnicodeString initialDirectory_;
+};
 
 }} // namespace ultraschall::reaper
+
+#endif // #ifndef __ULTRASCHALL_REAPER_FILE_DIALOG_H_INCL__

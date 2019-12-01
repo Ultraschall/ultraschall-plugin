@@ -24,20 +24,42 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_UI_MESSAGE_CLASS_H_INCL__
-#define __ULTRASCHALL_REAPER_UI_MESSAGE_CLASS_H_INCL__
+#include "FileDialog.h"
+#include "ReaperGateway.h"
+#include "StringUtilities.h"
 
 namespace ultraschall { namespace reaper {
 
-typedef enum {
-    MESSAGE_SUCCESS = 0,
-    MESSAGE_WARNING,
-    MESSAGE_ERROR,
-    MESSAGE_FATAL_ERROR,
-    INVALID_MESSAGE_CLASS,
-    MAX_MESSAGE_CLASS = INVALID_MESSAGE_CLASS
-} UIMessageClass;
+FileDialog::FileDialog(const UnicodeString& caption, const UnicodeString& initialDirectory) {}
+
+FileDialog::~FileDialog() {}
+
+UnicodeString FileDialog::BrowseForChapters()
+{
+    UnicodeString result;
+
+    return result;
+}
+
+UnicodeString FileDialog::BrowseForAudio()
+{
+    UnicodeString result;
+
+    return result;
+}
+
+UnicodeString FileDialog::BrowseForPicture()
+{
+    UnicodeString result;
+
+    return result;
+}
+
+UnicodeString FileDialog::BrowseForDirectory()
+{
+    UnicodeString result;
+
+    return result;
+}
 
 }} // namespace ultraschall::reaper
-
-#endif // #ifndef __ULTRASCHALL_REAPER_UI_MESSAGE_CLASS_H_INCL__

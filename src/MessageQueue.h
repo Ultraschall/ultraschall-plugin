@@ -24,42 +24,35 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "UIFileDialog.h"
-#include "ReaperGateway.h"
-#include "StringUtilities.h"
+#ifndef __ULTRASCHALL_REAPER_MESSAGE_QUEUE_H_INCL__
+#define __ULTRASCHALL_REAPER_MESSAGE_QUEUE_H_INCL__
+
+#include "Common.h"
+#include "Message.h"
 
 namespace ultraschall { namespace reaper {
 
-UIFileDialog::UIFileDialog(const UnicodeString& caption, const UnicodeString& initialDirectory) {}
-
-UIFileDialog::~UIFileDialog() {}
-
-UnicodeString UIFileDialog::BrowseForChapters()
+class MessageQueue
 {
-    UnicodeString result;
+public:
+    MessageQueue();
+    ~MessageQueue();
 
-    return result;
-}
+    void Add(const Message& message);
+    void Add(const MessageClass severity, const UnicodeString& str);
+    void Clear();
 
-UnicodeString UIFileDialog::BrowseForAudio()
-{
-    UnicodeString result;
+    const MessageArray& Items() const;
+    size_t              ItemCount() const;
 
-    return result;
-}
+private:
+    MessageQueue(const MessageQueue&) = delete;
+    MessageQueue& operator=(const MessageQueue&) = delete;
 
-UnicodeString UIFileDialog::BrowseForPicture()
-{
-    UnicodeString result;
-
-    return result;
-}
-
-UnicodeString UIFileDialog::BrowseForDirectory()
-{
-    UnicodeString result;
-
-    return result;
-}
+    MessageArray         items_;
+    std::recursive_mutex itemsLock_;
+};
 
 }} // namespace ultraschall::reaper
+
+#endif // #ifndef __ULTRASCHALL_REAPER_MESSAGE_QUEUE_H_INCL__

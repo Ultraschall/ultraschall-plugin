@@ -24,54 +24,46 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_UI_MESSAGE_SUPERVISOR_H_INCL__
-#define __ULTRASCHALL_REAPER_UI_MESSAGE_SUPERVISOR_H_INCL__
+#ifndef __ULTRASCHALL_REAPER_MESSAGE_H_INCL__
+#define __ULTRASCHALL_REAPER_MESSAGE_H_INCL__
 
 #include "Common.h"
-#include "UIMessageClass.h"
-#include "UIMessageQueue.h"
+#include "MessageClass.h"
 
 namespace ultraschall { namespace reaper {
 
-class UIMessageSupervisor
+class Message
 {
 public:
-    UIMessageSupervisor();
-    ~UIMessageSupervisor();
+    Message(const MessageClass severity, const UnicodeString& str);
 
-    inline void RegisterSuccess(const UnicodeString& str);
-    inline void RegisterWarning(const UnicodeString& str);
-    inline void RegisterError(const UnicodeString& str);
-    inline void RegisterFatalError(const UnicodeString& str);
+    inline MessageClass         Severity() const;
+    inline const UnicodeString& Str() const;
+
+    inline bool IsValid() const;
 
 private:
-    void RegisterMessage(const UIMessageClass severity, const UnicodeString& str);
-
-    void DisplayMessages();
-
-    UIMessageQueue messageQueue_;
+    const MessageClass  severity_ = INVALID_MESSAGE_CLASS;
+    const UnicodeString str_;
 };
 
-inline void UIMessageSupervisor::RegisterSuccess(const UnicodeString& str)
+inline MessageClass Message::Severity() const
 {
-    RegisterMessage(UIMessageClass::MESSAGE_SUCCESS, str);
+    return severity_;
 }
 
-inline void UIMessageSupervisor::RegisterWarning(const UnicodeString& str)
+inline const UnicodeString& Message::Str() const
 {
-    RegisterMessage(UIMessageClass::MESSAGE_WARNING, str);
+    return str_;
 }
 
-inline void UIMessageSupervisor::RegisterError(const UnicodeString& str)
+inline bool Message::IsValid() const
 {
-    RegisterMessage(UIMessageClass::MESSAGE_ERROR, str);
+    return (Str().empty() == false) && (Severity() != INVALID_MESSAGE_CLASS);
 }
 
-inline void UIMessageSupervisor::RegisterFatalError(const UnicodeString& str)
-{
-    RegisterMessage(UIMessageClass::MESSAGE_FATAL_ERROR, str);
-}
+typedef std::vector<Message> MessageArray;
 
 }} // namespace ultraschall::reaper
 
-#endif // #ifndef __ULTRASCHALL_REAPER_UI_MESSAGE_SUPERVISOR_H_INCL__
+#endif // #ifndef __ULTRASCHALL_REAPER_MESSAGE_H_INCL__

@@ -26,7 +26,7 @@
 
 #include "Application.h"
 #include "ServiceStatus.h"
-#include "UIMessageSupervisor.h"
+#include "MessageSupervisor.h"
 
 #include "CustomActionManager.h"
 
@@ -63,7 +63,7 @@ REAPER_PLUGIN_DLL_EXPORT int REAPER_PLUGIN_ENTRYPOINT(REAPER_PLUGIN_HINSTANCE ha
             }
             else
             {
-                ultraschall::reaper::UIMessageSupervisor supervisor;
+                ultraschall::reaper::MessageSupervisor supervisor;
                 supervisor.RegisterFatalError("Ultraschall failed to load!");
                 supervisor.RegisterFatalError(
                     "You are trying to load a version of REAPER that is not compatible to Ultraschall 3.");
@@ -90,37 +90,11 @@ REAPER_PLUGIN_DLL_EXPORT int REAPER_PLUGIN_ENTRYPOINT(REAPER_PLUGIN_HINSTANCE ha
 
 #ifdef _WIN32
 
-#ifdef _DEBUG
-static void PrintDllPath()
-{
-    HMODULE hModule = NULL;
-    BOOL    fStatus  = GetModuleHandleEx(
-        GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-        (LPCSTR)&ReaperPluginEntry, &hModule);
-    if(fStatus != FALSE)
-    {
-        CHAR szModulePath[MAX_PATH] = {0};
-        DWORD dwModulePathLength = GetModuleFileName(hModule, szModulePath, MAX_PATH * sizeof(CHAR));
-        if(dwModulePathLength > 0)
-        {
-            MessageBox(NULL, szModulePath, "Ultraschall", MB_OK);
-        }
-    }
-}
-#else  // #ifdef _DEBUG
-void PrintDllPath() {}
-#endif // #ifdef _DEBUG
-
-//#define ULTRASCHALL_STARTUP_DIAGNOSITICS 1
-
 BOOL APIENTRY DllMain(HMODULE, ULONG ul_reason_for_call, LPVOID)
 {
     switch(ul_reason_for_call)
     {
         case DLL_PROCESS_ATTACH:
-#ifdef ULTRASCHALL_STARTUP_DIAGNOSITICS
-          PrintDllPath();
-#endif // #ifdef ULTRASCHALL_STARTUP_DIAGNOSITICS
         case DLL_THREAD_ATTACH:
         case DLL_THREAD_DETACH:
         case DLL_PROCESS_DETACH:
@@ -128,12 +102,4 @@ BOOL APIENTRY DllMain(HMODULE, ULONG ul_reason_for_call, LPVOID)
     }
     return TRUE;
 }
-#else  // #ifdef _WIN32
-#include "resource.h"
-#include "WDL/swell/swell-dlggen.h"
-#include "reaper_ultraschall.rc_mac_dlg"
-#undef BEGIN
-#undef END
-#include "WDL/swell/swell-menugen.h"
-#include "reaper_ultraschall.rc_mac_menu"
 #endif // #ifdef _WIN32

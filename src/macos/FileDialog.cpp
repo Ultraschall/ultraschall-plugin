@@ -24,7 +24,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "UIFileDialog.h"
+#include "FileDialog.h"
 #include "ReaperGateway.h"
 #include "StringUtilities.h"
 
@@ -33,11 +33,11 @@
 
 namespace ultraschall { namespace reaper {
 
-UIFileDialog::UIFileDialog(const UnicodeString& caption, const UnicodeString& initialDirectory) {}
+FileDialog::FileDialog(const UnicodeString& caption, const UnicodeString& initialDirectory) {}
 
-UIFileDialog::~UIFileDialog() {}
+FileDialog::~FileDialog() {}
 
-UnicodeString UIFileDialog::BrowseForChapters()
+UnicodeString FileDialog::BrowseForChapters()
 {
     UnicodeString result;
 
@@ -64,7 +64,7 @@ UnicodeString UIFileDialog::BrowseForChapters()
     return result;
 }
 
-UnicodeString UIFileDialog::BrowseForAudio()
+UnicodeString FileDialog::BrowseForAudio()
 {
     UnicodeString result;
 
@@ -91,7 +91,7 @@ UnicodeString UIFileDialog::BrowseForAudio()
     return result;
 }
 
-UnicodeString UIFileDialog::BrowseForPicture()
+UnicodeString FileDialog::BrowseForPicture()
 {
     UnicodeString result;
 
@@ -118,7 +118,7 @@ UnicodeString UIFileDialog::BrowseForPicture()
     return result;
 }
 
-UnicodeString UIFileDialog::BrowseForDirectory()
+UnicodeString FileDialog::BrowseForDirectory()
 {
     UnicodeString result;
 

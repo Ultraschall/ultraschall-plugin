@@ -24,12 +24,38 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "UIMessage.h"
+#include "MessageQueue.h"
 
 namespace ultraschall { namespace reaper {
 
-UIMessage::UIMessage(const UIMessageClass severity, const UnicodeString& str) :
-    severity_(severity), str_(str)
-{}
+MessageQueue::MessageQueue() {}
+
+MessageQueue::~MessageQueue() {}
+
+void MessageQueue::Add(const Message& message)
+{
+    std::lock_guard<std::recursive_mutex> lock(itemsLock_);
+    items_.push_back(message);
+}
+
+void MessageQueue::Add(const MessageClass severity, const UnicodeString& str)
+{
+    Add(Message(severity, str));
+}
+
+void MessageQueue::Clear()
+{
+    items_.clear();
+}
+
+const MessageArray& MessageQueue::Items() const
+{
+    return items_;
+}
+
+size_t MessageQueue::ItemCount() const
+{
+    return items_.size();
+}
 
 }} // namespace ultraschall::reaper

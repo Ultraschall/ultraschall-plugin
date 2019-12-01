@@ -24,81 +24,63 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_SYSTEM_PROPERTIES_H_INCL__
-#define __ULTRASCHALL_REAPER_SYSTEM_PROPERTIES_H_INCL__
+#ifndef __ULTRASCHALL_REAPER_PROJECT_PROPERTIES_H_INCL__
+#define __ULTRASCHALL_REAPER_PROJECT_PROPERTIES_H_INCL__
 
 #include "Common.h"
 #include "ReaperGateway.h"
 
 namespace ultraschall { namespace reaper {
 
-template<class T> class SystemProperty
+template<class T> class ProjectProperty
 {
 public:
     typedef T value_type;
 
-    static bool Exists(const UnicodeString& section, const UnicodeString& key)
+    static bool Exists(ProjectReference projectReference, const UnicodeString& section, const UnicodeString& key)
     {
+        PRECONDITION_RETURN(projectReference != nullptr, false);
         PRECONDITION_RETURN(section.empty() == false, false);
         PRECONDITION_RETURN(key.empty() == false, false);
 
-        return ReaperGateway::HasSystemValue(section, key);
+        return ReaperGateway::HasProjectValue(projectReference, section, key);
     }
 
-    static void Set(const UnicodeString& section, const UnicodeString& key, const UnicodeString& value)
+    static void Set(
+        ProjectReference projectReference, const UnicodeString& section, const UnicodeString& key,
+        const value_type& value);
+
+    static value_type Query(ProjectReference projectReference, const UnicodeString& section, const UnicodeString& key);
+
+    static void Clear(ProjectReference projectReference, const UnicodeString& section, const UnicodeString& key)
     {
-        PRECONDITION(section.empty() == false);
-        PRECONDITION(key.empty() == false);
-        PRECONDITION(value.empty() == false);
-
-        ReaperGateway::SetSystemValue(section, key, value);
-    }
-
-    static void Save(const UnicodeString& section, const UnicodeString& key, const UnicodeString& value)
-    {
-        PRECONDITION(section.empty() == false);
-        PRECONDITION(key.empty() == false);
-        PRECONDITION(value.empty() == false);
-
-        ReaperGateway::SaveSystemValue(section, key, value);
-    }
-
-    static value_type Query(const UnicodeString& section, const UnicodeString& key);
-
-    static void Clear(const UnicodeString& section, const UnicodeString& key)
-    {
+        PRECONDITION(projectReference != nullptr);
         PRECONDITION(section.empty() == false);
         PRECONDITION(key.empty() == false);
 
-        ReaperGateway::ClearSystemValue(section, key);
+        ReaperGateway::ClearProjectValue(projectReference, section, key);
     }
 
-    static void Delete(const UnicodeString& section, const UnicodeString& key)
+    static void Clear(ProjectReference projectReference, const UnicodeString& section)
     {
+        PRECONDITION(projectReference != nullptr);
         PRECONDITION(section.empty() == false);
-        PRECONDITION(key.empty() == false);
 
-        ReaperGateway::DeleteSystemValue(section, key);
+        ReaperGateway::ClearProjectValues(projectReference, section);
     }
 
 private:
-    static UnicodeString RawValue(const UnicodeString& section, const UnicodeString& key)
+    static UnicodeString RawValue(
+        ProjectReference projectReference, const UnicodeString& section, const UnicodeString& key)
     {
+        PRECONDITION_RETURN(projectReference != nullptr, UnicodeString());
         PRECONDITION_RETURN(section.empty() == false, UnicodeString());
         PRECONDITION_RETURN(key.empty() == false, UnicodeString());
 
-        return ReaperGateway::QuerySystemValue(section, key);
+        return ReaperGateway::QueryProjectValue(projectReference, section, key);
     }
 };
 
-static UnicodeString VERSIONS_SECTION_NAME = "ultraschall_versions";
-static UnicodeString UPDATE_SECTION_NAME   = "ultraschall_update";
-static UnicodeString BOM_SECTION_NAME      = "ultraschall_bom";
-
-bool QuerySetPluginVersion();
-
-void UpdateBillOfMaterials();
-
 }} // namespace ultraschall::reaper
 
-#endif // #ifndef __ULTRASCHALL_REAPER_SYSTEM_PROPERTIES_H_INCL__
+#endif // #ifndef __ULTRASCHALL_REAPER_PROJECT_PROPERTIES_H_INCL__

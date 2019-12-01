@@ -24,26 +24,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "UIMessageSupervisor.h"
-#include "UIMessageDialog.h"
+#include "Message.h"
 
 namespace ultraschall { namespace reaper {
 
-UIMessageSupervisor::UIMessageSupervisor() {}
-
-UIMessageSupervisor::~UIMessageSupervisor()
-{
-    DisplayMessages();
-}
-
-void UIMessageSupervisor::RegisterMessage(const UIMessageClass severity, const UnicodeString& str)
-{
-    messageQueue_.Add(severity, str);
-}
-
-void UIMessageSupervisor::DisplayMessages() 
-{
-	UIMessageDialog::Display(messageQueue_.Items(), UIMessageClass::MESSAGE_SUCCESS);
-}
+Message::Message(const MessageClass severity, const UnicodeString& str) : severity_(severity), str_(str) {}
 
 }} // namespace ultraschall::reaper

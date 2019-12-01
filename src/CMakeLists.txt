@@ -44,6 +44,7 @@ set(COMMON_INCLUDES
   CustomAction.h
   CustomActionFactory.h
   CustomActionManager.h
+  FileDialog.h
   FileManager.h
   ICommand.h
   ICustomAction.h
@@ -60,7 +61,12 @@ set(COMMON_INCLUDES
   Malloc.h
   Marker.h
   MediaProperties.h
+  Message.h
+  MessageClass.h
+  MessageQueue.h
+  MessageSupervisor.h
   PictureUtilities.h
+  ProjectProperties.h
   ReaperProject.h
   ReaperProjectManager.h
   reaper_plugin_functions.h
@@ -75,12 +81,6 @@ set(COMMON_INCLUDES
   taglib_include.h
   TagWriterFactory.h
   UpdateCheck.h
-  UIFileDialog.h
-  UIMessage.h
-  UIMessageClass.h
-  UIMessageDialog.h
-  UIMessageQueue.h
-  UIMessageSupervisor.h
   UnicodeString.h
   VersionHandler.h
 )
@@ -101,7 +101,11 @@ set(COMMON_SOURCES
   ISOBMFFContext.cpp
   ISOBMFFWriter.cpp
   MediaProperties.cpp
+  Message.cpp
+  MessageQueue.cpp
+  MessageSupervisor.cpp
   PictureUtilities.cpp
+  ProjectProperties.cpp
   ReaperProject.cpp
   ReaperProjectManager.cpp
   ReaperEntryPoints.cpp
@@ -112,9 +116,6 @@ set(COMMON_SOURCES
   SystemProperties.cpp
   TagWriterFactory.cpp
   UpdateCheck.cpp
-  UIMessage.cpp
-  UIMessageQueue.cpp
-  UIMessageSupervisor.cpp
   UnicodeString.cpp
   VersionHandler.cpp
   reaper_ultraschall.cpp
@@ -131,25 +132,9 @@ elseif(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "macos")
   set(EXTERNAL_SOURCES
     ${LIBZ_SOURCE_PATH}/contrib/minizip/ioapi.c
     ${LIBZ_SOURCE_PATH}/contrib/minizip/unzip.c
-    ${LIBWDL_SOURCE_PATH}/WDL/swell/swell.cpp
-    ${LIBWDL_SOURCE_PATH}/WDL/swell/swell-wnd.mm
-    ${LIBWDL_SOURCE_PATH}/WDL/swell/swell-dlg.mm
-    ${LIBWDL_SOURCE_PATH}/WDL/swell/swell-menu.mm
-    ${LIBWDL_SOURCE_PATH}/WDL/swell/swell-kb.mm
-    ${LIBWDL_SOURCE_PATH}/WDL/swell/swell-gdi.mm
-    ${LIBWDL_SOURCE_PATH}/WDL/swell/swell-misc.mm
-    ${LIBWDL_SOURCE_PATH}/WDL/swell/swell-modstub.mm
   )
   set_source_files_properties(${LIBZ_SOURCE_PATH}/contrib/minizip/ioapi.c PROPERTIES GENERATED TRUE)
   set_source_files_properties(${LIBZ_SOURCE_PATH}/contrib/minizip/unzip.c PROPERTIES GENERATED TRUE)
-  set_source_files_properties(${LIBWDL_SOURCE_PATH}/WDL/swell/swell.cpp PROPERTIES GENERATED TRUE)
-  set_source_files_properties(${LIBWDL_SOURCE_PATH}/WDL/swell/swell-wnd.mm PROPERTIES GENERATED TRUE)
-  set_source_files_properties(${LIBWDL_SOURCE_PATH}/WDL/swell/swell-dlg.mm PROPERTIES GENERATED TRUE)
-  set_source_files_properties(${LIBWDL_SOURCE_PATH}/WDL/swell/swell-menu.mm PROPERTIES GENERATED TRUE)
-  set_source_files_properties(${LIBWDL_SOURCE_PATH}/WDL/swell/swell-kb.mm PROPERTIES GENERATED TRUE)
-  set_source_files_properties(${LIBWDL_SOURCE_PATH}/WDL/swell/swell-gdi.mm PROPERTIES GENERATED TRUE)
-  set_source_files_properties(${LIBWDL_SOURCE_PATH}/WDL/swell/swell-misc.mm PROPERTIES GENERATED TRUE)
-  set_source_files_properties(${LIBWDL_SOURCE_PATH}/WDL/swell/swell-modstub.mm PROPERTIES GENERATED TRUE)
 endif()
 
 include_directories(${CMAKE_CURRENT_LIST_DIR})
@@ -160,22 +145,19 @@ if(WIN32)
   include_directories(win32)
   set(PLATFORM_SOURCES
     win32/Platform.cpp
-    win32/UIMessageDialog.cpp
-    win32/UIFileDialog.cpp
+    win32/FileDialog.cpp
   )
 elseif(APPLE)
   include_directories(macos)
   set(PLATFORM_SOURCES
     macos/Platform.cpp
-    macos/UIMessageDialog.cpp
-    macos/UIFileDialog.cpp
+    macos/FileDialog.cpp
   )
 elseif(UNIX)
   include_directories(linux)
   set(PLATFORM_SOURCES
     linux/Platform.cpp
-    linux/UIMessageDialog.cpp
-    linux/UIFileDialog.cpp
+    linux/FileDialog.cpp
   )
 endif()
 
@@ -186,7 +168,7 @@ elseif(APPLE)
   add_compile_options(-mmacosx-version-min=10.11)
   set_source_files_properties(
     macos/Platform.cpp
-    macos/UIFileDialog.cpp
+    macos/FileDialog.cpp
     PROPERTIES COMPILE_FLAGS "-x objective-c++"
   )
 endif()

@@ -35,7 +35,7 @@
 #include "Platform.h"
 #include "StringUtilities.h"
 #include "SystemProperties.h"
-#include "UIMessageSupervisor.h"
+#include "MessageSupervisor.h"
 #include "UpdateCheck.h"
 #include "VersionHandler.h"
 
@@ -63,7 +63,7 @@ double QueryCurrentTimeAsSeconds()
 
 void UpdateCheck()
 {
-    if(SystemProperty<bool>::Get(UPDATE_SECTION_NAME, "update_check") == true)
+    if(SystemProperty<bool>::Query(UPDATE_SECTION_NAME, "update_check") == true)
     {
         bool updateCheckRequired = false;
 
@@ -71,7 +71,7 @@ void UpdateCheck()
         if(SystemProperty<std::string>::Exists(UPDATE_SECTION_NAME, LAST_UPDATE_CHECK_NAME) == true)
         {
             const std::string previousUpdateCheckpoint
-                = SystemProperty<std::string>::Get(UPDATE_SECTION_NAME, LAST_UPDATE_CHECK_NAME);
+                = SystemProperty<std::string>::Query(UPDATE_SECTION_NAME, LAST_UPDATE_CHECK_NAME);
             if(previousUpdateCheckpoint.empty() == false)
             {
                 try
@@ -138,8 +138,8 @@ void UpdateCheck()
                         const std::string localVersion = VersionHandler::PluginVersion();
                         if(remoteVersion > localVersion)
                         {
-                            UIMessageSupervisor supervisor;
-                            std::string message = "An update for Ultraschall is available. Go to "
+                            MessageSupervisor supervisor;
+                            std::string         message = "An update for Ultraschall is available. Go to "
                                                   "http://ultraschall.fm/install to download the updated version ";
                             message += remoteVersion + ".";
                             supervisor.RegisterSuccess(message);

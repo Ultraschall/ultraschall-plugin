@@ -28,7 +28,7 @@
 #include "FileManager.h"
 #include "ReaperProjectManager.h"
 #include "StringUtilities.h"
-#include "UIMessageSupervisor.h"
+#include "MessageSupervisor.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -39,7 +39,7 @@ bool CustomAction::ValidateCustomActionId(const int32_t id)
 
 bool CustomAction::ValidateProject()
 {
-    UIMessageSupervisor supervisor;
+    MessageSupervisor supervisor;
 
     const bool isValid = (GetProjectDirectory().empty() == false) && (GetProjectName().empty() == false);
     if(isValid == false)
@@ -100,7 +100,7 @@ UnicodeString CustomAction::CreateProjectPath(const UnicodeString& extension)
 
 bool CustomAction::ValidateChapterMarkers(const MarkerArray& markers)
 {
-    UIMessageSupervisor supervisor;
+    MessageSupervisor supervisor;
 
     bool valid = true;
 
