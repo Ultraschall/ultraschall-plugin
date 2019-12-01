@@ -34,8 +34,7 @@
 #include <unzip.h>
 #include <zlib.h>
 
-namespace ultraschall {
-namespace reaper {
+namespace ultraschall { namespace reaper {
 
 UnicodeString VersionHandler::ThemeVersion()
 {
@@ -110,12 +109,8 @@ UnicodeString VersionHandler::PluginVersion()
 {
 #ifdef _WIN32
     return Platform::ReadFileVersion(Platform::UserDataDirectory() + Platform::PLUGIN_PATH);
-#else // #ifdef _WIN32
+#else  // #ifdef _WIN32
     return "3.2.0";
-<<<<<<< HEAD
-=======
-// TODO: Linux
->>>>>>> 842dabae7c943ab16bd4045b2ae848c715af870e
 #endif // #ifdef _WIN32
 }
 
@@ -123,7 +118,7 @@ UnicodeString VersionHandler::ReaperVersion()
 {
     UnicodeString version;
 
-    const UnicodeStringArray tokens                  = UnicodeStringTokenize(ReaperGateway::QueryApplicationVersion(), '/');
+    const UnicodeStringArray tokens = UnicodeStringTokenize(ReaperGateway::QueryApplicationVersion(), '/');
     const size_t             MIN_VERSION_TOKEN_COUNT = 1;
     if(tokens.size() >= MIN_VERSION_TOKEN_COUNT)
     {
