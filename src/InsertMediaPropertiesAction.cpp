@@ -35,8 +35,8 @@
 #include "SystemProperties.h"
 #include "TagWriterFactory.h"
 #include "TimeUtilities.h"
-#include "UIFileDialog.h"
-#include "UIMessageSupervisor.h"
+#include "FileDialog.h"
+#include "MessageSupervisor.h"
 #include "ReaperProjectManager.h"
 
 namespace ultraschall { namespace reaper {
@@ -50,11 +50,11 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
     PRECONDITION_RETURN(ConfigureTargets() == true, SERVICE_FAILURE);
     PRECONDITION_RETURN(ConfigureSources() == true, SERVICE_FAILURE);
 
-	// caution! requires ConfigureSources() to be called beforehand
+    // caution! requires ConfigureSources() to be called beforehand
     PRECONDITION_RETURN(ValidateChapterMarkers(chapterMarkers_) == true, SERVICE_FAILURE);
 
     ServiceStatus       status = SERVICE_FAILURE;
-    UIMessageSupervisor supervisor;
+    MessageSupervisor supervisor;
     size_t              errorCount = 0;
 
     for(size_t i = 0; i < targets_.size(); i++)
@@ -108,7 +108,7 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
 bool InsertMediaPropertiesAction::ConfigureSources()
 {
     bool                result = false;
-    UIMessageSupervisor supervisor;
+    MessageSupervisor supervisor;
     size_t              invalidAssetCount = 0;
 
     mediaProperties_.Clear();
@@ -151,7 +151,7 @@ bool InsertMediaPropertiesAction::ConfigureSources()
 
 bool InsertMediaPropertiesAction::ConfigureTargets()
 {
-    UIMessageSupervisor supervisor;
+    MessageSupervisor supervisor;
 
     targets_.clear();
 
@@ -176,7 +176,7 @@ bool InsertMediaPropertiesAction::ConfigureTargets()
     {
         supervisor.RegisterWarning("Ultraschall can't find a suitable media file. Please select an alternative media "
                                    "file from the file selection dialog after closing this message.");
-        UIFileDialog        fileDialog("Select audio file");
+        FileDialog        fileDialog("Select audio file");
         const UnicodeString target = fileDialog.BrowseForAudio();
         if(target.empty() == false)
         {

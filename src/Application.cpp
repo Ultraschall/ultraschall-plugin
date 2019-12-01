@@ -29,7 +29,7 @@
 #include "FileManager.h"
 #include "StringUtilities.h"
 #include "SystemProperties.h"
-#include "UIMessageSupervisor.h"
+#include "MessageSupervisor.h"
 #include "UpdateCheck.h"
 #include "VersionHandler.h"
 
@@ -92,7 +92,7 @@ bool Application::OnCustomAction(const int32_t id)
 bool Application::HealthCheck()
 {
     bool                ok = true;
-    UIMessageSupervisor supervisor;
+    MessageSupervisor supervisor;
 
     const std::string information1("\
 The Application Support directory of your system contains an unsupported \

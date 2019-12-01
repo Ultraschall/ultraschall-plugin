@@ -26,7 +26,7 @@
 
 #include "SystemProperties.h"
 #include "StringUtilities.h"
-#include "UIMessageSupervisor.h"
+#include "MessageSupervisor.h"
 #include "VersionHandler.h"
 
 namespace ultraschall { namespace reaper {
@@ -72,7 +72,7 @@ template<> int SystemProperty<int>::Query(const UnicodeString& section, const Un
 bool QuerySetPluginVersion()
 {
     bool                result = false;
-    UIMessageSupervisor supervisor;
+    MessageSupervisor supervisor;
 
     if(SystemProperty<UnicodeString>::Exists(VERSIONS_SECTION_NAME, THEME_VERSION_KEY_NAME) == true)
     {

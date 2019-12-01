@@ -28,8 +28,8 @@
 #include "CustomActionFactory.h"
 #include "StringUtilities.h"
 #include "FileManager.h"
-#include "UIFileDialog.h"
-#include "UIMessageSupervisor.h"
+#include "FileDialog.h"
+#include "MessageSupervisor.h"
 #include "ReaperProjectManager.h"
 
 namespace ultraschall { namespace reaper {
@@ -47,7 +47,7 @@ ServiceStatus SaveChapterMarkersAction::Execute()
     PRECONDITION_RETURN(ValidateChapterMarkers(chapterMarkers_) == true, SERVICE_FAILURE);
 
     ServiceStatus       status = SERVICE_FAILURE;
-    UIMessageSupervisor supervisor;
+    MessageSupervisor supervisor;
 
     std::ofstream os(target_, std::ios::out);
     if(os.is_open() == true)
@@ -78,12 +78,12 @@ ServiceStatus SaveChapterMarkersAction::Execute()
 bool SaveChapterMarkersAction::ConfigureTargets()
 {
     bool                result = false;
-    UIMessageSupervisor supervisor;
+    MessageSupervisor supervisor;
 
     target_.clear();
 
     // TODO use SaveFileDialog instead of FolderBrowser
-    UIFileDialog fileDialog("Export chapter markers", GetProjectDirectory());
+    FileDialog fileDialog("Export chapter markers", GetProjectDirectory());
     target_ = fileDialog.BrowseForDirectory();
     if(target_.empty() == false)
     {
@@ -103,7 +103,7 @@ bool SaveChapterMarkersAction::ConfigureTargets()
 bool SaveChapterMarkersAction::ConfigureSources()
 {
     bool                result = false;
-    UIMessageSupervisor supervisor;
+    MessageSupervisor supervisor;
     size_t              invalidAssetCount = 0;
 
     chapterMarkers_ = ReaperProjectManager::Instance().CurrentProject().AllMarkers();

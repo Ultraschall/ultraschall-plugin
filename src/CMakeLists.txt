@@ -44,6 +44,7 @@ set(COMMON_INCLUDES
   CustomAction.h
   CustomActionFactory.h
   CustomActionManager.h
+  FileDialog.h
   FileManager.h
   ICommand.h
   ICustomAction.h
@@ -60,6 +61,10 @@ set(COMMON_INCLUDES
   Malloc.h
   Marker.h
   MediaProperties.h
+  Message.h
+  MessageClass.h
+  MessageQueue.h
+  MessageSupervisor.h
   PictureUtilities.h
   ProjectProperties.h
   ReaperProject.h
@@ -76,11 +81,6 @@ set(COMMON_INCLUDES
   taglib_include.h
   TagWriterFactory.h
   UpdateCheck.h
-  UIFileDialog.h
-  UIMessage.h
-  UIMessageClass.h
-  UIMessageQueue.h
-  UIMessageSupervisor.h
   UnicodeString.h
   VersionHandler.h
 )
@@ -101,6 +101,9 @@ set(COMMON_SOURCES
   ISOBMFFContext.cpp
   ISOBMFFWriter.cpp
   MediaProperties.cpp
+  Message.cpp
+  MessageQueue.cpp
+  MessageSupervisor.cpp
   PictureUtilities.cpp
   ProjectProperties.cpp
   ReaperProject.cpp
@@ -113,9 +116,6 @@ set(COMMON_SOURCES
   SystemProperties.cpp
   TagWriterFactory.cpp
   UpdateCheck.cpp
-  UIMessage.cpp
-  UIMessageQueue.cpp
-  UIMessageSupervisor.cpp
   UnicodeString.cpp
   VersionHandler.cpp
   reaper_ultraschall.cpp
@@ -145,19 +145,19 @@ if(WIN32)
   include_directories(win32)
   set(PLATFORM_SOURCES
     win32/Platform.cpp
-    win32/UIFileDialog.cpp
+    win32/FileDialog.cpp
   )
 elseif(APPLE)
   include_directories(macos)
   set(PLATFORM_SOURCES
     macos/Platform.cpp
-    macos/UIFileDialog.cpp
+    macos/FileDialog.cpp
   )
 elseif(UNIX)
   include_directories(linux)
   set(PLATFORM_SOURCES
     linux/Platform.cpp
-    linux/UIFileDialog.cpp
+    linux/FileDialog.cpp
   )
 endif()
 
@@ -168,7 +168,7 @@ elseif(APPLE)
   add_compile_options(-mmacosx-version-min=10.11)
   set_source_files_properties(
     macos/Platform.cpp
-    macos/UIFileDialog.cpp
+    macos/FileDialog.cpp
     PROPERTIES COMPILE_FLAGS "-x objective-c++"
   )
 endif()
