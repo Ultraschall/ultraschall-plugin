@@ -45,24 +45,24 @@ public:
 
     static uint32_t EditMarkerColor();
 
-    static UnicodeString ApplicationVersion();
+    static UnicodeString QueryApplicationVersion();
     static int32_t       RegisterCustomAction(const UnicodeString& name, void* infoStruct);
     static void          LockUIRefresh(const bool lock);
 
-    static UnicodeString ExportPathName();
-    static UnicodeString ProjectPathName();
-    static UnicodeString ProjectFileName();
-    static UnicodeString ProjectFolderName();
-    static UnicodeString ProjectName();
+    static UnicodeString QueryExportPathName();
+    static UnicodeString QueryProjectPathName();
+    static UnicodeString QueryProjectFileName();
+    static UnicodeString QueryProjectFolderName();
+    static UnicodeString QueryProjectName();
 
     static UnicodeString TimestampToString(const double timestamp);
     static double        StringToTimestamp(const UnicodeString& input);
 
-    static ProjectReference CurrentProject();
-    static UnicodeString    ProjectPath(ProjectReference projectReference);
-    static UnicodeString    ProjectNotes(ProjectReference projectReference);
+    static ProjectReference QueryCurrentProject();
+    static UnicodeString    QueryProjectPath(ProjectReference projectReference);
+    static UnicodeString    QueryProjectNotes(ProjectReference projectReference);
 
-    static MarkerArray AllMarkers(ProjectReference projectReference);
+    static MarkerArray QueryAllMarkers(ProjectReference projectReference);
 
     static size_t CountMarkers(ProjectReference projectReference);
     static bool   ClearMarkers(ProjectReference projectReference);
@@ -71,11 +71,11 @@ public:
     static bool InsertMarker(ProjectReference projectReference, const Marker& marker);
     static bool UndoMarker(ProjectReference projectReference, const double position);
 
-    static int    PlayState(ProjectReference projectReference);
-    static double CursorPosition(ProjectReference projectReference);
-    static double PlayPosition(ProjectReference projectReference);
-    static double MinPosition(ProjectReference projectReference);
-    static double MaxPosition(ProjectReference projectReference);
+    static int    QueryPlayState(ProjectReference projectReference);
+    static double QueryCursorPosition(ProjectReference projectReference);
+    static double QueryPlayPosition(ProjectReference projectReference);
+    static double QueryMinPosition(ProjectReference projectReference);
+    static double QueryMaxPosition(ProjectReference projectReference);
 
     static bool          HasSystemValue(const UnicodeString& section, const UnicodeString& key);
     static UnicodeString QuerySystemValue(const UnicodeString& section, const UnicodeString& key);

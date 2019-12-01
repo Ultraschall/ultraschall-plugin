@@ -47,7 +47,7 @@ uint32_t ReaperGateway::EditMarkerColor()
 #endif // #ifdef _WIN32
 }
 
-UnicodeString ReaperGateway::ApplicationVersion()
+UnicodeString ReaperGateway::QueryApplicationVersion()
 {
     return H2U(reaper_api::GetAppVersion());
 }
@@ -64,7 +64,7 @@ void ReaperGateway::LockUIRefresh(const bool lock)
     reaper_api::PreventUIRefresh((lock == true) ? 1 : -1);
 }
 
-UnicodeString ReaperGateway::ExportPathName()
+UnicodeString ReaperGateway::QueryExportPathName()
 {
     UnicodeString result;
 
@@ -78,12 +78,12 @@ UnicodeString ReaperGateway::ExportPathName()
     return result;
 }
 
-ProjectReference ReaperGateway::CurrentProject()
+ProjectReference ReaperGateway::QueryCurrentProject()
 {
     return reinterpret_cast<ProjectReference>(reaper_api::EnumProjects(-1, 0, 0));
 }
 
-UnicodeString ReaperGateway::ProjectPathName()
+UnicodeString ReaperGateway::QueryProjectPathName()
 {
     UnicodeString result;
 
@@ -97,11 +97,11 @@ UnicodeString ReaperGateway::ProjectPathName()
     return result;
 }
 
-UnicodeString ReaperGateway::ProjectFileName()
+UnicodeString ReaperGateway::QueryProjectFileName()
 {
     UnicodeString result;
 
-    const UnicodeString projectPath = ProjectPathName();
+    const UnicodeString projectPath = QueryProjectPathName();
     if(projectPath.empty() == false)
     {
         const UnicodeStringArray pathComponents = FileManager::SplitPath(projectPath);
@@ -114,11 +114,11 @@ UnicodeString ReaperGateway::ProjectFileName()
     return result;
 }
 
-UnicodeString ReaperGateway::ProjectFolderName()
+UnicodeString ReaperGateway::QueryProjectFolderName()
 {
     UnicodeString result;
 
-    const UnicodeString projectPath = ProjectPathName();
+    const UnicodeString projectPath = QueryProjectPathName();
     if(projectPath.empty() == false)
     {
         const UnicodeStringArray pathComponents = FileManager::SplitPath(projectPath);
@@ -138,11 +138,11 @@ UnicodeString ReaperGateway::ProjectFolderName()
     return result;
 }
 
-UnicodeString ReaperGateway::ProjectName()
+UnicodeString ReaperGateway::QueryProjectName()
 {
     UnicodeString result;
 
-    const UnicodeString projectFile = ProjectFileName();
+    const UnicodeString projectFile = QueryProjectFileName();
     if(projectFile.empty() == false)
     {
         result = projectFile.substr(0, projectFile.find('.', 0));
@@ -238,7 +238,7 @@ double ReaperGateway::StringToTimestamp(const UnicodeString& input)
     return reaper_api::parse_timestr(input.c_str());
 }
 
-UnicodeString ReaperGateway::ProjectPath(ProjectReference projectReference)
+UnicodeString ReaperGateway::QueryProjectPath(ProjectReference projectReference)
 {
     PRECONDITION_RETURN(projectReference != nullptr, UnicodeString());
 
@@ -263,7 +263,7 @@ UnicodeString ReaperGateway::ProjectPath(ProjectReference projectReference)
     return projectPath;
 }
 
-UnicodeString ReaperGateway::ProjectNotes(ProjectReference projectReference)
+UnicodeString ReaperGateway::QueryProjectNotes(ProjectReference projectReference)
 {
     PRECONDITION_RETURN(projectReference != nullptr, UnicodeString());
 
@@ -279,7 +279,7 @@ UnicodeString ReaperGateway::ProjectNotes(ProjectReference projectReference)
     return projectNotes;
 }
 
-MarkerArray ReaperGateway::AllMarkers(ProjectReference projectReference)
+MarkerArray ReaperGateway::QueryAllMarkers(ProjectReference projectReference)
 {
     PRECONDITION_RETURN(projectReference != nullptr, MarkerArray());
 
@@ -381,7 +381,7 @@ bool ReaperGateway::UndoMarker(ProjectReference projectReference, const double p
     return undone;
 }
 
-int ReaperGateway::PlayState(ProjectReference projectReference)
+int ReaperGateway::QueryPlayState(ProjectReference projectReference)
 {
     PRECONDITION_RETURN(projectReference != nullptr, -1);
 
@@ -389,7 +389,7 @@ int ReaperGateway::PlayState(ProjectReference projectReference)
     return reaper_api::GetPlayStateEx(nativeReference);
 }
 
-double ReaperGateway::CursorPosition(ProjectReference projectReference)
+double ReaperGateway::QueryCursorPosition(ProjectReference projectReference)
 {
     PRECONDITION_RETURN(projectReference != nullptr, -1);
 
@@ -397,7 +397,7 @@ double ReaperGateway::CursorPosition(ProjectReference projectReference)
     return reaper_api::GetCursorPositionEx(nativeReference);
 }
 
-double ReaperGateway::PlayPosition(ProjectReference projectReference)
+double ReaperGateway::QueryPlayPosition(ProjectReference projectReference)
 {
     PRECONDITION_RETURN(projectReference != nullptr, -1);
 
@@ -405,11 +405,11 @@ double ReaperGateway::PlayPosition(ProjectReference projectReference)
     return reaper_api::GetPlayPositionEx(nativeReference);
 }
 
-double ReaperGateway::MinPosition(ProjectReference projectReference)
+double ReaperGateway::QueryMinPosition(ProjectReference projectReference)
 {
     PRECONDITION_RETURN(projectReference != nullptr, -1);
 
-    double minPosition = MaxPosition(projectReference);
+    double minPosition = QueryMaxPosition(projectReference);
     if(minPosition != INVALID_POSITION)
     {
         ReaProject* nativeReference = reinterpret_cast<ReaProject*>(projectReference);
@@ -429,7 +429,7 @@ double ReaperGateway::MinPosition(ProjectReference projectReference)
     return minPosition;
 }
 
-double ReaperGateway::MaxPosition(ProjectReference projectReference)
+double ReaperGateway::QueryMaxPosition(ProjectReference projectReference)
 {
     PRECONDITION_RETURN(projectReference != nullptr, -1);
 

@@ -48,7 +48,7 @@ const ReaperProject& ReaperProjectManager::CurrentProject() const
 
 ProjectReference ReaperProjectManager::CurrentProjectReference() const
 {
-    return ReaperGateway::CurrentProject();
+    return ReaperGateway::QueryCurrentProject();
 }
 
 UnicodeString ReaperProjectManager::CurrentProjectName() const

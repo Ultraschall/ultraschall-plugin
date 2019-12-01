@@ -121,7 +121,7 @@ UnicodeString VersionHandler::ReaperVersion()
 {
     UnicodeString version;
 
-    const UnicodeStringArray tokens                  = UnicodeStringTokenize(ReaperGateway::ApplicationVersion(), '/');
+    const UnicodeStringArray tokens                  = UnicodeStringTokenize(ReaperGateway::QueryApplicationVersion(), '/');
     const size_t             MIN_VERSION_TOKEN_COUNT = 1;
     if(tokens.size() >= MIN_VERSION_TOKEN_COUNT)
     {

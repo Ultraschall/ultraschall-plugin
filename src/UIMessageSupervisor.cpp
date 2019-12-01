@@ -31,7 +31,7 @@ namespace ultraschall { namespace reaper {
 
 const UnicodeString UIMessageSupervisor::MESSAGES_SECTION_NAME("ultraschall_messages");
 
-UIMessageSupervisor::UIMessageSupervisor() : projectReference_(ReaperGateway::CurrentProject()) {}
+UIMessageSupervisor::UIMessageSupervisor() : projectReference_(ReaperGateway::QueryCurrentProject()) {}
 
 UIMessageSupervisor::~UIMessageSupervisor()
 {
