@@ -38,7 +38,7 @@ Context::Context(const UnicodeString& targetName) : target_(new taglib_mp3::File
 
 Context::~Context()
 {
-    tags_ = 0;
+    tags_ = nullptr;
 }
 
 }}} // namespace ultraschall::reaper::id3v2
