@@ -42,7 +42,7 @@ public:
         PRECONDITION_RETURN(section.empty() == false, false);
         PRECONDITION_RETURN(key.empty() == false, false);
 
-        return ReaperGateway::HasValue(section, key);
+        return ReaperGateway::HasSystemValue(section, key);
     }
 
     static void Set(const UnicodeString& section, const UnicodeString& key, const UnicodeString& value)
@@ -51,7 +51,7 @@ public:
         PRECONDITION(key.empty() == false);
         PRECONDITION(value.empty() == false);
 
-        ReaperGateway::SetValue(section, key, value);
+        ReaperGateway::SetSystemValue(section, key, value);
     }
 
     static void Save(const UnicodeString& section, const UnicodeString& key, const UnicodeString& value)
@@ -60,17 +60,17 @@ public:
         PRECONDITION(key.empty() == false);
         PRECONDITION(value.empty() == false);
 
-        ReaperGateway::SaveValue(section, key, value);
+        ReaperGateway::SaveSystemValue(section, key, value);
     }
 
-    static value_type Get(const UnicodeString& section, const UnicodeString& key);
+    static value_type Query(const UnicodeString& section, const UnicodeString& key);
 
     static void Clear(const UnicodeString& section, const UnicodeString& key)
     {
         PRECONDITION(section.empty() == false);
         PRECONDITION(key.empty() == false);
 
-        ReaperGateway::ClearValue(section, key);
+        ReaperGateway::ClearSystemValue(section, key);
     }
 
     static void Delete(const UnicodeString& section, const UnicodeString& key)
@@ -78,7 +78,7 @@ public:
         PRECONDITION(section.empty() == false);
         PRECONDITION(key.empty() == false);
 
-        ReaperGateway::DeleteValue(section, key);
+        ReaperGateway::DeleteSystemValue(section, key);
     }
 
 private:
@@ -87,7 +87,7 @@ private:
         PRECONDITION_RETURN(section.empty() == false, UnicodeString());
         PRECONDITION_RETURN(key.empty() == false, UnicodeString());
 
-        return ReaperGateway::GetValue(section, key);
+        return ReaperGateway::QuerySystemValue(section, key);
     }
 };
 

@@ -29,30 +29,25 @@
 #include "UIMessageSupervisor.h"
 #include "VersionHandler.h"
 
-namespace ultraschall
-{
-namespace reaper
-{
+namespace ultraschall { namespace reaper {
 
 static const char* THEME_VERSION_KEY_NAME  = "theme";
 static const char* PLUGIN_VERSION_KEY_NAME = "plugin";
 static const char* VERSION_VALUE_NAME      = "20180114";
 
-template <>
-UnicodeString SystemProperty<UnicodeString>::Get(const UnicodeString &section, const UnicodeString &key)
+template<> UnicodeString SystemProperty<UnicodeString>::Query(const UnicodeString& section, const UnicodeString& key)
 {
     return RawValue(section, key);
 }
 
-template <>
-bool SystemProperty<bool>::Get(const UnicodeString &section, const UnicodeString &key)
+template<> bool SystemProperty<bool>::Query(const UnicodeString& section, const UnicodeString& key)
 {
     bool value = false;
 
-    const UnicodeString &rawValue = RawValue(section, key);
-    if (rawValue.empty() == false)
+    const UnicodeString& rawValue = RawValue(section, key);
+    if(rawValue.empty() == false)
     {
-        if ((StringLowercase(rawValue) == "true") || (UnicodeStringToInt(rawValue) != 0))
+        if((StringLowercase(rawValue) == "true") || (UnicodeStringToInt(rawValue) != 0))
         {
             value = true;
         }
@@ -61,13 +56,12 @@ bool SystemProperty<bool>::Get(const UnicodeString &section, const UnicodeString
     return value;
 }
 
-template <>
-int SystemProperty<int>::Get(const UnicodeString &section, const UnicodeString &key)
+template<> int SystemProperty<int>::Query(const UnicodeString& section, const UnicodeString& key)
 {
     int value = 0;
 
     const UnicodeString rawValue = RawValue(section, key);
-    if (rawValue.empty() == false)
+    if(rawValue.empty() == false)
     {
         value = UnicodeStringToInt(rawValue);
     }
@@ -82,7 +76,8 @@ bool QuerySetPluginVersion()
 
     if(SystemProperty<UnicodeString>::Exists(VERSIONS_SECTION_NAME, THEME_VERSION_KEY_NAME) == true)
     {
-        const UnicodeString themeVersion = SystemProperty<UnicodeString>::Get(VERSIONS_SECTION_NAME, THEME_VERSION_KEY_NAME);
+        const UnicodeString themeVersion
+            = SystemProperty<UnicodeString>::Query(VERSIONS_SECTION_NAME, THEME_VERSION_KEY_NAME);
         if(themeVersion == VERSION_VALUE_NAME)
         {
             SystemProperty<UnicodeString>::Save(VERSIONS_SECTION_NAME, PLUGIN_VERSION_KEY_NAME, VERSION_VALUE_NAME);
@@ -120,7 +115,7 @@ void UpdateBillOfMaterials()
 
     if(SystemProperty<int>::Exists(BOM_SECTION_NAME, FOUND_ITEMS_KEY_NAME) == true)
     {
-        const int foundItems = SystemProperty<int>::Get(BOM_SECTION_NAME, FOUND_ITEMS_KEY_NAME);
+        const int foundItems = SystemProperty<int>::Query(BOM_SECTION_NAME, FOUND_ITEMS_KEY_NAME);
         if(foundItems > 0)
         {
             for(int i = 1; i <= foundItems; i++)
@@ -132,7 +127,8 @@ void UpdateBillOfMaterials()
         {
             for(int i = 1; i <= 23; i++)
             {
-                if (SystemProperty<UnicodeString>::Exists(BOM_SECTION_NAME, ITEM_KEY_NAME_PREFIX + std::to_string(i)) == true)
+                if(SystemProperty<UnicodeString>::Exists(BOM_SECTION_NAME, ITEM_KEY_NAME_PREFIX + std::to_string(i))
+                   == true)
                 {
                     SystemProperty<UnicodeString>::Delete(BOM_SECTION_NAME, ITEM_KEY_NAME_PREFIX + std::to_string(i));
                 }
@@ -145,7 +141,8 @@ void UpdateBillOfMaterials()
     {
         for(unsigned int i = 1; i <= 23; i++)
         {
-            if (SystemProperty<UnicodeString>::Exists(BOM_SECTION_NAME, ITEM_KEY_NAME_PREFIX + std::to_string(i)) == true)
+            if(SystemProperty<UnicodeString>::Exists(BOM_SECTION_NAME, ITEM_KEY_NAME_PREFIX + std::to_string(i))
+               == true)
             {
                 SystemProperty<UnicodeString>::Delete(BOM_SECTION_NAME, ITEM_KEY_NAME_PREFIX + std::to_string(i));
             }
@@ -206,5 +203,4 @@ void UpdateBillOfMaterials()
     }
 }
 
-} // namespace reaper
-} // namespace ultraschall
+}} // namespace ultraschall::reaper

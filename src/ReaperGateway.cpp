@@ -308,7 +308,7 @@ MarkerArray ReaperGateway::AllMarkers(ProjectReference projectReference)
            (false == isRegion) &&                          // remove regions
            (color != static_cast<int>(EditMarkerColor()))) // include only chapter markers
         {
-            // TODO check whether reaper uses unicode or ansi
+            // TODO check whether reaper uses Unicode or ANSI
             allMarkers.push_back(Marker(position, markerName, color));
         }
 
@@ -452,7 +452,7 @@ double ReaperGateway::MaxPosition(ProjectReference projectReference)
     return maxPosition;
 }
 
-bool ReaperGateway::HasValue(const UnicodeString& section, const UnicodeString& key)
+bool ReaperGateway::HasSystemValue(const UnicodeString& section, const UnicodeString& key)
 {
     PRECONDITION_RETURN(section.empty() == false, false);
     PRECONDITION_RETURN(key.empty() == false, false);
@@ -460,7 +460,7 @@ bool ReaperGateway::HasValue(const UnicodeString& section, const UnicodeString& 
     return reaper_api::HasExtState(U2H(section).c_str(), U2H(key).c_str());
 }
 
-UnicodeString ReaperGateway::GetValue(const UnicodeString& section, const UnicodeString& key)
+UnicodeString ReaperGateway::QuerySystemValue(const UnicodeString& section, const UnicodeString& key)
 {
     PRECONDITION_RETURN(section.empty() == false, UnicodeString());
     PRECONDITION_RETURN(key.empty() == false, UnicodeString());
@@ -468,7 +468,7 @@ UnicodeString ReaperGateway::GetValue(const UnicodeString& section, const Unicod
     return H2U(reaper_api::GetExtState(U2H(section).c_str(), U2H(key).c_str()));
 }
 
-void ReaperGateway::SetValue(const UnicodeString& section, const UnicodeString& key, const UnicodeString& value)
+void ReaperGateway::SetSystemValue(const UnicodeString& section, const UnicodeString& key, const UnicodeString& value)
 {
     PRECONDITION(section.empty() == false);
     PRECONDITION(key.empty() == false);
@@ -477,7 +477,7 @@ void ReaperGateway::SetValue(const UnicodeString& section, const UnicodeString& 
     reaper_api::SetExtState(U2H(section).c_str(), U2H(key).c_str(), U2H(value).c_str(), false);
 }
 
-void ReaperGateway::SaveValue(const UnicodeString& section, const UnicodeString& key, const UnicodeString& value)
+void ReaperGateway::SaveSystemValue(const UnicodeString& section, const UnicodeString& key, const UnicodeString& value)
 {
     PRECONDITION(section.empty() == false);
     PRECONDITION(key.empty() == false);
@@ -486,7 +486,7 @@ void ReaperGateway::SaveValue(const UnicodeString& section, const UnicodeString&
     reaper_api::SetExtState(U2H(section).c_str(), U2H(key).c_str(), U2H(value).c_str(), true);
 }
 
-void ReaperGateway::ClearValue(const UnicodeString& section, const UnicodeString& key)
+void ReaperGateway::ClearSystemValue(const UnicodeString& section, const UnicodeString& key)
 {
     PRECONDITION(section.empty() == false);
     PRECONDITION(key.empty() == false);
@@ -494,12 +494,82 @@ void ReaperGateway::ClearValue(const UnicodeString& section, const UnicodeString
     reaper_api::DeleteExtState(U2H(section).c_str(), U2H(key).c_str(), false);
 }
 
-void ReaperGateway::DeleteValue(const UnicodeString& section, const UnicodeString& key)
+void ReaperGateway::DeleteSystemValue(const UnicodeString& section, const UnicodeString& key)
 {
     PRECONDITION(section.empty() == false);
     PRECONDITION(key.empty() == false);
 
     reaper_api::DeleteExtState(U2H(section).c_str(), U2H(key).c_str(), true);
+}
+
+bool ReaperGateway::HasProjectValue(
+    ProjectReference projectReference, const UnicodeString& section, const UnicodeString& key)
+{
+    PRECONDITION_RETURN(projectReference != nullptr, false);
+    PRECONDITION_RETURN(section.empty() == false, false);
+    PRECONDITION_RETURN(key.empty() == false, false);
+
+    ReaProject*         nativeReference                = reinterpret_cast<ReaProject*>(projectReference);
+    static const size_t MAX_PROJECT_VALUE_SIZE         = 4096;
+    char                buffer[MAX_PROJECT_VALUE_SIZE] = {0};
+    const int           valueSize                      = reaper_api::GetProjExtState(
+        nativeReference, U2H(section).c_str(), U2H(key).c_str(), buffer, (int)MAX_PROJECT_VALUE_SIZE);
+    return valueSize > 0;
+}
+
+UnicodeString ReaperGateway::QueryProjectValue(
+    ProjectReference projectReference, const UnicodeString& section, const UnicodeString& key)
+{
+    PRECONDITION_RETURN(projectReference != nullptr, UnicodeString());
+    PRECONDITION_RETURN(section.empty() == false, UnicodeString());
+    PRECONDITION_RETURN(key.empty() == false, UnicodeString());
+
+    UnicodeString projectValue;
+
+    ReaProject*         nativeReference                = reinterpret_cast<ReaProject*>(projectReference);
+    static const size_t MAX_PROJECT_VALUE_SIZE         = 4096;
+    char                buffer[MAX_PROJECT_VALUE_SIZE] = {0};
+    const int           valueSize                      = reaper_api::GetProjExtState(
+        nativeReference, U2H(section).c_str(), U2H(key).c_str(), buffer, (int)MAX_PROJECT_VALUE_SIZE);
+    if(valueSize > 0)
+    {
+        projectValue = H2U(buffer);
+    }
+
+    return projectValue;
+}
+
+void ReaperGateway::SetProjectValue(
+    ProjectReference projectReference, const UnicodeString& section, const UnicodeString& key,
+    const UnicodeString& value)
+{
+    PRECONDITION(projectReference != nullptr);
+    PRECONDITION(section.empty() == false);
+    PRECONDITION(key.empty() == false);
+    PRECONDITION(value.empty() == false);
+
+    ReaProject* nativeReference = reinterpret_cast<ReaProject*>(projectReference);
+    reaper_api::SetProjExtState(nativeReference, U2H(section).c_str(), U2H(key).c_str(), U2H(value).c_str());
+}
+
+void ReaperGateway::ClearProjectValue(
+    ProjectReference projectReference, const UnicodeString& section, const UnicodeString& key)
+{
+    PRECONDITION(projectReference != nullptr);
+    PRECONDITION(section.empty() == false);
+    PRECONDITION(key.empty() == false);
+
+    ReaProject* nativeReference = reinterpret_cast<ReaProject*>(projectReference);
+    reaper_api::SetProjExtState(nativeReference, U2H(section).c_str(), U2H(key).c_str(), nullptr);
+}
+
+void ReaperGateway::ClearProjectValues(ProjectReference projectReference, const UnicodeString& section)
+{
+    PRECONDITION(projectReference != nullptr);
+    PRECONDITION(section.empty() == false);
+
+    ReaProject* nativeReference = reinterpret_cast<ReaProject*>(projectReference);
+    reaper_api::SetProjExtState(nativeReference, U2H(section).c_str(), nullptr, nullptr);
 }
 
 }} // namespace ultraschall::reaper

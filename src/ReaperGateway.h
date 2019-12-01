@@ -77,12 +77,23 @@ public:
     static double MinPosition(ProjectReference projectReference);
     static double MaxPosition(ProjectReference projectReference);
 
-    static bool          HasValue(const UnicodeString& section, const UnicodeString& key);
-    static UnicodeString GetValue(const UnicodeString& section, const UnicodeString& key);
-    static void          SetValue(const UnicodeString& section, const UnicodeString& key, const UnicodeString& value);
-    static void          SaveValue(const UnicodeString& section, const UnicodeString& key, const UnicodeString& value);
-    static void          ClearValue(const UnicodeString& section, const UnicodeString& key);
-    static void          DeleteValue(const UnicodeString& section, const UnicodeString& key);
+    static bool          HasSystemValue(const UnicodeString& section, const UnicodeString& key);
+    static UnicodeString QuerySystemValue(const UnicodeString& section, const UnicodeString& key);
+    static void SetSystemValue(const UnicodeString& section, const UnicodeString& key, const UnicodeString& value);
+    static void SaveSystemValue(const UnicodeString& section, const UnicodeString& key, const UnicodeString& value);
+    static void ClearSystemValue(const UnicodeString& section, const UnicodeString& key);
+    static void DeleteSystemValue(const UnicodeString& section, const UnicodeString& key);
+
+    static bool HasProjectValue(
+        ProjectReference projectReference, const UnicodeString& section, const UnicodeString& key);
+    static UnicodeString QueryProjectValue(
+        ProjectReference projectReference, const UnicodeString& section, const UnicodeString& key);
+    static void SetProjectValue(
+        ProjectReference projectReference, const UnicodeString& section, const UnicodeString& key,
+        const UnicodeString& value);
+    static void ClearProjectValue(
+        ProjectReference projectReference, const UnicodeString& section, const UnicodeString& key);
+    static void ClearProjectValues(ProjectReference projectReference, const UnicodeString& section);
 };
 
 }} // namespace ultraschall::reaper

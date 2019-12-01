@@ -63,7 +63,7 @@ double QueryCurrentTimeAsSeconds()
 
 void UpdateCheck()
 {
-    if(SystemProperty<bool>::Get(UPDATE_SECTION_NAME, "update_check") == true)
+    if(SystemProperty<bool>::Query(UPDATE_SECTION_NAME, "update_check") == true)
     {
         bool updateCheckRequired = false;
 
@@ -71,7 +71,7 @@ void UpdateCheck()
         if(SystemProperty<std::string>::Exists(UPDATE_SECTION_NAME, LAST_UPDATE_CHECK_NAME) == true)
         {
             const std::string previousUpdateCheckpoint
-                = SystemProperty<std::string>::Get(UPDATE_SECTION_NAME, LAST_UPDATE_CHECK_NAME);
+                = SystemProperty<std::string>::Query(UPDATE_SECTION_NAME, LAST_UPDATE_CHECK_NAME);
             if(previousUpdateCheckpoint.empty() == false)
             {
                 try
