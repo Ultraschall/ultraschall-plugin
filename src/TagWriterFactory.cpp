@@ -42,12 +42,10 @@ ITagWriter* TagWriterFactory::Create(const UnicodeString& targetName)
     {
         tagWriter = new id3v2::Writer();
     }
-#ifdef ULTRASCHALL_ENABLE_MP4
     else if(targetType == MP4_TARGET)
     {
         tagWriter = new isobmff::Writer();
     }
-#endif // #ifdef ULTRASCHALL_ENABLE_MP4
     else
     {
         tagWriter = nullptr;
@@ -80,7 +78,6 @@ TagWriterFactory::TARGET_TYPE TagWriterFactory::FindFileType(const UnicodeString
             {
                 type = MP3_TARGET;
             }
-#ifdef ULTRASCHALL_ENABLE_MP4
             else if(fileExtension == "mp4")
             {
                 type = MP4_TARGET;
@@ -89,7 +86,6 @@ TagWriterFactory::TARGET_TYPE TagWriterFactory::FindFileType(const UnicodeString
             {
                 type = MP4_TARGET;
             }
-#endif // #ifdef ULTRASCHALL_ENABLE_MP4
             else
             {
                 type = INVALID_TARGET_TYPE;

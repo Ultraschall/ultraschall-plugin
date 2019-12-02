@@ -53,9 +53,9 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
     // caution! requires ConfigureSources() to be called beforehand
     PRECONDITION_RETURN(ValidateChapterMarkers(chapterMarkers_) == true, SERVICE_FAILURE);
 
-    ServiceStatus       status = SERVICE_FAILURE;
+    ServiceStatus     status = SERVICE_FAILURE;
     MessageSupervisor supervisor;
-    size_t              errorCount = 0;
+    size_t            errorCount = 0;
 
     for(size_t i = 0; i < targets_.size(); i++)
     {
@@ -107,9 +107,9 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
 
 bool InsertMediaPropertiesAction::ConfigureSources()
 {
-    bool                result = false;
+    bool              result = false;
     MessageSupervisor supervisor;
-    size_t              invalidAssetCount = 0;
+    size_t            invalidAssetCount = 0;
 
     mediaProperties_.Clear();
     coverImage_.clear();
@@ -155,14 +155,8 @@ bool InsertMediaPropertiesAction::ConfigureTargets()
 
     targets_.clear();
 
-#ifdef ULTRASCHALL_ENABLE_MP4
     static const size_t MAX_FILE_EXTENSIONS                 = 3;
     static const char*  fileExtensions[MAX_FILE_EXTENSIONS] = {".mp3", ".mp4", ".m4a"};
-#else  // #ifdef ULTRASCHALL_ENABLE_MP4
-    static const size_t MAX_FILE_EXTENSIONS                 = 1;
-    static const char*  fileExtensions[MAX_FILE_EXTENSIONS] = {".mp3"};
-#endif // #ifdef ULTRASCHALL_ENABLE_MP4
-
     for(size_t i = 0; i < MAX_FILE_EXTENSIONS; i++)
     {
         UnicodeString targetName = CreateProjectPath(fileExtensions[i]);
@@ -176,7 +170,7 @@ bool InsertMediaPropertiesAction::ConfigureTargets()
     {
         supervisor.RegisterWarning("Ultraschall can't find a suitable media file. Please select an alternative media "
                                    "file from the file selection dialog after closing this message.");
-        FileDialog        fileDialog("Select audio file");
+        FileDialog          fileDialog("Select audio file");
         const UnicodeString target = fileDialog.BrowseForAudio();
         if(target.empty() == false)
         {
