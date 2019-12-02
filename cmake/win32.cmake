@@ -37,6 +37,7 @@ ExternalProject_Add(zlib
   PREFIX libz
   GIT_REPOSITORY https://github.com/madler/zlib.git
   GIT_TAG v1.2.11
+  UPDATE_COMMAND ""
   ${PROJECT_GLOBAL_ARGS}
   CMAKE_ARGS ${CMAKE_GLOBAL_ARGS} ${LIBZ_BUILD_ARGS}
 )
@@ -62,6 +63,7 @@ ExternalProject_Add(curl
   PREFIX libcurl
   GIT_REPOSITORY https://github.com/curl/curl.git
   GIT_TAG curl-7_63_0
+  UPDATE_COMMAND ""
   ${PROJECT_GLOBAL_ARGS}
   CMAKE_ARGS ${CMAKE_GLOBAL_ARGS} ${LIBCURL_BUILD_ARGS}
 )
@@ -86,6 +88,7 @@ ExternalProject_Add(mp4v2
   PREFIX libmp4v2
   GIT_REPOSITORY https://github.com/Ultraschall/mp4v2.git
   GIT_TAG v4.0.0-prerelease1
+  UPDATE_COMMAND ""
   ${PROJECT_GLOBAL_ARGS}
   CMAKE_ARGS ${CMAKE_GLOBAL_ARGS} ${LIBMP4V2_BUILD_ARGS}
 )
@@ -105,6 +108,7 @@ ExternalProject_Add(taglib
   PREFIX libtag
   GIT_REPOSITORY https://github.com/taglib/taglib.git
   GIT_TAG v1.11.1
+  UPDATE_COMMAND ""
   ${PROJECT_GLOBAL_ARGS}
   CMAKE_ARGS ${CMAKE_GLOBAL_ARGS} ${LIBTAG_BUILD_ARGS}
 )
@@ -131,6 +135,7 @@ ExternalProject_Add(json11
   PREFIX libjson11
   GIT_REPOSITORY https://github.com/dropbox/json11.git
   GIT_TAG v1.0.0
+  UPDATE_COMMAND ""
   ${PROJECT_GLOBAL_ARGS}
   CMAKE_ARGS ${CMAKE_GLOBAL_ARGS} ${LIBJSON11_BUILD_ARGS}
 )
@@ -151,6 +156,7 @@ ExternalProject_Add(expat
   SOURCE_SUBDIR expat
   GIT_REPOSITORY https://github.com/libexpat/libexpat.git
   GIT_TAG R_2_2_6
+  UPDATE_COMMAND ""
   ${PROJECT_GLOBAL_ARGS}
   CMAKE_ARGS ${CMAKE_GLOBAL_ARGS} ${LIBEXPAT_BUILD_ARGS}
 )
@@ -175,6 +181,7 @@ ExternalProject_Add(wdl
   GIT_REPOSITORY https://github.com/justinfrankel/WDL.git
   ${PROJECT_GLOBAL_ARGS}
   CONFIGURE_COMMAND ""
+  UPDATE_COMMAND ""
   BUILD_COMMAND ""
 )
 ExternalProject_Get_Property(wdl SOURCE_DIR)
