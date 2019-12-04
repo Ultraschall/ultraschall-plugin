@@ -51,8 +51,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,2,0,0
- PRODUCTVERSION 3,2,0,0
+ FILEVERSION 4,0,0,0
+ PRODUCTVERSION 4,0,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -69,12 +69,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "ultraschall.fm"
             VALUE "FileDescription", "Ultraschall REAPER Extension"
-            VALUE "FileVersion", "3.2.0.0"
+            VALUE "FileVersion", "4.0.0.0"
             VALUE "InternalName", "reaper_u.dll"
             VALUE "LegalCopyright", "Copyright (C) 2019 ultraschall.fm"
             VALUE "OriginalFilename", "reaper_ultraschall.dll"
             VALUE "ProductName", "Ultraschall"
-            VALUE "ProductVersion", "3.2.0.0"
+            VALUE "ProductVersion", "4.0.0.0"
         END
     END
     BLOCK "VarFileInfo"
@@ -85,14 +85,6 @@ END
 
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
-
-IDD_MESSAGE_DIALOG DIALOGEX 0, 0, 500, 300
-STYLE DS_CENTER | DS_SETFOREGROUND | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Ultraschall"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    CONTROL         "", IDC_MESSAGE_LIST, "SysListView32", LVS_REPORT | LVS_SHOWSELALWAYS | WS_BORDER, 3, 3, 494, 294
-END
 
 #ifndef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
