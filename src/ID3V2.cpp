@@ -64,18 +64,15 @@ const char* QueryMIMEType(const uint8_t* data, const size_t dataSize)
 
     switch(QueryPictureFormat(data, dataSize))
     {
-        case PICTURE_FORMAT::JPEG_PICTURE:
-        {
+        case PICTURE_FORMAT::JPEG_PICTURE: {
             mimeType = "image/jpeg";
             break;
         }
-        case PICTURE_FORMAT::PNG_PICTURE:
-        {
+        case PICTURE_FORMAT::PNG_PICTURE: {
             mimeType = "image/png";
             break;
         }
-        default:
-        {
+        default: {
             break;
         }
     }
@@ -83,17 +80,16 @@ const char* QueryMIMEType(const uint8_t* data, const size_t dataSize)
     return mimeType;
 }
 
-uint32_t QueryTargetDuration(const UnicodeString& target)
+uint32_t QueryTargetDuration(Context* context)
 {
-    PRECONDITION_RETURN(target.empty() == false, static_cast<uint32_t>(-1));
+    PRECONDITION_RETURN(context != nullptr, -1);
 
     uint32_t duration = 0;
 
-    taglib::FileRef mp3(target.c_str());
-    if((mp3.isNull() == false) && (mp3.audioProperties() != 0))
+    if(context->Target()->audioProperties() != nullptr)
     {
-        taglib::AudioProperties* properties = mp3.audioProperties();
-        if(properties != 0)
+        taglib::AudioProperties* properties = context->Target()->audioProperties();
+        if(properties != nullptr)
         {
             duration = properties->length() * 1000;
         }
@@ -172,41 +168,6 @@ bool RemoveFrames(Context* context, const UnicodeString& id)
     return success;
 }
 
-bool InsertUTF8TextFrame(Context* context, const UnicodeString& id, const UnicodeString& text)
-{
-    PRECONDITION_RETURN(context != 0, false);
-    PRECONDITION_RETURN(context->Tags() != 0, false);
-    PRECONDITION_RETURN(id.empty() == false, false);
-
-    bool success = false;
-
-    RemoveFrames(context, id.c_str());
-
-    if(text.empty() == false)
-    {
-        const char*                            frameIdString = id.c_str();
-        taglib::ByteVector                     frameId       = taglib::ByteVector::fromCString(frameIdString);
-        taglib_id3v2::TextIdentificationFrame* textFrame     = new taglib_id3v2::TextIdentificationFrame(frameId);
-        if(textFrame != 0)
-        {
-            const char*        rawStringData = reinterpret_cast<const char*>(text.data());
-            unsigned int       rawStringSize = static_cast<unsigned int>(text.size() * sizeof(char));
-            taglib::ByteVector stringData(rawStringData, rawStringSize);
-            textFrame->setTextEncoding(taglib::String::Type::UTF8);
-            textFrame->setText(taglib::String(stringData, taglib::String::Type::UTF8));
-
-            context->Tags()->addFrame(textFrame);
-            success = true;
-        }
-    }
-    else
-    {
-        success = true;
-    }
-
-    return success;
-}
-
 bool InsertUTF16TextFrame(Context* context, const UnicodeString& id, const UnicodeString& text)
 {
     PRECONDITION_RETURN(context != 0, false);
@@ -224,13 +185,39 @@ bool InsertUTF16TextFrame(Context* context, const UnicodeString& id, const Unico
         taglib_id3v2::TextIdentificationFrame* textFrame     = new taglib_id3v2::TextIdentificationFrame(frameId);
         if(textFrame != 0)
         {
-            WideUnicodeString  convertedString = UnicodeStringToWideUnicodeString(text, WITH_UTF16_BOM_LE);
-            const char*        rawStringData   = reinterpret_cast<const char*>(convertedString.data());
-            unsigned int       rawStringSize   = static_cast<unsigned int>(convertedString.size() * sizeof(char16_t));
-            taglib::ByteVector stringData(rawStringData, rawStringSize);
             textFrame->setTextEncoding(taglib::String::Type::UTF16);
-            textFrame->setText(taglib::String(stringData, taglib::String::Type::UTF16));
+            textFrame->setText(taglib::String(text, taglib::String::Type::UTF8));
+            context->Tags()->addFrame(textFrame);
+            success = true;
+        }
+    }
+    else
+    {
+        success = true;
+    }
 
+    return success;
+}
+
+bool InsertUTF8TextFrame(Context* context, const UnicodeString& id, const UnicodeString& text)
+{
+    PRECONDITION_RETURN(context != 0, false);
+    PRECONDITION_RETURN(context->Tags() != 0, false);
+    PRECONDITION_RETURN(id.empty() == false, false);
+
+    bool success = false;
+
+    RemoveFrames(context, id.c_str());
+
+    if(text.empty() == false)
+    {
+        const char*                            frameIdString = id.c_str();
+        taglib::ByteVector                     frameId       = taglib::ByteVector::fromCString(frameIdString);
+        taglib_id3v2::TextIdentificationFrame* textFrame     = new taglib_id3v2::TextIdentificationFrame(frameId);
+        if(textFrame != 0)
+        {
+            textFrame->setTextEncoding(taglib::String::Type::UTF8);
+            textFrame->setText(taglib::String(text, taglib::String::Type::UTF8));
             context->Tags()->addFrame(textFrame);
             success = true;
         }
@@ -245,7 +232,14 @@ bool InsertUTF16TextFrame(Context* context, const UnicodeString& id, const Unico
 
 bool InsertTextFrame(Context* context, const UnicodeString& id, const UnicodeString& text, const CHAR_ENCODING encoding)
 {
-    return (encoding == UTF16) ? InsertUTF16TextFrame(context, id, text) : InsertUTF8TextFrame(context, id, text);
+    if(encoding == UTF16)
+    {
+        return InsertUTF16TextFrame(context, id, text);
+    }
+    else
+    {
+        return InsertUTF8TextFrame(context, id, text);
+    }
 }
 
 bool InsertCommentsFrame(Context* context, const UnicodeString& id, const UnicodeString& text)
@@ -263,13 +257,9 @@ bool InsertCommentsFrame(Context* context, const UnicodeString& id, const Unicod
         taglib_id3v2::CommentsFrame* commentsFrame = new taglib_id3v2::CommentsFrame(taglib::String::Type::UTF16);
         if(commentsFrame != 0)
         {
-            WideUnicodeString  convertedString = UnicodeStringToWideUnicodeString(text, WITH_UTF16_BOM_LE);
-            taglib::ByteVector stream(
-                (const char*)convertedString.data(), (unsigned int)(convertedString.size() * sizeof(char16_t)));
             commentsFrame->setLanguage(taglib::ByteVector::fromCString("eng"));
             commentsFrame->setTextEncoding(taglib::String::Type::UTF16);
-            commentsFrame->setText(taglib::String(stream, taglib::String::Type::UTF16));
-
+            commentsFrame->setText(taglib::String(text, taglib::String::Type::UTF8));
             context->Tags()->addFrame(commentsFrame);
             success = true;
         }

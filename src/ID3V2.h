@@ -37,7 +37,7 @@ Context* StartTransaction(const UnicodeString& targetName);
 bool     CommitTransaction(Context*& context);
 void     AbortTransaction(Context*& context);
 
-uint32_t QueryTargetDuration(const UnicodeString& targetName);
+uint32_t QueryTargetDuration(Context* context);
 
 void RemoveFrames(const UnicodeString& target, const UnicodeString& frameId);
 bool RemoveFrames(Context* context, const UnicodeString& id);

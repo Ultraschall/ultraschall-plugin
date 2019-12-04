@@ -34,13 +34,13 @@ bool Writer::InsertProperties(const UnicodeString& targetName, const MediaProper
 {
     PRECONDITION_RETURN(targetName.empty() == false, false);
 
-    const UnicodeString durationString = UnicodeStringFromInt(id3v2::QueryTargetDuration(targetName));
-    const UnicodeString encoderString  = "Ultraschall v4.0";
-
     bool            success = true;
     id3v2::Context* context = id3v2::StartTransaction(targetName);
-    if(context != 0)
+    if(context != nullptr)
     {
+        const UnicodeString durationString = UnicodeStringFromInt(id3v2::QueryTargetDuration(context));
+        const UnicodeString encoderString  = "Ultraschall v4.0";
+
         // ATP Frame Order:
         // TALB:    UTF-16 -> Title
         // TPE1:    UTF-16 -> Title
@@ -53,22 +53,35 @@ bool Writer::InsertProperties(const UnicodeString& targetName, const MediaProper
 
         static const size_t MAX_SIMPLE_FRAME_MAPPINGS  = 6;
         static const size_t MAX_COMPLEX_FRAME_MAPPINGS = 2;
+
         struct MAP_ULTRASCHALL_PROPERTIES_TO_REQUIRED_APPLE_TAGS
         {
-            const UnicodeChar*   FrameId;
-            const CHAR_ENCODING  Encoding;
-            const UnicodeString& Text;
-        } simpleFrameMappings[MAX_SIMPLE_FRAME_MAPPINGS]
-            = {{"TALB", UTF16, standardProperties.Title()}, {"TPE1", UTF16, standardProperties.Title()},
-               {"TIT2", UTF16, standardProperties.Track()}, {"TLEN", UTF8, durationString},
-               {"TYER", UTF8, standardProperties.Date()},   {"TENC", UTF8, encoderString}},
-            complexFrameMapping[MAX_COMPLEX_FRAME_MAPPINGS]
-            = {{"COMM", UTF16, standardProperties.Comments()}, {"USLT", UTF16, standardProperties.Comments()}};
+            const UnicodeChar*   frameId;
+            const CHAR_ENCODING  targetEncoding;
+            const UnicodeString& text;
+        }
+        // clang-format off
+        simpleFrameMappings[MAX_SIMPLE_FRAME_MAPPINGS] =
+        {
+          {"TALB", UTF16, standardProperties.Title()}, 
+          {"TPE1", UTF16, standardProperties.Title()},
+          {"TIT2", UTF16, standardProperties.Track()}, 
+          {"TLEN", UTF8,  durationString},
+          {"TYER", UTF8,  standardProperties.Date()},   
+          {"TENC", UTF8,  encoderString}
+        },
+        complexFrameMapping[MAX_COMPLEX_FRAME_MAPPINGS] =
+        {
+          {"COMM", UTF16, standardProperties.Comments()}, 
+          {"USLT", UTF16, standardProperties.Comments()}
+        };
+        // clang-format on
 
         for(size_t i = 0; (i < MAX_SIMPLE_FRAME_MAPPINGS) && (true == success); i++)
         {
             success = id3v2::InsertTextFrame(
-                context, simpleFrameMappings[i].FrameId, simpleFrameMappings[i].Text, simpleFrameMappings[i].Encoding);
+                context, simpleFrameMappings[i].frameId, simpleFrameMappings[i].text,
+                simpleFrameMappings[i].targetEncoding);
         }
 
         if(true == success)
@@ -76,7 +89,7 @@ bool Writer::InsertProperties(const UnicodeString& targetName, const MediaProper
             for(size_t i = 0; (i < MAX_COMPLEX_FRAME_MAPPINGS) && (true == success); i++)
             {
                 success
-                    = id3v2::InsertCommentsFrame(context, complexFrameMapping[i].FrameId, complexFrameMapping[i].Text);
+                    = id3v2::InsertCommentsFrame(context, complexFrameMapping[i].frameId, complexFrameMapping[i].text);
             }
         }
 
@@ -122,14 +135,14 @@ bool Writer::InsertChapterMarkers(const UnicodeString& targetName, const MarkerA
     PRECONDITION_RETURN(targetName.empty() == false, false);
     PRECONDITION_RETURN(chapterMarkers.empty() == false, false);
 
-    const uint32_t targetDuration = id3v2::QueryTargetDuration(targetName);
-    PRECONDITION_RETURN(targetDuration > 0, false);
-
     bool success = false;
 
     id3v2::Context* context = id3v2::StartTransaction(targetName);
-    if(context != 0)
+    if(context != nullptr)
     {
+        const uint32_t targetDuration = id3v2::QueryTargetDuration(nullptr);
+        PRECONDITION_RETURN(targetDuration > 0, false);
+
         UnicodeStringArray tableOfContentsItems;
         success = true;
         for(size_t i = 0; (i < chapterMarkers.size()) && (true == success); i++)
@@ -170,14 +183,13 @@ bool Writer::ReplaceChapterMarkers(const UnicodeString& targetName, const Marker
     PRECONDITION_RETURN(targetName.empty() == false, false);
     PRECONDITION_RETURN(chapterMarkers.empty() == false, false);
 
-    const uint32_t targetDuration = id3v2::QueryTargetDuration(targetName);
-    PRECONDITION_RETURN(targetDuration > 0, false);
-
     bool success = false;
 
     id3v2::Context* context = id3v2::StartTransaction(targetName);
     if(context != 0)
     {
+        const uint32_t targetDuration = id3v2::QueryTargetDuration(context);
+
         id3v2::RemoveFrames(context, "CHAP");
 
         UnicodeStringArray tableOfContentsItems;
