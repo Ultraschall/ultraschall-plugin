@@ -162,8 +162,8 @@ bool VersionHandler::ReaperVersionCheck()
         UnicodeStringArray tokens = UnicodeStringTokenize(versionString, '.');
         if(tokens.size() >= 2)
         {
-            const int REQUIRED_REAPER_MAJOR_VERSION = 5;
-            const int REQUIRED_REAPER_MINOR_VERSION = 70;
+            const int REQUIRED_REAPER_MAJOR_VERSION = 6;
+            const int REQUIRED_REAPER_MINOR_VERSION = 0;
             const int majorVersion                  = UnicodeStringToInt(tokens[0]);
             const int minorVersion                  = UnicodeStringToInt(tokens[1]);
 
