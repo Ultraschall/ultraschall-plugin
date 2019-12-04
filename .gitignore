@@ -5,6 +5,7 @@
 _tools/
 
 # win32 specific stuff
+*.aps
 
 # common build directory.
 _build/
