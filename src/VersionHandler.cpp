@@ -110,7 +110,7 @@ UnicodeString VersionHandler::PluginVersion()
 #ifdef _WIN32
     return Platform::ReadFileVersion(Platform::UserDataDirectory() + Platform::PLUGIN_PATH);
 #else  // #ifdef _WIN32
-    return "3.2.0";
+    return "4.0.0";
 #endif // #ifdef _WIN32
 }
 

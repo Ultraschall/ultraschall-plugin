@@ -35,7 +35,7 @@ bool Writer::InsertProperties(const UnicodeString& targetName, const MediaProper
     PRECONDITION_RETURN(targetName.empty() == false, false);
 
     const UnicodeString durationString = UnicodeStringFromInt(id3v2::QueryTargetDuration(targetName));
-    const UnicodeString encoderString  = "Ultraschall v3.2";
+    const UnicodeString encoderString  = "Ultraschall v4.0";
 
     bool            success = true;
     id3v2::Context* context = id3v2::StartTransaction(targetName);
@@ -49,7 +49,7 @@ bool Writer::InsertProperties(const UnicodeString& targetName, const MediaProper
         // USLT:    UTF-16 -> Comments
         // TLEN:    ASCII  -> <dynamic>
         // TYER:    ASCII  -> Date
-        // TENC:    ASCII  -> "Ultraschall v3.2"
+        // TENC:    ASCII  -> "Ultraschall v4.0"
 
         static const size_t MAX_SIMPLE_FRAME_MAPPINGS  = 6;
         static const size_t MAX_COMPLEX_FRAME_MAPPINGS = 2;

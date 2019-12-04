@@ -25,7 +25,7 @@
 ################################################################################
 
 cmake_minimum_required(VERSION 3.12)
-project(reaper_ultraschall VERSION 3.2)
+project(reaper_ultraschall VERSION 4.0)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
