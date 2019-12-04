@@ -304,12 +304,13 @@ MarkerArray ReaperGateway::QueryAllMarkers(ProjectReference projectReference)
             markerName = markerName.substr(0, MAX_CHAPTER_NAME_LENGTH);
         }
 
-        if(("_Edit" != markerName) &&                      // remove edit markers
-           (false == isRegion) &&                          // remove regions
-           (color != static_cast<int>(EditMarkerColor()))) // include only chapter markers
+        static const uint32_t PREDEFINED_EDIT_MARKER_COLOR = 0x010000ff;
+        if(color != PREDEFINED_EDIT_MARKER_COLOR) // remove edit markers
         {
-            // TODO check whether reaper uses Unicode or ANSI
-            allMarkers.push_back(Marker(position, markerName, color));
+            if(false == isRegion) // remove regions
+            {
+                allMarkers.push_back(Marker(position, markerName, color));
+            }
         }
 
         nextIndex = reaper_api::EnumProjectMarkers3(
