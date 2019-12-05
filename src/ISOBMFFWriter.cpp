@@ -39,11 +39,11 @@ bool Writer::InsertProperties(const UnicodeString& targetName, const MediaProper
     if(context != nullptr)
     {
         result = isobmff::InsertName(context, properties.Title());
-        result |= isobmff::InsertArtist(context, properties.Author());
-        result |= isobmff::InsertAlbum(context, properties.Track());
-        result |= isobmff::InsertReleaseDate(context, properties.Date());
-        result |= isobmff::InsertGenre(context, properties.Category());
-        result |= isobmff::InsertComments(context, properties.Comments());
+        result &= isobmff::InsertArtist(context, properties.Author());
+        result &= isobmff::InsertAlbum(context, properties.Track());
+        result &= isobmff::InsertReleaseDate(context, properties.Date());
+        result &= isobmff::InsertGenre(context, properties.Category());
+        result &= isobmff::InsertComments(context, properties.Comments());
         if(true == result)
         {
             result = isobmff::CommitTransaction(context);
@@ -106,4 +106,3 @@ bool Writer::ReplaceChapterMarkers(const UnicodeString& targetName, const Marker
 }
 
 }}} // namespace ultraschall::reaper::isobmff
-
