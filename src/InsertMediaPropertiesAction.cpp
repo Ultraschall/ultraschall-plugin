@@ -78,13 +78,13 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
                 errorCount++;
             }
 
-            //if(pTagWriter->ReplaceChapterMarkers(targets_[i], chapterMarkers_) == false)
-            //{
-            //    UnicodeStringStream os;
-            //    os << "Failed to insert chapter markers into " << targets_[i] << ".";
-            //    supervisor.RegisterError(os.str());
-            //    errorCount++;
-            //}
+            if(pTagWriter->ReplaceChapterMarkers(targets_[i], chapterMarkers_) == false)
+            {
+                UnicodeStringStream os;
+                os << "Failed to insert chapter markers into " << targets_[i] << ".";
+                supervisor.RegisterError(os.str());
+                errorCount++;
+            }
 
             SafeRelease(pTagWriter);
         }
