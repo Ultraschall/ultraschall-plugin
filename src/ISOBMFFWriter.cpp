@@ -42,7 +42,7 @@ bool Writer::InsertProperties(const UnicodeString& targetName, const MediaProper
         result |= isobmff::InsertArtist(context, properties.Author());
         result |= isobmff::InsertAlbum(context, properties.Track());
         result |= isobmff::InsertReleaseDate(context, properties.Date());
-        result |= isobmff::InsertGenre(context, properties.Content());
+        result |= isobmff::InsertGenre(context, properties.Category());
         result |= isobmff::InsertComments(context, properties.Comments());
         if(true == result)
         {
