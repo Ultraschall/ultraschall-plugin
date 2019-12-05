@@ -38,9 +38,9 @@ bool Writer::InsertProperties(const UnicodeString& targetName, const MediaProper
     isobmff::Context* context = isobmff::StartTransaction(targetName);
     if(context != nullptr)
     {
-        result = isobmff::InsertName(context, properties.Title());
+        result = isobmff::InsertName(context, properties.Podcast());
         result &= isobmff::InsertArtist(context, properties.Author());
-        result &= isobmff::InsertAlbum(context, properties.Track());
+        result &= isobmff::InsertAlbum(context, properties.Episode());
         result &= isobmff::InsertReleaseDate(context, properties.Date());
         result &= isobmff::InsertGenre(context, properties.Genre());
         result &= isobmff::InsertComments(context, properties.Comments());

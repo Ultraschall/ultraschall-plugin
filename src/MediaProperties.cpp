@@ -49,7 +49,7 @@ MediaProperties MediaProperties::ParseProjectNotes()
         UnicodeStringArray tokens = UnicodeStringTokenize(notes, '\n');
         if(tokens.empty() == false)
         {
-            result.title_ = tokens[0];
+            result.podcast_ = tokens[0];
 
             if(tokens.size() > 1)
             {
@@ -58,7 +58,7 @@ MediaProperties MediaProperties::ParseProjectNotes()
 
             if(tokens.size() > 2)
             {
-                result.track_ = tokens[2];
+                result.episode_ = tokens[2];
             }
 
             if(tokens.size() > 3)
@@ -83,15 +83,15 @@ MediaProperties MediaProperties::ParseProjectNotes()
 
 bool MediaProperties::Validate() const
 {
-    return (title_.empty() == false) || (author_.empty() == false) || (track_.empty() == false)
+    return (podcast_.empty() == false) || (author_.empty() == false) || (episode_.empty() == false)
            || (date_.empty() == false) || (genre_.empty() == false);
 }
 
 void MediaProperties::Clear()
 {
-    title_.clear();
+    podcast_.clear();
     author_.clear();
-    track_.clear();
+    episode_.clear();
     date_.clear();
     genre_.clear();
     comments_.clear();

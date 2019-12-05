@@ -42,9 +42,9 @@ public:
     bool Validate() const;
     void Clear();
 
-    inline const UnicodeString& Title() const
+    inline const UnicodeString& Podcast() const
     {
-        return title_;
+        return podcast_;
     }
 
     inline const UnicodeString& Author() const
@@ -52,9 +52,9 @@ public:
         return author_;
     }
 
-    inline const UnicodeString& Track() const
+    inline const UnicodeString& Episode() const
     {
-        return track_;
+        return episode_;
     }
 
     inline const UnicodeString& Date() const
@@ -73,11 +73,11 @@ public:
     }
 
 private:
-    UnicodeString title_;    // TIT2
+    UnicodeString podcast_;    // TIT2
     UnicodeString author_;   // TPE1
-    UnicodeString track_;    // TALB
+    UnicodeString episode_;    // TALB
     UnicodeString date_;     // TDRC
-    UnicodeString genre_; // TCON
+    UnicodeString genre_;    // TCON
     UnicodeString comments_; // COMM
 };
 

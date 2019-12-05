@@ -63,9 +63,9 @@ bool Writer::InsertProperties(const UnicodeString& targetName, const MediaProper
         // clang-format off
         simpleFrameMappings[MAX_SIMPLE_FRAME_MAPPINGS] =
         {
-          {"TALB", UTF16, standardProperties.Title()}, 
+          {"TALB", UTF16, standardProperties.Podcast()}, 
           {"TPE1", UTF16, standardProperties.Author()},
-          {"TIT2", UTF16, standardProperties.Track()}, 
+          {"TIT2", UTF16, standardProperties.Episode()}, 
           {"TLEN", UTF8,  durationString},
           {"TYER", UTF8,  standardProperties.Date()},   
           {"TENC", UTF8,  encoderString},
