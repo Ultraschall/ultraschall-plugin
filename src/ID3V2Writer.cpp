@@ -51,7 +51,7 @@ bool Writer::InsertProperties(const UnicodeString& targetName, const MediaProper
         // TYER:    ASCII  -> Date
         // TENC:    ASCII  -> "Ultraschall v4.0"
 
-        static const size_t MAX_SIMPLE_FRAME_MAPPINGS  = 6;
+        static const size_t MAX_SIMPLE_FRAME_MAPPINGS  = 7;
         static const size_t MAX_COMPLEX_FRAME_MAPPINGS = 2;
 
         struct MAP_ULTRASCHALL_PROPERTIES_TO_REQUIRED_APPLE_TAGS
@@ -64,11 +64,12 @@ bool Writer::InsertProperties(const UnicodeString& targetName, const MediaProper
         simpleFrameMappings[MAX_SIMPLE_FRAME_MAPPINGS] =
         {
           {"TALB", UTF16, standardProperties.Title()}, 
-          {"TPE1", UTF16, standardProperties.Title()},
+          {"TPE1", UTF16, standardProperties.Author()},
           {"TIT2", UTF16, standardProperties.Track()}, 
           {"TLEN", UTF8,  durationString},
           {"TYER", UTF8,  standardProperties.Date()},   
-          {"TENC", UTF8,  encoderString}
+          {"TENC", UTF8,  encoderString},
+          {"TCON", UTF16, standardProperties.Genre()}
         },
         complexFrameMapping[MAX_COMPLEX_FRAME_MAPPINGS] =
         {

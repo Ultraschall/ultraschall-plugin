@@ -68,7 +68,7 @@ MediaProperties MediaProperties::ParseProjectNotes()
 
             if(tokens.size() > 4)
             {
-                result.category_ = tokens[4];
+                result.genre_ = tokens[4];
             }
 
             if(tokens.size() > 5)
@@ -84,7 +84,7 @@ MediaProperties MediaProperties::ParseProjectNotes()
 bool MediaProperties::Validate() const
 {
     return (title_.empty() == false) || (author_.empty() == false) || (track_.empty() == false)
-           || (date_.empty() == false) || (category_.empty() == false);
+           || (date_.empty() == false) || (genre_.empty() == false);
 }
 
 void MediaProperties::Clear()
@@ -93,7 +93,7 @@ void MediaProperties::Clear()
     author_.clear();
     track_.clear();
     date_.clear();
-    category_.clear();
+    genre_.clear();
     comments_.clear();
 }
 
