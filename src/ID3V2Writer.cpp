@@ -38,20 +38,10 @@ bool Writer::InsertProperties(const UnicodeString& targetName, const MediaProper
     id3v2::Context* context = id3v2::StartTransaction(targetName);
     if(context != nullptr)
     {
-        UnicodeString duration = UnicodeStringFromInt(context->Duration());
-
-        // ATP Frame Order:
-        // TALB:    UTF-16 -> Title
-        // TPE1:    UTF-16 -> Title
-        // TIT2:    UTF-16 -> Track
-        // COMM:    UTF-16 -> Comments
-        // USLT:    UTF-16 -> Comments
-        // TLEN:    ASCII  -> <dynamic>
-        // TYER:    ASCII  -> Date
-        // TENC:    ASCII  -> "Ultraschall v4.0"
+        const UnicodeString duration = UnicodeStringFromInt(context->Duration());
 
         static const size_t MAX_SIMPLE_FRAME_MAPPINGS  = 7;
-        static const size_t MAX_COMPLEX_FRAME_MAPPINGS = 2;
+        static const size_t MAX_COMPLEX_FRAME_MAPPINGS = 1;
 
         struct MAP_ULTRASCHALL_PROPERTIES_TO_REQUIRED_APPLE_TAGS
         {
@@ -72,8 +62,7 @@ bool Writer::InsertProperties(const UnicodeString& targetName, const MediaProper
         },
         complexFrameMapping[MAX_COMPLEX_FRAME_MAPPINGS] =
         {
-          {"COMM", UTF16, standardProperties.Comments()}, 
-          {"USLT", UTF16, standardProperties.Comments()}
+          {"COMM", UTF16, standardProperties.Comments()}
         };
         // clang-format on
 

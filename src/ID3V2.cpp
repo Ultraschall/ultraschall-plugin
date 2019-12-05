@@ -267,8 +267,8 @@ bool InsertChapterFrame(
     const uint32_t              startOffset  = 0xffffffff;
     const uint32_t              endOffset    = 0xffffffff;
     taglib_id3v2::ChapterFrame* chapterFrame = new taglib_id3v2::ChapterFrame(
-        taglib::ByteVector::fromCString(id.c_str(), taglib::String::Type::UTF16), startTime, endTime, startOffset,
-        endOffset);
+        taglib::ByteVector::fromCString(id.c_str(), static_cast<unsigned int>(id.length())), startTime, endTime,
+        startOffset, endOffset);
     if(chapterFrame != nullptr)
     {
         taglib_id3v2::TextIdentificationFrame* embeddedFrame = new taglib_id3v2::TextIdentificationFrame(
@@ -306,22 +306,13 @@ bool InsertTableOfContentsFrame(Context* context, const UnicodeStringArray& tabl
         = new taglib_id3v2::TableOfContentsFrame(tableOfContentsId);
     if(tableOfContentsFrame != 0)
     {
+      tableOfContentsFrame->setIsTopLevel(true);
+        tableOfContentsFrame->setIsOrdered(true);
         for(size_t j = 0; j < tableOfContentsItems.size(); j++)
         {
             tableOfContentsFrame->addChildElement(taglib::ByteVector::fromCString(tableOfContentsItems[j].c_str()));
         }
 
-        taglib_id3v2::TextIdentificationFrame* embeddedFrame
-            = new taglib_id3v2::TextIdentificationFrame(taglib::ByteVector::fromCString("TIT2"));
-        if(embeddedFrame != 0)
-        {
-            WideUnicodeString  convertedString = UnicodeStringToWideUnicodeString("toplevel toc", WITH_UTF16_BOM_LE);
-            taglib::ByteVector stream(
-                (const char*)convertedString.c_str(), (unsigned int)(convertedString.size() * sizeof(char16_t)));
-            embeddedFrame->setTextEncoding(taglib::String::Type::UTF16);
-            embeddedFrame->setText(taglib::String(stream, taglib::String::Type::UTF16));
-            tableOfContentsFrame->addEmbeddedFrame(embeddedFrame);
-        }
         context->Tags()->addFrame(tableOfContentsFrame);
         success = true;
     }
