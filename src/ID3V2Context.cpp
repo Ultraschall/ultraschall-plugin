@@ -32,6 +32,11 @@ Context::Context(const UnicodeString& targetName) : target_(new taglib_mp3::File
 {
     if(target_->isOpen() == true)
     {
+        if(target_->audioProperties() != nullptr)
+        {
+            duration_ = target_->audioProperties()->length() * 1000;
+        }
+
         tags_ = target_->ID3v2Tag();
     }
 }
@@ -39,6 +44,7 @@ Context::Context(const UnicodeString& targetName) : target_(new taglib_mp3::File
 Context::~Context()
 {
     tags_ = nullptr;
+    SafeDelete(target_);
 }
 
 }}} // namespace ultraschall::reaper::id3v2

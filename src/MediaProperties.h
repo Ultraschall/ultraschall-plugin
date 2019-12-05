@@ -62,9 +62,9 @@ public:
         return date_;
     }
 
-    inline const UnicodeString& Content() const
+    inline const UnicodeString& Category() const
     {
-        return content_;
+        return category_;
     }
 
     inline const UnicodeString& Comments() const
@@ -77,7 +77,7 @@ private:
     UnicodeString author_;   // TPE1
     UnicodeString track_;    // TALB
     UnicodeString date_;     // TDRC
-    UnicodeString content_;  // TCON
+    UnicodeString category_; // TCON
     UnicodeString comments_; // COMM
 };
 

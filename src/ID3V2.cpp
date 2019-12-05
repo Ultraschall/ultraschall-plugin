@@ -80,24 +80,6 @@ const char* QueryMIMEType(const uint8_t* data, const size_t dataSize)
     return mimeType;
 }
 
-uint32_t QueryTargetDuration(Context* context)
-{
-    PRECONDITION_RETURN(context != nullptr, -1);
-
-    uint32_t duration = 0;
-
-    if(context->Target()->audioProperties() != nullptr)
-    {
-        taglib::AudioProperties* properties = context->Target()->audioProperties();
-        if(properties != nullptr)
-        {
-            duration = properties->length() * 1000;
-        }
-    }
-
-    return duration;
-}
-
 void RemoveFrames(const UnicodeString& target, const UnicodeString& frameId)
 {
     PRECONDITION(target.empty() == false);
@@ -172,7 +154,7 @@ bool InsertUTF16TextFrame(Context* context, const UnicodeString& id, const Unico
 {
     PRECONDITION_RETURN(context != 0, false);
     PRECONDITION_RETURN(context->Tags() != 0, false);
-    PRECONDITION_RETURN(id.empty() == false, false);
+    PRECONDITION_RETURN(id.size() == 4, false);
 
     bool success = false;
 
@@ -180,9 +162,8 @@ bool InsertUTF16TextFrame(Context* context, const UnicodeString& id, const Unico
 
     if(text.empty() == false)
     {
-        const char*                            frameIdString = id.c_str();
-        taglib::ByteVector                     frameId       = taglib::ByteVector::fromCString(frameIdString);
-        taglib_id3v2::TextIdentificationFrame* textFrame     = new taglib_id3v2::TextIdentificationFrame(frameId);
+        taglib_id3v2::TextIdentificationFrame* textFrame = new taglib_id3v2::TextIdentificationFrame(
+            taglib::ByteVector::fromCString(id.c_str()), taglib::String::Type::UTF16);
         if(textFrame != 0)
         {
             textFrame->setTextEncoding(taglib::String::Type::UTF16);
@@ -195,7 +176,6 @@ bool InsertUTF16TextFrame(Context* context, const UnicodeString& id, const Unico
     {
         success = true;
     }
-
     return success;
 }
 
@@ -211,12 +191,11 @@ bool InsertUTF8TextFrame(Context* context, const UnicodeString& id, const Unicod
 
     if(text.empty() == false)
     {
-        const char*                            frameIdString = id.c_str();
-        taglib::ByteVector                     frameId       = taglib::ByteVector::fromCString(frameIdString);
-        taglib_id3v2::TextIdentificationFrame* textFrame     = new taglib_id3v2::TextIdentificationFrame(frameId);
+        taglib_id3v2::TextIdentificationFrame* textFrame = new taglib_id3v2::TextIdentificationFrame(
+            taglib::ByteVector::fromCString(id.c_str()), taglib::String::Type::Latin1);
         if(textFrame != 0)
         {
-            textFrame->setTextEncoding(taglib::String::Type::UTF8);
+            textFrame->setTextEncoding(taglib::String::Type::Latin1);
             textFrame->setText(taglib::String(text, taglib::String::Type::UTF8));
             context->Tags()->addFrame(textFrame);
             success = true;
@@ -285,29 +264,27 @@ bool InsertChapterFrame(
 
     bool success = false;
 
-    const uint32_t              startOffset = 0xffffffff;
-    const uint32_t              endOffset   = 0xffffffff;
-    taglib::ByteVector          chapterId   = taglib::ByteVector::fromCString(id.c_str());
-    taglib_id3v2::ChapterFrame* chapterFrame
-        = new taglib_id3v2::ChapterFrame(chapterId, startTime, endTime, startOffset, endOffset);
-    if(chapterFrame != 0)
+    const uint32_t              startOffset  = 0xffffffff;
+    const uint32_t              endOffset    = 0xffffffff;
+    taglib_id3v2::ChapterFrame* chapterFrame = new taglib_id3v2::ChapterFrame(
+        taglib::ByteVector::fromCString(id.c_str(), taglib::String::Type::UTF16), startTime, endTime, startOffset,
+        endOffset);
+    if(chapterFrame != nullptr)
     {
-        const char*                            embeddedFrameIdString = "TIT2";
-        taglib::ByteVector                     embeddedFrameId = taglib::ByteVector::fromCString(embeddedFrameIdString);
-        taglib_id3v2::TextIdentificationFrame* embeddedFrame
-            = new taglib_id3v2::TextIdentificationFrame(embeddedFrameId);
-        if(embeddedFrame != 0)
+        taglib_id3v2::TextIdentificationFrame* embeddedFrame = new taglib_id3v2::TextIdentificationFrame(
+            taglib::ByteVector::fromCString("TIT2"), taglib::String::Type::UTF16);
+        if(embeddedFrame != nullptr)
         {
-            WideUnicodeString  convertedString = UnicodeStringToWideUnicodeString(text, WITH_UTF16_BOM_LE);
-            taglib::ByteVector rawStringData(
-                (const char*)convertedString.c_str(), (unsigned int)(convertedString.size() * sizeof(char16_t)));
             embeddedFrame->setTextEncoding(taglib::String::Type::UTF16);
-            embeddedFrame->setText(taglib::String(rawStringData, taglib::String::Type::UTF16));
-
+            embeddedFrame->setText(taglib::String(text, taglib::String::Type::UTF8));
             chapterFrame->addEmbeddedFrame(embeddedFrame);
             context->Tags()->addFrame(chapterFrame);
-
             success = true;
+        }
+        else
+        {
+            SafeDelete(chapterFrame);
+            success = false;
         }
     }
 
@@ -345,12 +322,9 @@ bool InsertTableOfContentsFrame(Context* context, const UnicodeStringArray& tabl
             embeddedFrame->setText(taglib::String(stream, taglib::String::Type::UTF16));
             tableOfContentsFrame->addEmbeddedFrame(embeddedFrame);
         }
-
         context->Tags()->addFrame(tableOfContentsFrame);
-
         success = true;
     }
-
     return success;
 }
 
@@ -364,33 +338,29 @@ bool InsertCoverPictureFrame(Context* context, const UnicodeString& image)
 
     RemoveFrames(context, "APIC");
 
-    taglib_id3v2::AttachedPictureFrame* frame = new taglib_id3v2::AttachedPictureFrame();
-    if(frame != 0)
+    taglib_id3v2::AttachedPictureFrame* pFrame = new taglib_id3v2::AttachedPictureFrame();
+    if(pFrame != nullptr)
     {
-        BinaryStream* imageData = FileManager::ReadBinaryFile(image);
-        if(imageData != 0)
+        BinaryStream* pData = FileManager::ReadBinaryFile(image);
+        if(pData != nullptr)
         {
             uint8_t      imageHeader[10] = {0};
             const size_t imageHeaderSize = 10;
-            if(imageData->Read(0, imageHeader, imageHeaderSize) == true)
+            if(pData->Read(0, imageHeader, imageHeaderSize) == true)
             {
                 const UnicodeString mimeType = QueryMIMEType(imageHeader, imageHeaderSize);
                 if(mimeType.empty() == false)
                 {
-                    frame->setMimeType(mimeType);
-                    taglib::ByteVector coverData((const char*)imageData->Data(), (unsigned int)imageData->DataSize());
-                    frame->setPicture(coverData);
-
-                    context->Tags()->addFrame(frame);
-
+                    pFrame->setMimeType(mimeType);
+                    taglib::ByteVector coverData((const char*)pData->Data(), (unsigned int)pData->DataSize());
+                    pFrame->setPicture(coverData);
+                    context->Tags()->addFrame(pFrame);
                     success = true;
                 }
             }
-
-            SafeRelease(imageData);
+            SafeRelease(pData);
         }
     }
-
     return success;
 }
 

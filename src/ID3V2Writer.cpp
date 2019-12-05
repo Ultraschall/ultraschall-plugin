@@ -38,7 +38,7 @@ bool Writer::InsertProperties(const UnicodeString& targetName, const MediaProper
     id3v2::Context* context = id3v2::StartTransaction(targetName);
     if(context != nullptr)
     {
-        const UnicodeString durationString = UnicodeStringFromInt(id3v2::QueryTargetDuration(context));
+        const UnicodeString durationString = UnicodeStringFromInt(context->Duration());
         const UnicodeString encoderString  = "Ultraschall v4.0";
 
         // ATP Frame Order:
@@ -140,8 +140,7 @@ bool Writer::InsertChapterMarkers(const UnicodeString& targetName, const MarkerA
     id3v2::Context* context = id3v2::StartTransaction(targetName);
     if(context != nullptr)
     {
-        const uint32_t targetDuration = id3v2::QueryTargetDuration(nullptr);
-        PRECONDITION_RETURN(targetDuration > 0, false);
+        PRECONDITION_RETURN(context->Duration() > 0, false);
 
         UnicodeStringArray tableOfContentsItems;
         success = true;
@@ -155,7 +154,7 @@ bool Writer::InsertChapterMarkers(const UnicodeString& targetName, const MarkerA
             const uint32_t startTime = static_cast<uint32_t>(chapterMarkers[i].Position() * 1000);
             const uint32_t endTime   = (i < (chapterMarkers.size() - 1)) ?
                                          static_cast<uint32_t>(chapterMarkers[i + 1].Position() * 1000) :
-                                         targetDuration;
+                                         context->Duration();
             success
                 = id3v2::InsertChapterFrame(context, tableOfContensItem, chapterMarkers[i].Name(), startTime, endTime);
         }
@@ -188,8 +187,6 @@ bool Writer::ReplaceChapterMarkers(const UnicodeString& targetName, const Marker
     id3v2::Context* context = id3v2::StartTransaction(targetName);
     if(context != 0)
     {
-        const uint32_t targetDuration = id3v2::QueryTargetDuration(context);
-
         id3v2::RemoveFrames(context, "CHAP");
 
         UnicodeStringArray tableOfContentsItems;
@@ -204,7 +201,7 @@ bool Writer::ReplaceChapterMarkers(const UnicodeString& targetName, const Marker
             const uint32_t startTime = static_cast<uint32_t>(chapterMarkers[i].Position() * 1000);
             const uint32_t endTime   = (i < (chapterMarkers.size() - 1)) ?
                                          static_cast<uint32_t>(chapterMarkers[i + 1].Position() * 1000) :
-                                         targetDuration;
+                                         context->Duration();
             success
                 = id3v2::InsertChapterFrame(context, tableOfContensItem, chapterMarkers[i].Name(), startTime, endTime);
         }

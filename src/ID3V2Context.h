@@ -37,16 +37,18 @@ class Context
 {
 public:
     Context(const UnicodeString& targetName);
-    ~Context();
+    virtual ~Context();
 
     inline bool IsValid() const;
 
     inline taglib_mp3::File*  Target();
     inline taglib_id3v2::Tag* Tags();
+    inline uint32_t           Duration() const;
 
 private:
     taglib_mp3::File*  target_ = nullptr;
     taglib_id3v2::Tag* tags_   = nullptr;
+    uint32_t duration_ = -1;
 
     Context(const Context&) = delete;
     Context& operator=(const Context&) = delete;
@@ -65,6 +67,11 @@ inline taglib_mp3::File* Context::Target()
 inline taglib_id3v2::Tag* Context::Tags()
 {
     return tags_;
+}
+
+inline uint32_t Context::Duration() const 
+{
+  return duration_;
 }
 
 }}} // namespace ultraschall::reaper::id3v2
