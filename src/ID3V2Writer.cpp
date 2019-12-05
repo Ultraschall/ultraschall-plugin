@@ -38,9 +38,6 @@ bool Writer::InsertProperties(const UnicodeString& targetName, const MediaProper
     id3v2::Context* context = id3v2::StartTransaction(targetName);
     if(context != nullptr)
     {
-        const UnicodeString durationString = UnicodeStringFromInt(context->Duration());
-        const UnicodeString encoderString  = "Ultraschall v4.0";
-
         // ATP Frame Order:
         // TALB:    UTF-16 -> Title
         // TPE1:    UTF-16 -> Title
@@ -66,10 +63,10 @@ bool Writer::InsertProperties(const UnicodeString& targetName, const MediaProper
           {"TALB", UTF16, standardProperties.Podcast()}, 
           {"TPE1", UTF16, standardProperties.Author()},
           {"TIT2", UTF16, standardProperties.Episode()}, 
-          {"TLEN", UTF8,  durationString},
+          {"TCON", UTF16, standardProperties.Genre()},
           {"TYER", UTF8,  standardProperties.Date()},   
-          {"TENC", UTF8,  encoderString},
-          {"TCON", UTF16, standardProperties.Genre()}
+          {"TLEN", UTF8,  UnicodeStringFromInt(context->Duration())},
+          {"TENC", UTF8,  "Ultraschall v4.0"}
         },
         complexFrameMapping[MAX_COMPLEX_FRAME_MAPPINGS] =
         {
