@@ -31,8 +31,6 @@ include_directories(
   ${LIBCURL_INCLUDE_PATH}
   ${LIBTAG_INCLUDE_PATH}
   ${LIBMP4V2_INCLUDE_PATH}
-  ${LIBJSON11_INCLUDE_PATH}
-  ${LIBEXPAT_INCLUDE_PATH}
   ${LIBWDL_INCLUDE_PATH}
   ${REAPER_INCLUDE_PATH}
 )
@@ -82,7 +80,6 @@ set(COMMON_INCLUDES
   UINotificationStore.h
   UpdateCheck.h
   UnicodeString.h
-  VersionHandler.h
 )
 
 set(COMMON_SOURCES
@@ -117,7 +114,6 @@ set(COMMON_SOURCES
   UINotificationStore.cpp
   UpdateCheck.cpp
   UnicodeString.cpp
-  VersionHandler.cpp
   reaper_ultraschall.cpp
 )
 
@@ -229,8 +225,6 @@ add_dependencies(reaper_ultraschall zlib-build)
 add_dependencies(reaper_ultraschall curl-build)
 add_dependencies(reaper_ultraschall taglib-build)
 add_dependencies(reaper_ultraschall mp4v2-build)
-add_dependencies(reaper_ultraschall json11-build)
-add_dependencies(reaper_ultraschall expat-build)
 add_dependencies(reaper_ultraschall wdl-build)
 
 target_link_libraries(reaper_ultraschall
@@ -238,8 +232,6 @@ target_link_libraries(reaper_ultraschall
   ${LIBCURL_LIBRARY_PATH}
   ${LIBTAG_LIBRARY_PATH}
   ${LIBMP4V2_LIBRARY_PATH}
-  ${LIBJSON11_LIBRARY_PATH}
-  ${LIBEXPAT_LIBRARY_PATH}
   ${EXTRA_LIBRARIES}
 )
 
