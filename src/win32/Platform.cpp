@@ -39,13 +39,6 @@
 
 namespace ultraschall { namespace reaper {
 
-const UnicodeString Platform::THEME_PATH("\\REAPER\\ColorThemes\\Ultraschall_4.0.ReaperThemeZip");
-const UnicodeString Platform::SOUNDBOARD_PATH("\\Steinberg\\VstPlugins\\Soundboard64.dll");
-const UnicodeString Platform::SWS_PATH("\\REAPER\\UserPlugins\\reaper_sws64.dll");
-const UnicodeString Platform::PLUGIN_PATH("\\REAPER\\UserPlugins\\reaper_ultraschall.dll");
-const UnicodeString Platform::STUDIO_LINK_PATH("\\Steinberg\\VstPlugins\\studio-link.dll");
-const UnicodeString Platform::STUDIO_LINK_ONAIR_PATH("\\Steinberg\\VstPlugins\\studio-link-onair.dll");
-
 UnicodeString Platform::QueryProgramFilesDirectory()
 {
     UnicodeString directory;
@@ -102,79 +95,6 @@ bool Platform::QueryFileExists(const UnicodeString& path)
 UnicodeString Platform::AppendPath(const UnicodeString& prefix, const UnicodeString& appendix)
 {
     return prefix + QueryPathSeparator() + appendix;
-}
-
-UnicodeString Platform::ReadFileVersion(const UnicodeString& path)
-{
-    PRECONDITION_RETURN(path.empty() == false, UnicodeString());
-
-    UnicodeString version;
-
-    DWORD       fileVersionInfoHandle = 0;
-    const DWORD fileVersionInfoSize   = GetFileVersionInfoSize(path.c_str(), &fileVersionInfoHandle);
-    if(fileVersionInfoSize > 0)
-    {
-        uint8_t* fileVersionInfo = new uint8_t[fileVersionInfoSize];
-        if(fileVersionInfo != 0)
-        {
-            memset(fileVersionInfo, 0, fileVersionInfoSize * sizeof(uint8_t));
-            if(GetFileVersionInfoA(path.c_str(), fileVersionInfoHandle, fileVersionInfoSize, fileVersionInfo))
-            {
-                uint8_t* versionDataPtr  = 0;
-                uint32_t versionDataSize = 0;
-                if(VerQueryValueA(fileVersionInfo, "\\", (void**)&versionDataPtr, &versionDataSize))
-                {
-                    if(versionDataSize > 0)
-                    {
-                        const VS_FIXEDFILEINFO* fileInfo = reinterpret_cast<VS_FIXEDFILEINFO*>(versionDataPtr);
-                        if(fileInfo->dwSignature == 0xfeef04bd)
-                        {
-                            std::stringstream str;
-                            str << ((fileInfo->dwFileVersionMS >> 16) & 0xffff) << ".";
-                            str << ((fileInfo->dwFileVersionMS >> 0) & 0xffff) << ".";
-                            str << ((fileInfo->dwFileVersionLS >> 16) & 0xffff) << ".";
-                            str << ((fileInfo->dwFileVersionLS >> 0) & 0xffff);
-                            version = str.str();
-                        }
-                    }
-                }
-            }
-
-            SafeDeleteArray(fileVersionInfo);
-        }
-    }
-
-    return version;
-}
-
-UnicodeString FindUltraschallPluginDirectory()
-{
-    UnicodeString pluginDirectory;
-
-    HMODULE moduleHandle = GetModuleHandleA("reaper_ultraschall.dll");
-    if(moduleHandle != 0)
-    {
-        CHAR        dllPath[_MAX_PATH] = {0};
-        const DWORD charCount          = GetModuleFileNameA(moduleHandle, dllPath, _MAX_PATH);
-        if(charCount > 0)
-        {
-            pluginDirectory = dllPath;
-            if(pluginDirectory.empty() == false)
-            {
-                const size_t offset = pluginDirectory.rfind('\\');
-                if(offset != std::string::npos)
-                {
-                    pluginDirectory = pluginDirectory.substr(0, offset);
-                }
-                else
-                {
-                    pluginDirectory.clear();
-                }
-            }
-        }
-    }
-
-    return pluginDirectory;
 }
 
 size_t Platform::QueryAvailableDiskSpace(const UnicodeString& directory)

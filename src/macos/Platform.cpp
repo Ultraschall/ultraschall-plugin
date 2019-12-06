@@ -38,13 +38,6 @@
 
 namespace ultraschall { namespace reaper {
 
-const UnicodeString Platform::THEME_PATH = "/REAPER/ColorThemes/Ultraschall_4.0.ReaperThemeZip";
-const UnicodeString Platform::SOUNDBOARD_PATH("/Audio/Plug-Ins/Components/Soundboard.component");
-const UnicodeString Platform::SWS_PATH("/REAPER/UserPlugins/reaper_sws64.dylib");
-const UnicodeString Platform::PLUGIN_PATH("/REAPER/UserPlugins/reaper_ultraschall.dylib");
-const UnicodeString Platform::STUDIO_LINK_PATH("/Audio/Plug-Ins/Components/StudioLink.component");
-const UnicodeString Platform::STUDIO_LINK_ONAIR_PATH("/Audio/Plug-Ins/Components/StudioLinkOnAir.component");
-
 UnicodeString Platform::QueryUserDataDirectory()
 {
     UnicodeString directory;
@@ -86,34 +79,7 @@ bool Platform::QueryFileExists(const UnicodeString& path)
 
 UnicodeString Platform::AppendPath(const UnicodeString& prefix, const UnicodeString& appendix)
 {
-    return prefix + PathSeparator() + appendix;
-}
-
-UnicodeString Platform::ReadFileVersion(const UnicodeString& path)
-{
-    PRECONDITION_RETURN(path.empty() == false, UnicodeString());
-
-    UnicodeString version;
-
-    NSURL* libraryDirectory =
-        [[[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask] firstObject];
-    NSMutableString* filePath = [NSMutableString stringWithUTF8String:[libraryDirectory fileSystemRepresentation]];
-    [filePath appendString:[NSString stringWithUTF8String:path.c_str()]];
-    [filePath appendString:@"/Contents/Info.plist"];
-    if([[NSFileManager defaultManager] fileExistsAtPath:filePath])
-    {
-        NSDictionary* plist = [[NSDictionary alloc] initWithContentsOfFile:filePath];
-        NSString*     value = [plist objectForKey:@"CFBundleShortVersionString"];
-        version             = [value UTF8String];
-    }
-
-    return version;
-}
-
-UnicodeString FindUltraschallPluginDirectory()
-{
-    UnicodeString userDataDirectory = QueryUserDataDirectory();
-    return Platform::AppendPath(userDataDirectory, "Library/Application Support/REAPER/UserPlugins");
+    return prefix + QueryPathSeparator() + appendix;
 }
 
 }} // namespace ultraschall::reaper

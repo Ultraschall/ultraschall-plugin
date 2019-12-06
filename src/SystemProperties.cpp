@@ -30,10 +30,6 @@
 
 namespace ultraschall { namespace reaper {
 
-static const char* THEME_VERSION_KEY_NAME  = "theme";
-static const char* PLUGIN_VERSION_KEY_NAME = "plugin";
-static const char* VERSION_VALUE_NAME      = "20180114";
-
 template<> UnicodeString SystemProperty<UnicodeString>::Query(const UnicodeString& section, const UnicodeString& key)
 {
     return RawValue(section, key);
