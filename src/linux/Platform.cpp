@@ -28,29 +28,29 @@
 
 namespace ultraschall { namespace reaper {
 
-const UnicodeString Platform::THEME_PATH("/REAPER/ColorThemes/Ultraschall_3.1.ReaperThemeZip");
+const UnicodeString Platform::THEME_PATH("/REAPER/ColorThemes/Ultraschall_4.0.ReaperThemeZip");
 const UnicodeString Platform::SOUNDBOARD_PATH("/Audio/Plug-Ins/Components/Soundboard.component");
 const UnicodeString Platform::SWS_PATH("/REAPER/UserPlugins/reaper_sws64.dylib");
 const UnicodeString Platform::PLUGIN_PATH("/REAPER/UserPlugins/reaper_ultraschall.dylib");
 const UnicodeString Platform::STUDIO_LINK_PATH("/Audio/Plug-Ins/Components/StudioLink.component");
 const UnicodeString Platform::STUDIO_LINK_ONAIR_PATH("/Audio/Plug-Ins/Components/StudioLinkOnAir.component");
 
-UnicodeString Platform::UserDataDirectory()
+UnicodeString Platform::QueryUserDataDirectory()
 {
     return UnicodeString();
 }
 
-UnicodeString Platform::ProgramFilesDirectory()
+UnicodeString Platform::QueryProgramFilesDirectory()
 {
     return UnicodeString();
 }
 
-UnicodeChar Platform::PathSeparator()
+UnicodeChar Platform::QueryPathSeparator()
 {
     return '/';
 }
 
-bool Platform::FileExists(const UnicodeString& path)
+bool Platform::QueryFileExists(const UnicodeString& path)
 {
     return false;
 }

@@ -41,17 +41,18 @@ public:
     static const UnicodeString STUDIO_LINK_PATH;
     static const UnicodeString STUDIO_LINK_ONAIR_PATH;
 
-    static UnicodeString ProgramFilesDirectory();
-    static UnicodeString UserDataDirectory();
+    static UnicodeString QueryProgramFilesDirectory();
+    static UnicodeString QueryUserDataDirectory();
 
-    static UnicodeChar PathSeparator();
+    static UnicodeChar QueryPathSeparator();
+    static size_t      QueryAvailableDiskSpace(const UnicodeString& directory);
 
-    static bool        FileExists(const UnicodeString& path);
-    static UnicodeString AppendPath(const UnicodeString &prefix, const UnicodeString &appendix);
+    static bool          QueryFileExists(const UnicodeString& path);
+    static UnicodeString AppendPath(const UnicodeString& prefix, const UnicodeString& appendix);
 
-	static UnicodeString ReadFileVersion(const UnicodeString& path);
+    static UnicodeString ReadFileVersion(const UnicodeString& path);
 
-	static bool SWSVersionCheck();
+    static bool SWSVersionCheck();
 };
 
 }} // namespace ultraschall::reaper

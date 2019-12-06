@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) The Ultraschall Project (http://ultraschall.fm)
+// Copyright (c) The Ultraschall Project (https://ultraschall.fm)
 //
 // The MIT License (MIT)
 //
@@ -46,38 +46,48 @@ ServiceStatus SaveChapterMarkersAction::Execute()
     // caution! requires ConfigureSources() to be called beforehand
     PRECONDITION_RETURN(ValidateChapterMarkers(chapterMarkers_) == true, SERVICE_FAILURE);
 
-    ServiceStatus       status = SERVICE_FAILURE;
+    ServiceStatus     status = SERVICE_FAILURE;
     MessageSupervisor supervisor;
 
-    std::ofstream os(target_, std::ios::out);
-    if(os.is_open() == true)
+    std::ostringstream os;
+    for(size_t i = 0; i < chapterMarkers_.size(); i++)
     {
-        for(size_t i = 0; i < chapterMarkers_.size(); i++)
-        {
-            const UnicodeString timestamp = SecondsToString(chapterMarkers_[i].Position());
-            const UnicodeString item      = timestamp + " " + chapterMarkers_[i].Name();
-            os << item << std::endl;
-        }
-
-        os.close();
-
-        supervisor.RegisterSuccess("The chapter markers have been saved successfully.");
-        status = SERVICE_SUCCESS;
+        const UnicodeString timestamp = SecondsToString(chapterMarkers_[i].Position());
+        const UnicodeString item      = timestamp + " " + chapterMarkers_[i].Name();
+        os << item << std::endl;
     }
-    else
-    {
-        UnicodeStringStream os;
-        os << "Failed to open " << target_ << ".";
-        supervisor.RegisterError(os.str());
-        status = SERVICE_FAILURE;
-    }
+
+    FileManager::WriteTextFile(target_, os.str());
+
+    // std::ofstream os(target_, std::ios::out);
+    // if(os.is_open() == true)
+    //{
+    //    for(size_t i = 0; i < chapterMarkers_.size(); i++)
+    //    {
+    //        const UnicodeString timestamp = SecondsToString(chapterMarkers_[i].Position());
+    //        const UnicodeString item      = timestamp + " " + chapterMarkers_[i].Name();
+    //        os << item << std::endl;
+    //    }
+
+    //    os.close();
+
+    //    supervisor.RegisterSuccess("The chapter markers have been saved successfully.");
+    //    status = SERVICE_SUCCESS;
+    //}
+    // else
+    //{
+    //    UnicodeStringStream os;
+    //    os << "Failed to open " << target_ << ".";
+    //    supervisor.RegisterError(os.str());
+    //    status = SERVICE_FAILURE;
+    //}
 
     return status;
 }
 
 bool SaveChapterMarkersAction::ConfigureTargets()
 {
-    bool                result = false;
+    bool              result = false;
     MessageSupervisor supervisor;
 
     target_.clear();
@@ -102,9 +112,9 @@ bool SaveChapterMarkersAction::ConfigureTargets()
 
 bool SaveChapterMarkersAction::ConfigureSources()
 {
-    bool                result = false;
+    bool              result = false;
     MessageSupervisor supervisor;
-    size_t              invalidAssetCount = 0;
+    size_t            invalidAssetCount = 0;
 
     chapterMarkers_ = ReaperProjectManager::Instance().CurrentProject().AllMarkers();
     if(chapterMarkers_.empty() == true)

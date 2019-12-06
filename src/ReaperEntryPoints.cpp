@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) The Ultraschall Project (http://ultraschall.fm)
+// Copyright (c) The Ultraschall Project (https://ultraschall.fm)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy// The MIT License (MIT)
 //

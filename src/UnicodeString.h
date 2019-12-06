@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) The Ultraschall Project (http://ultraschall.fm)
+// Copyright (c) The Ultraschall Project (https://ultraschall.fm)
 //
 // The MIT License (MIT)
 //
@@ -24,8 +24,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_FRAMEWORK_UNICODE_STRING_H_INCL__
-#define __ULTRASCHALL_FRAMEWORK_UNICODE_STRING_H_INCL__
+#ifndef __ULTRASCHALL_REAPER_UNICODE_STRING_H_INCL__
+#define __ULTRASCHALL_REAPER_UNICODE_STRING_H_INCL__
 
 #include <map>
 #include <string>
@@ -83,4 +83,4 @@ std::string WideUnicodeStringToHostString(const WideUnicodeString& wideUnicodeSt
 
 }} // namespace ultraschall::reaper
 
-#endif // #ifndef __ULTRASCHALL_FRAMEWORK_UNICODE_STRING_H_INCL__
+#endif // #ifndef __ULTRASCHALL_REAPER_UNICODE_STRING_H_INCL__

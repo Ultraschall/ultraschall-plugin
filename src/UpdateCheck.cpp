@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) The Ultraschall Project (http://ultraschall.fm)
+// Copyright (c) The Ultraschall Project (https://ultraschall.fm)
 //
 // The MIT License (MIT)
 //
@@ -140,7 +140,7 @@ void UpdateCheck()
                         {
                             MessageSupervisor supervisor;
                             std::string         message = "An update for Ultraschall is available. Go to "
-                                                  "http://ultraschall.fm/install to download the updated version ";
+                                                  "https://ultraschall.fm/install to download the updated version ";
                             message += remoteVersion + ".";
                             supervisor.RegisterSuccess(message);
                         }

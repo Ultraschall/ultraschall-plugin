@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) The Ultraschall Project (http://ultraschall.fm)
+// Copyright (c) The Ultraschall Project (https://ultraschall.fm)
 //
 // The MIT License (MIT)
 //
@@ -39,14 +39,14 @@
 
 namespace ultraschall { namespace reaper {
 
-const UnicodeString Platform::THEME_PATH("\\REAPER\\ColorThemes\\Ultraschall_3.1.ReaperThemeZip");
+const UnicodeString Platform::THEME_PATH("\\REAPER\\ColorThemes\\Ultraschall_4.0.ReaperThemeZip");
 const UnicodeString Platform::SOUNDBOARD_PATH("\\Steinberg\\VstPlugins\\Soundboard64.dll");
 const UnicodeString Platform::SWS_PATH("\\REAPER\\UserPlugins\\reaper_sws64.dll");
 const UnicodeString Platform::PLUGIN_PATH("\\REAPER\\UserPlugins\\reaper_ultraschall.dll");
 const UnicodeString Platform::STUDIO_LINK_PATH("\\Steinberg\\VstPlugins\\studio-link.dll");
 const UnicodeString Platform::STUDIO_LINK_ONAIR_PATH("\\Steinberg\\VstPlugins\\studio-link-onair.dll");
 
-UnicodeString Platform::ProgramFilesDirectory()
+UnicodeString Platform::QueryProgramFilesDirectory()
 {
     UnicodeString directory;
 
@@ -61,7 +61,7 @@ UnicodeString Platform::ProgramFilesDirectory()
     return directory;
 }
 
-UnicodeString Platform::UserDataDirectory()
+UnicodeString Platform::QueryUserDataDirectory()
 {
     UnicodeString directory;
 
@@ -77,12 +77,12 @@ UnicodeString Platform::UserDataDirectory()
     return directory;
 }
 
-UnicodeChar Platform::PathSeparator()
+UnicodeChar Platform::QueryPathSeparator()
 {
     return '\\';
 }
 
-bool Platform::FileExists(const UnicodeString& path)
+bool Platform::QueryFileExists(const UnicodeString& path)
 {
     PRECONDITION_RETURN(path.empty() == false, false);
 
@@ -101,7 +101,7 @@ bool Platform::FileExists(const UnicodeString& path)
 
 UnicodeString Platform::AppendPath(const UnicodeString& prefix, const UnicodeString& appendix)
 {
-    return prefix + PathSeparator() + appendix;
+    return prefix + QueryPathSeparator() + appendix;
 }
 
 UnicodeString Platform::ReadFileVersion(const UnicodeString& path)
@@ -182,14 +182,13 @@ bool Platform::SWSVersionCheck()
 {
     bool result = false;
 
-    UnicodeString swsPlugin2_8UserPath
-        = Platform::ProgramFilesDirectory() + "\\REAPER (x64)\\Plugins\\reaper_sws64.dll";
-    if(Platform::FileExists(swsPlugin2_8UserPath) == false)
+    UnicodeString swsPlugin2_8UserPath = QueryProgramFilesDirectory() + "\\REAPER (x64)\\Plugins\\reaper_sws64.dll";
+    if(QueryFileExists(swsPlugin2_8UserPath) == false)
     {
-        swsPlugin2_8UserPath = Platform::AppendPath(FindUltraschallPluginDirectory(), "reaper_sws64.dll");
+        swsPlugin2_8UserPath = AppendPath(FindUltraschallPluginDirectory(), "reaper_sws64.dll");
     }
 
-    if(Platform::FileExists(swsPlugin2_8UserPath) == true)
+    if(QueryFileExists(swsPlugin2_8UserPath) == true)
     {
         reaper::BinaryStream* pStream = FileManager::ReadBinaryFile(swsPlugin2_8UserPath);
         if(pStream != 0)
@@ -208,6 +207,21 @@ bool Platform::SWSVersionCheck()
     }
 
     return result;
+}
+
+size_t Platform::QueryAvailableDiskSpace(const UnicodeString& directory)
+{
+    PRECONDITION_RETURN(directory.empty() == false, -1);
+
+    size_t availableSpace = -1;
+
+    ULARGE_INTEGER freeBytesAvailableToUser = {0};
+    if(GetDiskFreeSpaceEx(directory.c_str(), &freeBytesAvailableToUser, nullptr, nullptr) != FALSE)
+    {
+        availableSpace = freeBytesAvailableToUser.QuadPart;
+    }
+
+    return availableSpace;
 }
 
 }} // namespace ultraschall::reaper

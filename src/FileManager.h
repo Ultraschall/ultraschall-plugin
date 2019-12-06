@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) The Ultraschall Project (http://ultraschall.fm)
+// Copyright (c) The Ultraschall Project (https://ultraschall.fm)
 //
 // The MIT License (MIT)
 //
@@ -44,9 +44,26 @@ public:
     static bool   FileExists(const UnicodeString& path);
     static size_t FileExists(const UnicodeStringArray& paths);
 
+    static UnicodeString QueryFileDirectory(const UnicodeString& filename);
+
+    static size_t QueryFileSize(const UnicodeString& filename);
+    static bool   IsDiskSpaceAvailable(const UnicodeString& filename);
+
     static BinaryStream*      ReadBinaryFile(const UnicodeString& filename);
     static UnicodeStringArray ReadTextFile(const UnicodeString& filename);
-    static void               WriteTextFile(const UnicodeString& filename, const UnicodeStringArray& lines);
+
+    static bool WriteBinaryFile(const UnicodeString& filename, const BinaryStream* pStream);
+    static bool WriteTextFile(const UnicodeString& filename, const UnicodeString& str);
+    static bool WriteTextFile(const UnicodeString& filename, const UnicodeStringArray& lines);
+
+    static bool CreateFileBackup(const UnicodeString& filename);
+
+private:
+    static bool backupInProgress_;
+
+    static void BeginBackup();
+    static void EndBackup();
+    static bool BackupInProgress();
 };
 
 }} // namespace ultraschall::reaper

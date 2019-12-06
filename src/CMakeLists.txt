@@ -1,6 +1,6 @@
 ################################################################################
 #
-# Copyright (c) The Ultraschall Project (http://ultraschall.fm)
+# Copyright (c) The Ultraschall Project (https://ultraschall.fm)
 #
 # The MIT License (MIT)
 #
@@ -139,7 +139,7 @@ endif()
 
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
-set(PLATFORM_INLUDES Platform.h)
+set(PLATFORM_INCLUDES Platform.h)
 
 if(WIN32)
   include_directories(win32)

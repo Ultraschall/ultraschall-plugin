@@ -38,14 +38,14 @@
 
 namespace ultraschall { namespace reaper {
 
-const UnicodeString Platform::THEME_PATH = "/REAPER/ColorThemes/Ultraschall_3.2.ReaperThemeZip";
+const UnicodeString Platform::THEME_PATH = "/REAPER/ColorThemes/Ultraschall_4.0.ReaperThemeZip";
 const UnicodeString Platform::SOUNDBOARD_PATH("/Audio/Plug-Ins/Components/Soundboard.component");
 const UnicodeString Platform::SWS_PATH("/REAPER/UserPlugins/reaper_sws64.dylib");
 const UnicodeString Platform::PLUGIN_PATH("/REAPER/UserPlugins/reaper_ultraschall.dylib");
 const UnicodeString Platform::STUDIO_LINK_PATH("/Audio/Plug-Ins/Components/StudioLink.component");
 const UnicodeString Platform::STUDIO_LINK_ONAIR_PATH("/Audio/Plug-Ins/Components/StudioLinkOnAir.component");
 
-UnicodeString Platform::UserDataDirectory()
+UnicodeString Platform::QueryUserDataDirectory()
 {
     UnicodeString directory;
 
@@ -55,7 +55,7 @@ UnicodeString Platform::UserDataDirectory()
     return directory;
 }
 
-UnicodeString Platform::ProgramFilesDirectory()
+UnicodeString Platform::QueryProgramFilesDirectory()
 {
     UnicodeString directory;
 
@@ -67,12 +67,12 @@ UnicodeString Platform::ProgramFilesDirectory()
     return directory;
 }
 
-UnicodeChar Platform::PathSeparator()
+UnicodeChar Platform::QueryPathSeparator()
 {
     return '/';
 }
 
-bool Platform::FileExists(const UnicodeString& path)
+bool Platform::QueryFileExists(const UnicodeString& path)
 {
     PRECONDITION_RETURN(path.empty() == false, false);
 
@@ -112,7 +112,7 @@ UnicodeString Platform::ReadFileVersion(const UnicodeString& path)
 
 UnicodeString FindUltraschallPluginDirectory()
 {
-    UnicodeString userDataDirectory = Platform::UserDataDirectory();
+    UnicodeString userDataDirectory = QueryUserDataDirectory();
     return Platform::AppendPath(userDataDirectory, "Library/Application Support/REAPER/UserPlugins");
 }
 
@@ -122,7 +122,7 @@ bool Platform::SWSVersionCheck()
     bool result = false;
 
     UnicodeString swsPluginPath = Platform::AppendPath(FindUltraschallPluginDirectory(), "reaper_sws_extension.dylib");
-    if(Platform::FileExists(swsPluginPath) == true)
+    if(QueryFileExists(swsPluginPath) == true)
     {
         reaper::BinaryStream* pStream = FileManager::ReadBinaryFile(swsPluginPath);
         if(pStream != 0)

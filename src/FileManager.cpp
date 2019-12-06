@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) The Ultraschall Project (http://ultraschall.fm)
+// Copyright (c) The Ultraschall Project (https://ultraschall.fm)
 //
 // The MIT License (MIT)
 //
@@ -31,9 +31,11 @@
 
 namespace ultraschall { namespace reaper {
 
+bool FileManager::backupInProgress_ = false;
+
 UnicodeChar FileManager::PathSeparator()
 {
-    return Platform::PathSeparator();
+    return Platform::QueryPathSeparator();
 }
 
 UnicodeString FileManager::AppendPath(const UnicodeString& prefix, const UnicodeString& append)
@@ -43,14 +45,16 @@ UnicodeString FileManager::AppendPath(const UnicodeString& prefix, const Unicode
 
 UnicodeString FileManager::StripPath(const UnicodeString& path)
 {
+    PRECONDITION_RETURN(path.empty() == false, UnicodeString());
+
     UnicodeString shortName;
 
-    if (path.empty() == false)
+    if(path.empty() == false)
     {
         shortName = path;
 
         const UnicodeString::size_type offset = path.rfind(FileManager::PathSeparator());
-        if (offset != UnicodeString::npos)
+        if(offset != UnicodeString::npos)
         {
             shortName = path.substr(offset + 1, path.size()); // skip separator
         }
@@ -66,16 +70,18 @@ UnicodeStringArray FileManager::SplitPath(const UnicodeString& path)
 
 bool FileManager::FileExists(const UnicodeString& path)
 {
-    return Platform::FileExists(path);
+    return Platform::QueryFileExists(path);
 }
 
 size_t FileManager::FileExists(const UnicodeStringArray& paths)
 {
-    size_t offset = static_cast<size_t>(-1);
+    PRECONDITION_RETURN(paths.empty() == false, -1);
 
-    for (size_t i = 0; (i < paths.size()) && (offset == -1); i++)
+    size_t offset = -1;
+
+    for(size_t i = 0; (i < paths.size()) && (offset == -1); i++)
     {
-        if (FileExists(paths[i]) == true)
+        if(FileExists(paths[i]) == true)
         {
             offset = i;
         }
@@ -84,48 +90,130 @@ size_t FileManager::FileExists(const UnicodeStringArray& paths)
     return offset;
 }
 
-BinaryStream* FileManager::ReadBinaryFile(const UnicodeString& filename)
+UnicodeString FileManager::QueryFileDirectory(const UnicodeString& filename)
 {
-    BinaryStream* pStream = 0;
+    PRECONDITION_RETURN(filename.empty() == false, UnicodeString());
+
+    UnicodeString directory = ".";
+
+    size_t offset = filename.find_last_of(Platform::QueryPathSeparator());
+    if(offset != std::string::npos)
+    {
+        directory = filename.substr(0, offset - 1);
+    }
+
+    return directory;
+}
+
+size_t FileManager::QueryFileSize(const UnicodeString& filename)
+{
+    PRECONDITION_RETURN(filename.empty() == false, -1);
+    PRECONDITION_RETURN(FileExists(filename) == true, -1);
+
+    size_t size = -1;
 
     std::ifstream file(U2H(filename), std::ios::in | std::ios::binary | std::ios::ate);
     if(file.is_open() == true)
     {
-        const std::ifstream::pos_type fileSize = file.tellg();
-        file.seekg(std::ios::beg);
-        uint8_t* buffer = new uint8_t[fileSize];
-        if(buffer != 0)
+        size = file.tellg();
+        file.close();
+    }
+
+    return size;
+}
+
+bool FileManager::IsDiskSpaceAvailable(const UnicodeString& filename)
+{
+    PRECONDITION_RETURN(filename.empty() == false, false);
+
+    bool isAvailable = false;
+
+    const size_t availableSpace = Platform::QueryAvailableDiskSpace(QueryFileDirectory(filename));
+    if(availableSpace != -1)
+    {
+        const size_t fileSize = QueryFileSize(filename);
+        if(fileSize != -1)
         {
-            file.read(reinterpret_cast<char*>(buffer), fileSize);
-            if(file)
+            isAvailable = (fileSize <= availableSpace);
+        }
+    }
+
+    return isAvailable;
+}
+
+BinaryStream* FileManager::ReadBinaryFile(const UnicodeString& filename)
+{
+    PRECONDITION_RETURN(filename.empty() == false, nullptr);
+
+    BinaryStream* pStream = nullptr;
+
+    const size_t fileSize = QueryFileSize(filename);
+    if(fileSize != -1)
+    {
+        std::ifstream file(U2H(filename), std::ios::in | std::ios::binary | std::ios::ate);
+        if(file.is_open() == true)
+        {
+            uint8_t* buffer = new uint8_t[fileSize];
+            if(buffer != nullptr)
             {
-                pStream = new BinaryStream(fileSize);
-                if(pStream != 0)
+                file.read(reinterpret_cast<char*>(buffer), fileSize);
+                if(file)
                 {
-                    const bool succeeded = pStream->Write(0, buffer, fileSize);
-                    if(succeeded == false)
+                    pStream = new BinaryStream(fileSize);
+                    if(pStream != nullptr)
                     {
-                        SafeRelease(pStream);
+                        const bool succeeded = pStream->Write(0, buffer, fileSize);
+                        if(succeeded == false)
+                        {
+                            SafeRelease(pStream);
+                        }
                     }
                 }
+
+                SafeDeleteArray(buffer);
             }
 
-            SafeDeleteArray(buffer);
+            file.close();
         }
-
-        file.close();
     }
 
     return pStream;
 }
 
+bool FileManager::WriteBinaryFile(const UnicodeString& filename, const BinaryStream* pStream)
+{
+    PRECONDITION_RETURN(filename.empty() == false, false);
+    PRECONDITION_RETURN(IsDiskSpaceAvailable(filename) == true, false);
+    PRECONDITION_RETURN(pStream != nullptr, false);
+    PRECONDITION_RETURN(pStream->DataSize() > 0, false);
+
+    bool status = false;
+    if(BackupInProgress() == false)
+    {
+        status = CreateFileBackup(filename);
+    }
+    else
+    {
+        status = true;
+    }
+
+    if(true == status)
+    {
+    }
+
+    return status;
+}
+
 UnicodeStringArray FileManager::ReadTextFile(const UnicodeString& filename)
 {
+    PRECONDITION_RETURN(filename.empty() == false, UnicodeStringArray());
+    PRECONDITION_RETURN(FileExists(filename) == true, UnicodeStringArray());
+
     UnicodeStringArray lines;
 
-    std::ifstream inputStream(U2H(filename).c_str());
+    std::ifstream is(U2H(filename).c_str());
     UnicodeString line;
-    while(std::getline(inputStream, line))
+    while(std::getline(is, line))
     {
         lines.push_back(line);
     }
@@ -133,19 +221,99 @@ UnicodeStringArray FileManager::ReadTextFile(const UnicodeString& filename)
     return lines;
 }
 
-void FileManager::WriteTextFile(const UnicodeString& filename, const UnicodeStringArray& lines)
+bool FileManager::WriteTextFile(const UnicodeString& filename, const UnicodeString& str)
 {
-    if(filename.empty() == false)
+    PRECONDITION_RETURN(filename.empty() == false, false);
+    PRECONDITION_RETURN(FileExists(filename) == false, false);
+    PRECONDITION_RETURN(IsDiskSpaceAvailable(filename) == true, false);
+    PRECONDITION_RETURN(str.empty() == false, false);
+
+    bool status = false;
+
+    if(CreateFileBackup(filename) == true)
     {
         std::ofstream os(U2H(filename).c_str());
-        for(size_t i = 0; i < lines.size(); i++)
+        if(os.is_open() == true)
         {
-            os << lines[i];
-            os << "\r\n"; // TODO check whether this is fine
+            os << str << std::endl;
+            os.close();
+            status = true;
         }
-
-        os.close();
     }
+
+    return status;
 }
 
-}}     // namespace ultraschall::reaper
+bool FileManager::WriteTextFile(const UnicodeString& filename, const UnicodeStringArray& lines)
+{
+    PRECONDITION_RETURN(filename.empty() == false, false);
+    PRECONDITION_RETURN(FileExists(filename) == false, false);
+    PRECONDITION_RETURN(IsDiskSpaceAvailable(filename) == true, false);
+    PRECONDITION_RETURN(lines.empty() == false, false);
+
+    bool status = false;
+
+    if(CreateFileBackup(filename) == true)
+    {
+        std::ofstream os(U2H(filename).c_str());
+        if(os.is_open() == true)
+        {
+            for(size_t i = 0; i < lines.size(); i++)
+            {
+                os << lines[i];
+                os << std::endl;
+            }
+
+            os.close();
+            status = true;
+        }
+    }
+
+    return status;
+}
+
+bool FileManager::CreateFileBackup(const UnicodeString& filename)
+{
+    PRECONDITION_RETURN(filename.empty() == false, false);
+
+    bool status = false;
+
+    int                seed = 0;
+    std::ostringstream os;
+    os << filename << "." << std::setw(3) << std::setfill('0') << ++seed;
+    while(FileExists(os.str()) == true)
+    {
+        os.clear();
+        os << filename << "." << std::setw(3) << std::setfill('0') << ++seed;
+    }
+
+    UnicodeString newFilename = os.str();
+    BinaryStream* pStream     = ReadBinaryFile(filename);
+    if(pStream != nullptr)
+    {
+        BeginBackup();
+        status = WriteBinaryFile(newFilename, pStream);
+        EndBackup();
+
+        SafeRelease(pStream);
+    }
+
+    return status;
+}
+
+void FileManager::BeginBackup()
+{
+    backupInProgress_ = true;
+}
+
+void FileManager::EndBackup()
+{
+    backupInProgress_ = false;
+}
+
+bool FileManager::BackupInProgress()
+{
+    return backupInProgress_;
+}
+
+}} // namespace ultraschall::reaper

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) The Ultraschall Project (http://ultraschall.fm)
+// Copyright (c) The Ultraschall Project (https://ultraschall.fm)
 //
 // The MIT License (MIT)
 //
@@ -92,7 +92,7 @@ template<> int SystemProperty<int>::Query(const UnicodeString& section, const Un
 //               << ") and ULTRASCHALL PLUGIN (" << VERSION_VALUE_NAME
 //               << ").\n\nULTRASCHALL will NOT work properly until you fix this. \n\nPlease proceed by installing the "
 //                  "new theme or check the installation "
-//                  "guide on http://ultraschall.fm/install/";
+//                  "guide on https://ultraschall.fm/install/";
 //            supervisor.RegisterFatalError(os.str());
 //            result = false;
 //        }
@@ -101,7 +101,7 @@ template<> int SystemProperty<int>::Query(const UnicodeString& section, const Un
 //    {
 //        UnicodeStringStream os;
 //        os << "The ULTRASCHALL THEME is missing.\n\nULTRASCHALL will NOT work properly until you fix this.\n\nPlease "
-//              "proceed by installing the theme or check the installation guide on http://ultraschall.fm/install/";
+//              "proceed by installing the theme or check the installation guide on https://ultraschall.fm/install/";
 //        supervisor.RegisterFatalError(os.str());
 //        result = false;
 //    }

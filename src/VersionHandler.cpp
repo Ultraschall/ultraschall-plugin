@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) The Ultraschall Project (http://ultraschall.fm)
+// Copyright (c) The Ultraschall Project (https://ultraschall.fm)
 //
 // The MIT License (MIT)
 //
@@ -39,7 +39,7 @@ namespace ultraschall { namespace reaper {
 UnicodeString VersionHandler::ThemeVersion()
 {
     UnicodeString       versionString;
-    const UnicodeString themeControlFile = Platform::UserDataDirectory() + Platform::THEME_PATH;
+    const UnicodeString themeControlFile = Platform::QueryUserDataDirectory() + Platform::THEME_PATH;
     unzFile             themeFile        = unzOpen(U2H(themeControlFile).c_str());
     if(themeFile != nullptr)
     {
@@ -108,7 +108,7 @@ UnicodeString VersionHandler::ThemeVersion()
 UnicodeString VersionHandler::PluginVersion()
 {
 #ifdef _WIN32
-    return Platform::ReadFileVersion(Platform::UserDataDirectory() + Platform::PLUGIN_PATH);
+    return Platform::ReadFileVersion(Platform::QueryUserDataDirectory() + Platform::PLUGIN_PATH);
 #else  // #ifdef _WIN32
     return "4.0.0";
 #endif // #ifdef _WIN32
@@ -130,23 +130,23 @@ UnicodeString VersionHandler::ReaperVersion()
 
 UnicodeString VersionHandler::SoundboardVersion()
 {
-    return Platform::ReadFileVersion(Platform::ProgramFilesDirectory() + Platform::SOUNDBOARD_PATH);
+    return Platform::ReadFileVersion(Platform::QueryProgramFilesDirectory() + Platform::SOUNDBOARD_PATH);
 }
 
 UnicodeString VersionHandler::StudioLinkVersion()
 {
-    return Platform::ReadFileVersion(Platform::ProgramFilesDirectory() + Platform::STUDIO_LINK_PATH);
+    return Platform::ReadFileVersion(Platform::QueryProgramFilesDirectory() + Platform::STUDIO_LINK_PATH);
 }
 
 UnicodeString VersionHandler::StudioLinkOnAirVersion()
 {
-    return Platform::ReadFileVersion(Platform::ProgramFilesDirectory() + Platform::STUDIO_LINK_ONAIR_PATH);
+    return Platform::ReadFileVersion(Platform::QueryProgramFilesDirectory() + Platform::STUDIO_LINK_ONAIR_PATH);
 }
 
 UnicodeString VersionHandler::SWSVersion()
 {
 #ifdef _WIN32
-    return Platform::ReadFileVersion(Platform::UserDataDirectory() + Platform::SWS_PATH);
+    return Platform::ReadFileVersion(Platform::QueryUserDataDirectory() + Platform::SWS_PATH);
 #else  // #ifdef _WIN32
     return "2.9.7";
 #endif // #ifdef _WIN32
