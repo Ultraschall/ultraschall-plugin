@@ -82,4 +82,14 @@ UnicodeString Platform::AppendPath(const UnicodeString& prefix, const UnicodeStr
     return prefix + QueryPathSeparator() + appendix;
 }
 
+size_t Platform::QueryAvailableDiskSpace(const UnicodeString& directory)
+{
+    PRECONDITION_RETURN(directory.empty() == false, -1);
+
+    size_t availableSpace = -1;
+
+    return availableSpace;
+}
+
 }} // namespace ultraschall::reaper
+
