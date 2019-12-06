@@ -116,30 +116,4 @@ UnicodeString FindUltraschallPluginDirectory()
     return Platform::AppendPath(userDataDirectory, "Library/Application Support/REAPER/UserPlugins");
 }
 
-bool Platform::SWSVersionCheck()
-
-{
-    bool result = false;
-
-    UnicodeString swsPluginPath = Platform::AppendPath(FindUltraschallPluginDirectory(), "reaper_sws_extension.dylib");
-    if(QueryFileExists(swsPluginPath) == true)
-    {
-        reaper::BinaryStream* pStream = FileManager::ReadBinaryFile(swsPluginPath);
-        if(pStream != 0)
-
-        {
-            static const uint64_t originalCrc = 742728096; // SWS 2.10.0.1 from 02/2019
-            const uint64_t        currentCrc  = pStream->CRC32();
-            if(originalCrc == currentCrc)
-            {
-                result = true;
-            }
-
-            SafeRelease(pStream);
-        }
-    }
-
-    return result;
-}
-
 }} // namespace ultraschall::reaper

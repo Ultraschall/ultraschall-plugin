@@ -37,20 +37,19 @@
 #include "SystemProperties.h"
 #include "UINotificationStore.h"
 #include "UpdateCheck.h"
-#include "VersionHandler.h"
 
 namespace ultraschall { namespace reaper {
 
-size_t write_data(void* ptr, size_t size, size_t nmemb, void* stream)
+size_t ReceiveDataHandler(void* pData, size_t dataSize, size_t itemSize, void* pStream)
 {
-    PRECONDITION_RETURN(ptr != 0, 0);
-    PRECONDITION_RETURN(nmemb > 0, 0);
-    PRECONDITION_RETURN(stream != 0, 0);
+    PRECONDITION_RETURN(pData != 0, 0);
+    PRECONDITION_RETURN(itemSize > 0, 0);
+    PRECONDITION_RETURN(pStream != 0, 0);
 
-    std::string        data((const char*)ptr, (size_t)size * nmemb);
-    std::stringstream& os = *((std::stringstream*)stream);
+    std::string        data((const char*)pData, (size_t)dataSize * itemSize);
+    std::stringstream& os = *((std::stringstream*)pStream);
     os << data << std::endl;
-    return size * nmemb;
+    return dataSize * itemSize;
 }
 
 double QueryCurrentTimeAsSeconds()
@@ -118,12 +117,12 @@ void UpdateCheck()
             void* curlHandle = curl_easy_init();
             if(curlHandle != 0)
             {
-                const std::string url = "https://ultraschall.io/ultraschall_release.txt";
+                const std::string url = "https://ultraschall.io/ultraschall_prerelease.txt";
                 curl_easy_setopt(curlHandle, CURLOPT_URL, url.c_str());
                 curl_easy_setopt(curlHandle, CURLOPT_FOLLOWLOCATION, 1L);
                 curl_easy_setopt(curlHandle, CURLOPT_NOSIGNAL, 1);
                 curl_easy_setopt(curlHandle, CURLOPT_ACCEPT_ENCODING, "deflate");
-                curl_easy_setopt(curlHandle, CURLOPT_WRITEFUNCTION, write_data);
+                curl_easy_setopt(curlHandle, CURLOPT_WRITEFUNCTION, ReceiveDataHandler);
 
                 std::stringstream out;
                 curl_easy_setopt(curlHandle, CURLOPT_WRITEDATA, &out);
@@ -135,8 +134,7 @@ void UpdateCheck()
                     if(remoteVersion.empty() == false)
                     {
                         UnicodeStringTrim(remoteVersion);
-                        const std::string localVersion = VersionHandler::PluginVersion();
-                        if(remoteVersion > localVersion)
+                        if(remoteVersion > ULTRASCHALL_VERSION)
                         {
                             UINotificationStore supervisor;
                             std::string         message = "An update for Ultraschall is available. Go to "

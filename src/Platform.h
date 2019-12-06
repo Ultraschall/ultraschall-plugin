@@ -51,8 +51,6 @@ public:
     static UnicodeString AppendPath(const UnicodeString& prefix, const UnicodeString& appendix);
 
     static UnicodeString ReadFileVersion(const UnicodeString& path);
-
-    static bool SWSVersionCheck();
 };
 
 }} // namespace ultraschall::reaper

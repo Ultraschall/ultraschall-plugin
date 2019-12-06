@@ -59,11 +59,9 @@
 #include "SharedObject.h"
 #include "UnicodeString.h"
 
-namespace ultraschall { namespace reaper {
-
 #define PRECONDITION(a) \
     {                   \
-        if ((a) == 0)   \
+        if((a) == 0)    \
         {               \
             return;     \
         }               \
@@ -71,12 +69,12 @@ namespace ultraschall { namespace reaper {
 
 #define PRECONDITION_RETURN(a, b) \
     {                             \
-        if ((a) == 0)             \
+        if((a) == 0)              \
         {                         \
             return (b);           \
         }                         \
     }
 
-}} // namespace ultraschall::reaper
+#define ULTRASCHALL_VERSION "4.0"
 
 #endif // #ifndef __ULTRASCHALL_REAPER_COMMON_H_INCL__

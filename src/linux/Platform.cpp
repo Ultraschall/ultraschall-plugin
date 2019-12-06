@@ -70,10 +70,4 @@ UnicodeString FindUltraschallPluginDirectory()
     return UnicodeString();
 }
 
-bool Platform::SWSVersionCheck()
-
-{
-    return false;
-}
-
 }}

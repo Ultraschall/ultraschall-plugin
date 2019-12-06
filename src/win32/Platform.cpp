@@ -177,38 +177,6 @@ UnicodeString FindUltraschallPluginDirectory()
     return pluginDirectory;
 }
 
-bool Platform::SWSVersionCheck()
-
-{
-    bool result = false;
-
-    UnicodeString swsPlugin2_8UserPath = QueryProgramFilesDirectory() + "\\REAPER (x64)\\Plugins\\reaper_sws64.dll";
-    if(QueryFileExists(swsPlugin2_8UserPath) == false)
-    {
-        swsPlugin2_8UserPath = AppendPath(FindUltraschallPluginDirectory(), "reaper_sws64.dll");
-    }
-
-    if(QueryFileExists(swsPlugin2_8UserPath) == true)
-    {
-        reaper::BinaryStream* pStream = FileManager::ReadBinaryFile(swsPlugin2_8UserPath);
-        if(pStream != 0)
-
-        {
-            static const uint64_t originalCrc = 355942019; // SWS 2.10.0.1 from 02/2019
-            const uint64_t        crc         = pStream->CRC32();
-            if(originalCrc == crc)
-
-            {
-                result = true;
-            }
-
-            SafeRelease(pStream);
-        }
-    }
-
-    return result;
-}
-
 size_t Platform::QueryAvailableDiskSpace(const UnicodeString& directory)
 {
     PRECONDITION_RETURN(directory.empty() == false, -1);
