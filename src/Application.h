@@ -56,7 +56,8 @@ private:
 
     Application();
 
-    static bool HealthCheck();
+    // TODO Discuss whether this should be enabled
+    //static bool HealthCheck();
 };
 
 typedef struct

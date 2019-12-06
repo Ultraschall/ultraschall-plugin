@@ -52,7 +52,8 @@ ServiceStatus Application::Start(intptr_t handle)
     if(handle_ == 0)
     {
         handle_ = handle;
-        if(HealthCheck() == true)
+        // TODO Discuss whether this should be enabled
+        // if(HealthCheck() == true)
         {
             UpdateBillOfMaterials();
             UpdateCheck();
@@ -89,67 +90,68 @@ bool Application::OnCustomAction(const int32_t id)
     return executed;
 }
 
-bool Application::HealthCheck()
-{
-    bool                ok = true;
-    MessageSupervisor supervisor;
-
-    const std::string information1("\
-The Application Support directory of your system contains an unsupported \
-file that must be removed in order to use the Ultraschall REAPER Extension. Please move '\
-");
-    const std::string information2("\
-' to a different folder on your system and restart REAPER.\
-");
-
-// TODO: checks for legacy installations of ultraschall. remove in 4.x
-#ifdef _APPLE_
-    const std::string swsPlugin2_8SystemPath
-        = Platform::ProgramFilesDirectory() + "/REAPER/UserPlugins/reaper_sws_extension.dylib";
-    if((true == ok) && (FileManager::FileExists(swsPlugin2_8SystemPath) == true))
-    {
-        NotificationWindow::Show(message, information1 + swsPlugin2_8SystemPath + information2, true);
-        ok = false;
-    }
-
-    const std::string swsPlugin2_7SystemPath
-        = Platform::ProgramFilesDirectory() + "/REAPER/UserPlugins/reaper_sws.dylib";
-    if((true == ok) && (FileManager::FileExists(swsPlugin2_7SystemPath) == true))
-    {
-        NotificationWindow::Show(message, information1 + swsPlugin2_7SystemPath + information2, true);
-        ok = false;
-    }
-
-    const std::string ultraschallPluginSystemPath
-        = Platform::ProgramFilesDirectory() + "/REAPER/UserPlugins/reaper_ultraschall.dylib";
-    if((true == ok) && (FileManager::FileExists(ultraschallPluginSystemPath) == true))
-    {
-        NotificationWindow::Show(message, information1 + ultraschallPluginSystemPath + information2, true);
-        ok = false;
-    }
-#endif // #ifdef _APPLE_
-
-    if((true == ok) && (VersionHandler::ReaperVersionCheck() == false))
-    {
-        supervisor.RegisterError("The Ultraschall REAPER Extension requires REAPER 5.70.");
-        supervisor.RegisterError("If you want to use the Ultraschall REAPER extension, you must install REAPER 5.70");
-        ok = false;
-    }
-
-    if((true == ok) && (VersionHandler::SWSVersionCheck() == false))
-    {
-        supervisor.RegisterError("The installation of the Ultraschall REAPER extension has been corrupted.");
-        supervisor.RegisterError(
-            "Please reinstall the Ultraschall REAPER extension using the original or an updated installer.");
-        ok = false;
-    }
-
-    if(false == ok)
-    {
-        supervisor.RegisterFatalError("Ultraschall cannot continue!");
-    }
-
-    return ok;
-}
+// TODO Discuss whether this should be enabled
+// bool Application::HealthCheck()
+//{
+//    bool                ok = true;
+//    MessageSupervisor supervisor;
+//
+//    const std::string information1("\
+//The Application Support directory of your system contains an unsupported \
+//file that must be removed in order to use the Ultraschall REAPER Extension. Please move '\
+//");
+//    const std::string information2("\
+//' to a different folder on your system and restart REAPER.\
+//");
+//
+//// TODO: checks for legacy installations of ultraschall. remove in 4.x
+//#ifdef _APPLE_
+//    const std::string swsPlugin2_8SystemPath
+//        = Platform::ProgramFilesDirectory() + "/REAPER/UserPlugins/reaper_sws_extension.dylib";
+//    if((true == ok) && (FileManager::FileExists(swsPlugin2_8SystemPath) == true))
+//    {
+//        NotificationWindow::Show(message, information1 + swsPlugin2_8SystemPath + information2, true);
+//        ok = false;
+//    }
+//
+//    const std::string swsPlugin2_7SystemPath
+//        = Platform::ProgramFilesDirectory() + "/REAPER/UserPlugins/reaper_sws.dylib";
+//    if((true == ok) && (FileManager::FileExists(swsPlugin2_7SystemPath) == true))
+//    {
+//        NotificationWindow::Show(message, information1 + swsPlugin2_7SystemPath + information2, true);
+//        ok = false;
+//    }
+//
+//    const std::string ultraschallPluginSystemPath
+//        = Platform::ProgramFilesDirectory() + "/REAPER/UserPlugins/reaper_ultraschall.dylib";
+//    if((true == ok) && (FileManager::FileExists(ultraschallPluginSystemPath) == true))
+//    {
+//        NotificationWindow::Show(message, information1 + ultraschallPluginSystemPath + information2, true);
+//        ok = false;
+//    }
+//#endif // #ifdef _APPLE_
+//
+//    if((true == ok) && (VersionHandler::ReaperVersionCheck() == false))
+//    {
+//        supervisor.RegisterError("The Ultraschall REAPER Extension requires REAPER 5.70.");
+//        supervisor.RegisterError("If you want to use the Ultraschall REAPER extension, you must install REAPER 5.70");
+//        ok = false;
+//    }
+//
+//    if((true == ok) && (VersionHandler::SWSVersionCheck() == false))
+//    {
+//        supervisor.RegisterError("The installation of the Ultraschall REAPER extension has been corrupted.");
+//        supervisor.RegisterError(
+//            "Please reinstall the Ultraschall REAPER extension using the original or an updated installer.");
+//        ok = false;
+//    }
+//
+//    if(false == ok)
+//    {
+//        supervisor.RegisterFatalError("Ultraschall cannot continue!");
+//    }
+//
+//    return ok;
+//}
 
 }} // namespace ultraschall::reaper

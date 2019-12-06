@@ -48,7 +48,8 @@ REAPER_PLUGIN_DLL_EXPORT int REAPER_PLUGIN_ENTRYPOINT(REAPER_PLUGIN_HINSTANCE ha
         {
             if(ultraschall::reaper::ReaperEntryPoints::Setup(handle, pPluginInfo) == true)
             {
-                if(ultraschall::reaper::QuerySetPluginVersion() == true)
+                // TODO Discuss whether this should be enabled
+                // if(ultraschall::reaper::QuerySetPluginVersion() == true)
                 {
                     ultraschall::reaper::Application& application = ultraschall::reaper::Application::Instance();
                     if(ServiceSucceeded(application.Start((intptr_t)handle)))
@@ -63,10 +64,11 @@ REAPER_PLUGIN_DLL_EXPORT int REAPER_PLUGIN_ENTRYPOINT(REAPER_PLUGIN_HINSTANCE ha
             }
             else
             {
-                ultraschall::reaper::MessageSupervisor supervisor;
-                supervisor.RegisterFatalError("Ultraschall failed to load!");
-                supervisor.RegisterFatalError(
-                    "You are trying to load a version of REAPER that is not compatible to Ultraschall 3.");
+                // TODO Discuss whether this should be enabled
+                // ultraschall::reaper::MessageSupervisor supervisor;
+                //supervisor.RegisterFatalError("Ultraschall failed to load!");
+                //supervisor.RegisterFatalError(
+                //    "You are trying to load a version of REAPER that is not compatible to Ultraschall 4.");
             }
         }
 

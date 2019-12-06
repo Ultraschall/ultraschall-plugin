@@ -69,44 +69,45 @@ template<> int SystemProperty<int>::Query(const UnicodeString& section, const Un
     return value;
 }
 
-bool QuerySetPluginVersion()
-{
-    bool                result = false;
-    MessageSupervisor supervisor;
-
-    if(SystemProperty<UnicodeString>::Exists(VERSIONS_SECTION_NAME, THEME_VERSION_KEY_NAME) == true)
-    {
-        const UnicodeString themeVersion
-            = SystemProperty<UnicodeString>::Query(VERSIONS_SECTION_NAME, THEME_VERSION_KEY_NAME);
-        if(themeVersion == VERSION_VALUE_NAME)
-        {
-            SystemProperty<UnicodeString>::Save(VERSIONS_SECTION_NAME, PLUGIN_VERSION_KEY_NAME, VERSION_VALUE_NAME);
-            // quick sanity check
-            result = SystemProperty<UnicodeString>::Exists(VERSIONS_SECTION_NAME, PLUGIN_VERSION_KEY_NAME);
-        }
-        else
-        {
-            UnicodeStringStream os;
-            os << "There is a configuration mismatch between the ULTRASCHALL THEME (" << themeVersion
-               << ") and ULTRASCHALL PLUGIN (" << VERSION_VALUE_NAME
-               << ").\n\nULTRASCHALL will NOT work properly until you fix this. \n\nPlease proceed by installing the "
-                  "new theme or check the installation "
-                  "guide on http://ultraschall.fm/install/";
-            supervisor.RegisterFatalError(os.str());
-            result = false;
-        }
-    }
-    else
-    {
-        UnicodeStringStream os;
-        os << "The ULTRASCHALL THEME is missing.\n\nULTRASCHALL will NOT work properly until you fix this.\n\nPlease "
-              "proceed by installing the theme or check the installation guide on http://ultraschall.fm/install/";
-        supervisor.RegisterFatalError(os.str());
-        result = false;
-    }
-
-    return result;
-}
+// TODO Discuss whether this should be enabled
+// bool QuerySetPluginVersion()
+//{
+//    bool                result = false;
+//    MessageSupervisor supervisor;
+//
+//    if(SystemProperty<UnicodeString>::Exists(VERSIONS_SECTION_NAME, THEME_VERSION_KEY_NAME) == true)
+//    {
+//        const UnicodeString themeVersion
+//            = SystemProperty<UnicodeString>::Query(VERSIONS_SECTION_NAME, THEME_VERSION_KEY_NAME);
+//        if(themeVersion == VERSION_VALUE_NAME)
+//        {
+//            SystemProperty<UnicodeString>::Save(VERSIONS_SECTION_NAME, PLUGIN_VERSION_KEY_NAME, VERSION_VALUE_NAME);
+//            // quick sanity check
+//            result = SystemProperty<UnicodeString>::Exists(VERSIONS_SECTION_NAME, PLUGIN_VERSION_KEY_NAME);
+//        }
+//        else
+//        {
+//            UnicodeStringStream os;
+//            os << "There is a configuration mismatch between the ULTRASCHALL THEME (" << themeVersion
+//               << ") and ULTRASCHALL PLUGIN (" << VERSION_VALUE_NAME
+//               << ").\n\nULTRASCHALL will NOT work properly until you fix this. \n\nPlease proceed by installing the "
+//                  "new theme or check the installation "
+//                  "guide on http://ultraschall.fm/install/";
+//            supervisor.RegisterFatalError(os.str());
+//            result = false;
+//        }
+//    }
+//    else
+//    {
+//        UnicodeStringStream os;
+//        os << "The ULTRASCHALL THEME is missing.\n\nULTRASCHALL will NOT work properly until you fix this.\n\nPlease "
+//              "proceed by installing the theme or check the installation guide on http://ultraschall.fm/install/";
+//        supervisor.RegisterFatalError(os.str());
+//        result = false;
+//    }
+//
+//    return result;
+//}
 
 void UpdateBillOfMaterials()
 {
