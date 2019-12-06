@@ -29,7 +29,7 @@
 #include "FileManager.h"
 #include "StringUtilities.h"
 #include "SystemProperties.h"
-#include "MessageSupervisor.h"
+#include "UINotificationStore.h"
 #include "UpdateCheck.h"
 #include "VersionHandler.h"
 

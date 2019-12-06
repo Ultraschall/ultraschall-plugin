@@ -35,7 +35,7 @@
 #include "Platform.h"
 #include "StringUtilities.h"
 #include "SystemProperties.h"
-#include "MessageSupervisor.h"
+#include "UINotificationStore.h"
 #include "UpdateCheck.h"
 #include "VersionHandler.h"
 
@@ -138,7 +138,7 @@ void UpdateCheck()
                         const std::string localVersion = VersionHandler::PluginVersion();
                         if(remoteVersion > localVersion)
                         {
-                            MessageSupervisor supervisor;
+                            UINotificationStore supervisor;
                             std::string         message = "An update for Ultraschall is available. Go to "
                                                   "https://ultraschall.fm/install to download the updated version ";
                             message += remoteVersion + ".";

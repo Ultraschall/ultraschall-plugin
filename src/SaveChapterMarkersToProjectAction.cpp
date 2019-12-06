@@ -29,7 +29,7 @@
 #include "FileManager.h"
 #include "SaveChapterMarkersAction.h"
 #include "StringUtilities.h"
-#include "MessageSupervisor.h"
+#include "UINotificationStore.h"
 #include "ReaperProjectManager.h"
 
 namespace ultraschall { namespace reaper {
@@ -47,7 +47,7 @@ ServiceStatus SaveChapterMarkersToProjectAction::Execute()
     PRECONDITION_RETURN(ValidateChapterMarkers(chapterMarkers_) == true, SERVICE_FAILURE);
 
     ServiceStatus       status = SERVICE_FAILURE;
-    MessageSupervisor supervisor;
+    UINotificationStore supervisor;
 
     std::ofstream os(target_, std::ios::out);
     if(os.is_open() == true)
@@ -84,7 +84,7 @@ bool SaveChapterMarkersToProjectAction::ConfigureTargets()
 bool SaveChapterMarkersToProjectAction::ConfigureSources()
 {
     bool                result = false;
-    MessageSupervisor supervisor;
+    UINotificationStore supervisor;
     size_t              invalidAssetCount = 0;
 
     chapterMarkers_ = ReaperProjectManager::Instance().CurrentProject().AllMarkers();

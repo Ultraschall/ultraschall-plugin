@@ -30,7 +30,7 @@
 #include "ReaperProjectManager.h"
 #include "StringUtilities.h"
 #include "FileDialog.h"
-#include "MessageSupervisor.h"
+#include "UINotificationStore.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -46,7 +46,7 @@ ServiceStatus InsertChapterMarkersAction::Execute()
     PRECONDITION_RETURN(ValidateChapterMarkers(chapterMarkers_) == true, SERVICE_FAILURE);
 
     ServiceStatus       status = SERVICE_FAILURE;
-    MessageSupervisor supervisor;
+    UINotificationStore supervisor;
 
     ReaperProjectManager& projectManager = ReaperProjectManager::Instance();
     ReaperProject         currentProject = projectManager.CurrentProject();
@@ -79,7 +79,7 @@ ServiceStatus InsertChapterMarkersAction::Execute()
 
 bool InsertChapterMarkersAction::ConfigureTargets()
 {
-    MessageSupervisor supervisor;
+    UINotificationStore supervisor;
 
     chapterMarkers_.clear();
 

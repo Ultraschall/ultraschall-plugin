@@ -61,10 +61,6 @@ set(COMMON_INCLUDES
   Malloc.h
   Marker.h
   MediaProperties.h
-  Message.h
-  MessageClass.h
-  MessageQueue.h
-  MessageSupervisor.h
   PictureUtilities.h
   ProjectProperties.h
   ReaperProject.h
@@ -80,6 +76,10 @@ set(COMMON_INCLUDES
   SystemProperties.h
   taglib_include.h
   TagWriterFactory.h
+  UINotification.h
+  UINotificationClass.h
+  UINotificationQueue.h
+  UINotificationStore.h
   UpdateCheck.h
   UnicodeString.h
   VersionHandler.h
@@ -101,9 +101,6 @@ set(COMMON_SOURCES
   ISOBMFFContext.cpp
   ISOBMFFWriter.cpp
   MediaProperties.cpp
-  Message.cpp
-  MessageQueue.cpp
-  MessageSupervisor.cpp
   PictureUtilities.cpp
   ProjectProperties.cpp
   ReaperProject.cpp
@@ -115,6 +112,9 @@ set(COMMON_SOURCES
   StringUtilities.cpp
   SystemProperties.cpp
   TagWriterFactory.cpp
+  UINotification.cpp
+  UINotificationQueue.cpp
+  UINotificationStore.cpp
   UpdateCheck.cpp
   UnicodeString.cpp
   VersionHandler.cpp
