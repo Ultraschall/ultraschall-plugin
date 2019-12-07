@@ -39,37 +39,6 @@
 
 namespace ultraschall { namespace reaper {
 
-UnicodeString Platform::QueryProgramFilesDirectory()
-{
-    UnicodeString directory;
-
-    WideUnicodeChar* unicodeString = nullptr;
-    const HRESULT    hr            = SHGetKnownFolderPath(FOLDERID_ProgramFilesX64, 0, nullptr, (PWSTR*)&unicodeString);
-    if(SUCCEEDED(hr))
-    {
-        directory = WideUnicodeStringToUnicodeString(unicodeString);
-        CoTaskMemFree(unicodeString);
-    }
-
-    return directory;
-}
-
-UnicodeString Platform::QueryUserDataDirectory()
-{
-    UnicodeString directory;
-
-    WideUnicodeChar* unicodeString = nullptr;
-    const HRESULT    hr            = SHGetKnownFolderPath(FOLDERID_RoamingAppData, 0, nullptr, (PWSTR*)&unicodeString);
-    if(SUCCEEDED(hr))
-    {
-        directory = WideUnicodeStringToUnicodeString(unicodeString);
-        CoTaskMemFree(unicodeString);
-        unicodeString = nullptr;
-    }
-
-    return directory;
-}
-
 UnicodeChar Platform::QueryPathSeparator()
 {
     return '\\';
@@ -90,11 +59,6 @@ bool Platform::QueryFileExists(const UnicodeString& path)
     }
 
     return fileExists;
-}
-
-UnicodeString Platform::AppendPath(const UnicodeString& prefix, const UnicodeString& appendix)
-{
-    return prefix + QueryPathSeparator() + appendix;
 }
 
 size_t Platform::QueryAvailableDiskSpace(const UnicodeString& directory)

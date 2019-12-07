@@ -28,16 +28,6 @@
 
 namespace ultraschall { namespace reaper {
 
-UnicodeString Platform::QueryUserDataDirectory()
-{
-    return UnicodeString();
-}
-
-UnicodeString Platform::QueryProgramFilesDirectory()
-{
-    return UnicodeString();
-}
-
 UnicodeChar Platform::QueryPathSeparator()
 {
     return '/';
@@ -46,11 +36,6 @@ UnicodeChar Platform::QueryPathSeparator()
 bool Platform::QueryFileExists(const UnicodeString& path)
 {
     return false;
-}
-
-UnicodeString Platform::AppendPath(const UnicodeString& prefix, const UnicodeString& appendix)
-{
-    return prefix + QueryPathSeparator() + appendix;
 }
 
 size_t Platform::QueryAvailableDiskSpace(const UnicodeString& directory)

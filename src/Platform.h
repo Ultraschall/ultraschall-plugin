@@ -34,14 +34,10 @@ namespace ultraschall { namespace reaper {
 class Platform
 {
 public:
-    static UnicodeString QueryProgramFilesDirectory();
-    static UnicodeString QueryUserDataDirectory();
-
     static UnicodeChar QueryPathSeparator();
     static size_t      QueryAvailableDiskSpace(const UnicodeString& directory);
 
-    static bool          QueryFileExists(const UnicodeString& path);
-    static UnicodeString AppendPath(const UnicodeString& prefix, const UnicodeString& appendix);
+    static bool QueryFileExists(const UnicodeString& path);
 };
 
 }} // namespace ultraschall::reaper

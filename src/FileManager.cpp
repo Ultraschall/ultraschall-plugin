@@ -38,9 +38,9 @@ UnicodeChar FileManager::PathSeparator()
     return Platform::QueryPathSeparator();
 }
 
-UnicodeString FileManager::AppendPath(const UnicodeString& prefix, const UnicodeString& append)
+UnicodeString FileManager::AppendPath(const UnicodeString& prefix, const UnicodeString& appendix)
 {
-    return Platform::AppendPath(prefix, append);
+    return prefix + Platform::QueryPathSeparator() + appendix;
 }
 
 UnicodeString FileManager::StripPath(const UnicodeString& path)

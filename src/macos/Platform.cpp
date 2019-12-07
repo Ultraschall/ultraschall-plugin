@@ -38,28 +38,6 @@
 
 namespace ultraschall { namespace reaper {
 
-UnicodeString Platform::QueryUserDataDirectory()
-{
-    UnicodeString directory;
-
-    NSString* userHomeDirectory = NSHomeDirectory();
-    directory                   = [userHomeDirectory UTF8String];
-
-    return directory;
-}
-
-UnicodeString Platform::QueryProgramFilesDirectory()
-{
-    UnicodeString directory;
-
-    NSURL* applicationSupportDirectory =
-        [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSSystemDomainMask]
-            firstObject];
-    directory = [applicationSupportDirectory fileSystemRepresentation];
-
-    return directory;
-}
-
 UnicodeChar Platform::QueryPathSeparator()
 {
     return '/';
@@ -75,11 +53,6 @@ bool Platform::QueryFileExists(const UnicodeString& path)
     fileExists                 = [fileManager fileExistsAtPath:[NSString stringWithUTF8String:path.c_str()]] == YES;
 
     return fileExists;
-}
-
-UnicodeString Platform::AppendPath(const UnicodeString& prefix, const UnicodeString& appendix)
-{
-    return prefix + QueryPathSeparator() + appendix;
 }
 
 size_t Platform::QueryAvailableDiskSpace(const UnicodeString& directory)

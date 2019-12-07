@@ -37,7 +37,7 @@ class FileManager
 public:
     static UnicodeChar PathSeparator();
 
-    static UnicodeString      AppendPath(const UnicodeString& prefix, const UnicodeString& append);
+    static UnicodeString      AppendPath(const UnicodeString& prefix, const UnicodeString& appendix);
     static UnicodeString      StripPath(const UnicodeString& path);
     static UnicodeStringArray SplitPath(const UnicodeString& path);
 
