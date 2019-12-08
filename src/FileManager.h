@@ -47,23 +47,12 @@ public:
     static UnicodeString QueryFileDirectory(const UnicodeString& filename);
 
     static size_t QueryFileSize(const UnicodeString& filename);
-    static bool   IsDiskSpaceAvailable(const UnicodeString& filename);
+    static bool   IsDiskSpaceAvailable(const UnicodeString& filename, const size_t requiredBytes);
 
     static BinaryStream*      ReadBinaryFile(const UnicodeString& filename);
     static UnicodeStringArray ReadTextFile(const UnicodeString& filename);
 
-    static bool WriteBinaryFile(const UnicodeString& filename, const BinaryStream* pStream);
     static bool WriteTextFile(const UnicodeString& filename, const UnicodeString& str);
-    static bool WriteTextFile(const UnicodeString& filename, const UnicodeStringArray& lines);
-
-    static bool CreateFileBackup(const UnicodeString& filename);
-
-private:
-    static bool backupInProgress_;
-
-    static void BeginBackup();
-    static void EndBackup();
-    static bool BackupInProgress();
 };
 
 }} // namespace ultraschall::reaper

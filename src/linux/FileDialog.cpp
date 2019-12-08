@@ -34,28 +34,35 @@ FileDialog::FileDialog(const UnicodeString& caption, const UnicodeString& initia
 
 FileDialog::~FileDialog() {}
 
-UnicodeString FileDialog::BrowseForChapters()
+UnicodeString FileDialog::SelectChaptersFile()
 {
     UnicodeString result;
 
     return result;
 }
 
-UnicodeString FileDialog::BrowseForAudio()
+UnicodeString FileDialog::SelectAudioFile()
 {
     UnicodeString result;
 
     return result;
 }
 
-UnicodeString FileDialog::BrowseForPicture()
+UnicodeString FileDialog::SelectPictureFile()
 {
     UnicodeString result;
 
     return result;
 }
 
-UnicodeString FileDialog::BrowseForDirectory()
+UnicodeString FileDialog::SelectDirectory()
+{
+    UnicodeString result;
+
+    return result;
+}
+
+UnicodeString FileDialog::ChooseChaptersFileName()
 {
     UnicodeString result;
 

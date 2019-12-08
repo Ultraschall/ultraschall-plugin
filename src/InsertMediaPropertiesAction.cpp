@@ -171,7 +171,7 @@ bool InsertMediaPropertiesAction::ConfigureTargets()
         supervisor.RegisterWarning("Ultraschall can't find a suitable media file. Please select an alternative media "
                                    "file from the file selection dialog after closing this message.");
         FileDialog          fileDialog("Select audio file");
-        const UnicodeString target = fileDialog.BrowseForAudio();
+        const UnicodeString target = fileDialog.SelectAudioFile();
         if(target.empty() == false)
         {
             targets_.push_back(target);

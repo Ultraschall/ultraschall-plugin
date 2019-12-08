@@ -37,11 +37,12 @@ public:
     FileDialog(const UnicodeString& caption, const UnicodeString& initialDirectory = "");
     virtual ~FileDialog();
 
-    UnicodeString BrowseForChapters();
-    UnicodeString BrowseForAudio();
-    UnicodeString BrowseForPicture();
+    UnicodeString SelectChaptersFile();
+    UnicodeString SelectAudioFile();
+    UnicodeString SelectPictureFile();
 
-    UnicodeString BrowseForDirectory();
+    UnicodeString SelectDirectory();
+    UnicodeString ChooseChaptersFileName();
 
 private:
     UnicodeString caption_;

@@ -29,13 +29,9 @@
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 
-#include <shlobj.h>
 #include <windows.h>
 
-#include "FileManager.h"
 #include "Platform.h"
-
-#include "Malloc.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -66,7 +62,6 @@ size_t Platform::QueryAvailableDiskSpace(const UnicodeString& directory)
     PRECONDITION_RETURN(directory.empty() == false, -1);
 
     size_t availableSpace = -1;
-
     ULARGE_INTEGER freeBytesAvailableToUser = {0};
     if(GetDiskFreeSpaceEx(directory.c_str(), &freeBytesAvailableToUser, nullptr, nullptr) != FALSE)
     {

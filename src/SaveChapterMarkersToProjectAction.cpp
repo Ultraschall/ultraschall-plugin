@@ -42,34 +42,26 @@ ServiceStatus SaveChapterMarkersToProjectAction::Execute()
 
     PRECONDITION_RETURN(ConfigureTargets() == true, SERVICE_FAILURE);
     PRECONDITION_RETURN(ConfigureSources() == true, SERVICE_FAILURE);
-
-    // caution! requires ConfigureSources() to be called beforehand
     PRECONDITION_RETURN(ValidateChapterMarkers(chapterMarkers_) == true, SERVICE_FAILURE);
 
     ServiceStatus       status = SERVICE_FAILURE;
     UINotificationStore supervisor;
 
-    std::ofstream os(target_, std::ios::out);
-    if(os.is_open() == true)
+    std::ostringstream os;
+    for(size_t i = 0; i < chapterMarkers_.size(); i++)
     {
-        for(size_t i = 0; i < chapterMarkers_.size(); i++)
-        {
-            const UnicodeString timestamp = SecondsToString(chapterMarkers_[i].Position());
-            const UnicodeString item      = timestamp + " " + chapterMarkers_[i].Name();
-            os << item << std::endl;
-        }
+        const UnicodeString timestamp = SecondsToString(chapterMarkers_[i].Position());
+        const UnicodeString item      = timestamp + " " + chapterMarkers_[i].Name();
+        os << item << std::endl;
+    }
 
-        os.close();
-
-        supervisor.RegisterSuccess("The chapter markers have been saved successfully.");
+    if(FileManager::WriteTextFile(target_, os.str()) == true)
+    {
         status = SERVICE_SUCCESS;
     }
     else
     {
-        UnicodeStringStream os;
-        os << "Failed to open " << target_ << ".";
-        supervisor.RegisterError(os.str());
-        status = SERVICE_FAILURE;
+        supervisor.RegisterError("Failed to export chapter markers.");
     }
 
     return status;
@@ -83,31 +75,22 @@ bool SaveChapterMarkersToProjectAction::ConfigureTargets()
 
 bool SaveChapterMarkersToProjectAction::ConfigureSources()
 {
-    bool                result = false;
+    bool                status = false;
     UINotificationStore supervisor;
-    size_t              invalidAssetCount = 0;
 
-    chapterMarkers_ = ReaperProjectManager::Instance().CurrentProject().AllMarkers();
-    if(chapterMarkers_.empty() == true)
+    ReaperProjectManager& projectManager = ReaperProjectManager::Instance();
+    const ReaperProject&  currentProject = projectManager.CurrentProject();
+    chapterMarkers_                      = currentProject.AllMarkers();
+    if(chapterMarkers_.empty() == false)
     {
-        supervisor.RegisterWarning("No chapters have been set.");
-        invalidAssetCount++;
+        status = true;
     }
     else
     {
-        result = true;
+        supervisor.RegisterWarning("No chapters have been set.");
     }
 
-    if(invalidAssetCount >= 1)
-    {
-        UnicodeStringStream os;
-        os << "Your project does not meet the minimum requirements for the export to continue. Specify at least one "
-              "chapter marker.";
-        supervisor.RegisterError(os.str());
-        result = false;
-    }
-
-    return result;
+    return status;
 }
 
 }} // namespace ultraschall::reaper

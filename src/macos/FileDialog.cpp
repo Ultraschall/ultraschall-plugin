@@ -37,7 +37,7 @@ FileDialog::FileDialog(const UnicodeString& caption, const UnicodeString& initia
 
 FileDialog::~FileDialog() {}
 
-UnicodeString FileDialog::BrowseForChapters()
+UnicodeString FileDialog::SelectChaptersFile()
 {
     UnicodeString result;
 
@@ -64,7 +64,7 @@ UnicodeString FileDialog::BrowseForChapters()
     return result;
 }
 
-UnicodeString FileDialog::BrowseForAudio()
+UnicodeString FileDialog::SelectAudioFile()
 {
     UnicodeString result;
 
@@ -91,7 +91,7 @@ UnicodeString FileDialog::BrowseForAudio()
     return result;
 }
 
-UnicodeString FileDialog::BrowseForPicture()
+UnicodeString FileDialog::SelectPictureFile()
 {
     UnicodeString result;
 
@@ -118,7 +118,7 @@ UnicodeString FileDialog::BrowseForPicture()
     return result;
 }
 
-UnicodeString FileDialog::BrowseForDirectory()
+UnicodeString FileDialog::SelectDirectory()
 {
     UnicodeString result;
 
@@ -143,6 +143,13 @@ UnicodeString FileDialog::BrowseForDirectory()
 
         fileDialog = nil;
     }
+
+    return result;
+}
+
+UnicodeString FileDialog::ChooseChaptersFileName()
+{
+    UnicodeString result;
 
     return result;
 }

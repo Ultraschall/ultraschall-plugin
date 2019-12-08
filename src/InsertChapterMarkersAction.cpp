@@ -137,7 +137,7 @@ bool InsertChapterMarkersAction::ConfigureSources()
     source_.clear();
 
     FileDialog fileDialog("Import chapter markers");
-    source_ = fileDialog.BrowseForChapters();
+    source_ = fileDialog.SelectChaptersFile();
     return source_.empty() == false;
 }
 
