@@ -66,13 +66,6 @@ public:
         ReaperGateway::ClearSystemValue(section, key);
     }
 
-    static void Clear(const UnicodeString& section)
-    {
-        PRECONDITION(section.empty() == false);
-
-        ReaperGateway::ClearSystemValue(section);
-    }
-
     static void Delete(const UnicodeString& section, const UnicodeString& key)
     {
         PRECONDITION(section.empty() == false);
