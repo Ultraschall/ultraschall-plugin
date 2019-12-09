@@ -24,15 +24,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_MP4_WRITER_H_INCL__
-#define __ULTRASCHALL_REAPER_MP4_WRITER_H_INCL__
+#ifndef __ULTRASCHALL_REAPER_ISOBMFF_WRITER_H_INCL__
+#define __ULTRASCHALL_REAPER_ISOBMFF_WRITER_H_INCL__
 
 #include "Common.h"
 #include "ITagWriter.h"
 
-namespace ultraschall { namespace reaper { namespace isobmff {
+namespace ultraschall { namespace reaper {
 
-class Writer : public ITagWriter
+class ISOBMFFWriter : public ITagWriter
 {
 public:
     virtual bool InsertProperties(const UnicodeString& targetName, const MediaProperties& standardProperties);
@@ -44,9 +44,9 @@ public:
     virtual bool ReplaceChapterMarkers(const UnicodeString& targetName, const MarkerArray& chapterMarkers);
 
 protected:
-    virtual ~Writer() {}
+    virtual ~ISOBMFFWriter() {}
 };
 
-}}} // namespace ultraschall::reaper::isobmff
+}} // namespace ultraschall::reaper
 
-#endif // #ifndef __ULTRASCHALL_REAPER_MP3_WRITER_H_INCL__
+#endif // #ifndef __ULTRASCHALL_REAPER_ISOBMFF_WRITER_H_INCL__

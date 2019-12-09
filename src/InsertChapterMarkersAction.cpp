@@ -80,10 +80,84 @@ ServiceStatus InsertChapterMarkersAction::Execute()
 bool InsertChapterMarkersAction::ConfigureTargets()
 {
     UINotificationStore supervisor;
+    MarkerArray         chapterMarkers;
 
-    chapterMarkers_.clear();
+    MEDIA_TYPE mediaType = QueryMediaTypeFromFileExtension(source_);
+    switch (mediaType)
+    {
+      case MEDIA_TYPE::TEXT_MEDIA_TYPE:
+        chapterMarkers = ReadTextFile(source_);
+        break;
+      case MEDIA_TYPE::MP3_MEDIA_TYPE:
+          chapterMarkers = ReadMP3File(source_);
+          break;
+      case MEDIA_TYPE::MP4_MEDIA_TYPE:
+          chapterMarkers = ReadMP4File(source_);
+          break;
+      default:
+        break;
+    }
 
-    const UnicodeStringArray lines = FileManager::ReadTextFile(source_);
+    if(chapterMarkers.empty() == false)
+    {
+        chapterMarkers_ = chapterMarkers;
+    }
+
+    return chapterMarkers.empty() == false;
+}
+
+bool InsertChapterMarkersAction::ConfigureSources()
+{
+    source_.clear();
+
+    FileDialog fileDialog("Import chapter markers");
+    source_ = fileDialog.SelectChaptersFile();
+    return source_.empty() == false;
+}
+
+InsertChapterMarkersAction::MEDIA_TYPE InsertChapterMarkersAction::QueryMediaTypeFromFileExtension(
+    const UnicodeString& filename)
+{
+    PRECONDITION_RETURN(filename.empty() == false, MEDIA_TYPE::INVALID_MEDIA_TYPE);
+
+    MEDIA_TYPE mediaType = MEDIA_TYPE::INVALID_MEDIA_TYPE;
+
+    size_t offset = filename.find_last_of(".");
+    if(offset != UnicodeString::npos)
+    {
+        UnicodeString extension = StringLowercase(filename.substr(offset));
+        if(extension.empty() == false)
+        {
+            if((extension == ".txt") || (extension == ".mp4chaps"))
+            {
+                mediaType = MEDIA_TYPE::TEXT_MEDIA_TYPE;
+            }
+            else if((extension == ".mp3"))
+            {
+                mediaType = MEDIA_TYPE::MP3_MEDIA_TYPE;
+            }
+            else if((extension == ".mp4") || (extension == ".m4a"))
+            {
+                mediaType = MEDIA_TYPE::MP4_MEDIA_TYPE;
+            }
+            else
+            {
+                mediaType = MEDIA_TYPE::INVALID_MEDIA_TYPE;
+            }
+        }
+    }
+
+    return mediaType;
+}
+
+MarkerArray InsertChapterMarkersAction::ReadTextFile(const UnicodeString& filename)
+{
+    PRECONDITION_RETURN(filename.empty() == false, MarkerArray());
+
+    UINotificationStore supervisor;
+    MarkerArray         chapterMarkers;
+
+    const UnicodeStringArray lines = FileManager::ReadTextFile(filename);
     if(lines.empty() == false)
     {
         for(size_t i = 0; i < lines.size(); i++)
@@ -105,7 +179,7 @@ bool InsertChapterMarkersAction::ConfigureTargets()
                         name += " " + items[j];
                     }
 
-                    chapterMarkers_.push_back(Marker(position, name, 0));
+                    chapterMarkers.push_back(Marker(position, name, 0));
                 }
                 else
                 {
@@ -125,20 +199,31 @@ bool InsertChapterMarkersAction::ConfigureTargets()
     else
     {
         UnicodeStringStream os;
-        os << "The file '" << source_ << "' does not contain chapter markers";
+        os << "The file '" << filename << "' does not contain chapter markers";
         supervisor.RegisterWarning(os.str());
     }
 
-    return chapterMarkers_.empty() == false;
+    return chapterMarkers;
 }
 
-bool InsertChapterMarkersAction::ConfigureSources()
+MarkerArray InsertChapterMarkersAction::ReadMP3File(const UnicodeString& filename)
 {
-    source_.clear();
+    PRECONDITION_RETURN(filename.empty() == false, MarkerArray());
 
-    FileDialog fileDialog("Import chapter markers");
-    source_ = fileDialog.SelectChaptersFile();
-    return source_.empty() == false;
+    UINotificationStore supervisor;
+    MarkerArray         chapterMarkers;
+
+    return chapterMarkers;
+}
+
+MarkerArray InsertChapterMarkersAction::ReadMP4File(const UnicodeString& filename)
+{
+    PRECONDITION_RETURN(filename.empty() == false, MarkerArray());
+
+    UINotificationStore supervisor;
+    MarkerArray         chapterMarkers;
+
+    return chapterMarkers;
 }
 
 }} // namespace ultraschall::reaper

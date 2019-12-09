@@ -37,8 +37,8 @@ Context* StartTransaction(const UnicodeString& targetName);
 bool     CommitTransaction(Context*& context);
 void     AbortTransaction(Context*& context);
 
-void RemoveFrames(const UnicodeString& target, const UnicodeString& frameId);
 bool RemoveFrames(Context* context, const UnicodeString& id);
+bool QueryChapterFrames(Context* context);
 
 bool InsertTextFrame(
     Context* context, const UnicodeString& id, const UnicodeString& text, const CHAR_ENCODING encoding);

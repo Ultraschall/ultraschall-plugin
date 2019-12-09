@@ -80,43 +80,6 @@ const char* QueryMIMEType(const uint8_t* data, const size_t dataSize)
     return mimeType;
 }
 
-void RemoveFrames(const UnicodeString& target, const UnicodeString& frameId)
-{
-    PRECONDITION(target.empty() == false);
-    PRECONDITION(frameId.empty() == false);
-
-    taglib_mp3::File mp3(target.c_str());
-    if(mp3.isOpen() == true)
-    {
-        taglib_id3v2::Tag* id3v2 = mp3.ID3v2Tag();
-        if(id3v2 != 0)
-        {
-            std::vector<taglib_id3v2::Frame*> foundFrames;
-
-            taglib_id3v2::FrameList frames = id3v2->frameList(frameId.c_str());
-            for(unsigned int i = 0; i < frames.size(); i++)
-            {
-                taglib_id3v2::Frame* frame = frames[i];
-                if(frame != 0)
-                {
-                    foundFrames.push_back(frame);
-                }
-            }
-
-            if(foundFrames.empty() == false)
-            {
-                for(size_t j = 0; j < foundFrames.size(); j++)
-                {
-                    id3v2->removeFrame(foundFrames[j]);
-                }
-
-                //            FIXME
-                //            MP3_Commit(mp3);
-            }
-        }
-    }
-}
-
 bool RemoveFrames(Context* context, const UnicodeString& id)
 {
     PRECONDITION_RETURN(context != 0, false);
@@ -176,6 +139,7 @@ bool InsertUTF16TextFrame(Context* context, const UnicodeString& id, const Unico
     {
         success = true;
     }
+
     return success;
 }
 
@@ -306,7 +270,7 @@ bool InsertTableOfContentsFrame(Context* context, const UnicodeStringArray& tabl
         = new taglib_id3v2::TableOfContentsFrame(tableOfContentsId);
     if(tableOfContentsFrame != 0)
     {
-      tableOfContentsFrame->setIsTopLevel(true);
+        tableOfContentsFrame->setIsTopLevel(true);
         tableOfContentsFrame->setIsOrdered(true);
         for(size_t j = 0; j < tableOfContentsItems.size(); j++)
         {
@@ -316,6 +280,7 @@ bool InsertTableOfContentsFrame(Context* context, const UnicodeStringArray& tabl
         context->Tags()->addFrame(tableOfContentsFrame);
         success = true;
     }
+
     return success;
 }
 
@@ -349,10 +314,75 @@ bool InsertCoverPictureFrame(Context* context, const UnicodeString& image)
                     success = true;
                 }
             }
+
             SafeRelease(pData);
         }
     }
+
     return success;
+}
+
+bool QueryChapterFrames(Context* pContext)
+{
+    PRECONDITION_RETURN(pContext != 0, false);
+    PRECONDITION_RETURN(pContext->Tags() != 0, false);
+
+    static const taglib::ByteVector CHAPTER_FRAME_ID = taglib::ByteVector::fromCString("CHAP", 4);
+    static const taglib::ByteVector TEXT_FRAME_ID    = taglib::ByteVector::fromCString("TIT2", 4);
+
+    taglib_id3v2::FrameList frames = pContext->Tags()->frameList();
+    if(frames.isEmpty() == false)
+    {
+        taglib_id3v2::FrameList::Iterator frameIterator = frames.begin();
+        while(frameIterator != frames.end())
+        {
+            taglib_id3v2::Frame* pFrame = *frameIterator;
+            if(pFrame != nullptr)
+            {
+                if(pFrame->frameID() == CHAPTER_FRAME_ID)
+                {
+                    taglib_id3v2::ChapterFrame* pChapterFrame = reinterpret_cast<taglib_id3v2::ChapterFrame*>(pFrame);
+                    if(pChapterFrame != nullptr)
+                    {
+                        taglib_id3v2::FrameList embeddedFrames = pChapterFrame->embeddedFrameList();
+                        if(embeddedFrames.isEmpty() == false)
+                        {
+                            taglib_id3v2::FrameList::Iterator embeddedFrameIterator = embeddedFrames.begin();
+                            while(embeddedFrameIterator != embeddedFrames.end())
+                            {
+                                taglib_id3v2::Frame* pEmbeddedFrame = *embeddedFrameIterator;
+                                if(pEmbeddedFrame != nullptr)
+                                {
+                                    if(pEmbeddedFrame->frameID() == TEXT_FRAME_ID)
+                                    {
+                                        taglib_id3v2::TextIdentificationFrame* pTextIdFrame
+                                            = reinterpret_cast<taglib_id3v2::TextIdentificationFrame*>(
+                                                *embeddedFrameIterator);
+                                        if(pTextIdFrame != nullptr)
+                                        {
+                                            taglib::StringList strings = pTextIdFrame->fieldList();
+                                            if(strings.isEmpty() == false)
+                                            {
+                                                taglib::String str           = strings.front().to8Bit(true);
+                                                UnicodeString  unicodeString = str.toCString();
+                                                unicodeString                = unicodeString;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                embeddedFrameIterator++;
+                            }
+                        }
+                    }
+                }
+            }
+
+            frameIterator++;
+        }
+    }
+
+    return true;
 }
 
 }}} // namespace ultraschall::reaper::id3v2

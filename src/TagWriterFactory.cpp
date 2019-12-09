@@ -27,6 +27,7 @@
 #include "TagWriterFactory.h"
 #include "ID3V2Writer.h"
 #include "ISOBMFFWriter.h"
+#include "MP4CHAPSWriter.h"
 #include "StringUtilities.h"
 
 namespace ultraschall { namespace reaper {
@@ -38,13 +39,17 @@ ITagWriter* TagWriterFactory::Create(const UnicodeString& targetName)
 
     ITagWriter*       tagWriter  = nullptr;
     const TARGET_TYPE targetType = FindFileType(targetName);
-    if(targetType == MP3_TARGET)
+    if(targetType == TARGET_TYPE::MP4CHAPS_TARGET)
     {
-        tagWriter = new id3v2::Writer();
+        tagWriter = new MP4CHAPSWriter();
     }
-    else if(targetType == MP4_TARGET)
+    else if(targetType == TARGET_TYPE::MP3_TARGET)
     {
-        tagWriter = new isobmff::Writer();
+        tagWriter = new ID3V2Writer();
+    }
+    else if(targetType == TARGET_TYPE::MP4_TARGET)
+    {
+        tagWriter = new ISOBMFFWriter();
     }
     else
     {
@@ -63,9 +68,9 @@ UnicodeString TagWriterFactory::NormalizeTargetName(const UnicodeString& targetN
 
 TagWriterFactory::TARGET_TYPE TagWriterFactory::FindFileType(const UnicodeString& targetName)
 {
-    PRECONDITION_RETURN(targetName.empty() == false, INVALID_TARGET_TYPE);
+    PRECONDITION_RETURN(targetName.empty() == false, TARGET_TYPE::INVALID_TARGET_TYPE);
 
-    TARGET_TYPE         type             = INVALID_TARGET_TYPE;
+    TARGET_TYPE         type             = TARGET_TYPE::INVALID_TARGET_TYPE;
     const UnicodeString cookedTargetName = NormalizeTargetName(targetName);
     const size_t        extensionOffset  = targetName.rfind(".");
     if(extensionOffset != UnicodeString::npos)
@@ -76,22 +81,23 @@ TagWriterFactory::TARGET_TYPE TagWriterFactory::FindFileType(const UnicodeString
         {
             if(fileExtension == "mp3")
             {
-                type = MP3_TARGET;
+                type = TARGET_TYPE::MP3_TARGET;
             }
             else if(fileExtension == "mp4")
             {
-                type = MP4_TARGET;
+                type = TARGET_TYPE::MP4_TARGET;
             }
             else if(fileExtension == "m4a")
             {
-                type = MP4_TARGET;
+                type = TARGET_TYPE::MP4_TARGET;
             }
             else
             {
-                type = INVALID_TARGET_TYPE;
+                type = TARGET_TYPE::INVALID_TARGET_TYPE;
             }
         }
     }
+
     return type;
 }
 

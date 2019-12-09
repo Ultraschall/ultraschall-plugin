@@ -50,7 +50,6 @@ private:
     void RegisterNotification(const UINotificationClass severity, const UnicodeString& str);
     void DispatchNotifications();
     void DisplayNotifications();
-    void ClearNotifications();
 
     UINotificationQueue messageQueue_;
     void*               projectReference_;

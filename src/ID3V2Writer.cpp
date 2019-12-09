@@ -28,9 +28,9 @@
 #include "ID3V2.h"
 #include "StringUtilities.h"
 
-namespace ultraschall { namespace reaper { namespace id3v2 {
+namespace ultraschall { namespace reaper {
 
-bool Writer::InsertProperties(const UnicodeString& targetName, const MediaProperties& standardProperties)
+bool ID3V2Writer::InsertProperties(const UnicodeString& targetName, const MediaProperties& standardProperties)
 {
     PRECONDITION_RETURN(targetName.empty() == false, false);
 
@@ -66,7 +66,6 @@ bool Writer::InsertProperties(const UnicodeString& targetName, const MediaProper
         };
         // clang-format on
 
-
         for(size_t i = 0; (i < MAX_SIMPLE_FRAME_MAPPINGS) && (true == success); i++)
         {
             success = id3v2::InsertTextFrame(
@@ -96,7 +95,7 @@ bool Writer::InsertProperties(const UnicodeString& targetName, const MediaProper
     return success;
 }
 
-bool Writer::InsertCoverImage(const UnicodeString& targetName, const UnicodeString& coverImage)
+bool ID3V2Writer::InsertCoverImage(const UnicodeString& targetName, const UnicodeString& coverImage)
 {
     PRECONDITION_RETURN(targetName.empty() == false, false);
     PRECONDITION_RETURN(coverImage.empty() == false, false);
@@ -120,7 +119,7 @@ bool Writer::InsertCoverImage(const UnicodeString& targetName, const UnicodeStri
     return success;
 }
 
-bool Writer::InsertChapterMarkers(const UnicodeString& targetName, const MarkerArray& chapterMarkers)
+bool ID3V2Writer::InsertChapterMarkers(const UnicodeString& targetName, const MarkerArray& chapterMarkers)
 {
     PRECONDITION_RETURN(targetName.empty() == false, false);
     PRECONDITION_RETURN(chapterMarkers.empty() == false, false);
@@ -131,6 +130,8 @@ bool Writer::InsertChapterMarkers(const UnicodeString& targetName, const MarkerA
     if(context != nullptr)
     {
         PRECONDITION_RETURN(context->Duration() > 0, false);
+
+        id3v2::QueryChapterFrames(context);
 
         UnicodeStringArray tableOfContentsItems;
         success = true;
@@ -167,7 +168,7 @@ bool Writer::InsertChapterMarkers(const UnicodeString& targetName, const MarkerA
     return success;
 }
 
-bool Writer::ReplaceChapterMarkers(const UnicodeString& targetName, const MarkerArray& chapterMarkers)
+bool ID3V2Writer::ReplaceChapterMarkers(const UnicodeString& targetName, const MarkerArray& chapterMarkers)
 {
     PRECONDITION_RETURN(targetName.empty() == false, false);
     PRECONDITION_RETURN(chapterMarkers.empty() == false, false);
@@ -177,6 +178,8 @@ bool Writer::ReplaceChapterMarkers(const UnicodeString& targetName, const Marker
     id3v2::Context* context = id3v2::StartTransaction(targetName);
     if(context != 0)
     {
+        id3v2::QueryChapterFrames(context);
+
         id3v2::RemoveFrames(context, "CHAP");
 
         UnicodeStringArray tableOfContentsItems;
@@ -214,4 +217,4 @@ bool Writer::ReplaceChapterMarkers(const UnicodeString& targetName, const Marker
     return success;
 }
 
-}}} // namespace ultraschall::reaper::id3v2
+}} // namespace ultraschall::reaper

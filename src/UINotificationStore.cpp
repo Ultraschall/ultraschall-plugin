@@ -51,8 +51,6 @@ void UINotificationStore::DispatchNotifications()
     PRECONDITION(projectReference_ != nullptr);
     PRECONDITION(messageQueue_.ItemCount() > 0);
 
-    ClearNotifications();
-
     const size_t messageCount = messageQueue_.ItemCount();
     SystemProperty<int>::Set(NOTIFICATION_SECTION_NAME, "message_count", (int)messageCount);
 
@@ -91,14 +89,6 @@ void UINotificationStore::DispatchNotifications()
 void UINotificationStore::DisplayNotifications()
 {
     // TODO: Call LUA action
-}
-
-void UINotificationStore::ClearNotifications()
-{
-    PRECONDITION(projectReference_ != nullptr);
-    PRECONDITION(messageQueue_.ItemCount() > 0);
-
-    SystemProperty<UnicodeString>::Clear(NOTIFICATION_SECTION_NAME);
 }
 
 }} // namespace ultraschall::reaper

@@ -195,7 +195,6 @@ UnicodeStringArray FileManager::ReadTextFile(const UnicodeString& filename)
 bool FileManager::WriteTextFile(const UnicodeString& filename, const UnicodeString& str)
 {
     PRECONDITION_RETURN(filename.empty() == false, false);
-    PRECONDITION_RETURN(FileExists(filename) == false, false);
     PRECONDITION_RETURN(IsDiskSpaceAvailable(filename, str.size()) == true, false);
     PRECONDITION_RETURN(str.empty() == false, false);
 

@@ -46,7 +46,7 @@ FileDialog::~FileDialog() {}
 
 UnicodeString FileDialog::SelectChaptersFile()
 {
-    static const UnicodeString fileExtensions = "MP4 chapters|*.chapters.txt|MP4 chapters|*.mp4chaps";
+    static const UnicodeString fileExtensions = "MP4 chapters|*.chapters.txt|MP4 chapters|*.mp4chaps|MP3 file|*.mp3|MP4 file|*.mp4|M4A file|*.m4a";
     WideUnicodeString          result;
 
     UnicodeStringArray     filterSpecs = UnicodeStringTokenize(fileExtensions, UnicodeChar('|'));

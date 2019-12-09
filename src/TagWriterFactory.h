@@ -40,7 +40,13 @@ public:
 private:
     static UnicodeString NormalizeTargetName(const UnicodeString& targetName);
 
-    typedef enum { MP3_TARGET, MP4_TARGET, INVALID_TARGET_TYPE, MAX_TARGET_TYPE = INVALID_TARGET_TYPE } TARGET_TYPE;
+    enum class TARGET_TYPE {
+        MP4CHAPS_TARGET,
+        MP3_TARGET,
+        MP4_TARGET,
+        INVALID_TARGET_TYPE,
+        MAX_TARGET_TYPE = INVALID_TARGET_TYPE
+    };
 
     static TARGET_TYPE FindFileType(const UnicodeString& targetName);
 };

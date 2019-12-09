@@ -48,17 +48,22 @@ set(COMMON_INCLUDES
   ICustomAction.h
   ID3V2.h
   ID3V2Context.h
+  ID3V2Reader.h
   ID3V2Writer.h
   InsertChapterMarkersAction.h
   InsertMediaPropertiesAction.h
   ISOBMFF.h
   ISOBMFFContext.h
+  ISOBMFFReader.h
   ISOBMFFWriter.h
+  ITagReader.h
   ITagWriter.h
   SharedObject.h
   Malloc.h
   Marker.h
   MediaProperties.h
+  MP4CHAPSReader.h
+  MP4CHAPSWriter.h
   PictureUtilities.h
   ReaperProject.h
   ReaperProjectManager.h
@@ -72,6 +77,7 @@ set(COMMON_INCLUDES
   StringUtilities.h
   SystemProperties.h
   taglib_include.h
+  TagReaderFactory.h
   TagWriterFactory.h
   UINotification.h
   UINotificationClass.h
@@ -90,13 +96,17 @@ set(COMMON_SOURCES
   FileManager.cpp
   ID3V2.cpp
   ID3V2Context.cpp
+  ID3V2Reader.cpp
   ID3V2Writer.cpp
   InsertChapterMarkersAction.cpp
   InsertMediaPropertiesAction.cpp
   ISOBMFF.cpp
   ISOBMFFContext.cpp
+  ISOBMFFReader.cpp
   ISOBMFFWriter.cpp
   MediaProperties.cpp
+  MP4CHAPSReader.cpp
+  MP4CHAPSWriter.cpp
   PictureUtilities.cpp
   ReaperProject.cpp
   ReaperProjectManager.cpp
@@ -106,6 +116,7 @@ set(COMMON_SOURCES
   SaveChapterMarkersToProjectAction.cpp
   StringUtilities.cpp
   SystemProperties.cpp
+  TagReaderFactory.cpp
   TagWriterFactory.cpp
   UINotification.cpp
   UINotificationQueue.cpp

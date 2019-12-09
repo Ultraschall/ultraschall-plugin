@@ -70,7 +70,7 @@ public:
     {
         PRECONDITION(section.empty() == false);
 
-        ReaperGateway::ClearSystemValue(section, nullptr);
+        ReaperGateway::ClearSystemValue(section);
     }
 
     static void Delete(const UnicodeString& section, const UnicodeString& key)

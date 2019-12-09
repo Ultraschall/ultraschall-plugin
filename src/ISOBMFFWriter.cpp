@@ -27,9 +27,9 @@
 #include "ISOBMFFWriter.h"
 #include "ISOBMFF.h"
 
-namespace ultraschall { namespace reaper { namespace isobmff {
+namespace ultraschall { namespace reaper {
 
-bool Writer::InsertProperties(const UnicodeString& targetName, const MediaProperties& properties)
+bool ISOBMFFWriter::InsertProperties(const UnicodeString& targetName, const MediaProperties& properties)
 {
     PRECONDITION_RETURN(targetName.empty() == false, false);
 
@@ -57,7 +57,7 @@ bool Writer::InsertProperties(const UnicodeString& targetName, const MediaProper
     return result;
 }
 
-bool Writer::InsertCoverImage(const UnicodeString& targetName, const UnicodeString& file)
+bool ISOBMFFWriter::InsertCoverImage(const UnicodeString& targetName, const UnicodeString& file)
 {
     PRECONDITION_RETURN(targetName.empty() == false, false);
     PRECONDITION_RETURN(file.empty() == false, false);
@@ -73,7 +73,7 @@ bool Writer::InsertCoverImage(const UnicodeString& targetName, const UnicodeStri
     return result;
 }
 
-bool Writer::InsertChapterMarkers(const UnicodeString& targetName, const MarkerArray& chapterMarkers)
+bool ISOBMFFWriter::InsertChapterMarkers(const UnicodeString& targetName, const MarkerArray& chapterMarkers)
 {
     PRECONDITION_RETURN(targetName.empty() == false, false);
     PRECONDITION_RETURN(chapterMarkers.empty() == false, false);
@@ -89,7 +89,7 @@ bool Writer::InsertChapterMarkers(const UnicodeString& targetName, const MarkerA
     return result;
 }
 
-bool Writer::ReplaceChapterMarkers(const UnicodeString& targetName, const MarkerArray& chapterMarkers)
+bool ISOBMFFWriter::ReplaceChapterMarkers(const UnicodeString& targetName, const MarkerArray& chapterMarkers)
 {
     PRECONDITION_RETURN(targetName.empty() == false, false);
     PRECONDITION_RETURN(chapterMarkers.empty() == false, false);
@@ -105,4 +105,4 @@ bool Writer::ReplaceChapterMarkers(const UnicodeString& targetName, const Marker
     return result;
 }
 
-}}} // namespace ultraschall::reaper::isobmff
+}} // namespace ultraschall::reaper

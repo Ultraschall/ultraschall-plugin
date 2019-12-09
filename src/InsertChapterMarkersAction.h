@@ -58,6 +58,20 @@ private:
 
     bool ConfigureTargets();
     bool ConfigureSources();
+
+    enum class MEDIA_TYPE {
+      TEXT_MEDIA_TYPE,
+      MP3_MEDIA_TYPE,
+      MP4_MEDIA_TYPE,
+      INVALID_MEDIA_TYPE,
+      MAX_MEDIA_TYPE = INVALID_MEDIA_TYPE
+    };
+
+    static MEDIA_TYPE QueryMediaTypeFromFileExtension(const UnicodeString& filename);
+
+    static MarkerArray ReadTextFile(const UnicodeString& filename);
+    static MarkerArray ReadMP3File(const UnicodeString& filename);
+    static MarkerArray ReadMP4File(const UnicodeString& filename);
 };
 
 }} // namespace ultraschall::reaper
