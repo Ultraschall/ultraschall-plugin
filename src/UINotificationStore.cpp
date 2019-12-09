@@ -25,11 +25,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "UINotificationStore.h"
-#include "ProjectProperties.h"
+#include "SystemProperties.h"
 
 namespace ultraschall { namespace reaper {
 
-const UnicodeString UINotificationStore::MESSAGES_SECTION_NAME("ultraschall_messages");
+const UnicodeString UINotificationStore::NOTIFICATION_SECTION_NAME("ultraschall_messages");
 
 UINotificationStore::UINotificationStore() : projectReference_(ReaperGateway::QueryCurrentProject()) {}
 
@@ -54,7 +54,7 @@ void UINotificationStore::DispatchNotifications()
     ClearNotifications();
 
     const size_t messageCount = messageQueue_.ItemCount();
-    ProjectProperty<int>::Set(projectReference_, MESSAGES_SECTION_NAME, "message_count", (int)messageCount);
+    SystemProperty<int>::Set(NOTIFICATION_SECTION_NAME, "message_count", (int)messageCount);
 
     const UINotificationArray& messages_ = messageQueue_.Items();
     for(size_t i = 0; i < messages_.size(); ++i)
@@ -81,10 +81,10 @@ void UINotificationStore::DispatchNotifications()
                 break;
         }
 
-        is << ";" << messages_[i].Str();
+        is << ";" << messages_[i].Str() << std::endl;
         const UnicodeString value = is.str();
 
-        ProjectProperty<UnicodeString>::Set(projectReference_, MESSAGES_SECTION_NAME, key, value);
+        SystemProperty<UnicodeString>::Set(NOTIFICATION_SECTION_NAME, key, value);
     }
 }
 
@@ -98,7 +98,7 @@ void UINotificationStore::ClearNotifications()
     PRECONDITION(projectReference_ != nullptr);
     PRECONDITION(messageQueue_.ItemCount() > 0);
 
-    ProjectProperty<UnicodeString>::Clear(projectReference_, MESSAGES_SECTION_NAME);
+    SystemProperty<UnicodeString>::Clear(NOTIFICATION_SECTION_NAME);
 }
 
 }} // namespace ultraschall::reaper

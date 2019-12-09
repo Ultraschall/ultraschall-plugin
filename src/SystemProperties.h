@@ -45,15 +45,6 @@ public:
         return ReaperGateway::HasSystemValue(section, key);
     }
 
-    static void Set(const UnicodeString& section, const UnicodeString& key, const UnicodeString& value)
-    {
-        PRECONDITION(section.empty() == false);
-        PRECONDITION(key.empty() == false);
-        PRECONDITION(value.empty() == false);
-
-        ReaperGateway::SetSystemValue(section, key, value);
-    }
-
     static void Save(const UnicodeString& section, const UnicodeString& key, const UnicodeString& value)
     {
         PRECONDITION(section.empty() == false);
@@ -63,6 +54,8 @@ public:
         ReaperGateway::SaveSystemValue(section, key, value);
     }
 
+    static void Set(const UnicodeString& section, const UnicodeString& key, const value_type& value);
+
     static value_type Query(const UnicodeString& section, const UnicodeString& key);
 
     static void Clear(const UnicodeString& section, const UnicodeString& key)
@@ -71,6 +64,13 @@ public:
         PRECONDITION(key.empty() == false);
 
         ReaperGateway::ClearSystemValue(section, key);
+    }
+
+    static void Clear(const UnicodeString& section)
+    {
+        PRECONDITION(section.empty() == false);
+
+        ReaperGateway::ClearSystemValue(section, nullptr);
     }
 
     static void Delete(const UnicodeString& section, const UnicodeString& key)

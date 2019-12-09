@@ -60,7 +60,6 @@ set(COMMON_INCLUDES
   Marker.h
   MediaProperties.h
   PictureUtilities.h
-  ProjectProperties.h
   ReaperProject.h
   ReaperProjectManager.h
   reaper_plugin_functions.h
@@ -99,7 +98,6 @@ set(COMMON_SOURCES
   ISOBMFFWriter.cpp
   MediaProperties.cpp
   PictureUtilities.cpp
-  ProjectProperties.cpp
   ReaperProject.cpp
   ReaperProjectManager.cpp
   ReaperEntryPoints.cpp

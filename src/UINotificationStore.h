@@ -45,7 +45,7 @@ public:
     inline void RegisterFatalError(const UnicodeString& str);
 
 private:
-    static const UnicodeString MESSAGES_SECTION_NAME;
+    static const UnicodeString NOTIFICATION_SECTION_NAME;
 
     void RegisterNotification(const UINotificationClass severity, const UnicodeString& str);
     void DispatchNotifications();
