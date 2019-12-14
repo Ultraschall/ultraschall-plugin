@@ -88,7 +88,7 @@ if [ $CMAKE_INSTALL_FOUND -ne 0 ]; then
   if [ "$HOST_SYSTEM_TYPE" = "Linux" ]; then
     CMAKE_GENERATOR="Unix Makefiles"
   elif [ "$HOST_SYSTEM_TYPE" = "Darwin" ]; then
-    CMAKE_GENERATOR="Unix Makefiles"
+    CMAKE_GENERATOR="Xcode"
   else
     echo "Failed to detect the host system type. Only \"Linux\" or \"Darwin\" are supported. The current host system type is \"$HOST_SYSTEM_TYPE\""
     exit -1
