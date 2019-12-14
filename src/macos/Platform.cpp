@@ -32,6 +32,8 @@
 #import <AppKit/AppKit.h>
 #import <Foundation/Foundation.h>
 
+#include <sys/statvfs.h>
+
 #include "FileManager.h"
 #include "Platform.h"
 #include "StringUtilities.h"
@@ -60,6 +62,13 @@ size_t Platform::QueryAvailableDiskSpace(const UnicodeString& directory)
     PRECONDITION_RETURN(directory.empty() == false, -1);
 
     size_t availableSpace = -1;
+
+    struct statvfs fsi = {0};
+    const int status = statvfs(directory.c_str(), &fsi);
+    if(status == 0)
+    {
+        availableSpace = fsi.f_bavail * fsi.f_bsize;
+    }
 
     return availableSpace;
 }
