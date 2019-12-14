@@ -150,7 +150,25 @@ UnicodeString FileDialog::SelectDirectory()
 UnicodeString FileDialog::ChooseChaptersFileName()
 {
     UnicodeString result;
-
+    
+    NSSavePanel* fileDialog = [NSSavePanel savePanel];
+    if(nil != fileDialog)
+    {
+        fileDialog.allowedFileTypes = [[NSArray alloc] initWithObjects:@"chapters.txt", @"mp4chaps", @"txt", nil];
+        fileDialog.allowsOtherFileTypes = NO;
+        fileDialog.canCreateDirectories    = YES;
+        fileDialog.title                   = [NSString stringWithUTF8String:caption_.c_str()];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        if([fileDialog runModal] == NSFileHandlingPanelOKButton)
+#pragma clang diagnostic pop
+        {
+            result = [[fileDialog URL] fileSystemRepresentation];
+        }
+        
+        fileDialog = nil;
+    }
+    
     return result;
 }
 
