@@ -145,7 +145,7 @@ BinaryStream* FileManager::ReadBinaryFile(const UnicodeString& filename)
     const size_t fileSize = QueryFileSize(filename);
     if(fileSize != -1)
     {
-        std::ifstream file(U2H(filename), std::ios::in | std::ios::binary | std::ios::ate);
+        std::ifstream file(U2H(filename), std::ios::in | std::ios::binary);
         if(file.is_open() == true)
         {
             uint8_t* buffer = new uint8_t[fileSize];
