@@ -24,6 +24,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "Common.h"
 #include "StringUtilities.h"
 #include <codecvt>
 
@@ -44,23 +45,40 @@ UnicodeStringArray UnicodeStringTokenize(const UnicodeString& input, const char 
 }
 
 // trim from start
-UnicodeString& UnicodeStringTrimLeft(UnicodeString& s)
+void UnicodeStringTrimLeft(UnicodeString& str)
 {
-    s.erase(s.begin(), std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
-    return s;
+    str.erase(str.begin(), std::find_if(str.begin(), str.end(), [](int ch) { return !std::isspace(ch); }));
 }
 
 // trim from end
-UnicodeString& UnicodeStringTrimRight(UnicodeString& s)
+void UnicodeStringTrimRight(UnicodeString& str)
 {
-    s.erase(std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
-    return s;
+    str.erase(std::find_if(str.rbegin(), str.rend(), [](int ch) { return !std::isspace(ch); }).base(), str.end());
 }
 
 // trim from both ends
-UnicodeString& UnicodeStringTrim(UnicodeString& s)
+void UnicodeStringTrim(UnicodeString& str)
 {
-    return UnicodeStringTrimLeft(UnicodeStringTrimRight(s));
+    UnicodeStringTrimLeft(str);
+    UnicodeStringTrimRight(str);
+}
+
+UnicodeString UnicodeStringCopyTrimLeft(UnicodeString str)
+{
+    UnicodeStringTrimLeft(str);
+    return str;
+}
+
+UnicodeString UnicodeStringCopyTrimRight(UnicodeString str)
+{
+    UnicodeStringTrimRight(str);
+    return str;
+}
+
+UnicodeString UnicodeStringCopyTrim(UnicodeString str)
+{
+    UnicodeStringTrim(str);
+    return str;
 }
 
 void UnicodeStringReplace(UnicodeString& str, const UnicodeString& source, const UnicodeString& target)

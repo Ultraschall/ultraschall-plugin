@@ -62,7 +62,7 @@ ITagWriter* TagWriterFactory::Create(const UnicodeString& targetName)
 UnicodeString TagWriterFactory::NormalizeTargetName(const UnicodeString& targetName)
 {
     UnicodeString firstStage  = targetName;
-    UnicodeString secondStage = UnicodeStringTrimRight(firstStage);
+    UnicodeString secondStage = UnicodeStringCopyTrimRight(firstStage);
     return StringLowercase(secondStage);
 }
 

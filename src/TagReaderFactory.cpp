@@ -62,7 +62,7 @@ ITagReader* TagReaderFactory::Create(const UnicodeString& sourceName)
 UnicodeString TagReaderFactory::NormalizeSourceName(const UnicodeString& sourceName)
 {
     UnicodeString firstStage  = sourceName;
-    UnicodeString secondStage = UnicodeStringTrimRight(firstStage);
+    UnicodeString secondStage = UnicodeStringCopyTrimRight(firstStage);
     return StringLowercase(secondStage);
 }
 

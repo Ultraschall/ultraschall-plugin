@@ -36,9 +36,13 @@ namespace ultraschall { namespace reaper {
 
 UnicodeStringArray UnicodeStringTokenize(const UnicodeString& input, const char delimiter);
 
-UnicodeString& UnicodeStringTrimLeft(UnicodeString& s);
-UnicodeString& UnicodeStringTrimRight(UnicodeString& s);
-UnicodeString& UnicodeStringTrim(UnicodeString& s);
+void UnicodeStringTrimLeft(UnicodeString& str);
+void UnicodeStringTrimRight(UnicodeString& str);
+void UnicodeStringTrim(UnicodeString& str);
+
+UnicodeString UnicodeStringCopyTrimLeft(UnicodeString str);
+UnicodeString UnicodeStringCopyTrimRight(UnicodeString str);
+UnicodeString UnicodeStringCopyTrim(UnicodeString str);
 
 void UnicodeStringReplace(UnicodeString& str, const UnicodeString& source, const UnicodeString& target);
 
