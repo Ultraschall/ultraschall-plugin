@@ -45,18 +45,6 @@ UnicodeChar Platform::QueryPathSeparator()
     return '/';
 }
 
-bool Platform::QueryFileExists(const UnicodeString& path)
-{
-    PRECONDITION_RETURN(path.empty() == false, false);
-
-    bool fileExists = false;
-
-    NSFileManager* fileManager = [NSFileManager defaultManager];
-    fileExists                 = [fileManager fileExistsAtPath:[NSString stringWithUTF8String:path.c_str()]] == YES;
-
-    return fileExists;
-}
-
 size_t Platform::QueryAvailableDiskSpace(const UnicodeString& directory)
 {
     PRECONDITION_RETURN(directory.empty() == false, -1);
@@ -67,11 +55,10 @@ size_t Platform::QueryAvailableDiskSpace(const UnicodeString& directory)
     const int status = statvfs(directory.c_str(), &fsi);
     if(status == 0)
     {
-        availableSpace = fsi.f_bavail * fsi.f_bsize;
+        availableSpace = fsi.f_bavail * fsi.f_frsize;
     }
 
     return availableSpace;
 }
 
 }} // namespace ultraschall::reaper
-

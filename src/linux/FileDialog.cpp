@@ -28,6 +28,8 @@
 #include "ReaperGateway.h"
 #include "StringUtilities.h"
 
+#include <gtk/gtk.h>
+
 namespace ultraschall { namespace reaper {
 
 FileDialog::FileDialog(const UnicodeString& caption, const UnicodeString& initialDirectory) {}
@@ -38,6 +40,40 @@ UnicodeString FileDialog::SelectChaptersFile()
 {
     UnicodeString result;
 
+    GtkWindow*           pParent = (GtkWindow*)ReaperGateway::View();
+    GtkFileChooserAction action  = GTK_FILE_CHOOSER_ACTION_OPEN;
+    GtkWidget*           pDialog = gtk_file_chooser_dialog_new(
+        "Open File", pParent, action, "Cancel", GTK_RESPONSE_CANCEL, "Open", GTK_RESPONSE_ACCEPT, NULL);
+    if(pDialog != nullptr)
+    {
+        GtkFileChooser* pChooser = GTK_FILE_CHOOSER(pDialog);
+        if(pChooser != nullptr)
+        {
+            GtkFileFilter* pFilter = gtk_file_filter_new();
+            if(pFilter != nullptr)
+            {
+                gtk_file_filter_add_pattern(pFilter, "*.chapters.txt");
+                gtk_file_filter_add_pattern(pFilter, "*.mp4chaps");
+                gtk_file_chooser_set_filter(pChooser, pFilter);
+
+                const gint dialogResult = gtk_dialog_run(GTK_DIALOG(pDialog));
+                if(dialogResult == GTK_RESPONSE_ACCEPT)
+                {
+                    char* filename = gtk_file_chooser_get_filename(pChooser);
+                    if(filename != nullptr)
+                    {
+                        result = filename;
+                        g_free(filename);
+                    }
+                }
+
+                g_free(pFilter);
+            }
+        }
+
+        gtk_widget_destroy(pDialog);
+    }
+
     return result;
 }
 
@@ -45,12 +81,82 @@ UnicodeString FileDialog::SelectAudioFile()
 {
     UnicodeString result;
 
+    GtkWindow*           pParent = (GtkWindow*)ReaperGateway::View();
+    GtkFileChooserAction action  = GTK_FILE_CHOOSER_ACTION_OPEN;
+    GtkWidget*           pDialog = gtk_file_chooser_dialog_new(
+        "Open File", pParent, action, "Cancel", GTK_RESPONSE_CANCEL, "Open", GTK_RESPONSE_ACCEPT, NULL);
+    if(pDialog != nullptr)
+    {
+        GtkFileChooser* pChooser = GTK_FILE_CHOOSER(pDialog);
+        if(pChooser != nullptr)
+        {
+            GtkFileFilter* pFilter = gtk_file_filter_new();
+            if(pFilter != nullptr)
+            {
+                gtk_file_filter_add_pattern(pFilter, "*.mp3");
+                gtk_file_filter_add_pattern(pFilter, "*.mp4");
+                gtk_file_filter_add_pattern(pFilter, "*.m4a");
+                gtk_file_chooser_set_filter(pChooser, pFilter);
+
+                const gint dialogResult = gtk_dialog_run(GTK_DIALOG(pDialog));
+                if(dialogResult == GTK_RESPONSE_ACCEPT)
+                {
+                    char* filename = gtk_file_chooser_get_filename(pChooser);
+                    if(filename != nullptr)
+                    {
+                        result = filename;
+                        g_free(filename);
+                    }
+                }
+
+                g_free(pFilter);
+            }
+        }
+
+        gtk_widget_destroy(pDialog);
+    }
+
     return result;
 }
 
 UnicodeString FileDialog::SelectPictureFile()
 {
     UnicodeString result;
+
+    GtkWindow*           pParent = (GtkWindow*)ReaperGateway::View();
+    GtkFileChooserAction action  = GTK_FILE_CHOOSER_ACTION_OPEN;
+    GtkWidget*           pDialog = gtk_file_chooser_dialog_new(
+        "Open File", pParent, action, "Cancel", GTK_RESPONSE_CANCEL, "Open", GTK_RESPONSE_ACCEPT, NULL);
+    if(pDialog != nullptr)
+    {
+        GtkFileChooser* pChooser = GTK_FILE_CHOOSER(pDialog);
+        if(pChooser != nullptr)
+        {
+            GtkFileFilter* pFilter = gtk_file_filter_new();
+            if(pFilter != nullptr)
+            {
+                gtk_file_filter_add_pattern(pFilter, "*.jpg");
+                gtk_file_filter_add_pattern(pFilter, "*.jpeg");
+                gtk_file_filter_add_pattern(pFilter, "*.png");
+                gtk_file_chooser_set_filter(pChooser, pFilter);
+
+                const gint dialogResult = gtk_dialog_run(GTK_DIALOG(pDialog));
+                if(dialogResult == GTK_RESPONSE_ACCEPT)
+                {
+                    char* filename = gtk_file_chooser_get_filename(pChooser);
+                    if(filename != nullptr)
+                    {
+                        result = filename;
+                        g_free(filename);
+                    }
+                }
+
+                g_free(pFilter);
+            }
+        }
+
+        gtk_widget_destroy(pDialog);
+    }
 
     return result;
 }

@@ -66,9 +66,19 @@ UnicodeStringArray FileManager::SplitPath(const UnicodeString& path)
     return UnicodeStringTokenize(path, PathSeparator());
 }
 
-bool FileManager::FileExists(const UnicodeString& path)
+bool FileManager::FileExists(const UnicodeString& filename)
 {
-    return Platform::QueryFileExists(path);
+    PRECONDITION_RETURN(filename.empty() == false, false);
+
+    bool fileExists = false;
+
+    std::ifstream is(U2H(filename), std::ios::in | std::ios::binary);
+    if(is.is_open() == true)
+    {
+        is.close();
+    }
+
+    return fileExists;
 }
 
 size_t FileManager::FileExists(const UnicodeStringArray& paths)
@@ -127,11 +137,11 @@ UnicodeString FileManager::NormalizeFileName(const UnicodeString& targetName)
     return StringLowercase(secondStage);
 }
 
-FileManager::FILE_TYPE FileManager::QueryFileType(const UnicodeString& filename) 
+FileManager::FILE_TYPE FileManager::QueryFileType(const UnicodeString& filename)
 {
     PRECONDITION_RETURN(filename.empty() == false, FILE_TYPE::UNKNOWN_FILE_TYPE);
 
-    FILE_TYPE type = FILE_TYPE::UNKNOWN_FILE_TYPE;
+    FILE_TYPE           type             = FILE_TYPE::UNKNOWN_FILE_TYPE;
     const UnicodeString cookedTargetName = NormalizeFileName(filename);
     const size_t        extensionOffset  = cookedTargetName.rfind(".");
     if(extensionOffset != UnicodeString::npos)

@@ -22,6 +22,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <sys/statvfs.h>
+
 #include "Common.h"
 #include "Platform.h"
 #include "StringUtilities.h"
@@ -33,16 +35,18 @@ UnicodeChar Platform::QueryPathSeparator()
     return '/';
 }
 
-bool Platform::QueryFileExists(const UnicodeString& path)
-{
-    return false;
-}
-
 size_t Platform::QueryAvailableDiskSpace(const UnicodeString& directory)
 {
     PRECONDITION_RETURN(directory.empty() == false, -1);
 
     size_t availableSpace = -1;
+
+    struct statvfs fsi = {0};
+    const int status = statvfs(directory.c_str(), &fsi);
+    if(status == 0)
+    {
+        availableSpace = fsi.f_bavail * fsi.f_frsize;
+    }
 
     return availableSpace;
 }

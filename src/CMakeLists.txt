@@ -65,6 +65,7 @@ set(COMMON_INCLUDES
   MP4CHAPSReader.h
   MP4CHAPSWriter.h
   PictureManager.h
+  Platform.h
   ReaperProject.h
   ReaperProjectManager.h
   reaper_plugin_functions.h
@@ -126,71 +127,34 @@ set(COMMON_SOURCES
   reaper_ultraschall.cpp
 )
 
-if(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "win32")
-  set(EXTERNAL_SOURCES
-    ${LIBZ_SOURCE_PATH}/contrib/minizip/ioapi.c
-    ${LIBZ_SOURCE_PATH}/contrib/minizip/unzip.c
-  )
-  set_source_files_properties(${LIBZ_SOURCE_PATH}/contrib/minizip/ioapi.c PROPERTIES GENERATED TRUE)
-  set_source_files_properties(${LIBZ_SOURCE_PATH}/contrib/minizip/unzip.c PROPERTIES GENERATED TRUE)
-elseif(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "macos")
-  set(EXTERNAL_SOURCES
-    ${LIBZ_SOURCE_PATH}/contrib/minizip/ioapi.c
-    ${LIBZ_SOURCE_PATH}/contrib/minizip/unzip.c
-  )
-  set_source_files_properties(${LIBZ_SOURCE_PATH}/contrib/minizip/ioapi.c PROPERTIES GENERATED TRUE)
-  set_source_files_properties(${LIBZ_SOURCE_PATH}/contrib/minizip/unzip.c PROPERTIES GENERATED TRUE)
-endif()
+set(EXTERNAL_SOURCES
+  ${LIBZ_SOURCE_PATH}/contrib/minizip/ioapi.c
+  ${LIBZ_SOURCE_PATH}/contrib/minizip/unzip.c
+)
+set_source_files_properties(${LIBZ_SOURCE_PATH}/contrib/minizip/ioapi.c PROPERTIES GENERATED TRUE)
+set_source_files_properties(${LIBZ_SOURCE_PATH}/contrib/minizip/unzip.c PROPERTIES GENERATED TRUE)
 
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
-set(PLATFORM_INCLUDES Platform.h)
-
-if(WIN32)
-  include_directories(win32)
-  set(PLATFORM_SOURCES
-    win32/Platform.cpp
-    win32/FileDialog.cpp
-  )
-elseif(APPLE)
-  include_directories(macos)
-  set(PLATFORM_SOURCES
-    macos/Platform.cpp
-    macos/FileDialog.cpp
-  )
-elseif(UNIX)
-  include_directories(linux)
-  set(PLATFORM_SOURCES
-    linux/Platform.cpp
-    linux/FileDialog.cpp
-  )
-endif()
-
-if(WIN32)
+if(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "win32")
+  set(PLATFORM_SOURCES win32/Platform.cpp win32/FileDialog.cpp)
   set(EXTRA_SOURCES reaper_ultraschall.rc)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-elseif(APPLE)
+  set(EXTRA_LIBRARIES version.lib ws2_32.lib crypt32.lib wldap32.lib mfplat.lib mf.lib mfuuid.lib shlwapi.lib comctl32.lib comdlg32.lib rpcrt4.lib)
+elseif(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "macos")
+  set(PLATFORM_SOURCES macos/Platform.cpp macos/FileDialog.cpp)
   add_compile_options(-mmacosx-version-min=10.11)
-  set_source_files_properties(
-    macos/Platform.cpp
-    macos/FileDialog.cpp
-    PROPERTIES COMPILE_FLAGS "-x objective-c++"
-  )
+  set_source_files_properties(macos/Platform.cpp macos/FileDialog.cpp PROPERTIES COMPILE_FLAGS "-x objective-c++")
+  set(EXTRA_LIBRARIES "-framework AppKit" "-framework Carbon" "-framework IOKit" "-framework Security")
+elseif(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "linux")
+  include_directories(${LIBGTK3_INCLUDE_PATH})
+  set(PLATFORM_SOURCES linux/Platform.cpp linux/FileDialog.cpp)
+  set(EXTRA_LIBRARIES ${LIBGTK3_LIBRARY_PATH})
 endif()
 
-source_group("Header Files" FILES
-  ${COMMON_INCLUDES}
-  ${PLATFORM_INCLUDES}
-)
-source_group("Source Files" FILES
-  ${COMMON_SOURCES}
-  ${PLATFORM_SOURCES}
-  ${EXTRA_SOURCES}
-)
-
-source_group("External Files" FILES
-  ${EXTERNAL_SOURCES}
-)
+source_group("Header Files" FILES ${COMMON_INCLUDES} ${PLATFORM_INCLUDES})
+source_group("Source Files" FILES ${COMMON_SOURCES} ${PLATFORM_SOURCES} ${EXTRA_SOURCES})
+source_group("External Files" FILES ${EXTERNAL_SOURCES})
 
 message(STATUS "COMMON_INCLUDES   = ${COMMON_INCLUDES}")
 message(STATUS "COMMON_SOURCES    = ${COMMON_SOURCES}")
@@ -202,33 +166,10 @@ message(STATUS "EXTRA_SOURCES     = ${EXTRA_SOURCES}")
 add_library(reaper_ultraschall SHARED
   ${COMMON_INCLUDES}
   ${COMMON_SOURCES}
-  ${PLATFORM_INCLUDES}
   ${PLATFORM_SOURCES}
   ${EXTERNAL_SOURCES}
   ${EXTRA_SOURCES}
 )
-
-if(WIN32)
-  set(EXTRA_LIBRARIES
-    version.lib
-    ws2_32.lib
-    crypt32.lib
-    wldap32.lib
-    mfplat.lib
-    mf.lib
-    mfuuid.lib
-    shlwapi.lib
-    comctl32.lib
-    comdlg32.lib
-    rpcrt4.lib
-  )
-elseif(APPLE)
-  set(EXTRA_LIBRARIES
-    "-framework AppKit"
-    "-framework Carbon"
-    "-framework IOKit"
-    "-framework Security")
-endif()
 
 add_dependencies(reaper_ultraschall zlib-build)
 add_dependencies(reaper_ultraschall curl-build)
@@ -243,6 +184,5 @@ target_link_libraries(reaper_ultraschall
   ${LIBMP4V2_LIBRARY_PATH}
   ${EXTRA_LIBRARIES}
 )
-
 
 set_target_properties(reaper_ultraschall PROPERTIES PREFIX "")

@@ -40,23 +40,6 @@ UnicodeChar Platform::QueryPathSeparator()
     return '\\';
 }
 
-bool Platform::QueryFileExists(const UnicodeString& path)
-{
-    PRECONDITION_RETURN(path.empty() == false, false);
-
-    bool fileExists = false;
-
-    HANDLE fileHandle = CreateFileA(
-        path.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
-    if(INVALID_HANDLE_VALUE != fileHandle)
-    {
-        fileExists = true;
-        CloseHandle(fileHandle);
-    }
-
-    return fileExists;
-}
-
 size_t Platform::QueryAvailableDiskSpace(const UnicodeString& directory)
 {
     PRECONDITION_RETURN(directory.empty() == false, -1);

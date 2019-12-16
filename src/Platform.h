@@ -36,8 +36,6 @@ class Platform
 public:
     static UnicodeChar QueryPathSeparator();
     static size_t      QueryAvailableDiskSpace(const UnicodeString& directory);
-
-    static bool QueryFileExists(const UnicodeString& path);
 };
 
 }} // namespace ultraschall::reaper
