@@ -27,7 +27,7 @@
 #include "ID3V2.h"
 #include "BinaryStream.h"
 #include "FileManager.h"
-#include "PictureUtilities.h"
+#include "PictureManager.h"
 #include "StringUtilities.h"
 
 namespace ultraschall { namespace reaper { namespace id3v2 {
@@ -53,31 +53,6 @@ bool CommitTransaction(Context*& context)
 void AbortTransaction(Context*& context)
 {
     SafeDelete(context);
-}
-
-const char* QueryMIMEType(const uint8_t* data, const size_t dataSize)
-{
-    PRECONDITION_RETURN(data != 0, 0);
-    PRECONDITION_RETURN(dataSize > 0, 0);
-
-    const char* mimeType = 0;
-
-    switch(QueryPictureFormat(data, dataSize))
-    {
-        case PICTURE_FORMAT::JPEG_PICTURE: {
-            mimeType = "image/jpeg";
-            break;
-        }
-        case PICTURE_FORMAT::PNG_PICTURE: {
-            mimeType = "image/png";
-            break;
-        }
-        default: {
-            break;
-        }
-    }
-
-    return mimeType;
 }
 
 bool RemoveFrames(Context* context, const UnicodeString& id)
@@ -228,6 +203,8 @@ bool InsertChapterFrame(
 
     bool success = false;
 
+    RemoveFrames(context, "CHAP");
+
     const uint32_t              startOffset  = 0xffffffff;
     const uint32_t              endOffset    = 0xffffffff;
     taglib_id3v2::ChapterFrame* chapterFrame = new taglib_id3v2::ChapterFrame(
@@ -304,7 +281,7 @@ bool InsertCoverPictureFrame(Context* context, const UnicodeString& image)
             const size_t imageHeaderSize = 10;
             if(pData->Read(0, imageHeader, imageHeaderSize) == true)
             {
-                const UnicodeString mimeType = QueryMIMEType(imageHeader, imageHeaderSize);
+                const UnicodeString mimeType = PictureManager::QueryFormatString(imageHeader, imageHeaderSize);
                 if(mimeType.empty() == false)
                 {
                     pFrame->setMimeType(mimeType);

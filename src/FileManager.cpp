@@ -120,6 +120,56 @@ size_t FileManager::QueryFileSize(const UnicodeString& filename)
     return size;
 }
 
+UnicodeString FileManager::NormalizeFileName(const UnicodeString& targetName)
+{
+    UnicodeString firstStage  = targetName;
+    UnicodeString secondStage = UnicodeStringCopyTrim(firstStage);
+    return StringLowercase(secondStage);
+}
+
+FileManager::FILE_TYPE FileManager::QueryFileType(const UnicodeString& filename) 
+{
+    PRECONDITION_RETURN(filename.empty() == false, FILE_TYPE::UNKNOWN_FILE_TYPE);
+
+    FILE_TYPE type = FILE_TYPE::UNKNOWN_FILE_TYPE;
+    const UnicodeString cookedTargetName = NormalizeFileName(filename);
+    const size_t        extensionOffset  = cookedTargetName.rfind(".");
+    if(extensionOffset != UnicodeString::npos)
+    {
+        const UnicodeString fileExtension
+            = cookedTargetName.substr(extensionOffset + 1, cookedTargetName.length() - extensionOffset);
+        if(fileExtension.empty() == false)
+        {
+            if((fileExtension == "txt") || (fileExtension == "mp4chaps"))
+            {
+                type = FILE_TYPE::MP4CHAPS;
+            }
+            else if(fileExtension == "mp3")
+            {
+                type = FILE_TYPE::MP3;
+            }
+            else if((fileExtension == "mp4") || (fileExtension == "m4a"))
+            {
+                type = FILE_TYPE::MP4;
+            }
+            else if((fileExtension == "jpg") || (fileExtension == "jpeg"))
+            {
+                type = FILE_TYPE::JPEG;
+            }
+            else if(fileExtension == "png")
+            {
+                type = FILE_TYPE::PNG;
+            }
+            else
+            {
+                type = FILE_TYPE::UNKNOWN_FILE_TYPE;
+            }
+        }
+    }
+
+    return type;
+}
+
 bool FileManager::IsDiskSpaceAvailable(const UnicodeString& filename, const size_t requiredBytes)
 {
     PRECONDITION_RETURN(filename.empty() == false, false);

@@ -64,7 +64,7 @@ set(COMMON_INCLUDES
   MediaProperties.h
   MP4CHAPSReader.h
   MP4CHAPSWriter.h
-  PictureUtilities.h
+  PictureManager.h
   ReaperProject.h
   ReaperProjectManager.h
   reaper_plugin_functions.h
@@ -107,7 +107,7 @@ set(COMMON_SOURCES
   MediaProperties.cpp
   MP4CHAPSReader.cpp
   MP4CHAPSWriter.cpp
-  PictureUtilities.cpp
+  PictureManager.cpp
   ReaperProject.cpp
   ReaperProjectManager.cpp
   ReaperEntryPoints.cpp

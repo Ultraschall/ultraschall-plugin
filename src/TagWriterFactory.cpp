@@ -29,6 +29,7 @@
 #include "ISOBMFFWriter.h"
 #include "MP4CHAPSWriter.h"
 #include "StringUtilities.h"
+#include "FileManager.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -38,16 +39,16 @@ ITagWriter* TagWriterFactory::Create(const UnicodeString& targetName)
     PRECONDITION_RETURN(targetName.length() > 4, 0);
 
     ITagWriter*       tagWriter  = nullptr;
-    const TARGET_TYPE targetType = FindFileType(targetName);
-    if(targetType == TARGET_TYPE::MP4CHAPS_TARGET)
+    const FileManager::FILE_TYPE targetType = FileManager::QueryFileType(targetName);
+    if(targetType == FileManager::FILE_TYPE::MP4CHAPS)
     {
         tagWriter = new MP4CHAPSWriter();
     }
-    else if(targetType == TARGET_TYPE::MP3_TARGET)
+    else if(targetType == FileManager::FILE_TYPE::MP3)
     {
         tagWriter = new ID3V2Writer();
     }
-    else if(targetType == TARGET_TYPE::MP4_TARGET)
+    else if(targetType == FileManager::FILE_TYPE::MP4)
     {
         tagWriter = new ISOBMFFWriter();
     }
@@ -57,48 +58,6 @@ ITagWriter* TagWriterFactory::Create(const UnicodeString& targetName)
     }
 
     return tagWriter;
-}
-
-UnicodeString TagWriterFactory::NormalizeTargetName(const UnicodeString& targetName)
-{
-    UnicodeString firstStage  = targetName;
-    UnicodeString secondStage = UnicodeStringCopyTrimRight(firstStage);
-    return StringLowercase(secondStage);
-}
-
-TagWriterFactory::TARGET_TYPE TagWriterFactory::FindFileType(const UnicodeString& targetName)
-{
-    PRECONDITION_RETURN(targetName.empty() == false, TARGET_TYPE::INVALID_TARGET_TYPE);
-
-    TARGET_TYPE         type             = TARGET_TYPE::INVALID_TARGET_TYPE;
-    const UnicodeString cookedTargetName = NormalizeTargetName(targetName);
-    const size_t        extensionOffset  = targetName.rfind(".");
-    if(extensionOffset != UnicodeString::npos)
-    {
-        const UnicodeString fileExtension
-            = targetName.substr(extensionOffset + 1, targetName.length() - extensionOffset);
-        if(fileExtension.empty() == false)
-        {
-            if(fileExtension == "mp3")
-            {
-                type = TARGET_TYPE::MP3_TARGET;
-            }
-            else if(fileExtension == "mp4")
-            {
-                type = TARGET_TYPE::MP4_TARGET;
-            }
-            else if(fileExtension == "m4a")
-            {
-                type = TARGET_TYPE::MP4_TARGET;
-            }
-            else
-            {
-                type = TARGET_TYPE::INVALID_TARGET_TYPE;
-            }
-        }
-    }
-
-    return type;
 }
 
 }} // namespace ultraschall::reaper

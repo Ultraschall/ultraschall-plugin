@@ -46,6 +46,9 @@ public:
 
     static UnicodeString QueryFileDirectory(const UnicodeString& filename);
 
+    enum class FILE_TYPE { MP4CHAPS, MP3, MP4, JPEG, PNG, UNKNOWN_FILE_TYPE, MAX_FILE_TYPE = UNKNOWN_FILE_TYPE };
+    static FILE_TYPE QueryFileType(const UnicodeString& filename);
+
     static size_t QueryFileSize(const UnicodeString& filename);
     static bool   IsDiskSpaceAvailable(const UnicodeString& filename, const size_t requiredBytes);
 
@@ -53,6 +56,9 @@ public:
     static UnicodeStringArray ReadTextFile(const UnicodeString& filename);
 
     static bool WriteTextFile(const UnicodeString& filename, const UnicodeString& str);
+
+private:
+    static UnicodeString NormalizeFileName(const UnicodeString& targetName);
 };
 
 }} // namespace ultraschall::reaper

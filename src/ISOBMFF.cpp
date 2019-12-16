@@ -30,7 +30,7 @@
 #include "Common.h"
 #include "FileManager.h"
 #include "Marker.h"
-#include "PictureUtilities.h"
+#include "PictureManager.h"
 
 #define MP4V2_EXPORTS 0
 #define MP4V2_NO_STDINT_DEFS 1
@@ -66,15 +66,15 @@ static MP4TagArtworkType QueryArtworkType(const uint8_t* data, const size_t data
     PRECONDITION_RETURN(dataSize > 0, MP4_ART_UNDEFINED);
 
     MP4TagArtworkType mp4_format = MP4_ART_UNDEFINED;
-
-    switch(QueryPictureFormat(data, dataSize))
+    PictureManager::FORMAT pictureFormat = PictureManager::QueryFormat(data, dataSize);
+    switch(pictureFormat)
     {
-        case PICTURE_FORMAT::JPEG_PICTURE:
+        case PictureManager::FORMAT::JPEG:
         {
             mp4_format = MP4_ART_JPEG;
             break;
         }
-        case PICTURE_FORMAT::PNG_PICTURE:
+        case PictureManager::FORMAT::PNG:
         {
             mp4_format = MP4_ART_PNG;
             break;

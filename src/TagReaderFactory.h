@@ -36,13 +36,6 @@ class TagReaderFactory
 {
 public:
     static ITagReader* Create(const UnicodeString& sourceName);
-
-private:
-    static UnicodeString NormalizeSourceName(const UnicodeString& sourceName);
-
-    enum class SOURCE_TYPE { MP4CHAPS_SOURCE, MP3_SOURCE, MP4_SOURCE, INVALID_SOURCE_TYPE, MAX_SOURCE_TYPE = INVALID_SOURCE_TYPE };
-
-    static SOURCE_TYPE FindFileType(const UnicodeString& sourceName);
 };
 
 }} // namespace ultraschall::reaper

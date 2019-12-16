@@ -29,6 +29,7 @@
 #include "ISOBMFFReader.h"
 #include "MP4CHAPSReader.h"
 #include "StringUtilities.h"
+#include "FileManager.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -37,67 +38,26 @@ ITagReader* TagReaderFactory::Create(const UnicodeString& sourceName)
     PRECONDITION_RETURN(sourceName.empty() == false, 0);
     PRECONDITION_RETURN(sourceName.length() > 4, 0);
 
-    ITagReader*       tagReader  = nullptr;
-    const SOURCE_TYPE sourceType = FindFileType(sourceName);
-    if(sourceType == SOURCE_TYPE::MP4CHAPS_SOURCE)
+    ITagReader*                  pReader    = nullptr;
+    const FileManager::FILE_TYPE sourceType = FileManager::QueryFileType(sourceName);
+    if(sourceType == FileManager::FILE_TYPE::MP4CHAPS)
     {
-        tagReader = new MP4CHAPSReader();
+        pReader = new MP4CHAPSReader();
     }
-    else if(sourceType == SOURCE_TYPE::MP3_SOURCE)
+    else if(sourceType == FileManager::FILE_TYPE::MP3)
     {
-        tagReader = new ID3V2Reader();
+        pReader = new ID3V2Reader();
     }
-    else if(sourceType == SOURCE_TYPE::MP4_SOURCE)
+    else if(sourceType == FileManager::FILE_TYPE::MP4)
     {
-        tagReader = new ISOBMFFReader();
+        pReader = new ISOBMFFReader();
     }
     else
     {
-        tagReader = nullptr;
+        pReader = nullptr;
     }
 
-    return tagReader;
-}
-
-UnicodeString TagReaderFactory::NormalizeSourceName(const UnicodeString& sourceName)
-{
-    UnicodeString firstStage  = sourceName;
-    UnicodeString secondStage = UnicodeStringCopyTrimRight(firstStage);
-    return StringLowercase(secondStage);
-}
-
-TagReaderFactory::SOURCE_TYPE TagReaderFactory::FindFileType(const UnicodeString& sourceName)
-{
-    PRECONDITION_RETURN(sourceName.empty() == false, SOURCE_TYPE::INVALID_SOURCE_TYPE);
-
-    SOURCE_TYPE         type             = SOURCE_TYPE::INVALID_SOURCE_TYPE;
-    const UnicodeString cookedSourceName = NormalizeSourceName(sourceName);
-    const size_t        extensionOffset  = sourceName.rfind(".");
-    if(extensionOffset != UnicodeString::npos)
-    {
-        const UnicodeString fileExtension
-            = sourceName.substr(extensionOffset + 1, sourceName.length() - extensionOffset);
-        if(fileExtension.empty() == false)
-        {
-            if((fileExtension == "txt") || (fileExtension == "mp4chaps"))
-            {
-                type = SOURCE_TYPE::MP4CHAPS_SOURCE;
-            }
-            else if(fileExtension == "mp3")
-            {
-                type = SOURCE_TYPE::MP3_SOURCE;
-            }
-            else if((fileExtension == "mp4") || (fileExtension == "m4a"))
-            {
-                type = SOURCE_TYPE::MP4_SOURCE;
-            }
-            else
-            {
-                type = SOURCE_TYPE::INVALID_SOURCE_TYPE;
-            }
-        }
-    }
-    return type;
+    return pReader;
 }
 
 }} // namespace ultraschall::reaper
