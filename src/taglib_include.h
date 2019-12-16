@@ -30,6 +30,11 @@
 #ifdef __APPLE__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#else // #ifdef __APPLE__
+#ifdef _WIN32
+#pragma warning(push)
+#pragma warning(disable: 4267)
+#endif // #ifdef _WIN32
 #endif // #ifdef __APPLE__
 
 #define TAGLIB_STATIC
@@ -53,6 +58,10 @@ namespace taglib_mp3 = TagLib::MPEG;
 
 #ifdef __APPLE__
 #pragma clang diagnostic pop
+#else // #ifdef __APPLE__
+#ifdef _WIN32
+#pragma warning(pop)
+#endif // #ifdef _WIN32
 #endif // #ifdef __APPLE__
 
 #endif // #ifndef __ULTRASCHALL_REAPER_TAG_LIB_H_INCL__
