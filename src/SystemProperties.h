@@ -84,13 +84,7 @@ private:
     }
 };
 
-static UnicodeString VERSIONS_SECTION_NAME = "ultraschall_versions";
 static UnicodeString UPDATE_SECTION_NAME   = "ultraschall_update";
-static UnicodeString BOM_SECTION_NAME      = "ultraschall_bom";
-
-bool QuerySetPluginVersion();
-
-void UpdateBillOfMaterials();
 
 }} // namespace ultraschall::reaper
 
