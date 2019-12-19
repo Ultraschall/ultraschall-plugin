@@ -44,9 +44,8 @@ FileDialog::~FileDialog() {}
 
 UnicodeString FileDialog::SelectChaptersFile()
 {
-    static const UnicodeString fileExtensions
-        = "MP4 chapters|*.chapters.txt|MP4 chapters|*.mp4chaps|MP3 file|*.mp3|MP4 file|*.mp4|M4A file|*.m4a";
-    WideUnicodeString result;
+    static const UnicodeString fileExtensions = "MP4 chapters|*.chapters.txt|MP4 chapters|*.mp4chaps";
+    WideUnicodeString          result;
 
     UnicodeStringArray     filterSpecs = UnicodeStringTokenize(fileExtensions, UnicodeChar('|'));
     WideUnicodeStringArray wideFileExtensions;
@@ -107,7 +106,7 @@ UnicodeString FileDialog::SelectChaptersFile()
 UnicodeString FileDialog::SelectAudioFile()
 {
     // FIXME: Disable mp4 due to bug #13
-    //static const UnicodeString fileExtensions = "MP3 file|*.mp3|MP4 file|*.mp4|M4A file|*.m4a";
+    // static const UnicodeString fileExtensions = "MP3 file|*.mp3|MP4 file|*.mp4|M4A file|*.m4a";
     static const UnicodeString fileExtensions = "MP3 file|*.mp3";
     WideUnicodeString          result;
 
