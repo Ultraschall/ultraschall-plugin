@@ -44,19 +44,16 @@ UnicodeStringArray UnicodeStringTokenize(const UnicodeString& input, const char 
     return tokens;
 }
 
-// trim from start
 void UnicodeStringTrimLeft(UnicodeString& str)
 {
     str.erase(str.begin(), std::find_if(str.begin(), str.end(), [](int ch) { return !std::isspace(ch); }));
 }
 
-// trim from end
 void UnicodeStringTrimRight(UnicodeString& str)
 {
     str.erase(std::find_if(str.rbegin(), str.rend(), [](int ch) { return !std::isspace(ch); }).base(), str.end());
 }
 
-// trim from both ends
 void UnicodeStringTrim(UnicodeString& str)
 {
     UnicodeStringTrimLeft(str);
@@ -106,7 +103,7 @@ int UnicodeStringToInt(const UnicodeString& str)
 
 UnicodeString UnicodeStringFromInt(const int value)
 {
-	std::ostringstream os;
+    std::ostringstream os;
     os << value;
     return os.str();
 }
