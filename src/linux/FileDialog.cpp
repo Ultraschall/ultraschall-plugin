@@ -43,7 +43,7 @@ UnicodeString FileDialog::SelectChaptersFile()
     GtkWindow*           pParent = (GtkWindow*)ReaperGateway::View();
     GtkFileChooserAction action  = GTK_FILE_CHOOSER_ACTION_OPEN;
     GtkWidget*           pDialog = gtk_file_chooser_dialog_new(
-        "Open File", pParent, action, "Cancel", GTK_RESPONSE_CANCEL, "Open", GTK_RESPONSE_ACCEPT, NULL);
+        caption_.c_str(), pParent, action, "Cancel", GTK_RESPONSE_CANCEL, "Open", GTK_RESPONSE_ACCEPT, NULL);
     if(pDialog != nullptr)
     {
         GtkFileChooser* pChooser = GTK_FILE_CHOOSER(pDialog);
@@ -84,7 +84,7 @@ UnicodeString FileDialog::SelectAudioFile()
     GtkWindow*           pParent = (GtkWindow*)ReaperGateway::View();
     GtkFileChooserAction action  = GTK_FILE_CHOOSER_ACTION_OPEN;
     GtkWidget*           pDialog = gtk_file_chooser_dialog_new(
-        "Open File", pParent, action, "Cancel", GTK_RESPONSE_CANCEL, "Open", GTK_RESPONSE_ACCEPT, NULL);
+        caption_.c_str(), pParent, action, "Cancel", GTK_RESPONSE_CANCEL, "Open", GTK_RESPONSE_ACCEPT, NULL);
     if(pDialog != nullptr)
     {
         GtkFileChooser* pChooser = GTK_FILE_CHOOSER(pDialog);
@@ -94,8 +94,9 @@ UnicodeString FileDialog::SelectAudioFile()
             if(pFilter != nullptr)
             {
                 gtk_file_filter_add_pattern(pFilter, "*.mp3");
-                gtk_file_filter_add_pattern(pFilter, "*.mp4");
-                gtk_file_filter_add_pattern(pFilter, "*.m4a");
+                // FIXME: Disable due to bug #13
+                // gtk_file_filter_add_pattern(pFilter, "*.mp4");
+                // gtk_file_filter_add_pattern(pFilter, "*.m4a");
                 gtk_file_chooser_set_filter(pChooser, pFilter);
 
                 const gint dialogResult = gtk_dialog_run(GTK_DIALOG(pDialog));
@@ -126,7 +127,7 @@ UnicodeString FileDialog::SelectPictureFile()
     GtkWindow*           pParent = (GtkWindow*)ReaperGateway::View();
     GtkFileChooserAction action  = GTK_FILE_CHOOSER_ACTION_OPEN;
     GtkWidget*           pDialog = gtk_file_chooser_dialog_new(
-        "Open File", pParent, action, "Cancel", GTK_RESPONSE_CANCEL, "Open", GTK_RESPONSE_ACCEPT, NULL);
+        caption_.c_str(), pParent, action, "Cancel", GTK_RESPONSE_CANCEL, "Open", GTK_RESPONSE_ACCEPT, NULL);
     if(pDialog != nullptr)
     {
         GtkFileChooser* pChooser = GTK_FILE_CHOOSER(pDialog);
@@ -161,16 +162,43 @@ UnicodeString FileDialog::SelectPictureFile()
     return result;
 }
 
-UnicodeString FileDialog::SelectDirectory()
-{
-    UnicodeString result;
-
-    return result;
-}
-
 UnicodeString FileDialog::ChooseChaptersFileName()
 {
     UnicodeString result;
+
+    GtkWindow*           pParent = (GtkWindow*)ReaperGateway::View();
+    GtkFileChooserAction action  = GTK_FILE_CHOOSER_ACTION_SAVE;
+    GtkWidget*           pDialog = gtk_file_chooser_dialog_new(
+        caption_.c_str(), pParent, action, "Cancel", GTK_RESPONSE_CANCEL, "Save", GTK_RESPONSE_ACCEPT, NULL);
+    if(pDialog != nullptr)
+    {
+        GtkFileChooser* pChooser = GTK_FILE_CHOOSER(pDialog);
+        if(pChooser != nullptr)
+        {
+            GtkFileFilter* pFilter = gtk_file_filter_new();
+            if(pFilter != nullptr)
+            {
+                gtk_file_filter_add_pattern(pFilter, "*.chapters.txt");
+                gtk_file_filter_add_pattern(pFilter, "*.mp4chaps");
+                gtk_file_chooser_set_filter(pChooser, pFilter);
+
+                const gint dialogResult = gtk_dialog_run(GTK_DIALOG(pDialog));
+                if(dialogResult == GTK_RESPONSE_ACCEPT)
+                {
+                    char* filename = gtk_file_chooser_get_filename(pChooser);
+                    if(filename != nullptr)
+                    {
+                        result = filename;
+                        g_free(filename);
+                    }
+                }
+
+                g_free(pFilter);
+            }
+        }
+
+        gtk_widget_destroy(pDialog);
+    }
 
     return result;
 }

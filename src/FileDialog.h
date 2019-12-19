@@ -41,7 +41,6 @@ public:
     UnicodeString SelectAudioFile();
     UnicodeString SelectPictureFile();
 
-    UnicodeString SelectDirectory();
     UnicodeString ChooseChaptersFileName();
 
 private:

@@ -24,8 +24,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifdef _WIN32
-
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 
@@ -46,8 +44,9 @@ FileDialog::~FileDialog() {}
 
 UnicodeString FileDialog::SelectChaptersFile()
 {
-    static const UnicodeString fileExtensions = "MP4 chapters|*.chapters.txt|MP4 chapters|*.mp4chaps|MP3 file|*.mp3|MP4 file|*.mp4|M4A file|*.m4a";
-    WideUnicodeString          result;
+    static const UnicodeString fileExtensions
+        = "MP4 chapters|*.chapters.txt|MP4 chapters|*.mp4chaps|MP3 file|*.mp3|MP4 file|*.mp4|M4A file|*.m4a";
+    WideUnicodeString result;
 
     UnicodeStringArray     filterSpecs = UnicodeStringTokenize(fileExtensions, UnicodeChar('|'));
     WideUnicodeStringArray wideFileExtensions;
@@ -227,59 +226,6 @@ UnicodeString FileDialog::SelectPictureFile()
     return WU2U(result);
 }
 
-UnicodeString FileDialog::SelectDirectory()
-{
-    WideUnicodeString result;
-
-    IFileOpenDialog* pfod = nullptr;
-    HRESULT          hr   = CoCreateInstance(CLSID_FileOpenDialog, nullptr, CLSCTX_INPROC, IID_PPV_ARGS(&pfod));
-    if(SUCCEEDED(hr))
-    {
-        pfod->SetTitle(reinterpret_cast<LPCWSTR>(U2WU(caption_).c_str()));
-
-        if(initialDirectory_.empty() == false)
-        {
-            IShellItem* psi = 0;
-            hr              = SHCreateItemFromParsingName(
-                reinterpret_cast<LPCWSTR>(U2WU(initialDirectory_).c_str()), nullptr, IID_PPV_ARGS(&psi));
-            if(SUCCEEDED(hr))
-            {
-                pfod->SetFolder(psi);
-                SafeRelease(psi);
-            }
-        }
-
-        if(SUCCEEDED(hr))
-        {
-            FILEOPENDIALOGOPTIONS fos = FOS_PICKFOLDERS | FOS_PATHMUSTEXIST;
-            pfod->SetOptions(fos);
-
-            hr = pfod->Show(reinterpret_cast<HWND>(ReaperGateway::View()));
-            if(SUCCEEDED(hr))
-            {
-                IShellItem* psi = 0;
-                hr              = pfod->GetResult(&psi);
-                if(SUCCEEDED(hr))
-                {
-                    LPWSTR fileSystemPath = 0;
-                    hr                    = psi->GetDisplayName(SIGDN_FILESYSPATH, &fileSystemPath);
-                    if(SUCCEEDED(hr) && (0 != fileSystemPath))
-                    {
-                        result = reinterpret_cast<WideUnicodeChar*>(fileSystemPath);
-                        CoTaskMemFree(fileSystemPath);
-                    }
-
-                    SafeRelease(psi);
-                }
-            }
-        }
-
-        SafeRelease(pfod);
-    }
-
-    return WU2U(result);
-}
-
 UnicodeString FileDialog::ChooseChaptersFileName()
 {
     static const UnicodeString fileExtensions = "MP4 chapters|*.chapters.txt|MP4 chapters|*.mp4chaps";
@@ -355,5 +301,3 @@ UnicodeString FileDialog::ChooseChaptersFileName()
 }
 
 }} // namespace ultraschall::reaper
-
-#endif // #ifdef _WIN32

@@ -118,46 +118,17 @@ UnicodeString FileDialog::SelectPictureFile()
     return result;
 }
 
-UnicodeString FileDialog::SelectDirectory()
-{
-    UnicodeString result;
-
-    NSOpenPanel* fileDialog = [NSOpenPanel openPanel];
-    if(nil != fileDialog)
-    {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        fileDialog.canCreateDirectories    = YES;
-        fileDialog.canChooseDirectories    = YES;
-        fileDialog.canChooseFiles          = NO;
-        fileDialog.allowsMultipleSelection = NO;
-        fileDialog.prompt                  = @"Select";
-        fileDialog.title                   = [NSString stringWithUTF8String:caption_.c_str()];
-
-        NSString* initialPath = [NSString stringWithUTF8String:initialDirectory_.c_str()];
-        if([fileDialog runModalForDirectory:initialPath file:nil types:nil] == NSFileHandlingPanelOKButton)
-#pragma clang diagnostic pop
-        {
-            result = [[fileDialog URL] fileSystemRepresentation];
-        }
-
-        fileDialog = nil;
-    }
-
-    return result;
-}
-
 UnicodeString FileDialog::ChooseChaptersFileName()
 {
     UnicodeString result;
-    
+
     NSSavePanel* fileDialog = [NSSavePanel savePanel];
     if(nil != fileDialog)
     {
-        fileDialog.allowedFileTypes = [[NSArray alloc] initWithObjects:@"chapters.txt", @"mp4chaps", @"txt", nil];
+        fileDialog.allowedFileTypes     = [[NSArray alloc] initWithObjects:@"chapters.txt", @"mp4chaps", @"txt", nil];
         fileDialog.allowsOtherFileTypes = NO;
-        fileDialog.canCreateDirectories    = YES;
-        fileDialog.title                   = [NSString stringWithUTF8String:caption_.c_str()];
+        fileDialog.canCreateDirectories = YES;
+        fileDialog.title                = [NSString stringWithUTF8String:caption_.c_str()];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
         if([fileDialog runModal] == NSFileHandlingPanelOKButton)
@@ -165,10 +136,10 @@ UnicodeString FileDialog::ChooseChaptersFileName()
         {
             result = [[fileDialog URL] fileSystemRepresentation];
         }
-        
+
         fileDialog = nil;
     }
-    
+
     return result;
 }
 
