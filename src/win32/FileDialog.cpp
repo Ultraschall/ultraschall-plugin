@@ -106,7 +106,9 @@ UnicodeString FileDialog::SelectChaptersFile()
 
 UnicodeString FileDialog::SelectAudioFile()
 {
-    static const UnicodeString fileExtensions = "MP3 file|*.mp3|MP4 file|*.mp4|M4A file|*.m4a";
+    // FIXME: Disable mp4 due to bug #13
+    //static const UnicodeString fileExtensions = "MP3 file|*.mp3|MP4 file|*.mp4|M4A file|*.m4a";
+    static const UnicodeString fileExtensions = "MP3 file|*.mp3";
     WideUnicodeString          result;
 
     UnicodeStringArray     filterSpecs = UnicodeStringTokenize(fileExtensions, UnicodeChar('|'));

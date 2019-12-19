@@ -155,9 +155,10 @@ bool InsertMediaPropertiesAction::ConfigureTargets()
 
     targets_.clear();
 
-    static const size_t MAX_FILE_EXTENSIONS                 = 3;
-    static const char*  fileExtensions[MAX_FILE_EXTENSIONS] = {".mp3", ".mp4", ".m4a"};
-    for(size_t i = 0; i < MAX_FILE_EXTENSIONS; i++)
+    // FIXME: Disable mp4 due to bug #13
+    //static const UnicodeStringArray fileExtensions = {".mp3", ".mp4", ".m4a"};
+    static const UnicodeStringArray fileExtensions = {".mp3"};
+    for(size_t i = 0; i < fileExtensions.size(); i++)
     {
         UnicodeString targetName = CreateProjectPath(fileExtensions[i]);
         if(FileManager::FileExists(targetName) != false)
@@ -168,6 +169,7 @@ bool InsertMediaPropertiesAction::ConfigureTargets()
 
     if(targets_.empty() == true)
     {
+      // TODO: Wording seems to be inaccurate now
         supervisor.RegisterWarning("Ultraschall can't find a suitable media file. Please select an alternative media "
                                    "file from the file selection dialog after closing this message.");
         FileDialog          fileDialog("Select audio file");
