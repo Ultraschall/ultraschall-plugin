@@ -127,47 +127,51 @@ set(COMMON_SOURCES
   reaper_ultraschall.cpp
 )
 
-set(EXTERNAL_SOURCES
+set(EXTRA_INCLUDES)
+set(EXTRA_SOURCES
   ${LIBZ_SOURCE_PATH}/contrib/minizip/ioapi.c
   ${LIBZ_SOURCE_PATH}/contrib/minizip/unzip.c
 )
 set_source_files_properties(${LIBZ_SOURCE_PATH}/contrib/minizip/ioapi.c PROPERTIES GENERATED TRUE)
 set_source_files_properties(${LIBZ_SOURCE_PATH}/contrib/minizip/unzip.c PROPERTIES GENERATED TRUE)
 
+set(PLATFORM_INCLUDES FileDialog.h Platform.h)
+set(PLATFORM_SOURCES
+  ${ULTRASCHALL_TARGET_SYSTEM}/FileDialog.cpp
+  ${ULTRASCHALL_TARGET_SYSTEM}/Platform.cpp
+)
+
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
 if(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "win32")
-  set(PLATFORM_SOURCES win32/Platform.cpp win32/FileDialog.cpp)
-  set(EXTRA_SOURCES reaper_ultraschall.rc)
+  set(EXTRA_SOURCES ${EXTRA_SOURCES} reaper_ultraschall.rc)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
   set(EXTRA_LIBRARIES version.lib ws2_32.lib crypt32.lib wldap32.lib mfplat.lib mf.lib mfuuid.lib shlwapi.lib comctl32.lib comdlg32.lib rpcrt4.lib)
 elseif(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "macos")
-  set(PLATFORM_SOURCES macos/Platform.cpp macos/FileDialog.cpp)
   add_compile_options(-mmacosx-version-min=10.11)
   set_source_files_properties(macos/Platform.cpp macos/FileDialog.cpp PROPERTIES COMPILE_FLAGS "-x objective-c++")
   set(EXTRA_LIBRARIES "-framework AppKit" "-framework Carbon" "-framework IOKit" "-framework Security")
 elseif(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "linux")
   include_directories(${LIBGTK3_INCLUDE_PATH})
-  set(PLATFORM_SOURCES linux/Platform.cpp linux/FileDialog.cpp)
   set(EXTRA_LIBRARIES ${LIBGTK3_LIBRARY_PATH})
 endif()
-
-source_group("Header Files" FILES ${COMMON_INCLUDES} ${PLATFORM_INCLUDES})
-source_group("Source Files" FILES ${COMMON_SOURCES} ${PLATFORM_SOURCES} ${EXTRA_SOURCES})
-source_group("External Files" FILES ${EXTERNAL_SOURCES})
 
 message(STATUS "COMMON_INCLUDES   = ${COMMON_INCLUDES}")
 message(STATUS "COMMON_SOURCES    = ${COMMON_SOURCES}")
 message(STATUS "PLATFORM_INCLUDES = ${PLATFORM_INCLUDES}")
 message(STATUS "PLATFORM_SOURCES  = ${PLATFORM_SOURCES}")
-message(STATUS "EXTERNAL_SOURCES  = ${EXTERNAL_SOURCES}")
+message(STATUS "EXTRA_INCLUDES    = ${EXTERNAL_INCLUDES}")
 message(STATUS "EXTRA_SOURCES     = ${EXTRA_SOURCES}")
+
+source_group("Header Files" FILES ${COMMON_INCLUDES} ${PLATFORM_INCLUDES})
+source_group("Source Files" FILES ${COMMON_SOURCES} ${PLATFORM_SOURCES} ${EXTRA_SOURCES} ${EXTERNAL_SOURCES})
 
 add_library(reaper_ultraschall SHARED
   ${COMMON_INCLUDES}
   ${COMMON_SOURCES}
+  ${PLATFORM_INCLUDES}
   ${PLATFORM_SOURCES}
-  ${EXTERNAL_SOURCES}
+  ${EXTRA_INCLUDES}
   ${EXTRA_SOURCES}
 )
 
