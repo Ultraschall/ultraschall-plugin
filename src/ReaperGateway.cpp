@@ -297,19 +297,12 @@ MarkerArray ReaperGateway::QueryAllMarkers(ProjectReference projectReference)
         = reaper_api::EnumProjectMarkers3(nativeReference, 0, &isRegion, &position, &duration, &name, &number, &color);
     while(nextIndex > 0)
     {
-        static const size_t MAX_CHAPTER_NAME_LENGTH = 62; // limitation in taglib/id3v2
-        UnicodeString       markerName              = name;
-        if(markerName.size() > MAX_CHAPTER_NAME_LENGTH)
-        {
-            markerName = markerName.substr(0, MAX_CHAPTER_NAME_LENGTH);
-        }
-
         static const uint32_t PREDEFINED_EDIT_MARKER_COLOR = 0x010000ff;
         if(color != PREDEFINED_EDIT_MARKER_COLOR) // remove edit markers
         {
             if(false == isRegion) // remove regions
             {
-                allMarkers.push_back(Marker(position, markerName, color));
+                allMarkers.push_back(Marker(position, name, color));
             }
         }
 
