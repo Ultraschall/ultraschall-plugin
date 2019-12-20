@@ -94,9 +94,6 @@ UnicodeString FileDialog::SelectAudioFile()
             if(pFilter != nullptr)
             {
                 gtk_file_filter_add_pattern(pFilter, "*.mp3");
-                // FIXME: Disable due to bug #13
-                // gtk_file_filter_add_pattern(pFilter, "*.mp4");
-                // gtk_file_filter_add_pattern(pFilter, "*.m4a");
                 gtk_file_chooser_set_filter(pChooser, pFilter);
 
                 const gint dialogResult = gtk_dialog_run(GTK_DIALOG(pDialog));

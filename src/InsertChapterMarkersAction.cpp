@@ -82,20 +82,17 @@ bool InsertChapterMarkersAction::ConfigureTargets()
     UINotificationStore supervisor;
     MarkerArray         chapterMarkers;
 
-    MEDIA_TYPE mediaType = QueryMediaTypeFromFileExtension(source_);
-    switch (mediaType)
+    FileManager::FILE_TYPE mediaType = FileManager::QueryFileType(source_);
+    switch(mediaType)
     {
-      case MEDIA_TYPE::TEXT_MEDIA_TYPE:
-        chapterMarkers = ReadTextFile(source_);
-        break;
-      case MEDIA_TYPE::MP3_MEDIA_TYPE:
-          chapterMarkers = ReadMP3File(source_);
-          break;
-      case MEDIA_TYPE::MP4_MEDIA_TYPE:
-          chapterMarkers = ReadMP4File(source_);
-          break;
-      default:
-        break;
+        case FileManager::FILE_TYPE::MP4CHAPS:
+            chapterMarkers = ReadTextFile(source_);
+            break;
+        case FileManager::FILE_TYPE::MP3:
+            chapterMarkers = ReadMP3File(source_);
+            break;
+        default:
+            break;
     }
 
     if(chapterMarkers.empty() == false)
@@ -113,41 +110,6 @@ bool InsertChapterMarkersAction::ConfigureSources()
     FileDialog fileDialog("Import chapter markers");
     source_ = fileDialog.SelectChaptersFile();
     return source_.empty() == false;
-}
-
-InsertChapterMarkersAction::MEDIA_TYPE InsertChapterMarkersAction::QueryMediaTypeFromFileExtension(
-    const UnicodeString& filename)
-{
-    PRECONDITION_RETURN(filename.empty() == false, MEDIA_TYPE::INVALID_MEDIA_TYPE);
-
-    MEDIA_TYPE mediaType = MEDIA_TYPE::INVALID_MEDIA_TYPE;
-
-    size_t offset = filename.find_last_of(".");
-    if(offset != UnicodeString::npos)
-    {
-        UnicodeString extension = StringLowercase(filename.substr(offset));
-        if(extension.empty() == false)
-        {
-            if((extension == ".txt") || (extension == ".mp4chaps"))
-            {
-                mediaType = MEDIA_TYPE::TEXT_MEDIA_TYPE;
-            }
-            else if((extension == ".mp3"))
-            {
-                mediaType = MEDIA_TYPE::MP3_MEDIA_TYPE;
-            }
-            else if((extension == ".mp4") || (extension == ".m4a"))
-            {
-                mediaType = MEDIA_TYPE::MP4_MEDIA_TYPE;
-            }
-            else
-            {
-                mediaType = MEDIA_TYPE::INVALID_MEDIA_TYPE;
-            }
-        }
-    }
-
-    return mediaType;
 }
 
 MarkerArray InsertChapterMarkersAction::ReadTextFile(const UnicodeString& filename)
@@ -207,16 +169,6 @@ MarkerArray InsertChapterMarkersAction::ReadTextFile(const UnicodeString& filena
 }
 
 MarkerArray InsertChapterMarkersAction::ReadMP3File(const UnicodeString& filename)
-{
-    PRECONDITION_RETURN(filename.empty() == false, MarkerArray());
-
-    UINotificationStore supervisor;
-    MarkerArray         chapterMarkers;
-
-    return chapterMarkers;
-}
-
-MarkerArray InsertChapterMarkersAction::ReadMP4File(const UnicodeString& filename)
 {
     PRECONDITION_RETURN(filename.empty() == false, MarkerArray());
 

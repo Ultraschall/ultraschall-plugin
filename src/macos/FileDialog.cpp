@@ -78,10 +78,7 @@ UnicodeString FileDialog::SelectAudioFile()
         fileDialog.title                   = [NSString stringWithUTF8String:caption_.c_str()];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        // FIXME: Disable mp4 due to bug #13
-        //if([fileDialog runModalForTypes:[[NSArray alloc] initWithObjects:@"mp3", @"mp4", @"m4a", nil]]
-        if([fileDialog runModalForTypes:[[NSArray alloc] initWithObjects:@"mp3", nil]]
-           == NSFileHandlingPanelOKButton)
+        if([fileDialog runModalForTypes:[[NSArray alloc] initWithObjects:@"mp3", nil]] == NSFileHandlingPanelOKButton)
 #pragma clang diagnostic pop
         {
             result = [[fileDialog URL] fileSystemRepresentation];

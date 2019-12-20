@@ -46,7 +46,7 @@ public:
 
     static UnicodeString QueryFileDirectory(const UnicodeString& filename);
 
-    enum class FILE_TYPE { MP4CHAPS, MP3, MP4, JPEG, PNG, UNKNOWN_FILE_TYPE, MAX_FILE_TYPE = UNKNOWN_FILE_TYPE };
+    enum class FILE_TYPE { MP4CHAPS, MP3, JPEG, PNG, UNKNOWN_FILE_TYPE, MAX_FILE_TYPE = UNKNOWN_FILE_TYPE };
     static FILE_TYPE QueryFileType(const UnicodeString& filename);
 
     static size_t QueryFileSize(const UnicodeString& filename);

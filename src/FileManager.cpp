@@ -158,10 +158,6 @@ FileManager::FILE_TYPE FileManager::QueryFileType(const UnicodeString& filename)
             {
                 type = FILE_TYPE::MP3;
             }
-            else if((fileExtension == "mp4") || (fileExtension == "m4a"))
-            {
-                type = FILE_TYPE::MP4;
-            }
             else if((fileExtension == "jpg") || (fileExtension == "jpeg"))
             {
                 type = FILE_TYPE::JPEG;

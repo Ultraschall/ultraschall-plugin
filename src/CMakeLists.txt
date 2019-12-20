@@ -30,7 +30,6 @@ include_directories(
   ${LIBZ_INCLUDE_PATH}
   ${LIBCURL_INCLUDE_PATH}
   ${LIBTAG_INCLUDE_PATH}
-  ${LIBMP4V2_INCLUDE_PATH}
   ${LIBWDL_INCLUDE_PATH}
   ${REAPER_INCLUDE_PATH}
 )
@@ -52,10 +51,6 @@ set(COMMON_INCLUDES
   ID3V2Writer.h
   InsertChapterMarkersAction.h
   InsertMediaPropertiesAction.h
-  ISOBMFF.h
-  ISOBMFFContext.h
-  ISOBMFFReader.h
-  ISOBMFFWriter.h
   ITagReader.h
   ITagWriter.h
   SharedObject.h
@@ -101,10 +96,6 @@ set(COMMON_SOURCES
   ID3V2Writer.cpp
   InsertChapterMarkersAction.cpp
   InsertMediaPropertiesAction.cpp
-  ISOBMFF.cpp
-  ISOBMFFContext.cpp
-  ISOBMFFReader.cpp
-  ISOBMFFWriter.cpp
   MediaProperties.cpp
   MP4CHAPSReader.cpp
   MP4CHAPSWriter.cpp
@@ -178,14 +169,12 @@ add_library(reaper_ultraschall SHARED
 add_dependencies(reaper_ultraschall zlib-build)
 add_dependencies(reaper_ultraschall curl-build)
 add_dependencies(reaper_ultraschall taglib-build)
-add_dependencies(reaper_ultraschall mp4v2-build)
 add_dependencies(reaper_ultraschall wdl-build)
 
 target_link_libraries(reaper_ultraschall
   ${LIBZ_LIBRARY_PATH}
   ${LIBCURL_LIBRARY_PATH}
   ${LIBTAG_LIBRARY_PATH}
-  ${LIBMP4V2_LIBRARY_PATH}
   ${EXTRA_LIBRARIES}
 )
 

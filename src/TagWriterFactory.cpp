@@ -26,7 +26,6 @@
 
 #include "TagWriterFactory.h"
 #include "ID3V2Writer.h"
-#include "ISOBMFFWriter.h"
 #include "MP4CHAPSWriter.h"
 #include "StringUtilities.h"
 #include "FileManager.h"
@@ -38,7 +37,7 @@ ITagWriter* TagWriterFactory::Create(const UnicodeString& targetName)
     PRECONDITION_RETURN(targetName.empty() == false, 0);
     PRECONDITION_RETURN(targetName.length() > 4, 0);
 
-    ITagWriter*       tagWriter  = nullptr;
+    ITagWriter*                  tagWriter  = nullptr;
     const FileManager::FILE_TYPE targetType = FileManager::QueryFileType(targetName);
     if(targetType == FileManager::FILE_TYPE::MP4CHAPS)
     {
@@ -47,10 +46,6 @@ ITagWriter* TagWriterFactory::Create(const UnicodeString& targetName)
     else if(targetType == FileManager::FILE_TYPE::MP3)
     {
         tagWriter = new ID3V2Writer();
-    }
-    else if(targetType == FileManager::FILE_TYPE::MP4)
-    {
-        tagWriter = new ISOBMFFWriter();
     }
     else
     {

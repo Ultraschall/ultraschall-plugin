@@ -155,8 +155,6 @@ bool InsertMediaPropertiesAction::ConfigureTargets()
 
     targets_.clear();
 
-    // FIXME: Disable mp4 due to bug #13
-    //static const UnicodeStringArray fileExtensions = {".mp3", ".mp4", ".m4a"};
     static const UnicodeStringArray fileExtensions = {".mp3"};
     for(size_t i = 0; i < fileExtensions.size(); i++)
     {

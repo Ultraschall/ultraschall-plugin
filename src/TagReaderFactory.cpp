@@ -26,7 +26,6 @@
 
 #include "TagReaderFactory.h"
 #include "ID3V2Reader.h"
-#include "ISOBMFFReader.h"
 #include "MP4CHAPSReader.h"
 #include "StringUtilities.h"
 #include "FileManager.h"
@@ -47,10 +46,6 @@ ITagReader* TagReaderFactory::Create(const UnicodeString& sourceName)
     else if(sourceType == FileManager::FILE_TYPE::MP3)
     {
         pReader = new ID3V2Reader();
-    }
-    else if(sourceType == FileManager::FILE_TYPE::MP4)
-    {
-        pReader = new ISOBMFFReader();
     }
     else
     {
