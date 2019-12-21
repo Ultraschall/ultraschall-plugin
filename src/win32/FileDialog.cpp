@@ -44,7 +44,7 @@ FileDialog::~FileDialog() {}
 
 UnicodeString FileDialog::SelectChaptersFile()
 {
-    static const UnicodeString fileExtensions = "MP4 chapters|*.chapters.txt|MP4 chapters|*.mp4chaps";
+    static const UnicodeString fileExtensions = "MP4 chapters|*.chapters.txt|All files|*.*";
     WideUnicodeString          result;
 
     UnicodeStringArray     filterSpecs = UnicodeStringTokenize(fileExtensions, UnicodeChar('|'));
@@ -105,7 +105,7 @@ UnicodeString FileDialog::SelectChaptersFile()
 
 UnicodeString FileDialog::SelectAudioFile()
 {
-    static const UnicodeString fileExtensions = "MP3 file|*.mp3";
+    static const UnicodeString fileExtensions = "MP3 file|*.mp3|All files|*.*";
     WideUnicodeString          result;
 
     UnicodeStringArray     filterSpecs = UnicodeStringTokenize(fileExtensions, UnicodeChar('|'));
@@ -166,7 +166,7 @@ UnicodeString FileDialog::SelectAudioFile()
 
 UnicodeString FileDialog::SelectPictureFile()
 {
-    static const UnicodeString fileExtensions = "JPG file|*.jpg|PNG file|*.png";
+    static const UnicodeString fileExtensions = "JPG file|*.jpg|PNG file|*.png|All files|*.*";
     WideUnicodeString          result;
 
     UnicodeStringArray     filterSpecs = UnicodeStringTokenize(fileExtensions, UnicodeChar('|'));
@@ -227,7 +227,7 @@ UnicodeString FileDialog::SelectPictureFile()
 
 UnicodeString FileDialog::ChooseChaptersFileName()
 {
-    static const UnicodeString fileExtensions = "MP4 chapters|*.chapters.txt|MP4 chapters|*.mp4chaps";
+    static const UnicodeString fileExtensions = "MP4 chapters|*.chapters.txt|All files|*.*";
     WideUnicodeString          result;
 
     UnicodeStringArray     filterSpecs = UnicodeStringTokenize(fileExtensions, UnicodeChar('|'));
@@ -268,7 +268,7 @@ UnicodeString FileDialog::ChooseChaptersFileName()
                 }
             }
 
-            FILEOPENDIALOGOPTIONS fos = FOS_STRICTFILETYPES | FOS_OVERWRITEPROMPT | FOS_CREATEPROMPT;
+            FILEOPENDIALOGOPTIONS fos = FOS_OVERWRITEPROMPT | FOS_CREATEPROMPT;
             pfsd->SetOptions(fos);
 
             hr = pfsd->Show(reinterpret_cast<HWND>(ReaperGateway::View()));
