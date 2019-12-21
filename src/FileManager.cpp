@@ -75,6 +75,7 @@ bool FileManager::FileExists(const UnicodeString& filename)
     std::ifstream is(U2H(filename), std::ios::in | std::ios::binary);
     if(is.is_open() == true)
     {
+        fileExists = true;
         is.close();
     }
 
