@@ -31,24 +31,25 @@
 #include "ID3V2Context.h"
 #include "Marker.h"
 
-namespace ultraschall { namespace reaper { namespace id3v2 {
+namespace ultraschall { namespace reaper { 
 
-Context* StartTransaction(const UnicodeString& targetName);
-bool     CommitTransaction(Context*& context);
-void     AbortTransaction(Context*& context);
+ID3V2Context* ID3V2StartTransaction(const UnicodeString& targetName);
+bool     ID3V2CommitTransaction(ID3V2Context*& context);
+void     ID3V2AbortTransaction(ID3V2Context*& context);
 
-bool RemoveFrames(Context* context, const UnicodeString& id);
-bool QueryChapterFrames(Context* context);
+bool ID3V2RemoveFrames(ID3V2Context* context, const UnicodeString& id);
+bool ID3V2RemoveAllFrames(ID3V2Context*);
+bool ID3V2QueryChapterFrames(ID3V2Context* context);
 
-bool InsertTextFrame(
-    Context* context, const UnicodeString& id, const UnicodeString& text, const CHAR_ENCODING encoding);
-bool InsertCommentsFrame(Context* context, const UnicodeString& id, const UnicodeString& text);
-bool InsertChapterFrame(
-    Context* context, const UnicodeString& id, const UnicodeString& text, const uint32_t startTime,
+bool ID3V2InsertTextFrame(
+    ID3V2Context* context, const UnicodeString& id, const UnicodeString& text, const CHAR_ENCODING encoding);
+bool ID3V2InsertCommentsFrame(ID3V2Context* context, const UnicodeString& text);
+bool ID3V2InsertChapterFrame(
+    ID3V2Context* context, const UnicodeString& id, const UnicodeString& text, const uint32_t startTime,
     const uint32_t endTime);
-bool InsertTableOfContentsFrame(Context* context, const UnicodeStringArray& tableOfContentsItems);
-bool InsertCoverPictureFrame(Context* context, const UnicodeString& image);
+bool ID3V2InsertTableOfContentsFrame(ID3V2Context* context, const UnicodeStringArray& tableOfContentsItems);
+bool ID3V2InsertCoverPictureFrame(ID3V2Context* context, const UnicodeString& image);
 
-}}} // namespace ultraschall::reaper::id3v2
+}} // namespace ultraschall::reaper::id3v2
 
 #endif // #ifndef __ULTRASCHALL_REAPER_ID3V2_H_INCL__

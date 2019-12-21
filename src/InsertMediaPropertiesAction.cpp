@@ -53,37 +53,52 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
     // caution! requires ConfigureSources() to be called beforehand
     PRECONDITION_RETURN(ValidateChapterMarkers(chapterMarkers_) == true, SERVICE_FAILURE);
 
-    ServiceStatus     status = SERVICE_FAILURE;
+    ServiceStatus       status = SERVICE_FAILURE;
     UINotificationStore supervisor;
-    size_t            errorCount = 0;
+    size_t              errorCount = 0;
 
     for(size_t i = 0; i < targets_.size(); i++)
     {
         ITagWriter* pTagWriter = TagWriterFactory::Create(targets_[i]);
         if(pTagWriter != 0)
         {
-            if(pTagWriter->InsertProperties(targets_[i], mediaProperties_) == false)
+            if(pTagWriter->Start(targets_[i]) == true)
             {
-                UnicodeStringStream os;
-                os << "Failed to insert tags into " << targets_[i] << ".";
-                supervisor.RegisterError(os.str());
-                errorCount++;
-            }
+                bool commit = false;
 
-            if(pTagWriter->InsertCoverImage(targets_[i], coverImage_) == false)
-            {
-                UnicodeStringStream os;
-                os << "Failed to insert cover image into " << targets_[i] << ".";
-                supervisor.RegisterError(os.str());
-                errorCount++;
-            }
+                if(pTagWriter->InsertProperties(targets_[i], mediaProperties_) == true)
+                {
+                    if(pTagWriter->InsertCoverImage(targets_[i], coverImage_) == true)
+                    {
+                        if(pTagWriter->InsertChapterMarkers(targets_[i], chapterMarkers_) == true)
+                        {
+                            commit = true;
+                        }
+                        else
+                        {
+                            UnicodeStringStream os;
+                            os << "Failed to insert chapter markers into " << targets_[i] << ".";
+                            supervisor.RegisterError(os.str());
+                            errorCount++;
+                        }
+                    }
+                    else
+                    {
+                        UnicodeStringStream os;
+                        os << "Failed to insert cover image into " << targets_[i] << ".";
+                        supervisor.RegisterError(os.str());
+                        errorCount++;
+                    }
+                }
+                else
+                {
+                    UnicodeStringStream os;
+                    os << "Failed to insert tags into " << targets_[i] << ".";
+                    supervisor.RegisterError(os.str());
+                    errorCount++;
+                }
 
-            if(pTagWriter->ReplaceChapterMarkers(targets_[i], chapterMarkers_) == false)
-            {
-                UnicodeStringStream os;
-                os << "Failed to insert chapter markers into " << targets_[i] << ".";
-                supervisor.RegisterError(os.str());
-                errorCount++;
+                pTagWriter->Stop(commit);
             }
 
             SafeRelease(pTagWriter);
@@ -107,9 +122,9 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
 
 bool InsertMediaPropertiesAction::ConfigureSources()
 {
-    bool              result = false;
+    bool                result = false;
     UINotificationStore supervisor;
-    size_t            invalidAssetCount = 0;
+    size_t              invalidAssetCount = 0;
 
     mediaProperties_.Clear();
     coverImage_.clear();
@@ -167,7 +182,7 @@ bool InsertMediaPropertiesAction::ConfigureTargets()
 
     if(targets_.empty() == true)
     {
-      // TODO: Wording seems to be inaccurate now
+        // TODO: Wording seems to be inaccurate now
         supervisor.RegisterWarning("Ultraschall can't find a suitable media file. Please select an alternative media "
                                    "file from the file selection dialog after closing this message.");
         FileDialog          fileDialog("Select audio file");

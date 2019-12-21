@@ -30,32 +30,32 @@
 #include "PictureManager.h"
 #include "StringUtilities.h"
 
-namespace ultraschall { namespace reaper { namespace id3v2 {
+namespace ultraschall { namespace reaper { 
 
-Context* StartTransaction(const UnicodeString& targetName)
+ID3V2Context* ID3V2StartTransaction(const UnicodeString& targetName)
 {
     PRECONDITION_RETURN(targetName.empty() == false, 0);
 
-    return new Context(targetName);
+    return new ID3V2Context(targetName);
 }
 
-bool CommitTransaction(Context*& context)
+bool ID3V2CommitTransaction(ID3V2Context*& context)
 {
     PRECONDITION_RETURN(context != 0, false);
     PRECONDITION_RETURN(context->Tags() != 0, false);
 
-    const bool success = context->Target()->save(taglib_mp3::File::ID3v2, true, 3);
+    const bool success = context->Target()->save(taglib_mp3::File::AllTags, true, 3);
     SafeDelete(context);
 
     return success;
 }
 
-void AbortTransaction(Context*& context)
+void ID3V2AbortTransaction(ID3V2Context*& context)
 {
     SafeDelete(context);
 }
 
-bool RemoveFrames(Context* context, const UnicodeString& id)
+bool ID3V2RemoveFrames(ID3V2Context* context, const UnicodeString& id)
 {
     PRECONDITION_RETURN(context != 0, false);
     PRECONDITION_RETURN(context->Tags() != 0, false);
@@ -69,17 +69,14 @@ bool RemoveFrames(Context* context, const UnicodeString& id)
     for(unsigned int i = 0; i < frames.size(); i++)
     {
         taglib_id3v2::Frame* frame = frames[i];
-        if(frame != 0)
-        {
-            selectedFrames.push_back(frame);
-        }
+        selectedFrames.push_back(frame);
     }
 
     if(selectedFrames.empty() == false)
     {
         for(size_t j = 0; j < selectedFrames.size(); j++)
         {
-            context->Tags()->removeFrame(selectedFrames[j]);
+            context->Tags()->removeFrame(selectedFrames[j], false);
         }
 
         success = true;
@@ -88,15 +85,41 @@ bool RemoveFrames(Context* context, const UnicodeString& id)
     return success;
 }
 
-bool InsertUTF16TextFrame(Context* context, const UnicodeString& id, const UnicodeString& text)
+bool ID3V2RemoveAllFrames(ID3V2Context* context)
+{
+    PRECONDITION_RETURN(context != 0, false);
+    PRECONDITION_RETURN(context->Tags() != 0, false);
+
+    bool success = false;
+
+    std::vector<taglib_id3v2::Frame*> selectedFrames;
+    taglib_id3v2::FrameList           frames = context->Tags()->frameList();
+    for(unsigned int i = 0; i < frames.size(); i++)
+    {
+        taglib_id3v2::Frame* frame = frames[i];
+        selectedFrames.push_back(frame);
+    }
+
+    if(selectedFrames.empty() == false)
+    {
+        for(size_t j = 0; j < selectedFrames.size(); j++)
+        {
+            context->Tags()->removeFrame(selectedFrames[j], false);
+        }
+
+        success = true;
+    }
+
+    return success;
+}
+
+bool InsertUTF16TextFrame(ID3V2Context* context, const UnicodeString& id, const UnicodeString& text)
 {
     PRECONDITION_RETURN(context != 0, false);
     PRECONDITION_RETURN(context->Tags() != 0, false);
     PRECONDITION_RETURN(id.size() == 4, false);
 
     bool success = false;
-
-    RemoveFrames(context, id.c_str());
 
     if(text.empty() == false)
     {
@@ -118,7 +141,7 @@ bool InsertUTF16TextFrame(Context* context, const UnicodeString& id, const Unico
     return success;
 }
 
-bool InsertUTF8TextFrame(Context* context, const UnicodeString& id, const UnicodeString& text)
+bool InsertUTF8TextFrame(ID3V2Context* context, const UnicodeString& id, const UnicodeString& text)
 {
     PRECONDITION_RETURN(context != 0, false);
     PRECONDITION_RETURN(context->Tags() != 0, false);
@@ -126,12 +149,10 @@ bool InsertUTF8TextFrame(Context* context, const UnicodeString& id, const Unicod
 
     bool success = false;
 
-    RemoveFrames(context, id.c_str());
-
     if(text.empty() == false)
     {
         taglib_id3v2::TextIdentificationFrame* textFrame = new taglib_id3v2::TextIdentificationFrame(
-            taglib::ByteVector::fromCString(id.c_str()), taglib::String::Type::Latin1);
+            taglib::ByteVector::fromCString(id.c_str()), taglib::String::Type::UTF8);
         if(textFrame != 0)
         {
             textFrame->setTextEncoding(taglib::String::Type::Latin1);
@@ -148,7 +169,7 @@ bool InsertUTF8TextFrame(Context* context, const UnicodeString& id, const Unicod
     return success;
 }
 
-bool InsertTextFrame(Context* context, const UnicodeString& id, const UnicodeString& text, const CHAR_ENCODING encoding)
+bool ID3V2InsertTextFrame(ID3V2Context* context, const UnicodeString& id, const UnicodeString& text, const CHAR_ENCODING encoding)
 {
     if(encoding == UTF16)
     {
@@ -160,15 +181,12 @@ bool InsertTextFrame(Context* context, const UnicodeString& id, const UnicodeStr
     }
 }
 
-bool InsertCommentsFrame(Context* context, const UnicodeString& id, const UnicodeString& text)
+bool ID3V2InsertCommentsFrame(ID3V2Context* context, const UnicodeString& text)
 {
     PRECONDITION_RETURN(context != 0, false);
     PRECONDITION_RETURN(context->Tags() != 0, false);
-    PRECONDITION_RETURN(id.empty() == false, false);
 
     bool success = false;
-
-    RemoveFrames(context, id.c_str());
 
     if(text.empty() == false)
     {
@@ -190,8 +208,8 @@ bool InsertCommentsFrame(Context* context, const UnicodeString& id, const Unicod
     return success;
 }
 
-bool InsertChapterFrame(
-    Context* context, const UnicodeString& id, const UnicodeString& text, const uint32_t startTime,
+bool ID3V2InsertChapterFrame(
+    ID3V2Context* context, const UnicodeString& id, const UnicodeString& text, const uint32_t startTime,
     const uint32_t endTime)
 {
     PRECONDITION_RETURN(context != 0, false);
@@ -202,8 +220,6 @@ bool InsertChapterFrame(
     PRECONDITION_RETURN(endTime != 0xffffffff, false);
 
     bool success = false;
-
-    RemoveFrames(context, "CHAP");
 
     const uint32_t              startOffset  = 0xffffffff;
     const uint32_t              endOffset    = 0xffffffff;
@@ -232,15 +248,13 @@ bool InsertChapterFrame(
     return success;
 }
 
-bool InsertTableOfContentsFrame(Context* context, const UnicodeStringArray& tableOfContentsItems)
+bool ID3V2InsertTableOfContentsFrame(ID3V2Context* context, const UnicodeStringArray& tableOfContentsItems)
 {
     PRECONDITION_RETURN(context != 0, false);
     PRECONDITION_RETURN(context->Tags() != 0, false);
     PRECONDITION_RETURN(tableOfContentsItems.empty() == false, false);
 
     bool success = false;
-
-    RemoveFrames(context, "CTOC");
 
     taglib::ByteVector                  tableOfContentsId = taglib::ByteVector::fromCString("toc");
     taglib_id3v2::TableOfContentsFrame* tableOfContentsFrame
@@ -261,15 +275,13 @@ bool InsertTableOfContentsFrame(Context* context, const UnicodeStringArray& tabl
     return success;
 }
 
-bool InsertCoverPictureFrame(Context* context, const UnicodeString& image)
+bool ID3V2InsertCoverPictureFrame(ID3V2Context* context, const UnicodeString& image)
 {
     PRECONDITION_RETURN(context != 0, false);
     PRECONDITION_RETURN(context->Tags() != 0, false);
     PRECONDITION_RETURN(image.empty() == false, false);
 
     bool success = false;
-
-    RemoveFrames(context, "APIC");
 
     taglib_id3v2::AttachedPictureFrame* pFrame = new taglib_id3v2::AttachedPictureFrame();
     if(pFrame != nullptr)
@@ -299,7 +311,7 @@ bool InsertCoverPictureFrame(Context* context, const UnicodeString& image)
     return success;
 }
 
-bool QueryChapterFrames(Context* pContext)
+bool ID3V2QueryChapterFrames(ID3V2Context* pContext)
 {
     PRECONDITION_RETURN(pContext != 0, false);
     PRECONDITION_RETURN(pContext->Tags() != 0, false);
@@ -362,4 +374,4 @@ bool QueryChapterFrames(Context* pContext)
     return true;
 }
 
-}}} // namespace ultraschall::reaper::id3v2
+}} // namespace ultraschall::reaper::id3v2

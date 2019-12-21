@@ -25,70 +25,96 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "ID3V2Writer.h"
+#include "ID3V2Context.h"
 #include "ID3V2.h"
 #include "StringUtilities.h"
 
 namespace ultraschall { namespace reaper {
 
+ID3V2Writer::~ID3V2Writer()
+{
+    SafeDelete(pContext_);
+}
+
+bool ID3V2Writer::Start(const UnicodeString& targetName)
+{
+    PRECONDITION_RETURN(targetName.empty() == false, false);
+    PRECONDITION_RETURN(pContext_ == nullptr, false);
+
+    bool contextStarted = false;
+
+    pContext_ = ID3V2StartTransaction(targetName);
+    if(pContext_ != nullptr)
+    {
+        ID3V2RemoveAllFrames(pContext_);
+        contextStarted = true;
+    }
+
+    return contextStarted;
+}
+
+void ID3V2Writer::Stop(const bool commit)
+{
+    PRECONDITION(pContext_ != nullptr);
+
+    if(true == commit)
+    {
+        ID3V2CommitTransaction(pContext_);
+    }
+    else
+    {
+        ID3V2AbortTransaction(pContext_);
+    }
+}
+
 bool ID3V2Writer::InsertProperties(const UnicodeString& targetName, const MediaProperties& standardProperties)
 {
     PRECONDITION_RETURN(targetName.empty() == false, false);
+    PRECONDITION_RETURN(pContext_ != nullptr, false);
 
-    bool            success = true;
-    id3v2::Context* context = id3v2::StartTransaction(targetName);
-    if(context != nullptr)
+    bool success = true;
+
+    const UnicodeString duration = UnicodeStringFromInt(pContext_->Duration());
+    const UnicodeString encoder = "ultraschall4";
+
+    static const size_t MAX_SIMPLE_FRAME_MAPPINGS  = 7;
+    static const size_t MAX_COMPLEX_FRAME_MAPPINGS = 1;
+
+    struct MAP_ULTRASCHALL_PROPERTIES_TO_REQUIRED_APPLE_TAGS
     {
-        const UnicodeString duration = UnicodeStringFromInt(context->Duration());
+        const UnicodeChar*   frameId;
+        const CHAR_ENCODING  targetEncoding;
+        const UnicodeString& text;
+    }
+    // clang-format off
+    simpleFrameMappings[MAX_SIMPLE_FRAME_MAPPINGS] =
+    {
+      {"TALB", UTF16, standardProperties.Podcast()}, 
+      {"TPE1", UTF16, standardProperties.Author()},
+      {"TIT2", UTF16, standardProperties.Episode()}, 
+      {"TCON", UTF16, standardProperties.Genre()},
+      {"TYER", UTF8,  standardProperties.Date()},   
+      {"TENC", UTF8,  encoder},   
+      {"TLEN", UTF8,  duration}
+    },
+    complexFrameMapping[MAX_COMPLEX_FRAME_MAPPINGS] =
+    {
+      {"COMM", UTF16, standardProperties.Comments()}
+    };
+    // clang-format on
 
-        static const size_t MAX_SIMPLE_FRAME_MAPPINGS  = 7;
-        static const size_t MAX_COMPLEX_FRAME_MAPPINGS = 1;
+    for(size_t i = 0; (i < MAX_SIMPLE_FRAME_MAPPINGS) && (true == success); i++)
+    {
+        success = ID3V2InsertTextFrame(
+            pContext_, simpleFrameMappings[i].frameId, simpleFrameMappings[i].text,
+            simpleFrameMappings[i].targetEncoding);
+    }
 
-        struct MAP_ULTRASCHALL_PROPERTIES_TO_REQUIRED_APPLE_TAGS
+    if(true == success)
+    {
+        for(size_t i = 0; (i < MAX_COMPLEX_FRAME_MAPPINGS) && (true == success); i++)
         {
-            const UnicodeChar*   frameId;
-            const CHAR_ENCODING  targetEncoding;
-            const UnicodeString& text;
-        }
-        // clang-format off
-        simpleFrameMappings[MAX_SIMPLE_FRAME_MAPPINGS] =
-        {
-          {"TALB", UTF16, standardProperties.Podcast()}, 
-          {"TPE1", UTF16, standardProperties.Author()},
-          {"TIT2", UTF16, standardProperties.Episode()}, 
-          {"TCON", UTF16, standardProperties.Genre()},
-          {"TYER", UTF8,  standardProperties.Date()},   
-          {"TLEN", UTF8,  duration},
-          {"TENC", UTF8,  "Ultraschall v4.0"}
-        },
-        complexFrameMapping[MAX_COMPLEX_FRAME_MAPPINGS] =
-        {
-          {"COMM", UTF16, standardProperties.Comments()}
-        };
-        // clang-format on
-
-        for(size_t i = 0; (i < MAX_SIMPLE_FRAME_MAPPINGS) && (true == success); i++)
-        {
-            success = id3v2::InsertTextFrame(
-                context, simpleFrameMappings[i].frameId, simpleFrameMappings[i].text,
-                simpleFrameMappings[i].targetEncoding);
-        }
-
-        if(true == success)
-        {
-            for(size_t i = 0; (i < MAX_COMPLEX_FRAME_MAPPINGS) && (true == success); i++)
-            {
-                success
-                    = id3v2::InsertCommentsFrame(context, complexFrameMapping[i].frameId, complexFrameMapping[i].text);
-            }
-        }
-
-        if(true == success)
-        {
-            success = id3v2::CommitTransaction(context);
-        }
-        else
-        {
-            id3v2::AbortTransaction(context);
+            success = ID3V2InsertCommentsFrame(pContext_, complexFrameMapping[i].text);
         }
     }
 
@@ -99,119 +125,39 @@ bool ID3V2Writer::InsertCoverImage(const UnicodeString& targetName, const Unicod
 {
     PRECONDITION_RETURN(targetName.empty() == false, false);
     PRECONDITION_RETURN(coverImage.empty() == false, false);
+    PRECONDITION_RETURN(pContext_ != nullptr, false);
 
-    bool success = false;
-
-    id3v2::Context* context = id3v2::StartTransaction(targetName);
-    if(context != 0)
-    {
-        success = id3v2::InsertCoverPictureFrame(context, coverImage);
-        if(true == success)
-        {
-            success = id3v2::CommitTransaction(context);
-        }
-        else
-        {
-            id3v2::AbortTransaction(context);
-        }
-    }
-
-    return success;
+    return ID3V2InsertCoverPictureFrame(pContext_, coverImage);
 }
 
 bool ID3V2Writer::InsertChapterMarkers(const UnicodeString& targetName, const MarkerArray& chapterMarkers)
 {
     PRECONDITION_RETURN(targetName.empty() == false, false);
     PRECONDITION_RETURN(chapterMarkers.empty() == false, false);
+    PRECONDITION_RETURN(pContext_ != nullptr, false);
+    PRECONDITION_RETURN(pContext_->Duration() > 0, false);
 
     bool success = false;
 
-    id3v2::Context* context = id3v2::StartTransaction(targetName);
-    if(context != nullptr)
+    UnicodeStringArray tableOfContentsItems;
+    success = true;
+    for(size_t i = 0; (i < chapterMarkers.size()) && (true == success); i++)
     {
-        PRECONDITION_RETURN(context->Duration() > 0, false);
+        std::stringstream chapterId;
+        chapterId << "chp" << i;
+        UnicodeString tableOfContensItem = chapterId.str();
+        tableOfContentsItems.push_back(tableOfContensItem);
 
-        id3v2::QueryChapterFrames(context);
-
-        UnicodeStringArray tableOfContentsItems;
-        success = true;
-        for(size_t i = 0; (i < chapterMarkers.size()) && (true == success); i++)
-        {
-            std::stringstream chapterId;
-            chapterId << "chp" << i;
-            UnicodeString tableOfContensItem = chapterId.str();
-            tableOfContentsItems.push_back(tableOfContensItem);
-
-            const uint32_t startTime = static_cast<uint32_t>(chapterMarkers[i].Position() * 1000);
-            const uint32_t endTime   = (i < (chapterMarkers.size() - 1)) ?
-                                         static_cast<uint32_t>(chapterMarkers[i + 1].Position() * 1000) :
-                                         context->Duration();
-            success
-                = id3v2::InsertChapterFrame(context, tableOfContensItem, chapterMarkers[i].Name(), startTime, endTime);
-        }
-
-        if(true == success)
-        {
-            success = id3v2::InsertTableOfContentsFrame(context, tableOfContentsItems);
-        }
-
-        if(true == success)
-        {
-            success = id3v2::CommitTransaction(context);
-        }
-        else
-        {
-            id3v2::AbortTransaction(context);
-        }
+        const uint32_t startTime = static_cast<uint32_t>(chapterMarkers[i].Position() * 1000);
+        const uint32_t endTime   = (i < (chapterMarkers.size() - 1)) ?
+                                     static_cast<uint32_t>(chapterMarkers[i + 1].Position() * 1000) :
+                                     pContext_->Duration();
+        success = ID3V2InsertChapterFrame(pContext_, tableOfContensItem, chapterMarkers[i].Name(), startTime, endTime);
     }
 
-    return success;
-}
-
-bool ID3V2Writer::ReplaceChapterMarkers(const UnicodeString& targetName, const MarkerArray& chapterMarkers)
-{
-    PRECONDITION_RETURN(targetName.empty() == false, false);
-    PRECONDITION_RETURN(chapterMarkers.empty() == false, false);
-
-    bool success = false;
-
-    id3v2::Context* context = id3v2::StartTransaction(targetName);
-    if(context != 0)
+    if(true == success)
     {
-        id3v2::QueryChapterFrames(context);
-
-        id3v2::RemoveFrames(context, "CHAP");
-
-        UnicodeStringArray tableOfContentsItems;
-        success = true;
-        for(size_t i = 0; (i < chapterMarkers.size()) && (true == success); i++)
-        {
-            std::stringstream chapterId;
-            chapterId << "chp" << i;
-            UnicodeString tableOfContensItem = chapterId.str();
-            tableOfContentsItems.push_back(tableOfContensItem);
-
-            const uint32_t startTime = static_cast<uint32_t>(chapterMarkers[i].Position() * 1000);
-            const uint32_t endTime   = (i < (chapterMarkers.size() - 1)) ?
-                                         static_cast<uint32_t>(chapterMarkers[i + 1].Position() * 1000) :
-                                         context->Duration();
-            success
-                = id3v2::InsertChapterFrame(context, tableOfContensItem, chapterMarkers[i].Name(), startTime, endTime);
-        }
-
-        if(true == success)
-        {
-            success = id3v2::InsertTableOfContentsFrame(context, tableOfContentsItems);
-        }
-
-        if(true == success)
-        {
-            success = id3v2::CommitTransaction(context);
-        }
-        else
-        {
-            id3v2::AbortTransaction(context);
-        }
+        success = ID3V2InsertTableOfContentsFrame(pContext_, tableOfContentsItems);
     }
 
     return success;

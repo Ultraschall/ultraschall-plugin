@@ -26,9 +26,9 @@
 
 #include "ID3V2Context.h"
 
-namespace ultraschall { namespace reaper { namespace id3v2 {
+namespace ultraschall { namespace reaper { 
 
-Context::Context(const UnicodeString& targetName) : target_(new taglib_mp3::File(targetName.c_str())), tags_(nullptr)
+ID3V2Context::ID3V2Context(const UnicodeString& targetName) : target_(new taglib_mp3::File(targetName.c_str())), tags_(nullptr)
 {
     if(target_->isOpen() == true)
     {
@@ -41,10 +41,10 @@ Context::Context(const UnicodeString& targetName) : target_(new taglib_mp3::File
     }
 }
 
-Context::~Context()
+ID3V2Context::~ID3V2Context()
 {
     tags_ = nullptr;
     SafeDelete(target_);
 }
 
-}}} // namespace ultraschall::reaper::id3v2
+}} // namespace ultraschall::reaper::id3v2

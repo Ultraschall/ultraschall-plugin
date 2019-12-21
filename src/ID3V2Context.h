@@ -31,13 +31,13 @@
 
 #include "taglib_include.h"
 
-namespace ultraschall { namespace reaper { namespace id3v2 {
+namespace ultraschall { namespace reaper { 
 
-class Context
+class ID3V2Context
 {
 public:
-    Context(const UnicodeString& targetName);
-    virtual ~Context();
+    ID3V2Context(const UnicodeString& targetName);
+    virtual ~ID3V2Context();
 
     inline bool IsValid() const;
 
@@ -50,30 +50,30 @@ private:
     taglib_id3v2::Tag* tags_   = nullptr;
     uint32_t duration_ = -1;
 
-    Context(const Context&) = delete;
-    Context& operator=(const Context&) = delete;
+    ID3V2Context(const ID3V2Context&) = delete;
+    ID3V2Context& operator=(const ID3V2Context&) = delete;
 };
 
-inline bool Context::IsValid() const
+inline bool ID3V2Context::IsValid() const
 {
     return (target_ != nullptr) && (tags_ != nullptr);
 }
 
-inline taglib_mp3::File* Context::Target()
+inline taglib_mp3::File* ID3V2Context::Target()
 {
     return target_;
 }
 
-inline taglib_id3v2::Tag* Context::Tags()
+inline taglib_id3v2::Tag* ID3V2Context::Tags()
 {
     return tags_;
 }
 
-inline uint32_t Context::Duration() const 
+inline uint32_t ID3V2Context::Duration() const 
 {
   return duration_;
 }
 
-}}} // namespace ultraschall::reaper::id3v2
+}} // namespace ultraschall::reaper::id3v2
 
 #endif // #ifndef __ULTRASCHALL_REAPER_ID3V2_CONTEXT_H_INCL__

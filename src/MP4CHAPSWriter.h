@@ -35,13 +35,15 @@ namespace ultraschall { namespace reaper {
 class MP4CHAPSWriter : public ITagWriter
 {
 public:
+    virtual bool Start(const UnicodeString& targetName);
+
+    virtual void Stop(const bool commit);
+
     virtual bool InsertProperties(const UnicodeString& targetName, const MediaProperties& standardProperties);
 
     virtual bool InsertCoverImage(const UnicodeString& targetName, const UnicodeString& coverImage);
 
     virtual bool InsertChapterMarkers(const UnicodeString& targetName, const MarkerArray& chapterMarkers);
-
-    virtual bool ReplaceChapterMarkers(const UnicodeString& targetName, const MarkerArray& chapterMarkers);
 
 protected:
     virtual ~MP4CHAPSWriter() {}

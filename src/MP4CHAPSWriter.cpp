@@ -29,6 +29,14 @@
 
 namespace ultraschall { namespace reaper {
 
+bool MP4CHAPSWriter::Start(const UnicodeString& targetName) 
+{
+  return false;
+}
+
+void MP4CHAPSWriter::Stop(const bool commit)
+{}
+
 bool MP4CHAPSWriter::InsertProperties(const UnicodeString& targetName, const MediaProperties& standardProperties)
 {
     return true;
@@ -47,11 +55,6 @@ bool MP4CHAPSWriter::InsertChapterMarkers(const UnicodeString& targetName, const
     bool success = false;
 
     return success;
-}
-
-bool MP4CHAPSWriter::ReplaceChapterMarkers(const UnicodeString& targetName, const MarkerArray& chapterMarkers)
-{
-    return InsertChapterMarkers(targetName, chapterMarkers);
 }
 
 }} // namespace ultraschall::reaper

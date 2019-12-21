@@ -38,13 +38,15 @@ namespace ultraschall { namespace reaper {
 class ITagWriter : public SharedObject
 {
 public:
+    virtual bool Start(const UnicodeString& targetName) = 0;
+
+    virtual void Stop(const bool commit) = 0;
+
     virtual bool InsertProperties(const UnicodeString& targetName, const MediaProperties& standardProperties) = 0;
 
     virtual bool InsertCoverImage(const UnicodeString& targetName, const UnicodeString& coverImage) = 0;
 
     virtual bool InsertChapterMarkers(const UnicodeString& targetName, const MarkerArray& chapterMarkers) = 0;
-
-    virtual bool ReplaceChapterMarkers(const UnicodeString& targetName, const MarkerArray& chapterMarkers) = 0;
 
 protected:
     virtual ~ITagWriter() {}

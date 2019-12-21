@@ -32,19 +32,25 @@
 
 namespace ultraschall { namespace reaper {
 
+class ID3V2Context;
+
 class ID3V2Writer : public ITagWriter
 {
 public:
+    virtual bool Start(const UnicodeString& targetName);
+
+    virtual void Stop(const bool commit);
+
     virtual bool InsertProperties(const UnicodeString& targetName, const MediaProperties& standardProperties);
 
     virtual bool InsertCoverImage(const UnicodeString& targetName, const UnicodeString& coverImage);
 
     virtual bool InsertChapterMarkers(const UnicodeString& targetName, const MarkerArray& chapterMarkers);
 
-    virtual bool ReplaceChapterMarkers(const UnicodeString& targetName, const MarkerArray& chapterMarkers);
-
 protected:
-    virtual ~ID3V2Writer() {}
+    virtual ~ID3V2Writer();
+
+    ID3V2Context* pContext_ = nullptr;
 };
 
 }} // namespace ultraschall::reaper
