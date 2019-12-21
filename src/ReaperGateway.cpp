@@ -254,7 +254,7 @@ UnicodeString ReaperGateway::QueryProjectPath(ProjectReference projectReference)
     {
         if(externalReference == nativeReference)
         {
-            projectPath = H2U(buffer);
+            projectPath = buffer;
         }
 
         externalReference = (ProjectReference)reaper_api::EnumProjects(index++, buffer, MAX_REAPER_STRING_BUFFER_SIZE);
