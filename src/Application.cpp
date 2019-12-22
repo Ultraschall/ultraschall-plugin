@@ -29,7 +29,7 @@
 #include "FileManager.h"
 #include "StringUtilities.h"
 #include "SystemProperties.h"
-#include "UINotificationStore.h"
+#include "NotificationStore.h"
 #include "UpdateCheck.h"
 
 namespace ultraschall { namespace reaper {

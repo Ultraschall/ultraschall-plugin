@@ -24,16 +24,16 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "UINotificationStore.h"
+#include "NotificationStore.h"
 #include "SystemProperties.h"
 
 namespace ultraschall { namespace reaper {
 
-const UnicodeString UINotificationStore::NOTIFICATION_SECTION_NAME("ultraschall_messages");
+const UnicodeString NotificationStore::NOTIFICATION_SECTION_NAME("ultraschall_messages");
 
-UINotificationStore::UINotificationStore() : projectReference_(ReaperGateway::QueryCurrentProject()) {}
+NotificationStore::NotificationStore() : projectReference_(ReaperGateway::QueryCurrentProject()) {}
 
-UINotificationStore::~UINotificationStore()
+NotificationStore::~NotificationStore()
 {
     DispatchNotifications();
 
@@ -41,12 +41,12 @@ UINotificationStore::~UINotificationStore()
     projectReference_ = nullptr;
 }
 
-void UINotificationStore::RegisterNotification(const UINotificationClass severity, const UnicodeString& str)
+void NotificationStore::RegisterNotification(const NotificationClass severity, const UnicodeString& str)
 {
     messageQueue_.Add(severity, str);
 }
 
-void UINotificationStore::DispatchNotifications()
+void NotificationStore::DispatchNotifications()
 {
     PRECONDITION(projectReference_ != nullptr);
     PRECONDITION(messageQueue_.ItemCount() > 0);
@@ -54,7 +54,7 @@ void UINotificationStore::DispatchNotifications()
     const size_t messageCount = messageQueue_.ItemCount();
     SystemProperty<int>::Set(NOTIFICATION_SECTION_NAME, "message_count", (int)messageCount);
 
-    const UINotificationArray& messages_ = messageQueue_.Items();
+    const NotificationArray& messages_ = messageQueue_.Items();
     for(size_t i = 0; i < messages_.size(); ++i)
     {
         UnicodeStringStream is;
@@ -64,14 +64,14 @@ void UINotificationStore::DispatchNotifications()
         is.clear();
         switch(messages_[i].Severity())
         {
-            case UINotificationClass::NOTIFICATION_SUCCESS:
+            case NotificationClass::NOTIFICATION_SUCCESS:
                 is << "+";
                 break;
-            case UINotificationClass::NOTIFICATION_WARNING:
+            case NotificationClass::NOTIFICATION_WARNING:
                 is << "!";
                 break;
-            case UINotificationClass::NOTIFICATION_FATAL_ERROR:
-            case UINotificationClass::NOTIFICATION_ERROR:
+            case NotificationClass::NOTIFICATION_FATAL_ERROR:
+            case NotificationClass::NOTIFICATION_ERROR:
                 is << "-";
                 break;
             default:
@@ -86,7 +86,7 @@ void UINotificationStore::DispatchNotifications()
     }
 }
 
-void UINotificationStore::DisplayNotifications()
+void NotificationStore::DisplayNotifications()
 {
     // TODO: Call LUA action
 }

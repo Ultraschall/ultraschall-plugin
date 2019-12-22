@@ -26,7 +26,7 @@
 
 #include "SystemProperties.h"
 #include "StringUtilities.h"
-#include "UINotificationStore.h"
+#include "NotificationStore.h"
 
 namespace ultraschall { namespace reaper {
 

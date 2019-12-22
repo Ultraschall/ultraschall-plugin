@@ -75,10 +75,10 @@ set(COMMON_INCLUDES
   taglib_include.h
   TagReaderFactory.h
   TagWriterFactory.h
-  UINotification.h
-  UINotificationClass.h
-  UINotificationQueue.h
-  UINotificationStore.h
+  Notification.h
+  NotificationClass.h
+  NotificationQueue.h
+  NotificationStore.h
   UpdateCheck.h
   UnicodeString.h
 )
@@ -109,9 +109,9 @@ set(COMMON_SOURCES
   SystemProperties.cpp
   TagReaderFactory.cpp
   TagWriterFactory.cpp
-  UINotification.cpp
-  UINotificationQueue.cpp
-  UINotificationStore.cpp
+  Notification.cpp
+  NotificationQueue.cpp
+  NotificationStore.cpp
   UpdateCheck.cpp
   UnicodeString.cpp
   reaper_ultraschall.cpp

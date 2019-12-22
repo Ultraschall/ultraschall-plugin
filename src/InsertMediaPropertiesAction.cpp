@@ -36,7 +36,7 @@
 #include "TagWriterFactory.h"
 #include "TimeUtilities.h"
 #include "FileDialog.h"
-#include "UINotificationStore.h"
+#include "NotificationStore.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -53,7 +53,7 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
     PRECONDITION_RETURN(AreChapterMarkersValid(chapterMarkers_) == true, SERVICE_FAILURE);
 
     ServiceStatus       status = SERVICE_FAILURE;
-    UINotificationStore supervisor;
+    NotificationStore supervisor;
     size_t              errorCount = 0;
 
     for(size_t i = 0; i < targets_.size(); i++)
@@ -122,7 +122,7 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
 bool InsertMediaPropertiesAction::ConfigureSources()
 {
     bool                result = false;
-    UINotificationStore supervisor;
+    NotificationStore supervisor;
 
     mediaProperties_.Clear();
     coverImage_.clear();
@@ -163,7 +163,7 @@ bool InsertMediaPropertiesAction::ConfigureSources()
 
 bool InsertMediaPropertiesAction::ConfigureTargets()
 {
-    UINotificationStore supervisor;
+    NotificationStore supervisor;
 
     targets_.clear();
 

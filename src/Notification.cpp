@@ -24,10 +24,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "UINotification.h"
+#include "Notification.h"
 
 namespace ultraschall { namespace reaper {
 
-UINotification::UINotification(const UINotificationClass severity, const UnicodeString& str) : severity_(severity), str_(str) {}
+Notification::Notification(const NotificationClass severity, const UnicodeString& str) : severity_(severity), str_(str) {}
 
 }} // namespace ultraschall::reaper

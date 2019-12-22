@@ -29,7 +29,7 @@
 #include "StringUtilities.h"
 #include "FileManager.h"
 #include "FileDialog.h"
-#include "UINotificationStore.h"
+#include "NotificationStore.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -44,7 +44,7 @@ ServiceStatus SaveChapterMarkersAction::Execute()
     PRECONDITION_RETURN(AreChapterMarkersValid(chapterMarkers_) == true, SERVICE_FAILURE);
 
     ServiceStatus       status = SERVICE_FAILURE;
-    UINotificationStore supervisor;
+    NotificationStore supervisor;
 
     std::ostringstream os;
     for(size_t i = 0; i < chapterMarkers_.size(); i++)
@@ -69,7 +69,7 @@ ServiceStatus SaveChapterMarkersAction::Execute()
 bool SaveChapterMarkersAction::ConfigureTargets()
 {
     bool                result = false;
-    UINotificationStore supervisor;
+    NotificationStore supervisor;
 
     target_.clear();
 
@@ -91,7 +91,7 @@ bool SaveChapterMarkersAction::ConfigureTargets()
 bool SaveChapterMarkersAction::ConfigureSources()
 {
     bool                result = false;
-    UINotificationStore supervisor;
+    NotificationStore supervisor;
 
     ReaperProject currentProject = ReaperProject::Current();
     chapterMarkers_              = currentProject.AllMarkers();

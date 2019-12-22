@@ -29,7 +29,7 @@
 #include "FileManager.h"
 #include "StringUtilities.h"
 #include "FileDialog.h"
-#include "UINotificationStore.h"
+#include "NotificationStore.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -45,7 +45,7 @@ ServiceStatus InsertChapterMarkersAction::Execute()
     PRECONDITION_RETURN(AreChapterMarkersValid(chapterMarkers_) == true, SERVICE_FAILURE);
 
     ServiceStatus       status = SERVICE_FAILURE;
-    UINotificationStore supervisor;
+    NotificationStore supervisor;
 
     ReaperProject         currentProject = ReaperProject::Current();
     size_t addedTags = 0;
@@ -76,7 +76,7 @@ ServiceStatus InsertChapterMarkersAction::Execute()
 
 bool InsertChapterMarkersAction::ConfigureTargets()
 {
-    UINotificationStore supervisor;
+    NotificationStore supervisor;
     MarkerArray         chapterMarkers;
 
     FileManager::FILE_TYPE mediaType = FileManager::QueryFileType(source_);
@@ -113,7 +113,7 @@ MarkerArray InsertChapterMarkersAction::ReadTextFile(const UnicodeString& filena
 {
     PRECONDITION_RETURN(filename.empty() == false, MarkerArray());
 
-    UINotificationStore supervisor;
+    NotificationStore supervisor;
     MarkerArray         chapterMarkers;
 
     const UnicodeStringArray lines = FileManager::ReadTextFile(filename);
@@ -169,7 +169,7 @@ MarkerArray InsertChapterMarkersAction::ReadMP3File(const UnicodeString& filenam
 {
     PRECONDITION_RETURN(filename.empty() == false, MarkerArray());
 
-    UINotificationStore supervisor;
+    NotificationStore supervisor;
     MarkerArray         chapterMarkers;
 
     return chapterMarkers;

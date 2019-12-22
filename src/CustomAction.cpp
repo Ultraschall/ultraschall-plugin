@@ -27,7 +27,7 @@
 #include "CustomAction.h"
 #include "FileManager.h"
 #include "StringUtilities.h"
-#include "UINotificationStore.h"
+#include "NotificationStore.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -38,7 +38,7 @@ bool CustomAction::IsValidCustomActionId(const int32_t id)
 
 bool CustomAction::HasValidProject()
 {
-    UINotificationStore supervisor;
+    NotificationStore supervisor;
 
     const bool isValid = (CurrentProjectDirectory().empty() == false) && (CurrentProjectName().empty() == false);
     if(isValid == false)
@@ -82,7 +82,7 @@ bool CustomAction::AreChapterMarkersValid(const MarkerArray& markers)
 {
     PRECONDITION_RETURN(HasValidProject() == true, false);
 
-    UINotificationStore supervisor;
+    NotificationStore supervisor;
 
     bool valid = true;
 

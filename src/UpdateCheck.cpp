@@ -35,7 +35,7 @@
 #include "Platform.h"
 #include "StringUtilities.h"
 #include "SystemProperties.h"
-#include "UINotificationStore.h"
+#include "NotificationStore.h"
 #include "UpdateCheck.h"
 
 namespace ultraschall { namespace reaper {
@@ -136,7 +136,7 @@ void UpdateCheck()
                         UnicodeStringTrim(remoteVersion);
                         if(remoteVersion > ULTRASCHALL_VERSION)
                         {
-                            UINotificationStore supervisor;
+                            NotificationStore supervisor;
                             std::string         message = "An update for Ultraschall is available. Go to "
                                                   "https://ultraschall.fm/install to download the updated version ";
                             message += remoteVersion + ".";

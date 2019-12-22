@@ -28,16 +28,16 @@
 #define __ULTRASCHALL_REAPER_UI_NOTIFICATION_STORE_H_INCL__
 
 #include "Common.h"
-#include "UINotificationClass.h"
-#include "UINotificationQueue.h"
+#include "NotificationClass.h"
+#include "NotificationQueue.h"
 
 namespace ultraschall { namespace reaper {
 
-class UINotificationStore
+class NotificationStore
 {
 public:
-    UINotificationStore();
-    ~UINotificationStore();
+    NotificationStore();
+    ~NotificationStore();
 
     inline void RegisterSuccess(const UnicodeString& str);
     inline void RegisterWarning(const UnicodeString& str);
@@ -47,32 +47,32 @@ public:
 private:
     static const UnicodeString NOTIFICATION_SECTION_NAME;
 
-    void RegisterNotification(const UINotificationClass severity, const UnicodeString& str);
+    void RegisterNotification(const NotificationClass severity, const UnicodeString& str);
     void DispatchNotifications();
     void DisplayNotifications();
 
-    UINotificationQueue messageQueue_;
+    NotificationQueue messageQueue_;
     void*               projectReference_;
 };
 
-inline void UINotificationStore::RegisterSuccess(const UnicodeString& str)
+inline void NotificationStore::RegisterSuccess(const UnicodeString& str)
 {
-    RegisterNotification(UINotificationClass::NOTIFICATION_SUCCESS, str);
+    RegisterNotification(NotificationClass::NOTIFICATION_SUCCESS, str);
 }
 
-inline void UINotificationStore::RegisterWarning(const UnicodeString& str)
+inline void NotificationStore::RegisterWarning(const UnicodeString& str)
 {
-    RegisterNotification(UINotificationClass::NOTIFICATION_WARNING, str);
+    RegisterNotification(NotificationClass::NOTIFICATION_WARNING, str);
 }
 
-inline void UINotificationStore::RegisterError(const UnicodeString& str)
+inline void NotificationStore::RegisterError(const UnicodeString& str)
 {
-    RegisterNotification(UINotificationClass::NOTIFICATION_ERROR, str);
+    RegisterNotification(NotificationClass::NOTIFICATION_ERROR, str);
 }
 
-inline void UINotificationStore::RegisterFatalError(const UnicodeString& str)
+inline void NotificationStore::RegisterFatalError(const UnicodeString& str)
 {
-    RegisterNotification(UINotificationClass::NOTIFICATION_FATAL_ERROR, str);
+    RegisterNotification(NotificationClass::NOTIFICATION_FATAL_ERROR, str);
 }
 
 }} // namespace ultraschall::reaper

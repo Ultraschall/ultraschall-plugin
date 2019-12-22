@@ -24,35 +24,35 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_UI_NOTIFICATION_QUEUE_H_INCL__
-#define __ULTRASCHALL_REAPER_UI_NOTIFICATION_QUEUE_H_INCL__
+#ifndef __ULTRASCHALL_REAPER_NOTIFICATION_QUEUE_H_INCL__
+#define __ULTRASCHALL_REAPER_NOTIFICATION_QUEUE_H_INCL__
 
 #include "Common.h"
-#include "UINotification.h"
+#include "Notification.h"
 
 namespace ultraschall { namespace reaper {
 
-class UINotificationQueue
+class NotificationQueue
 {
 public:
-    UINotificationQueue();
-    ~UINotificationQueue();
+    NotificationQueue();
+    ~NotificationQueue();
 
-    void Add(const UINotification& message);
-    void Add(const UINotificationClass severity, const UnicodeString& str);
+    void Add(const Notification& message);
+    void Add(const NotificationClass severity, const UnicodeString& str);
     void Clear();
 
-    const UINotificationArray& Items() const;
+    const NotificationArray& Items() const;
     size_t                     ItemCount() const;
 
 private:
-    UINotificationQueue(const UINotificationQueue&) = delete;
-    UINotificationQueue& operator=(const UINotificationQueue&) = delete;
+    NotificationQueue(const NotificationQueue&) = delete;
+    NotificationQueue& operator=(const NotificationQueue&) = delete;
 
-    UINotificationArray  items_;
+    NotificationArray  items_;
     std::recursive_mutex itemsLock_;
 };
 
 }} // namespace ultraschall::reaper
 
-#endif // #ifndef __ULTRASCHALL_REAPER_UI_NOTIFICATION_QUEUE_H_INCL__
+#endif // #ifndef __ULTRASCHALL_REAPER_NOTIFICATION_QUEUE_H_INCL__
