@@ -27,7 +27,6 @@
 #include "ReaperEntryPoints.h"
 
 #include "Application.h"
-#include "ReaperProjectManager.h"
 
 namespace reaper_api {
 HWND (*GetMainHwnd)();

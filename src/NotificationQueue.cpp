@@ -24,46 +24,38 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_UI_NOTIFICATION_H_INCL__
-#define __ULTRASCHALL_REAPER_UI_NOTIFICATION_H_INCL__
-
-#include "Common.h"
-#include "UINotificationClass.h"
+#include "NotificationQueue.h"
 
 namespace ultraschall { namespace reaper {
 
-class UINotification
+NotificationQueue::NotificationQueue() {}
+
+NotificationQueue::~NotificationQueue() {}
+
+void NotificationQueue::Add(const Notification& message)
 {
-public:
-    UINotification(const UINotificationClass severity, const UnicodeString& str);
-
-    inline UINotificationClass  Severity() const;
-    inline const UnicodeString& Str() const;
-
-    inline bool IsValid() const;
-
-private:
-    const UINotificationClass severity_ = UINotificationClass::INVALID_NOTIFICATION_CLASS;
-    const UnicodeString       str_;
-};
-
-inline UINotificationClass UINotification::Severity() const
-{
-    return severity_;
+    std::lock_guard<std::recursive_mutex> lock(itemsLock_);
+    items_.push_back(message);
 }
 
-inline const UnicodeString& UINotification::Str() const
+void NotificationQueue::Add(const NotificationClass severity, const UnicodeString& str)
 {
-    return str_;
+    Add(Notification(severity, str));
 }
 
-inline bool UINotification::IsValid() const
+void NotificationQueue::Clear()
 {
-    return (Str().empty() == false) && (Severity() != UINotificationClass::INVALID_NOTIFICATION_CLASS);
+    items_.clear();
 }
 
-typedef std::vector<UINotification> UINotificationArray;
+const NotificationArray& NotificationQueue::Items() const
+{
+    return items_;
+}
+
+size_t NotificationQueue::ItemCount() const
+{
+    return items_.size();
+}
 
 }} // namespace ultraschall::reaper
-
-#endif // #ifndef __ULTRASCHALL_REAPER_UI_NOTIFICATION_H_INCL__

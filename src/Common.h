@@ -55,6 +55,7 @@
 #include <ctime>
 
 #include "Malloc.h"
+#include "Globals.h"
 #include "ServiceStatus.h"
 #include "SharedObject.h"
 #include "UnicodeString.h"

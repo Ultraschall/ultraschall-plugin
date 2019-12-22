@@ -43,6 +43,7 @@ set(COMMON_INCLUDES
   CustomActionManager.h
   FileDialog.h
   FileManager.h
+  Globals.h
   ICommand.h
   ICustomAction.h
   ID3V2.h
@@ -56,13 +57,12 @@ set(COMMON_INCLUDES
   SharedObject.h
   Malloc.h
   Marker.h
-  MediaProperties.h
+#  MediaProperties.h
   MP4CHAPSReader.h
   MP4CHAPSWriter.h
-  PictureManager.h
+  Picture.h
   Platform.h
   ReaperProject.h
-  ReaperProjectManager.h
   reaper_plugin_functions.h
   ReaperEntryPoints.h
   ReaperGateway.h
@@ -75,10 +75,10 @@ set(COMMON_INCLUDES
   taglib_include.h
   TagReaderFactory.h
   TagWriterFactory.h
-  UINotification.h
-  UINotificationClass.h
-  UINotificationQueue.h
-  UINotificationStore.h
+  Notification.h
+  NotificationClass.h
+  NotificationQueue.h
+  NotificationStore.h
   UpdateCheck.h
   UnicodeString.h
 )
@@ -96,12 +96,11 @@ set(COMMON_SOURCES
   ID3V2Writer.cpp
   InsertChapterMarkersAction.cpp
   InsertMediaPropertiesAction.cpp
-  MediaProperties.cpp
+ # MediaProperties.cpp
   MP4CHAPSReader.cpp
   MP4CHAPSWriter.cpp
-  PictureManager.cpp
+  Picture.cpp
   ReaperProject.cpp
-  ReaperProjectManager.cpp
   ReaperEntryPoints.cpp
   ReaperGateway.cpp
   SaveChapterMarkersAction.cpp
@@ -110,9 +109,9 @@ set(COMMON_SOURCES
   SystemProperties.cpp
   TagReaderFactory.cpp
   TagWriterFactory.cpp
-  UINotification.cpp
-  UINotificationQueue.cpp
-  UINotificationStore.cpp
+  Notification.cpp
+  NotificationQueue.cpp
+  NotificationStore.cpp
   UpdateCheck.cpp
   UnicodeString.cpp
   reaper_ultraschall.cpp

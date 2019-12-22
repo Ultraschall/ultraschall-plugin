@@ -27,10 +27,9 @@
 #include "InsertChapterMarkersAction.h"
 #include "CustomActionFactory.h"
 #include "FileManager.h"
-#include "ReaperProjectManager.h"
 #include "StringUtilities.h"
 #include "FileDialog.h"
-#include "UINotificationStore.h"
+#include "NotificationStore.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -38,19 +37,17 @@ static DeclareCustomAction<InsertChapterMarkersAction> action;
 
 ServiceStatus InsertChapterMarkersAction::Execute()
 {
-    PRECONDITION_RETURN(ValidateProject() == true, SERVICE_FAILURE);
+    PRECONDITION_RETURN(HasValidProject() == true, SERVICE_FAILURE);
 
     PRECONDITION_RETURN(ConfigureSources() == true, SERVICE_FAILURE);
     PRECONDITION_RETURN(ConfigureTargets() == true, SERVICE_FAILURE);
 
-    PRECONDITION_RETURN(ValidateChapterMarkers(chapterMarkers_) == true, SERVICE_FAILURE);
+    PRECONDITION_RETURN(AreChapterMarkersValid(chapterMarkers_) == true, SERVICE_FAILURE);
 
     ServiceStatus       status = SERVICE_FAILURE;
-    UINotificationStore supervisor;
+    NotificationStore supervisor;
 
-    ReaperProjectManager& projectManager = ReaperProjectManager::Instance();
-    ReaperProject         currentProject = projectManager.CurrentProject();
-
+    ReaperProject         currentProject = ReaperProject::Current();
     size_t addedTags = 0;
     for(size_t i = 0; i < chapterMarkers_.size(); i++)
     {
@@ -79,7 +76,7 @@ ServiceStatus InsertChapterMarkersAction::Execute()
 
 bool InsertChapterMarkersAction::ConfigureTargets()
 {
-    UINotificationStore supervisor;
+    NotificationStore supervisor;
     MarkerArray         chapterMarkers;
 
     FileManager::FILE_TYPE mediaType = FileManager::QueryFileType(source_);
@@ -116,7 +113,7 @@ MarkerArray InsertChapterMarkersAction::ReadTextFile(const UnicodeString& filena
 {
     PRECONDITION_RETURN(filename.empty() == false, MarkerArray());
 
-    UINotificationStore supervisor;
+    NotificationStore supervisor;
     MarkerArray         chapterMarkers;
 
     const UnicodeStringArray lines = FileManager::ReadTextFile(filename);
@@ -172,7 +169,7 @@ MarkerArray InsertChapterMarkersAction::ReadMP3File(const UnicodeString& filenam
 {
     PRECONDITION_RETURN(filename.empty() == false, MarkerArray());
 
-    UINotificationStore supervisor;
+    NotificationStore supervisor;
     MarkerArray         chapterMarkers;
 
     return chapterMarkers;

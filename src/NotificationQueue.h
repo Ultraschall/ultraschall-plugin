@@ -24,43 +24,35 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_PROJECT_MANAGER_H_INCL__
-#define __ULTRASCHALL_REAPER_PROJECT_MANAGER_H_INCL__
+#ifndef __ULTRASCHALL_REAPER_NOTIFICATION_QUEUE_H_INCL__
+#define __ULTRASCHALL_REAPER_NOTIFICATION_QUEUE_H_INCL__
 
 #include "Common.h"
-#include "ReaperProject.h"
+#include "Notification.h"
 
 namespace ultraschall { namespace reaper {
 
-class ReaperProjectManager
+class NotificationQueue
 {
 public:
-    static const ReaperProject INVALID_PROJECT;
+    NotificationQueue();
+    ~NotificationQueue();
 
-    static ReaperProjectManager& Instance();
+    void Add(const Notification& message);
+    void Add(const NotificationClass severity, const UnicodeString& str);
+    void Clear();
 
-    const ReaperProject& CurrentProject() const;
-    ProjectReference     CurrentProjectReference() const;
-    UnicodeString        CurrentProjectName() const;
-
-    bool                 InsertProject(ProjectReference projectReference);
-    const ReaperProject& LookupProject(ProjectReference projectReference) const;
-    void                 RemoveProject(ProjectReference projectReference);
-    void                 RemoveAllProjects();
-
-protected:
-    virtual ~ReaperProjectManager();
+    const NotificationArray& Items() const;
+    size_t                     ItemCount() const;
 
 private:
-    ReaperProjectManager();
+    NotificationQueue(const NotificationQueue&) = delete;
+    NotificationQueue& operator=(const NotificationQueue&) = delete;
 
-    ReaperProjectManager(const ReaperProjectManager&) = delete;
-    ReaperProjectManager& operator=(const ReaperProjectManager&) = delete;
-
-    typedef std::map<ProjectReference, ReaperProject> ProjectReferenceDictionary;
-    ProjectReferenceDictionary                        projectReferences_;
+    NotificationArray  items_;
+    std::recursive_mutex itemsLock_;
 };
 
 }} // namespace ultraschall::reaper
 
-#endif // #ifndef __ULTRASCHALL_REAPER_PROJECT_MANAGER_H_INCL__
+#endif // #ifndef __ULTRASCHALL_REAPER_NOTIFICATION_QUEUE_H_INCL__

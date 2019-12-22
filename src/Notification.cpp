@@ -24,25 +24,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_PICTURE_MANAGER_H_INCL__
-#define __ULTRASCHALL_REAPER_PICTURE_MANAGER_H_INCL__
-
-#include "BinaryStream.h"
+#include "Notification.h"
 
 namespace ultraschall { namespace reaper {
 
-class PictureManager
-{
-public:
-    enum class FORMAT { JPEG, PNG, UNKNOWN_PICTURE, MAX_FORMAT = UNKNOWN_PICTURE };
-
-    static FORMAT QueryFormat(const UnicodeString& filename);
-    static FORMAT QueryFormat(const BinaryStream* pStream);
-    static FORMAT QueryFormat(const uint8_t* data, const size_t dataSize);
-
-    static UnicodeString QueryFormatString(const uint8_t* data, const size_t dataSize);
-};
+Notification::Notification(const NotificationClass severity, const UnicodeString& str) : severity_(severity), str_(str) {}
 
 }} // namespace ultraschall::reaper
-
-#endif // #ifndef __ULTRASCHALL_REAPER_PICTURE_MANAGER_H_INCL__

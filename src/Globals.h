@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) The Ultraschall Project (https://ultraschall.fm)
+// Copyright (c) The Ultraschall Project (http://ultraschall.fm)
 //
 // The MIT License (MIT)
 //
@@ -24,10 +24,20 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "UINotification.h"
+#ifndef __ULTRASCHALL_REAPER_GLOBALS_H_INCL__
+#define __ULTRASCHALL_REAPER_GLOBALS_H_INCL__
 
 namespace ultraschall { namespace reaper {
 
-UINotification::UINotification(const UINotificationClass severity, const UnicodeString& str) : severity_(severity), str_(str) {}
+struct Globals
+{
+    inline static const size_t MAX_CHAPTER_TITLE_LENGTH = 62;
+
+    inline static const double INVALID_MARKER_POSITION = -1;
+
+    inline static const int DEFAULT_EDIT_MARKER_COLOR = 0x010000ff;
+};
 
 }} // namespace ultraschall::reaper
+
+#endif // #ifndef __ULTRASCHALL_REAPER_GLOBALS_H_INCL__

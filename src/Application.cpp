@@ -29,7 +29,7 @@
 #include "FileManager.h"
 #include "StringUtilities.h"
 #include "SystemProperties.h"
-#include "UINotificationStore.h"
+#include "NotificationStore.h"
 #include "UpdateCheck.h"
 
 namespace ultraschall { namespace reaper {
@@ -62,7 +62,7 @@ void Application::Stop() {}
 
 bool Application::OnCustomAction(const int32_t id)
 {
-    PRECONDITION_RETURN(CustomAction::ValidateCustomActionId(id) != false, false);
+    PRECONDITION_RETURN(CustomAction::IsValidCustomActionId(id) != false, false);
 
     bool executed = false;
 
@@ -71,11 +71,8 @@ bool Application::OnCustomAction(const int32_t id)
     ServiceStatus        status        = manager.LookupCustomAction(id, pCustomAction);
     if(ServiceSucceeded(status) && (pCustomAction != 0))
     {
-        if(CustomAction::RegisterProject() == true)
-        {
-            pCustomAction->Execute();
-            executed = true;
-        }
+        pCustomAction->Execute();
+        executed = true;
 
         SafeRelease(pCustomAction);
     }

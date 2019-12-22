@@ -26,7 +26,7 @@
 
 #include "Application.h"
 #include "ServiceStatus.h"
-#include "UINotificationStore.h"
+#include "NotificationStore.h"
 
 #include "CustomActionManager.h"
 

@@ -29,6 +29,7 @@
 
 #include "Common.h"
 #include "ICustomAction.h"
+#include "ReaperProject.h"
 #include "Marker.h"
 
 namespace ultraschall { namespace reaper {
@@ -38,15 +39,16 @@ class CustomAction : public ICustomAction
 public:
     static const int32_t INVALID_CUSTOM_ACTION_ID = -1;
 
-    static bool ValidateCustomActionId(const int32_t id);
-    static bool ValidateProject();
-    static bool ValidateChapterMarkers(const MarkerArray& markers);
-
-    static bool RegisterProject();
+    static bool IsValidCustomActionId(const int32_t id);
 
 protected:
-    static UnicodeString GetProjectDirectory();
-    static UnicodeString GetProjectName();
+    static bool HasValidProject();
+    static bool AreChapterMarkersValid(const MarkerArray& markers);
+
+protected:
+    static ReaperProject CurrentProject();
+    static UnicodeString CurrentProjectDirectory();
+    static UnicodeString CurrentProjectName();
     static UnicodeString CreateProjectPath(const UnicodeString& extension = "");
 };
 

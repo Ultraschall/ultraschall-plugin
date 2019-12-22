@@ -37,7 +37,7 @@ bool MP4CHAPSWriter::Start(const UnicodeString& targetName)
 void MP4CHAPSWriter::Stop(const bool commit)
 {}
 
-bool MP4CHAPSWriter::InsertProperties(const UnicodeString& targetName, const MediaProperties& standardProperties)
+bool MP4CHAPSWriter::InsertProperties(const UnicodeString& targetName, const UnicodeStringDictionary& mediaData)
 {
     return true;
 }

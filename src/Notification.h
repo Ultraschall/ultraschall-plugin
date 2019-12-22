@@ -24,20 +24,46 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_UI_NOTIFICATION_CLASS_H_INCL__
-#define __ULTRASCHALL_REAPER_UI_NOTIFICATION_CLASS_H_INCL__
+#ifndef __ULTRASCHALL_REAPER_NOTIFICATION_H_INCL__
+#define __ULTRASCHALL_REAPER_NOTIFICATION_H_INCL__
+
+#include "Common.h"
+#include "NotificationClass.h"
 
 namespace ultraschall { namespace reaper {
 
-enum class UINotificationClass {
-    NOTIFICATION_SUCCESS = 0,
-    NOTIFICATION_WARNING,
-    NOTIFICATION_ERROR,
-    NOTIFICATION_FATAL_ERROR,
-    INVALID_NOTIFICATION_CLASS,
-    MAX_NOTIFICATION_CLASS = INVALID_NOTIFICATION_CLASS
+class Notification
+{
+public:
+    Notification(const NotificationClass severity, const UnicodeString& str);
+
+    inline NotificationClass    Severity() const;
+    inline const UnicodeString& Str() const;
+
+    inline bool IsValid() const;
+
+private:
+    const NotificationClass severity_ = NotificationClass::INVALID_NOTIFICATION_CLASS;
+    const UnicodeString     str_;
 };
+
+inline NotificationClass Notification::Severity() const
+{
+    return severity_;
+}
+
+inline const UnicodeString& Notification::Str() const
+{
+    return str_;
+}
+
+inline bool Notification::IsValid() const
+{
+    return (Str().empty() == false) && (Severity() != NotificationClass::INVALID_NOTIFICATION_CLASS);
+}
+
+typedef std::vector<Notification> NotificationArray;
 
 }} // namespace ultraschall::reaper
 
-#endif // #ifndef __ULTRASCHALL_REAPER_UI_NOTIFICATION_CLASS_H_INCL__
+#endif // #ifndef __ULTRASCHALL_REAPER_NOTIFICATION_H_INCL__

@@ -24,35 +24,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "PictureManager.h"
+#include "Picture.h"
 #include "FileManager.h"
 
 namespace ultraschall { namespace reaper {
 
-PictureManager::FORMAT PictureManager::QueryFormat(const UnicodeString& filename)
-{
-    PRECONDITION_RETURN(filename.empty() == false, FORMAT::UNKNOWN_PICTURE);
-
-    FORMAT        format  = FORMAT::UNKNOWN_PICTURE;
-    BinaryStream* pStream = FileManager::ReadBinaryFile(filename);
-    if(pStream != nullptr)
-    {
-        format = QueryFormat(pStream);
-
-        SafeRelease(pStream);
-    }
-
-    return format;
-}
-
-PictureManager::FORMAT PictureManager::QueryFormat(const BinaryStream* pStream)
-{
-    PRECONDITION_RETURN(pStream != nullptr, FORMAT::UNKNOWN_PICTURE);
-
-    return QueryFormat(pStream->Data(), pStream->DataSize());
-}
-
-PictureManager::FORMAT PictureManager::QueryFormat(const uint8_t* data, const size_t dataSize)
+Picture::FORMAT Picture::Format(const uint8_t* data, const size_t dataSize)
 {
     PRECONDITION_RETURN(data != 0, FORMAT::UNKNOWN_PICTURE);
     PRECONDITION_RETURN(dataSize > 0, FORMAT::UNKNOWN_PICTURE);
@@ -77,14 +54,37 @@ PictureManager::FORMAT PictureManager::QueryFormat(const uint8_t* data, const si
     return format;
 }
 
-UnicodeString PictureManager::QueryFormatString(const uint8_t* data, const size_t dataSize)
+Picture::FORMAT Picture::Format(const BinaryStream* pStream)
+{
+    PRECONDITION_RETURN(pStream != nullptr, FORMAT::UNKNOWN_PICTURE);
+
+    return Format(pStream->Data(), pStream->DataSize());
+}
+
+Picture::FORMAT Picture::Format(const UnicodeString& filename)
+{
+    PRECONDITION_RETURN(filename.empty() == false, FORMAT::UNKNOWN_PICTURE);
+
+    FORMAT        format  = FORMAT::UNKNOWN_PICTURE;
+    BinaryStream* pStream = FileManager::ReadBinaryFile(filename);
+    if(pStream != nullptr)
+    {
+        format = Format(pStream);
+
+        SafeRelease(pStream);
+    }
+
+    return format;
+}
+
+UnicodeString Picture::FormatString(const uint8_t* data, const size_t dataSize)
 {
     PRECONDITION_RETURN(data != nullptr, UnicodeString());
     PRECONDITION_RETURN(dataSize > 0, UnicodeString());
 
     UnicodeString formatString;
 
-    const FORMAT        pictureFormat = QueryFormat(data, dataSize);
+    const FORMAT pictureFormat = Format(data, dataSize);
     switch(pictureFormat)
     {
         case FORMAT::JPEG: {
@@ -98,6 +98,28 @@ UnicodeString PictureManager::QueryFormatString(const uint8_t* data, const size_
         default: {
             break;
         }
+    }
+
+    return formatString;
+}
+
+UnicodeString Picture::FormatString(const BinaryStream* pStream)
+{
+    PRECONDITION_RETURN(pStream != nullptr, UnicodeString());
+
+    return FormatString(pStream->Data(), pStream->DataSize());
+}
+
+UnicodeString Picture::FormatString(const UnicodeString& filename)
+{
+    PRECONDITION_RETURN(filename.empty() == false, UnicodeString());
+
+    UnicodeString formatString;
+    BinaryStream* pStream = FileManager::ReadBinaryFile(filename);
+    if(pStream != nullptr)
+    {
+        formatString = FormatString(pStream);
+        SafeRelease(pStream);
     }
 
     return formatString;

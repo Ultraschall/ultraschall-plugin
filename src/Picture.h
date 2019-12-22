@@ -24,63 +24,27 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_BASIC_MEDIA_INFORMATION_H_INCL__
-#define __ULTRASCHALL_REAPER_BASIC_MEDIA_INFORMATION_H_INCL__
+#ifndef __ULTRASCHALL_REAPER_PICTURE_H_INCL__
+#define __ULTRASCHALL_REAPER_PICTURE_H_INCL__
 
-#include "Common.h"
+#include "BinaryStream.h"
 
 namespace ultraschall { namespace reaper {
 
-class MediaProperties
+class Picture
 {
 public:
-    MediaProperties();
-    ~MediaProperties();
+    enum class FORMAT { JPEG, PNG, UNKNOWN_PICTURE, MAX_FORMAT = UNKNOWN_PICTURE };
 
-    static MediaProperties ParseProjectNotes();
+    static FORMAT Format(const uint8_t* data, const size_t dataSize);
+    static FORMAT Format(const BinaryStream* pStream);
+    static FORMAT Format(const UnicodeString& filename);
 
-    bool Validate() const;
-    void Clear();
-
-    inline const UnicodeString& Podcast() const
-    {
-        return podcast_;
-    }
-
-    inline const UnicodeString& Author() const
-    {
-        return author_;
-    }
-
-    inline const UnicodeString& Episode() const
-    {
-        return episode_;
-    }
-
-    inline const UnicodeString& Date() const
-    {
-        return date_;
-    }
-
-    inline const UnicodeString& Genre() const
-    {
-        return genre_;
-    }
-
-    inline const UnicodeString& Comments() const
-    {
-        return comments_;
-    }
-
-private:
-    UnicodeString podcast_;    // TIT2
-    UnicodeString author_;   // TPE1
-    UnicodeString episode_;    // TALB
-    UnicodeString date_;     // TDRC
-    UnicodeString genre_;    // TCON
-    UnicodeString comments_; // COMM
+    static UnicodeString FormatString(const uint8_t* data, const size_t dataSize);
+    static UnicodeString FormatString(const BinaryStream* pStream);
+    static UnicodeString FormatString(const UnicodeString& filename);
 };
 
 }} // namespace ultraschall::reaper
 
-#endif // #ifndef __ULTRASCHALL_REAPER_BASIC_MEDIA_INFORMATION_H_INCL__
+#endif // #ifndef __ULTRASCHALL_REAPER_PICTURE_H_INCL__

@@ -29,8 +29,7 @@
 #include "StringUtilities.h"
 #include "FileManager.h"
 #include "FileDialog.h"
-#include "UINotificationStore.h"
-#include "ReaperProjectManager.h"
+#include "NotificationStore.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -38,14 +37,14 @@ static DeclareCustomAction<SaveChapterMarkersAction> action;
 
 ServiceStatus SaveChapterMarkersAction::Execute()
 {
-    PRECONDITION_RETURN(ValidateProject() == true, SERVICE_FAILURE);
+    PRECONDITION_RETURN(HasValidProject() == true, SERVICE_FAILURE);
 
     PRECONDITION_RETURN(ConfigureTargets() == true, SERVICE_FAILURE);
     PRECONDITION_RETURN(ConfigureSources() == true, SERVICE_FAILURE);
-    PRECONDITION_RETURN(ValidateChapterMarkers(chapterMarkers_) == true, SERVICE_FAILURE);
+    PRECONDITION_RETURN(AreChapterMarkersValid(chapterMarkers_) == true, SERVICE_FAILURE);
 
     ServiceStatus       status = SERVICE_FAILURE;
-    UINotificationStore supervisor;
+    NotificationStore supervisor;
 
     std::ostringstream os;
     for(size_t i = 0; i < chapterMarkers_.size(); i++)
@@ -70,11 +69,11 @@ ServiceStatus SaveChapterMarkersAction::Execute()
 bool SaveChapterMarkersAction::ConfigureTargets()
 {
     bool                result = false;
-    UINotificationStore supervisor;
+    NotificationStore supervisor;
 
     target_.clear();
 
-    FileDialog fileDialog("Export chapter markers", GetProjectDirectory());
+    FileDialog fileDialog("Export chapter markers", CurrentProjectDirectory());
     target_ = fileDialog.ChooseChaptersFileName();
     if(target_.empty() == false)
     {
@@ -92,11 +91,10 @@ bool SaveChapterMarkersAction::ConfigureTargets()
 bool SaveChapterMarkersAction::ConfigureSources()
 {
     bool                result = false;
-    UINotificationStore supervisor;
+    NotificationStore supervisor;
 
-    ReaperProjectManager& projectManager = ReaperProjectManager::Instance();
-    const ReaperProject&  currentProject = projectManager.CurrentProject();
-    chapterMarkers_                      = currentProject.AllMarkers();
+    ReaperProject currentProject = ReaperProject::Current();
+    chapterMarkers_              = currentProject.AllMarkers();
     if(chapterMarkers_.empty() == true)
     {
         supervisor.RegisterWarning("No chapters have been set.");

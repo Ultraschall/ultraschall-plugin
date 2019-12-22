@@ -29,8 +29,7 @@
 #include "FileManager.h"
 #include "SaveChapterMarkersAction.h"
 #include "StringUtilities.h"
-#include "UINotificationStore.h"
-#include "ReaperProjectManager.h"
+#include "NotificationStore.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -38,14 +37,14 @@ static DeclareCustomAction<SaveChapterMarkersToProjectAction> action;
 
 ServiceStatus SaveChapterMarkersToProjectAction::Execute()
 {
-    PRECONDITION_RETURN(ValidateProject() == true, SERVICE_FAILURE);
+    PRECONDITION_RETURN(HasValidProject() == true, SERVICE_FAILURE);
 
     PRECONDITION_RETURN(ConfigureTargets() == true, SERVICE_FAILURE);
     PRECONDITION_RETURN(ConfigureSources() == true, SERVICE_FAILURE);
-    PRECONDITION_RETURN(ValidateChapterMarkers(chapterMarkers_) == true, SERVICE_FAILURE);
+    PRECONDITION_RETURN(AreChapterMarkersValid(chapterMarkers_) == true, SERVICE_FAILURE);
 
     ServiceStatus       status = SERVICE_FAILURE;
-    UINotificationStore supervisor;
+    NotificationStore supervisor;
 
     std::ostringstream os;
     for(size_t i = 0; i < chapterMarkers_.size(); i++)
@@ -69,18 +68,17 @@ ServiceStatus SaveChapterMarkersToProjectAction::Execute()
 
 bool SaveChapterMarkersToProjectAction::ConfigureTargets()
 {
-    target_ = GetProjectDirectory() + FileManager::PathSeparator() + GetProjectName() + ".chapters.txt";
+    target_ = CurrentProjectDirectory() + FileManager::PathSeparator() + CurrentProjectName() + ".chapters.txt";
     return true;
 }
 
 bool SaveChapterMarkersToProjectAction::ConfigureSources()
 {
     bool                status = false;
-    UINotificationStore supervisor;
+    NotificationStore supervisor;
 
-    ReaperProjectManager& projectManager = ReaperProjectManager::Instance();
-    const ReaperProject&  currentProject = projectManager.CurrentProject();
-    chapterMarkers_                      = currentProject.AllMarkers();
+    ReaperProject currentProject = ReaperProject::Current();
+    chapterMarkers_              = currentProject.AllMarkers();
     if(chapterMarkers_.empty() == false)
     {
         status = true;
