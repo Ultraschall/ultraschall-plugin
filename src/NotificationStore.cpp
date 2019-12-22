@@ -31,7 +31,7 @@ namespace ultraschall { namespace reaper {
 
 const UnicodeString NotificationStore::NOTIFICATION_SECTION_NAME("ultraschall_messages");
 
-NotificationStore::NotificationStore() : projectReference_(ReaperGateway::QueryCurrentProject()) {}
+NotificationStore::NotificationStore() : projectReference_(ReaperGateway::CurrentProject()) {}
 
 NotificationStore::~NotificationStore()
 {

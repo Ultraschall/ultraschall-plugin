@@ -80,7 +80,7 @@ private:
         PRECONDITION_RETURN(section.empty() == false, UnicodeString());
         PRECONDITION_RETURN(key.empty() == false, UnicodeString());
 
-        return ReaperGateway::QuerySystemValue(section, key);
+        return ReaperGateway::SystemValue(section, key);
     }
 };
 

@@ -31,23 +31,12 @@
 
 namespace ultraschall { namespace reaper {
 
-const double ReaperGateway::INVALID_POSITION = -1;
-
 intptr_t ReaperGateway::View()
 {
     return reinterpret_cast<intptr_t>(reaper_api::GetMainHwnd());
 }
 
-uint32_t ReaperGateway::EditMarkerColor()
-{
-#ifdef _WIN32
-    return 0x01ff0000;
-#else  // #ifdef _WIN32
-    return 0x010000ff;
-#endif // #ifdef _WIN32
-}
-
-UnicodeString ReaperGateway::QueryApplicationVersion()
+UnicodeString ReaperGateway::ApplicationVersion()
 {
     return H2U(reaper_api::GetAppVersion());
 }
@@ -59,37 +48,18 @@ int32_t ReaperGateway::RegisterCustomAction(const UnicodeString& name, void* inf
     return reaper_api::plugin_register(U2H(name).c_str(), infoStruct);
 }
 
-void ReaperGateway::LockUIRefresh(const bool lock)
-{
-    reaper_api::PreventUIRefresh((lock == true) ? 1 : -1);
-}
-
-UnicodeString ReaperGateway::QueryExportPathName()
-{
-    UnicodeString result;
-
-    char buffer[MAX_REAPER_STRING_BUFFER_SIZE] = {0};
-    reaper_api::GetProjectPath(buffer, MAX_REAPER_STRING_BUFFER_SIZE);
-    if(strlen(buffer) > 0)
-    {
-        result = buffer;
-    }
-
-    return result;
-}
-
-ProjectReference ReaperGateway::QueryCurrentProject()
+ProjectReference ReaperGateway::CurrentProject()
 {
     return reinterpret_cast<ProjectReference>(reaper_api::EnumProjects(-1, 0, 0));
 }
 
-UnicodeString ReaperGateway::QueryProjectPathName()
+UnicodeString ReaperGateway::CurrentProjectPath()
 {
     UnicodeString result;
 
     char buffer[MAX_REAPER_STRING_BUFFER_SIZE] = {0};
-    reaper_api::EnumProjects(-1, buffer, MAX_REAPER_STRING_BUFFER_SIZE);
-    if(strlen(buffer) > 0)
+    ProjectReference projectReference = reaper_api::EnumProjects(-1, buffer, MAX_REAPER_STRING_BUFFER_SIZE);
+    if((projectReference != nullptr) && (strlen(buffer) > 0))
     {
         result = buffer;
     }
@@ -97,11 +67,11 @@ UnicodeString ReaperGateway::QueryProjectPathName()
     return result;
 }
 
-UnicodeString ReaperGateway::QueryProjectFileName()
+UnicodeString ReaperGateway::CurrentProjectFile()
 {
     UnicodeString result;
 
-    const UnicodeString projectPath = QueryProjectPathName();
+    const UnicodeString projectPath = CurrentProjectPath();
     if(projectPath.empty() == false)
     {
         const UnicodeStringArray pathComponents = FileManager::SplitPath(projectPath);
@@ -114,11 +84,11 @@ UnicodeString ReaperGateway::QueryProjectFileName()
     return result;
 }
 
-UnicodeString ReaperGateway::QueryProjectFolderName()
+UnicodeString ReaperGateway::CurrentProjectDirectory()
 {
     UnicodeString result;
 
-    const UnicodeString projectPath = QueryProjectPathName();
+    const UnicodeString projectPath = CurrentProjectPath();
     if(projectPath.empty() == false)
     {
         const UnicodeStringArray pathComponents = FileManager::SplitPath(projectPath);
@@ -138,11 +108,11 @@ UnicodeString ReaperGateway::QueryProjectFolderName()
     return result;
 }
 
-UnicodeString ReaperGateway::QueryProjectName()
+UnicodeString ReaperGateway::CurrentProjectName()
 {
     UnicodeString result;
 
-    const UnicodeString projectFile = QueryProjectFileName();
+    const UnicodeString projectFile = CurrentProjectFile();
     if(projectFile.empty() == false)
     {
         result = projectFile.substr(0, projectFile.find('.', 0));
@@ -238,7 +208,7 @@ double ReaperGateway::StringToTimestamp(const UnicodeString& input)
     return reaper_api::parse_timestr(input.c_str());
 }
 
-UnicodeString ReaperGateway::QueryProjectPath(ProjectReference projectReference)
+UnicodeString ReaperGateway::ProjectPath(ProjectReference projectReference)
 {
     PRECONDITION_RETURN(projectReference != nullptr, UnicodeString());
 
@@ -263,7 +233,7 @@ UnicodeString ReaperGateway::QueryProjectPath(ProjectReference projectReference)
     return projectPath;
 }
 
-UnicodeString ReaperGateway::QueryProjectNotes(ProjectReference projectReference)
+UnicodeString ReaperGateway::ProjectNotes(ProjectReference projectReference)
 {
     PRECONDITION_RETURN(projectReference != nullptr, UnicodeString());
 
@@ -279,7 +249,7 @@ UnicodeString ReaperGateway::QueryProjectNotes(ProjectReference projectReference
     return projectNotes;
 }
 
-MarkerArray ReaperGateway::QueryAllMarkers(ProjectReference projectReference)
+MarkerArray ReaperGateway::Markers(ProjectReference projectReference)
 {
     PRECONDITION_RETURN(projectReference != nullptr, MarkerArray());
 
@@ -297,8 +267,7 @@ MarkerArray ReaperGateway::QueryAllMarkers(ProjectReference projectReference)
         = reaper_api::EnumProjectMarkers3(nativeReference, 0, &isRegion, &position, &duration, &name, &number, &color);
     while(nextIndex > 0)
     {
-        static const uint32_t PREDEFINED_EDIT_MARKER_COLOR = 0x010000ff;
-        if(color != PREDEFINED_EDIT_MARKER_COLOR) // remove edit markers
+        if(color != Globals::DEFAULT_EDIT_MARKER_COLOR) // remove edit markers
         {
             if(false == isRegion) // remove regions
             {
@@ -343,7 +312,6 @@ bool ReaperGateway::InsertMarker(ProjectReference projectReference, const Unicod
     PRECONDITION_RETURN(position >= 0, false);
 
     ReaProject* nativeReference = reinterpret_cast<ReaProject*>(projectReference);
-    // TODO check whether reaper takes unicode or ansi
     return reaper_api::AddProjectMarker2(nativeReference, false, position, 0, name.c_str(), -1, 0) != -1;
 }
 
@@ -352,7 +320,6 @@ bool ReaperGateway::InsertMarker(ProjectReference projectReference, const Marker
     PRECONDITION_RETURN(projectReference != nullptr, false);
 
     ReaProject* nativeReference = reinterpret_cast<ReaProject*>(projectReference);
-    // TODO check whether reaper takes unicode or ansi
     return reaper_api::AddProjectMarker2(
                nativeReference, false, marker.Position(), 0, marker.Name().c_str(), -1, marker.Color())
            != -1;
@@ -375,7 +342,7 @@ bool ReaperGateway::UndoMarker(ProjectReference projectReference, const double p
     return undone;
 }
 
-int ReaperGateway::QueryPlayState(ProjectReference projectReference)
+int ReaperGateway::PlayState(ProjectReference projectReference)
 {
     PRECONDITION_RETURN(projectReference != nullptr, -1);
 
@@ -383,7 +350,7 @@ int ReaperGateway::QueryPlayState(ProjectReference projectReference)
     return reaper_api::GetPlayStateEx(nativeReference);
 }
 
-double ReaperGateway::QueryCursorPosition(ProjectReference projectReference)
+double ReaperGateway::CursorPosition(ProjectReference projectReference)
 {
     PRECONDITION_RETURN(projectReference != nullptr, -1);
 
@@ -391,7 +358,7 @@ double ReaperGateway::QueryCursorPosition(ProjectReference projectReference)
     return reaper_api::GetCursorPositionEx(nativeReference);
 }
 
-double ReaperGateway::QueryPlayPosition(ProjectReference projectReference)
+double ReaperGateway::PlayPosition(ProjectReference projectReference)
 {
     PRECONDITION_RETURN(projectReference != nullptr, -1);
 
@@ -399,12 +366,12 @@ double ReaperGateway::QueryPlayPosition(ProjectReference projectReference)
     return reaper_api::GetPlayPositionEx(nativeReference);
 }
 
-double ReaperGateway::QueryMinPosition(ProjectReference projectReference)
+double ReaperGateway::MinPosition(ProjectReference projectReference)
 {
     PRECONDITION_RETURN(projectReference != nullptr, -1);
 
-    double minPosition = QueryMaxPosition(projectReference);
-    if(minPosition != INVALID_POSITION)
+    double minPosition = MaxPosition(projectReference);
+    if(minPosition != Globals::INVALID_MARKER_POSITION)
     {
         ReaProject* nativeReference = reinterpret_cast<ReaProject*>(projectReference);
         int         i               = 0;
@@ -423,11 +390,11 @@ double ReaperGateway::QueryMinPosition(ProjectReference projectReference)
     return minPosition;
 }
 
-double ReaperGateway::QueryMaxPosition(ProjectReference projectReference)
+double ReaperGateway::MaxPosition(ProjectReference projectReference)
 {
     PRECONDITION_RETURN(projectReference != nullptr, -1);
 
-    double      maxPosition     = INVALID_POSITION;
+    double      maxPosition     = Globals::INVALID_MARKER_POSITION;
     ReaProject* nativeReference = reinterpret_cast<ReaProject*>(projectReference);
     int         i               = 0;
     MediaItem*  mediaItem       = reaper_api::GetMediaItem(nativeReference, i++);
@@ -454,7 +421,7 @@ bool ReaperGateway::HasSystemValue(const UnicodeString& section, const UnicodeSt
     return reaper_api::HasExtState(U2H(section).c_str(), U2H(key).c_str());
 }
 
-UnicodeString ReaperGateway::QuerySystemValue(const UnicodeString& section, const UnicodeString& key)
+UnicodeString ReaperGateway::SystemValue(const UnicodeString& section, const UnicodeString& key)
 {
     PRECONDITION_RETURN(section.empty() == false, UnicodeString());
     PRECONDITION_RETURN(key.empty() == false, UnicodeString());

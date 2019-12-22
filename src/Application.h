@@ -55,9 +55,6 @@ private:
     mutable std::recursive_mutex lock_;
 
     Application();
-
-    // TODO Discuss whether this should be enabled
-    //static bool HealthCheck();
 };
 
 typedef struct

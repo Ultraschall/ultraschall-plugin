@@ -34,6 +34,8 @@ struct Globals
     inline static const size_t MAX_CHAPTER_TITLE_LENGTH = 62;
 
     inline static const double INVALID_MARKER_POSITION = -1;
+
+    inline static const int DEFAULT_EDIT_MARKER_COLOR = 0x010000ff;
 };
 
 }} // namespace ultraschall::reaper

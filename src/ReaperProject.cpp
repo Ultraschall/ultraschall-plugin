@@ -67,13 +67,13 @@ bool ReaperProject::IsValid(const ReaperProject& project)
 
 ReaperProject ReaperProject::Current()
 {
-    return ReaperProject(ReaperGateway::QueryCurrentProject());
+    return ReaperProject(ReaperGateway::CurrentProject());
 }
 
 UnicodeString ReaperProject::PathName() const
 {
     PRECONDITION_RETURN(nativeReference_ != 0, UnicodeString());
-    return ReaperGateway::QueryProjectPath(nativeReference_);
+    return ReaperGateway::ProjectPath(nativeReference_);
 }
 
 UnicodeString ReaperProject::FolderName() const
@@ -138,7 +138,7 @@ UnicodeString ReaperProject::Notes() const
 {
     PRECONDITION_RETURN(nativeReference_ != 0, UnicodeString());
 
-    return ReaperGateway::QueryProjectNotes(nativeReference_);
+    return ReaperGateway::ProjectNotes(nativeReference_);
 }
 
 bool ReaperProject::InsertChapterMarker(const UnicodeString& name, const double position)
@@ -156,14 +156,14 @@ double ReaperProject::CurrentPosition() const
     PRECONDITION_RETURN(nativeReference_ != 0, Globals::INVALID_MARKER_POSITION);
 
     double    currentPosition = Globals::INVALID_MARKER_POSITION;
-    const int playState       = ReaperGateway::QueryPlayState(nativeReference_);
+    const int playState       = ReaperGateway::PlayState(nativeReference_);
     if((playState == 0) || (playState == 2))
     {
-        currentPosition = ReaperGateway::QueryCursorPosition(nativeReference_);
+        currentPosition = ReaperGateway::CursorPosition(nativeReference_);
     }
     else
     {
-        currentPosition = ReaperGateway::QueryPlayPosition(nativeReference_);
+        currentPosition = ReaperGateway::PlayPosition(nativeReference_);
     }
 
     return currentPosition;
@@ -173,14 +173,14 @@ double ReaperProject::MinPosition() const
 {
     PRECONDITION_RETURN(nativeReference_ != 0, Globals::INVALID_MARKER_POSITION);
 
-    return ReaperGateway::QueryMinPosition(nativeReference_);
+    return ReaperGateway::MinPosition(nativeReference_);
 }
 
 double ReaperProject::MaxPosition() const
 {
     PRECONDITION_RETURN(nativeReference_ != 0, Globals::INVALID_MARKER_POSITION);
 
-    return ReaperGateway::QueryMaxPosition(nativeReference_);
+    return ReaperGateway::MaxPosition(nativeReference_);
 }
 
 bool ReaperProject::IsValidPosition(const double position)
@@ -194,7 +194,7 @@ MarkerArray ReaperProject::AllMarkers() const
 {
     PRECONDITION_RETURN(nativeReference_ != 0, MarkerArray());
 
-    return ReaperGateway::QueryAllMarkers(nativeReference_);
+    return ReaperGateway::Markers(nativeReference_);
 }
 
 }} // namespace ultraschall::reaper

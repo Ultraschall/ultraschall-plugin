@@ -38,31 +38,24 @@ typedef void* ProjectReference;
 class ReaperGateway
 {
 public:
-    static const size_t MAX_REAPER_STRING_BUFFER_SIZE = 4096;
-    static const double INVALID_POSITION;
-
     static intptr_t View();
 
-    static uint32_t EditMarkerColor();
-
-    static UnicodeString QueryApplicationVersion();
+    static UnicodeString ApplicationVersion();
     static int32_t       RegisterCustomAction(const UnicodeString& name, void* infoStruct);
-    static void          LockUIRefresh(const bool lock);
 
-    static UnicodeString QueryExportPathName();
-    static UnicodeString QueryProjectPathName();
-    static UnicodeString QueryProjectFileName();
-    static UnicodeString QueryProjectFolderName();
-    static UnicodeString QueryProjectName();
+    static UnicodeString CurrentProjectPath();
+    static UnicodeString CurrentProjectFile();
+    static UnicodeString CurrentProjectDirectory();
+    static UnicodeString CurrentProjectName();
 
     static UnicodeString TimestampToString(const double timestamp);
     static double        StringToTimestamp(const UnicodeString& input);
 
-    static ProjectReference QueryCurrentProject();
-    static UnicodeString    QueryProjectPath(ProjectReference projectReference);
-    static UnicodeString    QueryProjectNotes(ProjectReference projectReference);
+    static ProjectReference CurrentProject();
+    static UnicodeString    ProjectPath(ProjectReference projectReference);
+    static UnicodeString    ProjectNotes(ProjectReference projectReference);
 
-    static MarkerArray QueryAllMarkers(ProjectReference projectReference);
+    static MarkerArray Markers(ProjectReference projectReference);
 
     static size_t CountMarkers(ProjectReference projectReference);
     static bool   ClearMarkers(ProjectReference projectReference);
@@ -71,14 +64,14 @@ public:
     static bool InsertMarker(ProjectReference projectReference, const Marker& marker);
     static bool UndoMarker(ProjectReference projectReference, const double position);
 
-    static int    QueryPlayState(ProjectReference projectReference);
-    static double QueryCursorPosition(ProjectReference projectReference);
-    static double QueryPlayPosition(ProjectReference projectReference);
-    static double QueryMinPosition(ProjectReference projectReference);
-    static double QueryMaxPosition(ProjectReference projectReference);
+    static int    PlayState(ProjectReference projectReference);
+    static double CursorPosition(ProjectReference projectReference);
+    static double PlayPosition(ProjectReference projectReference);
+    static double MinPosition(ProjectReference projectReference);
+    static double MaxPosition(ProjectReference projectReference);
 
     static bool          HasSystemValue(const UnicodeString& section, const UnicodeString& key);
-    static UnicodeString QuerySystemValue(const UnicodeString& section, const UnicodeString& key);
+    static UnicodeString SystemValue(const UnicodeString& section, const UnicodeString& key);
     static void SetSystemValue(const UnicodeString& section, const UnicodeString& key, const UnicodeString& value);
     static void SaveSystemValue(const UnicodeString& section, const UnicodeString& key, const UnicodeString& value);
     static void ClearSystemValue(const UnicodeString& section, const UnicodeString& key);
@@ -94,6 +87,9 @@ public:
     static void ClearProjectValue(
         ProjectReference projectReference, const UnicodeString& section, const UnicodeString& key);
     static void ClearProjectValues(ProjectReference projectReference, const UnicodeString& section);
+
+private:
+    static const size_t MAX_REAPER_STRING_BUFFER_SIZE = 4096;
 };
 
 }} // namespace ultraschall::reaper
