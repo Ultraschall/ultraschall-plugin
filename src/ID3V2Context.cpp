@@ -28,7 +28,7 @@
 
 namespace ultraschall { namespace reaper { 
 
-ID3V2Context::ID3V2Context(const UnicodeString& targetName) : target_(new taglib_mp3::File(targetName.c_str())), tags_(nullptr)
+ID3V2Context::ID3V2Context(const UnicodeString& targetName) : target_(new taglib_mp3::File(U2H(targetName).c_str())), tags_(nullptr)
 {
     if(target_->isOpen() == true)
     {
