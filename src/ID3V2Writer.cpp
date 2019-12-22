@@ -67,20 +67,35 @@ void ID3V2Writer::Stop(const bool commit)
     }
 }
 
-bool ID3V2Writer::InsertProperties(const UnicodeString& targetName, const MediaProperties& standardProperties)
+bool ID3V2Writer::InsertProperties(const UnicodeString& targetName, const UnicodeStringDictionary& mediaData)
 {
     PRECONDITION_RETURN(targetName.empty() == false, false);
     PRECONDITION_RETURN(pContext_ != nullptr, false);
 
+    static const UnicodeStringArray mediaDataKeys
+        = {"podcast", "author", "episode", "publicationDate", "category", "description"};
+
     bool success = true;
 
+    UnicodeStringArray mediaDataValues;
+    std::for_each(mediaDataKeys.begin(), mediaDataKeys.end(), [&](const UnicodeString& mediaDataKey) {
+        UnicodeStringDictionary::const_iterator mediaDataIterator = mediaData.find(mediaDataKey);
+        if(mediaDataIterator != mediaData.end())
+        {
+            mediaDataValues.push_back(mediaDataIterator->second);
+        }
+        else
+        {
+            mediaDataValues.push_back("");
+        }
+    });
+
     const UnicodeString duration = UnicodeStringFromInt(pContext_->Duration());
-    const UnicodeString encoder = "ultraschall4";
+    const UnicodeString encoder  = "ultraschall4";
 
     static const size_t MAX_SIMPLE_FRAME_MAPPINGS  = 7;
     static const size_t MAX_COMPLEX_FRAME_MAPPINGS = 1;
-
-    struct MAP_ULTRASCHALL_PROPERTIES_TO_REQUIRED_APPLE_TAGS
+    struct MAP_ULTRASCHALL_PROPERTIES_TO_ID3V2_TAGS
     {
         const UnicodeChar*   frameId;
         const CHAR_ENCODING  targetEncoding;
@@ -89,17 +104,17 @@ bool ID3V2Writer::InsertProperties(const UnicodeString& targetName, const MediaP
     // clang-format off
     simpleFrameMappings[MAX_SIMPLE_FRAME_MAPPINGS] =
     {
-      {"TALB", UTF16, standardProperties.Podcast()}, 
-      {"TPE1", UTF16, standardProperties.Author()},
-      {"TIT2", UTF16, standardProperties.Episode()}, 
-      {"TCON", UTF16, standardProperties.Genre()},
-      {"TYER", UTF8,  standardProperties.Date()},   
+      {"TALB", UTF16, mediaDataValues[0]}, 
+      {"TPE1", UTF16, mediaDataValues[1]},
+      {"TIT2", UTF16, mediaDataValues[2]}, 
+      {"TCON", UTF16, mediaDataValues[3]},
+      {"TYER", UTF8,  mediaDataValues[4]},   
       {"TENC", UTF8,  encoder},   
       {"TLEN", UTF8,  duration}
     },
     complexFrameMapping[MAX_COMPLEX_FRAME_MAPPINGS] =
     {
-      {"COMM", UTF16, standardProperties.Comments()}
+      {"COMM", UTF16, mediaDataValues[5]}
     };
     // clang-format on
 

@@ -29,7 +29,6 @@
 
 #include "Common.h"
 #include "CustomAction.h"
-#include "MediaProperties.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -64,7 +63,7 @@ private:
     UnicodeStringArray targets_;
     UnicodeString      coverImage_;
     MarkerArray        chapterMarkers_;
-    MediaProperties    mediaProperties_;
+    UnicodeStringDictionary mediaData_;
 };
 
 }} // namespace ultraschall::reaper

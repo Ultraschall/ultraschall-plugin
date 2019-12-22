@@ -62,7 +62,7 @@ public:
 
     MarkerArray AllMarkers() const;
 
-    UnicodeString Notes() const;
+    UnicodeStringDictionary ParseNotes() const;
 
 private:
     ProjectReference nativeReference_ = nullptr;

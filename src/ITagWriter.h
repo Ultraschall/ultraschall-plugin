@@ -29,7 +29,6 @@
 
 #include "Common.h"
 #include "Marker.h"
-#include "MediaProperties.h"
 #include "ServiceStatus.h"
 #include "SharedObject.h"
 
@@ -42,7 +41,7 @@ public:
 
     virtual void Stop(const bool commit) = 0;
 
-    virtual bool InsertProperties(const UnicodeString& targetName, const MediaProperties& standardProperties) = 0;
+    virtual bool InsertProperties(const UnicodeString& targetName, const UnicodeStringDictionary& mediaData) = 0;
 
     virtual bool InsertCoverImage(const UnicodeString& targetName, const UnicodeString& coverImage) = 0;
 

@@ -39,7 +39,7 @@ public:
 
     virtual void Stop(const bool commit);
 
-    virtual bool InsertProperties(const UnicodeString& targetName, const MediaProperties& standardProperties);
+    virtual bool InsertProperties(const UnicodeString& targetName, const UnicodeStringDictionary& mediaData);
 
     virtual bool InsertCoverImage(const UnicodeString& targetName, const UnicodeString& coverImage);
 

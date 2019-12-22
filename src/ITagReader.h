@@ -29,7 +29,6 @@
 
 #include "Common.h"
 #include "Marker.h"
-#include "MediaProperties.h"
 #include "ServiceStatus.h"
 #include "SharedObject.h"
 

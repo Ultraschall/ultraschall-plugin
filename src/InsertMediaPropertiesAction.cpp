@@ -52,9 +52,9 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
     // caution! requires ConfigureSources() to be called beforehand
     PRECONDITION_RETURN(AreChapterMarkersValid(chapterMarkers_) == true, SERVICE_FAILURE);
 
-    ServiceStatus       status = SERVICE_FAILURE;
+    ServiceStatus     status = SERVICE_FAILURE;
     NotificationStore supervisor;
-    size_t              errorCount = 0;
+    size_t            errorCount = 0;
 
     for(size_t i = 0; i < targets_.size(); i++)
     {
@@ -65,7 +65,7 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
             {
                 bool commit = false;
 
-                if(pTagWriter->InsertProperties(targets_[i], mediaProperties_) == true)
+                if(pTagWriter->InsertProperties(targets_[i], mediaData_) == true)
                 {
                     if(pTagWriter->InsertCoverImage(targets_[i], coverImage_) == true)
                     {
@@ -121,15 +121,15 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
 
 bool InsertMediaPropertiesAction::ConfigureSources()
 {
-    bool                result = false;
+    bool              result = false;
     NotificationStore supervisor;
 
-    mediaProperties_.Clear();
+    mediaData_.clear();
     coverImage_.clear();
     chapterMarkers_.clear();
 
-    mediaProperties_ = MediaProperties::ParseProjectNotes();
-    if(mediaProperties_.Validate() == false)
+    mediaData_ = ReaperProject::Current().ParseNotes();
+    if(mediaData_.empty() == true)
     {
         supervisor.RegisterWarning("ID3v2 tags have not been defined yet.");
     }
@@ -143,15 +143,19 @@ bool InsertMediaPropertiesAction::ConfigureSources()
     chapterMarkers_ = CurrentProject().AllMarkers();
     if(chapterMarkers_.empty() == false)
     {
+        bool errorFound = false;
         std::for_each(chapterMarkers_.begin(), chapterMarkers_.end(), [&](const Marker& chapterMarker) {
             if(chapterMarker.Name().length() > Globals::MAX_CHAPTER_TITLE_LENGTH)
             {
                 UnicodeStringStream os;
-                os << "The chapter marker title '" << chapterMarker.Name() << " is too long. "
+                os << "The chapter marker title '" << chapterMarker.Name() << "' is too long. "
                    << "Make sure that is does not exceed " << Globals::MAX_CHAPTER_TITLE_LENGTH << " characters.";
-                supervisor.RegisterWarning(os.str());
+                supervisor.RegisterError(os.str());
+                errorFound = true;
             }
         });
+
+        result = (false == errorFound);
     }
     else
     {
@@ -179,9 +183,6 @@ bool InsertMediaPropertiesAction::ConfigureTargets()
 
     if(targets_.empty() == true)
     {
-        // TODO: Wording seems to be inaccurate now
-        supervisor.RegisterWarning("Ultraschall can't find a suitable media file. Please select an alternative media "
-                                   "file from the file selection dialog after closing this message.");
         FileDialog          fileDialog("Select audio file");
         const UnicodeString target = fileDialog.SelectAudioFile();
         if(target.empty() == false)
@@ -202,6 +203,8 @@ UnicodeString InsertMediaPropertiesAction::FindCoverImage()
     for(size_t i = 0; i < extensions.size(); i++)
     {
         files.push_back(FileManager::AppendPath(CurrentProjectDirectory(), "cover") + extensions[i]);
+        files.push_back(FileManager::AppendPath(CurrentProjectDirectory(), "Cover") + extensions[i]);
+        files.push_back(FileManager::AppendPath(CurrentProjectDirectory(), "COVER") + extensions[i]);
         files.push_back(FileManager::AppendPath(CurrentProjectDirectory(), CurrentProjectName()) + extensions[i]);
     }
 

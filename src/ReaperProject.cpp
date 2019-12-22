@@ -134,11 +134,25 @@ UnicodeString ReaperProject::Name() const
     return result;
 }
 
-UnicodeString ReaperProject::Notes() const
+UnicodeStringDictionary ReaperProject::ParseNotes() const
 {
-    PRECONDITION_RETURN(nativeReference_ != 0, UnicodeString());
+    PRECONDITION_RETURN(nativeReference_ != 0, UnicodeStringDictionary());
 
-    return ReaperGateway::ProjectNotes(nativeReference_);
+    static const UnicodeStringArray keys
+        = {"podcast", "author", "episode", "publicationDate", "category", "description"};
+
+    UnicodeStringDictionary notesDictionary;
+    UnicodeString notes = ReaperGateway::ProjectNotes(nativeReference_);
+    if(notes.empty() == false)
+    {
+        UnicodeStringArray values = UnicodeStringTokenize(notes, '\n');
+        for(size_t i = 0; i < values.size(); i++)
+        {
+            notesDictionary.insert(std::pair<UnicodeString, UnicodeString>(keys[i], values[i]));
+        }
+    }
+
+    return notesDictionary;
 }
 
 bool ReaperProject::InsertChapterMarker(const UnicodeString& name, const double position)
