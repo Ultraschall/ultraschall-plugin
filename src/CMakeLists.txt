@@ -43,6 +43,7 @@ set(COMMON_INCLUDES
   CustomActionManager.h
   FileDialog.h
   FileManager.h
+  Globals.h
   ICommand.h
   ICustomAction.h
   ID3V2.h

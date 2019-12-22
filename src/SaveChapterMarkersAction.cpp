@@ -38,11 +38,11 @@ static DeclareCustomAction<SaveChapterMarkersAction> action;
 
 ServiceStatus SaveChapterMarkersAction::Execute()
 {
-    PRECONDITION_RETURN(ValidateProject() == true, SERVICE_FAILURE);
+    PRECONDITION_RETURN(HasValidProject() == true, SERVICE_FAILURE);
 
     PRECONDITION_RETURN(ConfigureTargets() == true, SERVICE_FAILURE);
     PRECONDITION_RETURN(ConfigureSources() == true, SERVICE_FAILURE);
-    PRECONDITION_RETURN(ValidateChapterMarkers(chapterMarkers_) == true, SERVICE_FAILURE);
+    PRECONDITION_RETURN(AreChapterMarkersValid(chapterMarkers_) == true, SERVICE_FAILURE);
 
     ServiceStatus       status = SERVICE_FAILURE;
     UINotificationStore supervisor;
@@ -74,7 +74,7 @@ bool SaveChapterMarkersAction::ConfigureTargets()
 
     target_.clear();
 
-    FileDialog fileDialog("Export chapter markers", GetProjectDirectory());
+    FileDialog fileDialog("Export chapter markers", CurrentProjectDirectory());
     target_ = fileDialog.ChooseChaptersFileName();
     if(target_.empty() == false)
     {

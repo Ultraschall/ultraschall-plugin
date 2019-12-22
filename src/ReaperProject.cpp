@@ -60,9 +60,14 @@ ReaperProject& ReaperProject::operator=(const ReaperProject& rhs)
     return *this;
 }
 
-bool ReaperProject::Validate(const ReaperProject& project)
+bool ReaperProject::IsValid() const
 {
-    return project.nativeReference_ != 0;
+    return nativeReference_ != nullptr;
+}
+
+bool ReaperProject::IsValid(const ReaperProject& project)
+{
+    return project.IsValid();
 }
 
 UnicodeString ReaperProject::FullPathName() const

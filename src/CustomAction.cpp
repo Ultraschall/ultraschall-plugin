@@ -32,16 +32,16 @@
 
 namespace ultraschall { namespace reaper {
 
-bool CustomAction::ValidateCustomActionId(const int32_t id)
+bool CustomAction::IsValidCustomActionId(const int32_t id)
 {
     return id != INVALID_CUSTOM_ACTION_ID;
 }
 
-bool CustomAction::ValidateProject()
+bool CustomAction::HasValidProject()
 {
     UINotificationStore supervisor;
 
-    const bool isValid = (GetProjectDirectory().empty() == false) && (GetProjectName().empty() == false);
+    const bool isValid = (CurrentProjectDirectory().empty() == false) && (CurrentProjectName().empty() == false);
     if(isValid == false)
     {
         supervisor.RegisterError("This action requires that you save the current project. Save the current project and "
@@ -60,7 +60,7 @@ bool CustomAction::RegisterProject()
     if(currentProjectReference != nullptr)
     {
         const ReaperProject& currentProject = projectManager.LookupProject(currentProjectReference);
-        if(ReaperProject::Validate(currentProject) == false)
+        if(ReaperProject::IsValid(currentProject) == false)
         {
             registered = projectManager.InsertProject(currentProjectReference);
         }
@@ -73,23 +73,27 @@ bool CustomAction::RegisterProject()
     return registered;
 }
 
-UnicodeString CustomAction::GetProjectDirectory()
+ReaperProject CustomAction::CurrentProject() 
 {
     const ReaperProjectManager& projectManager = ReaperProjectManager::Instance();
-    ReaperProject               currentProject = projectManager.CurrentProject();
-    return currentProject.FolderName();
+    return projectManager.CurrentProject();
 }
 
-UnicodeString CustomAction::GetProjectName()
+UnicodeString CustomAction::CurrentProjectDirectory()
 {
-    const ReaperProjectManager& projectManager = ReaperProjectManager::Instance();
-    ReaperProject               currentProject = projectManager.CurrentProject();
-    return currentProject.Name();
+    return CurrentProject().FolderName();
+}
+
+UnicodeString CustomAction::CurrentProjectName()
+{
+    return CurrentProject().Name();
 }
 
 UnicodeString CustomAction::CreateProjectPath(const UnicodeString& extension)
 {
-    UnicodeString path = FileManager::AppendPath(GetProjectDirectory(), GetProjectName());
+    PRECONDITION_RETURN(HasValidProject() == true, UnicodeString());
+
+    UnicodeString path = FileManager::AppendPath(CurrentProjectDirectory(), CurrentProjectName());
     if(extension.empty() == false)
     {
         path += extension;
@@ -98,8 +102,10 @@ UnicodeString CustomAction::CreateProjectPath(const UnicodeString& extension)
     return path;
 }
 
-bool CustomAction::ValidateChapterMarkers(const MarkerArray& markers)
+bool CustomAction::AreChapterMarkersValid(const MarkerArray& markers)
 {
+    PRECONDITION_RETURN(HasValidProject() == true, false);
+
     UINotificationStore supervisor;
 
     bool valid = true;
@@ -110,12 +116,10 @@ bool CustomAction::ValidateChapterMarkers(const MarkerArray& markers)
         const UnicodeString safeName     = current.Name();
         const double        safePosition = current.Position();
 
-        ReaperProjectManager& projectManager = ReaperProjectManager::Instance();
-        ReaperProject         currentProject = projectManager.CurrentProject();
-        if(currentProject.IsValidPosition(current.Position()) == false)
+        if(CurrentProject().IsValidPosition(current.Position()) == false)
         {
             UnicodeStringStream os;
-            os << "Chapter marker '" << ((safeName.empty() == false) ? safeName : UnicodeString("Unknown"))
+            os << "The chapter marker '" << ((safeName.empty() == false) ? safeName : UnicodeString("Unknown"))
                << "' is out of track range.";
             supervisor.RegisterError(os.str());
             valid = false;
@@ -124,7 +128,7 @@ bool CustomAction::ValidateChapterMarkers(const MarkerArray& markers)
         if(current.Name().empty() == true)
         {
             UnicodeStringStream os;
-            os << "Chapter marker at '" << SecondsToString(safePosition) << "' has no name.";
+            os << "The Chapter marker at '" << SecondsToString(safePosition) << "' has no name.";
             supervisor.RegisterError(os.str());
             valid = false;
         }

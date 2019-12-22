@@ -38,11 +38,11 @@ static DeclareCustomAction<SaveChapterMarkersToProjectAction> action;
 
 ServiceStatus SaveChapterMarkersToProjectAction::Execute()
 {
-    PRECONDITION_RETURN(ValidateProject() == true, SERVICE_FAILURE);
+    PRECONDITION_RETURN(HasValidProject() == true, SERVICE_FAILURE);
 
     PRECONDITION_RETURN(ConfigureTargets() == true, SERVICE_FAILURE);
     PRECONDITION_RETURN(ConfigureSources() == true, SERVICE_FAILURE);
-    PRECONDITION_RETURN(ValidateChapterMarkers(chapterMarkers_) == true, SERVICE_FAILURE);
+    PRECONDITION_RETURN(AreChapterMarkersValid(chapterMarkers_) == true, SERVICE_FAILURE);
 
     ServiceStatus       status = SERVICE_FAILURE;
     UINotificationStore supervisor;
@@ -69,7 +69,7 @@ ServiceStatus SaveChapterMarkersToProjectAction::Execute()
 
 bool SaveChapterMarkersToProjectAction::ConfigureTargets()
 {
-    target_ = GetProjectDirectory() + FileManager::PathSeparator() + GetProjectName() + ".chapters.txt";
+    target_ = CurrentProjectDirectory() + FileManager::PathSeparator() + CurrentProjectName() + ".chapters.txt";
     return true;
 }
 

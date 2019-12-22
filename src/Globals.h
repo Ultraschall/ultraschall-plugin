@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) The Ultraschall Project (https://ultraschall.fm)
+// Copyright (c) The Ultraschall Project (http://ultraschall.fm)
 //
 // The MIT License (MIT)
 //
@@ -24,36 +24,16 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_CUSTOM_ACTION_H_INCL__
-#define __ULTRASCHALL_REAPER_CUSTOM_ACTION_H_INCL__
-
-#include "Common.h"
-#include "ICustomAction.h"
-#include "ReaperProject.h"
-#include "Marker.h"
+#ifndef __ULTRASCHALL_REAPER_GLOBALS_H_INCL__
+#define __ULTRASCHALL_REAPER_GLOBALS_H_INCL__
 
 namespace ultraschall { namespace reaper {
 
-class CustomAction : public ICustomAction
+struct Globals
 {
-public:
-    static const int32_t INVALID_CUSTOM_ACTION_ID = -1;
-
-    static bool IsValidCustomActionId(const int32_t id);
-
-    static bool RegisterProject();
-
-protected:
-    static bool HasValidProject();
-    static bool AreChapterMarkersValid(const MarkerArray& markers);
-
-protected:
-    static ReaperProject CurrentProject();
-    static UnicodeString CurrentProjectDirectory();
-    static UnicodeString CurrentProjectName();
-    static UnicodeString CreateProjectPath(const UnicodeString& extension = "");
+    static const size_t MAX_CHAPTER_TITLE_LENGTH = 62;
 };
 
 }} // namespace ultraschall::reaper
 
-#endif // #ifndef __ULTRASCHALL_REAPER_CUSTOM_ACTION_H_INCL__
+#endif // #ifndef __ULTRASCHALL_REAPER_GLOBALS_H_INCL__

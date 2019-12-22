@@ -45,13 +45,13 @@ static DeclareCustomAction<InsertMediaPropertiesAction> action;
 
 ServiceStatus InsertMediaPropertiesAction::Execute()
 {
-    PRECONDITION_RETURN(ValidateProject() == true, SERVICE_FAILURE);
+    PRECONDITION_RETURN(HasValidProject() == true, SERVICE_FAILURE);
 
     PRECONDITION_RETURN(ConfigureTargets() == true, SERVICE_FAILURE);
     PRECONDITION_RETURN(ConfigureSources() == true, SERVICE_FAILURE);
 
     // caution! requires ConfigureSources() to be called beforehand
-    PRECONDITION_RETURN(ValidateChapterMarkers(chapterMarkers_) == true, SERVICE_FAILURE);
+    PRECONDITION_RETURN(AreChapterMarkersValid(chapterMarkers_) == true, SERVICE_FAILURE);
 
     ServiceStatus       status = SERVICE_FAILURE;
     UINotificationStore supervisor;
@@ -124,7 +124,6 @@ bool InsertMediaPropertiesAction::ConfigureSources()
 {
     bool                result = false;
     UINotificationStore supervisor;
-    size_t              invalidAssetCount = 0;
 
     mediaProperties_.Clear();
     coverImage_.clear();
@@ -134,31 +133,30 @@ bool InsertMediaPropertiesAction::ConfigureSources()
     if(mediaProperties_.Validate() == false)
     {
         supervisor.RegisterWarning("ID3v2 tags have not been defined yet.");
-        invalidAssetCount++;
     }
 
     coverImage_ = FindCoverImage();
     if(coverImage_.empty() == true)
     {
         supervisor.RegisterWarning("Cover image is missing.");
-        invalidAssetCount++;
     }
 
-    chapterMarkers_ = ReaperProjectManager::Instance().CurrentProject().AllMarkers();
-    if(chapterMarkers_.empty() == true)
+    chapterMarkers_ = CurrentProject().AllMarkers();
+    if(chapterMarkers_.empty() == false)
     {
-        supervisor.RegisterWarning("No chapters have been set.");
-        invalidAssetCount++;
-    }
-
-    if(invalidAssetCount >= 3)
-    {
-        supervisor.RegisterError("Specify at least one ID3v2 tag, a cover image or a chapter marker.");
-        result = false;
+        std::for_each(chapterMarkers_.begin(), chapterMarkers_.end(), [&](const Marker& chapterMarker) {
+            if(chapterMarker.Name().length() > Globals::MAX_CHAPTER_TITLE_LENGTH)
+            {
+                UnicodeStringStream os;
+                os << "The chapter marker title '" << chapterMarker.Name() << " is too long. "
+                   << "Make sure that is does not exceed " << Globals::MAX_CHAPTER_TITLE_LENGTH << " characters.";
+                supervisor.RegisterWarning(os.str());
+            }
+        });
     }
     else
     {
-        result = true;
+        supervisor.RegisterWarning("No chapters have been set.");
     }
 
     return result;
@@ -204,8 +202,8 @@ UnicodeString InsertMediaPropertiesAction::FindCoverImage()
     const UnicodeStringArray extensions{".jpg", ".jpeg", ".png"};
     for(size_t i = 0; i < extensions.size(); i++)
     {
-        files.push_back(FileManager::AppendPath(GetProjectDirectory(), "cover") + extensions[i]);
-        files.push_back(FileManager::AppendPath(GetProjectDirectory(), GetProjectName()) + extensions[i]);
+        files.push_back(FileManager::AppendPath(CurrentProjectDirectory(), "cover") + extensions[i]);
+        files.push_back(FileManager::AppendPath(CurrentProjectDirectory(), CurrentProjectName()) + extensions[i]);
     }
 
     const size_t imageIndex = FileManager::FileExists(files);

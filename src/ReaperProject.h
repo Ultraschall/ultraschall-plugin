@@ -43,7 +43,8 @@ public:
     ReaperProject(const ReaperProject& rhs);
     ReaperProject& operator=(const ReaperProject& rhs);
 
-    static bool Validate(const ReaperProject& project);
+    static bool IsValid(const ReaperProject& project);
+    bool IsValid() const;
 
     UnicodeString FullPathName() const;
     UnicodeString FolderName() const;

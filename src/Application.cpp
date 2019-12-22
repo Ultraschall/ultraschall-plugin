@@ -62,7 +62,7 @@ void Application::Stop() {}
 
 bool Application::OnCustomAction(const int32_t id)
 {
-    PRECONDITION_RETURN(CustomAction::ValidateCustomActionId(id) != false, false);
+    PRECONDITION_RETURN(CustomAction::IsValidCustomActionId(id) != false, false);
 
     bool executed = false;
 

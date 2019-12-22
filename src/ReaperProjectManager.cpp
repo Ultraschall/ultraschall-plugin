@@ -56,7 +56,7 @@ UnicodeString ReaperProjectManager::CurrentProjectName() const
     UnicodeString name;
 
     const ReaperProject& currentProject = CurrentProject();
-    if(ReaperProject::Validate(currentProject) == true)
+    if(ReaperProject::IsValid(currentProject) == true)
     {
         // TODO check whether reaper uses unicode or ansi
         name = H2U(currentProject.Name());
