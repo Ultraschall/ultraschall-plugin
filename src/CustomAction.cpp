@@ -26,7 +26,6 @@
 
 #include "CustomAction.h"
 #include "FileManager.h"
-#include "ReaperProjectManager.h"
 #include "StringUtilities.h"
 #include "UINotificationStore.h"
 
@@ -51,32 +50,9 @@ bool CustomAction::HasValidProject()
     return isValid;
 }
 
-bool CustomAction::RegisterProject()
-{
-    bool registered = false;
-
-    ReaperProjectManager& projectManager          = ReaperProjectManager::Instance();
-    void*                 currentProjectReference = projectManager.CurrentProjectReference();
-    if(currentProjectReference != nullptr)
-    {
-        const ReaperProject& currentProject = projectManager.LookupProject(currentProjectReference);
-        if(ReaperProject::IsValid(currentProject) == false)
-        {
-            registered = projectManager.InsertProject(currentProjectReference);
-        }
-        else
-        {
-            registered = true;
-        }
-    }
-
-    return registered;
-}
-
 ReaperProject CustomAction::CurrentProject() 
 {
-    const ReaperProjectManager& projectManager = ReaperProjectManager::Instance();
-    return projectManager.CurrentProject();
+  return ReaperProject::Current();
 }
 
 UnicodeString CustomAction::CurrentProjectDirectory()

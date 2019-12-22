@@ -31,7 +31,9 @@ namespace ultraschall { namespace reaper {
 
 struct Globals
 {
-    static const size_t MAX_CHAPTER_TITLE_LENGTH = 62;
+    inline static const size_t MAX_CHAPTER_TITLE_LENGTH = 62;
+
+    inline static const double INVALID_MARKER_POSITION = -1;
 };
 
 }} // namespace ultraschall::reaper

@@ -31,18 +31,13 @@
 
 namespace ultraschall { namespace reaper {
 
-const double ReaperProject::INVALID_POSITION = -1;
-
 ReaperProject::ReaperProject() {}
 
-ReaperProject::ReaperProject(ProjectReference nativeReference) : nativeReference_(nativeReference)
-{
-    UpdateMarkers();
-}
+ReaperProject::ReaperProject(ProjectReference nativeReference) : nativeReference_(nativeReference) {}
 
 ReaperProject::~ReaperProject()
 {
-    nativeReference_ = 0;
+    nativeReference_ = nullptr;
 }
 
 ReaperProject::ReaperProject(const ReaperProject& rhs)
@@ -70,7 +65,12 @@ bool ReaperProject::IsValid(const ReaperProject& project)
     return project.IsValid();
 }
 
-UnicodeString ReaperProject::FullPathName() const
+ReaperProject ReaperProject::Current()
+{
+    return ReaperProject(ReaperGateway::QueryCurrentProject());
+}
+
+UnicodeString ReaperProject::PathName() const
 {
     PRECONDITION_RETURN(nativeReference_ != 0, UnicodeString());
     return ReaperGateway::QueryProjectPath(nativeReference_);
@@ -80,7 +80,7 @@ UnicodeString ReaperProject::FolderName() const
 {
     UnicodeString result;
 
-    const UnicodeString fullPath = FullPathName();
+    const UnicodeString fullPath = PathName();
     if(fullPath.empty() == false)
     {
         const char               pathSeparator  = FileManager::PathSeparator();
@@ -105,7 +105,7 @@ UnicodeString ReaperProject::FileName() const
 {
     UnicodeString result;
 
-    const UnicodeString fullPath = FullPathName();
+    const UnicodeString fullPath = PathName();
     if(fullPath.empty() == false)
     {
         const char               pathSeparator  = FileManager::PathSeparator();
@@ -141,32 +141,21 @@ UnicodeString ReaperProject::Notes() const
     return ReaperGateway::QueryProjectNotes(nativeReference_);
 }
 
-bool ReaperProject::InsertMarker(const Marker& marker)
-{
-    allMarkers_.push_back(marker);
-    RefreshUI(MarkerStatus());
-    return false;
-}
-
-bool ReaperProject::InsertMarker(const UnicodeString& name, const int /*color*/, const double position)
+bool ReaperProject::InsertChapterMarker(const UnicodeString& name, const double position)
 {
     PRECONDITION_RETURN(nativeReference_ != 0, false);
     PRECONDITION_RETURN(name.empty() == false, false);
 
-    double actualPosition = position;
-    if(actualPosition == INVALID_POSITION)
-    {
-        actualPosition = CurrentPosition();
-    }
+    double actualPosition = (position != Globals::INVALID_MARKER_POSITION) ? position : CurrentPosition();
 
     return ReaperGateway::InsertMarker(nativeReference_, name, actualPosition);
 }
 
 double ReaperProject::CurrentPosition() const
 {
-    PRECONDITION_RETURN(nativeReference_ != 0, INVALID_POSITION);
+    PRECONDITION_RETURN(nativeReference_ != 0, Globals::INVALID_MARKER_POSITION);
 
-    double    currentPosition = INVALID_POSITION;
+    double    currentPosition = Globals::INVALID_MARKER_POSITION;
     const int playState       = ReaperGateway::QueryPlayState(nativeReference_);
     if((playState == 0) || (playState == 2))
     {
@@ -182,14 +171,14 @@ double ReaperProject::CurrentPosition() const
 
 double ReaperProject::MinPosition() const
 {
-    PRECONDITION_RETURN(nativeReference_ != 0, INVALID_POSITION);
+    PRECONDITION_RETURN(nativeReference_ != 0, Globals::INVALID_MARKER_POSITION);
 
     return ReaperGateway::QueryMinPosition(nativeReference_);
 }
 
 double ReaperProject::MaxPosition() const
 {
-    PRECONDITION_RETURN(nativeReference_ != 0, INVALID_POSITION);
+    PRECONDITION_RETURN(nativeReference_ != 0, Globals::INVALID_MARKER_POSITION);
 
     return ReaperGateway::QueryMaxPosition(nativeReference_);
 }
@@ -201,41 +190,6 @@ bool ReaperProject::IsValidPosition(const double position)
     return (position >= 0) && (position <= MaxPosition());
 }
 
-bool ReaperProject::UndoMarker()
-{
-    PRECONDITION_RETURN(nativeReference_ != 0, false);
-
-    return ReaperGateway::UndoMarker(nativeReference_, CurrentPosition());
-}
-
-MarkerArray ReaperProject::FilterMarkers(const int color) const
-{
-    MarkerArray result;
-
-    std::for_each(allMarkers_.begin(), allMarkers_.end(), [&](const Marker& marker) {
-        if(marker.Color() == color)
-        {
-            result.push_back(marker);
-        }
-    });
-
-    return result;
-}
-
-class AutoPreventUIRefresh
-{
-public:
-    AutoPreventUIRefresh()
-    {
-        ReaperGateway::LockUIRefresh(true);
-    }
-
-    virtual ~AutoPreventUIRefresh()
-    {
-        ReaperGateway::LockUIRefresh(false);
-    }
-};
-
 MarkerArray ReaperProject::AllMarkers() const
 {
     PRECONDITION_RETURN(nativeReference_ != 0, MarkerArray());
@@ -243,68 +197,4 @@ MarkerArray ReaperProject::AllMarkers() const
     return ReaperGateway::QueryAllMarkers(nativeReference_);
 }
 
-void ReaperProject::UpdateMarkers()
-{
-    PRECONDITION(nativeReference_ != 0);
-
-    allMarkers_.clear();
-
-    const size_t noMarkers = ReaperGateway::CountMarkers(nativeReference_);
-    if(noMarkers > 0)
-    {
-        allMarkers_ = AllMarkers();
-    }
-}
-
-void ReaperProject::RefreshUI(const uint32_t mask)
-{
-    PRECONDITION(nativeReference_ != 0);
-
-    AutoPreventUIRefresh();
-    ReaperGateway::ClearMarkers(nativeReference_);
-
-    if(SetMarkerStatus(mask) == true)
-    {
-        std::for_each(allMarkers_.begin(), allMarkers_.end(), [&](const Marker& marker) {
-            bool           insert       = false;
-            const uint32_t markerStatus = MarkerStatus();
-            if(markerStatus & SHOW_CHAPTER_MARKERS)
-            {
-                if(marker.Color() == CHAPTER_MARKER_COLOR)
-                {
-                    insert = true;
-                }
-            }
-
-            if(markerStatus & SHOW_EDIT_MARKERS)
-            {
-                if(marker.Color() == EDIT_MARKER_COLOR)
-                {
-                    insert = true;
-                }
-            }
-
-            if(markerStatus & SHOW_SHOWNOTE_MARKERS)
-            {
-                if(marker.Color() == SHOWNOTE_MARKER_COLOR)
-                {
-                    insert = true;
-                }
-            }
-
-            if(markerStatus & SHOW_HISTORICAL_MARKERS)
-            {
-                if(marker.Color() == HISTORICAL_MARKER_COLOR)
-                {
-                    insert = true;
-                }
-            }
-
-            if(true == insert)
-            {
-                ReaperGateway::InsertMarker(nativeReference_, marker);
-            }
-        });
-    }
-}
 }} // namespace ultraschall::reaper

@@ -30,7 +30,6 @@
 #include "FileManager.h"
 #include "FileDialog.h"
 #include "UINotificationStore.h"
-#include "ReaperProjectManager.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -94,9 +93,8 @@ bool SaveChapterMarkersAction::ConfigureSources()
     bool                result = false;
     UINotificationStore supervisor;
 
-    ReaperProjectManager& projectManager = ReaperProjectManager::Instance();
-    const ReaperProject&  currentProject = projectManager.CurrentProject();
-    chapterMarkers_                      = currentProject.AllMarkers();
+    ReaperProject currentProject = ReaperProject::Current();
+    chapterMarkers_              = currentProject.AllMarkers();
     if(chapterMarkers_.empty() == true)
     {
         supervisor.RegisterWarning("No chapters have been set.");

@@ -27,7 +27,7 @@
 #include "ID3V2.h"
 #include "BinaryStream.h"
 #include "FileManager.h"
-#include "PictureManager.h"
+#include "Picture.h"
 #include "StringUtilities.h"
 
 namespace ultraschall { namespace reaper { 
@@ -293,7 +293,7 @@ bool ID3V2InsertCoverPictureFrame(ID3V2Context* context, const UnicodeString& im
             const size_t imageHeaderSize = 10;
             if(pData->Read(0, imageHeader, imageHeaderSize) == true)
             {
-                const UnicodeString mimeType = PictureManager::QueryFormatString(imageHeader, imageHeaderSize);
+                const UnicodeString mimeType = Picture::FormatString(imageHeader, imageHeaderSize);
                 if(mimeType.empty() == false)
                 {
                     pFrame->setMimeType(mimeType);

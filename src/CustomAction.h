@@ -41,8 +41,6 @@ public:
 
     static bool IsValidCustomActionId(const int32_t id);
 
-    static bool RegisterProject();
-
 protected:
     static bool HasValidProject();
     static bool AreChapterMarkersValid(const MarkerArray& markers);

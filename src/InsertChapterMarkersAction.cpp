@@ -27,7 +27,6 @@
 #include "InsertChapterMarkersAction.h"
 #include "CustomActionFactory.h"
 #include "FileManager.h"
-#include "ReaperProjectManager.h"
 #include "StringUtilities.h"
 #include "FileDialog.h"
 #include "UINotificationStore.h"
@@ -48,9 +47,7 @@ ServiceStatus InsertChapterMarkersAction::Execute()
     ServiceStatus       status = SERVICE_FAILURE;
     UINotificationStore supervisor;
 
-    ReaperProjectManager& projectManager = ReaperProjectManager::Instance();
-    ReaperProject         currentProject = projectManager.CurrentProject();
-
+    ReaperProject         currentProject = ReaperProject::Current();
     size_t addedTags = 0;
     for(size_t i = 0; i < chapterMarkers_.size(); i++)
     {

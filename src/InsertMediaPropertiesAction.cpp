@@ -37,7 +37,6 @@
 #include "TimeUtilities.h"
 #include "FileDialog.h"
 #include "UINotificationStore.h"
-#include "ReaperProjectManager.h"
 
 namespace ultraschall { namespace reaper {
 

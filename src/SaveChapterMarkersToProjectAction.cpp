@@ -30,7 +30,6 @@
 #include "SaveChapterMarkersAction.h"
 #include "StringUtilities.h"
 #include "UINotificationStore.h"
-#include "ReaperProjectManager.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -78,9 +77,8 @@ bool SaveChapterMarkersToProjectAction::ConfigureSources()
     bool                status = false;
     UINotificationStore supervisor;
 
-    ReaperProjectManager& projectManager = ReaperProjectManager::Instance();
-    const ReaperProject&  currentProject = projectManager.CurrentProject();
-    chapterMarkers_                      = currentProject.AllMarkers();
+    ReaperProject currentProject = ReaperProject::Current();
+    chapterMarkers_              = currentProject.AllMarkers();
     if(chapterMarkers_.empty() == false)
     {
         status = true;
