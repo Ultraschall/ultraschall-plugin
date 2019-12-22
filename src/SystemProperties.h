@@ -45,14 +45,7 @@ public:
         return ReaperGateway::HasSystemValue(section, key);
     }
 
-    static void Save(const UnicodeString& section, const UnicodeString& key, const UnicodeString& value)
-    {
-        PRECONDITION(section.empty() == false);
-        PRECONDITION(key.empty() == false);
-        PRECONDITION(value.empty() == false);
-
-        ReaperGateway::SaveSystemValue(section, key, value);
-    }
+    static void Save(const UnicodeString& section, const UnicodeString& key, const value_type& value);
 
     static void Set(const UnicodeString& section, const UnicodeString& key, const value_type& value);
 
@@ -84,7 +77,7 @@ private:
     }
 };
 
-static UnicodeString UPDATE_SECTION_NAME   = "ultraschall_update";
+static UnicodeString UPDATE_SECTION_NAME = "ultraschall_update";
 
 }} // namespace ultraschall::reaper
 

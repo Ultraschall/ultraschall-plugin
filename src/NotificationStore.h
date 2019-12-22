@@ -46,13 +46,18 @@ public:
 
 private:
     static const UnicodeString NOTIFICATION_SECTION_NAME;
+    static const UnicodeString NOTIFICATION_VALUE_COUNT_NAME;
+    static const UnicodeString NOTIFICATION_KEY_PREFIX_NAME;
 
     void RegisterNotification(const NotificationClass severity, const UnicodeString& str);
     void DispatchNotifications();
+    void ClearNotifications();
+
     void DisplayNotifications();
 
+
     NotificationQueue messageQueue_;
-    void*               projectReference_;
+    //void*               projectReference_;
 };
 
 inline void NotificationStore::RegisterSuccess(const UnicodeString& str)

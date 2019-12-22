@@ -30,15 +30,16 @@
 namespace ultraschall { namespace reaper {
 
 const UnicodeString NotificationStore::NOTIFICATION_SECTION_NAME("ultraschall_messages");
+const UnicodeString NotificationStore::NOTIFICATION_VALUE_COUNT_NAME("message_count");
+const UnicodeString NotificationStore::NOTIFICATION_KEY_PREFIX_NAME("message_");
 
-NotificationStore::NotificationStore() : projectReference_(ReaperGateway::CurrentProject()) {}
+NotificationStore::NotificationStore() {}
 
 NotificationStore::~NotificationStore()
 {
     DispatchNotifications();
 
     messageQueue_.Clear();
-    projectReference_ = nullptr;
 }
 
 void NotificationStore::RegisterNotification(const NotificationClass severity, const UnicodeString& str)
@@ -48,8 +49,13 @@ void NotificationStore::RegisterNotification(const NotificationClass severity, c
 
 void NotificationStore::DispatchNotifications()
 {
-    PRECONDITION(projectReference_ != nullptr);
     PRECONDITION(messageQueue_.ItemCount() > 0);
+
+    size_t messageCountSeed = SystemProperty<int>::Query(NOTIFICATION_SECTION_NAME, NOTIFICATION_VALUE_COUNT_NAME);
+    if(-1 == messageCountSeed)
+    {
+        messageCountSeed = 0;
+    }
 
     const size_t messageCount = messageQueue_.ItemCount();
     SystemProperty<int>::Set(NOTIFICATION_SECTION_NAME, "message_count", (int)messageCount);
@@ -57,38 +63,55 @@ void NotificationStore::DispatchNotifications()
     const NotificationArray& messages_ = messageQueue_.Items();
     for(size_t i = 0; i < messages_.size(); ++i)
     {
-        UnicodeStringStream is;
-        is << "message_" << i;
-        const UnicodeString key = is.str();
+        UnicodeStringStream keyStream;
+        keyStream << NOTIFICATION_KEY_PREFIX_NAME << (static_cast<int>(messageCountSeed) + i);
+        const UnicodeString key = keyStream.str();
 
-        is.clear();
+        UnicodeStringStream valueStream;
         switch(messages_[i].Severity())
         {
             case NotificationClass::NOTIFICATION_SUCCESS:
-                is << "+";
+                valueStream << "+";
                 break;
             case NotificationClass::NOTIFICATION_WARNING:
-                is << "!";
+                valueStream << "!";
                 break;
             case NotificationClass::NOTIFICATION_FATAL_ERROR:
             case NotificationClass::NOTIFICATION_ERROR:
-                is << "-";
+                valueStream << "-";
                 break;
             default:
-                is << "?";
+                valueStream << "?";
                 break;
         }
 
-        is << ";" << messages_[i].Str() << std::endl;
-        const UnicodeString value = is.str();
-
+        valueStream << ";" << messages_[i].Str() << std::endl;
+        const UnicodeString value = valueStream.str();
         SystemProperty<UnicodeString>::Set(NOTIFICATION_SECTION_NAME, key, value);
+    }
+}
+
+void NotificationStore::ClearNotifications()
+{
+    size_t messageCount = SystemProperty<int>::Query(NOTIFICATION_SECTION_NAME, NOTIFICATION_VALUE_COUNT_NAME);
+    if(-1 == messageCount)
+    {
+        messageCount = 0;
+    }
+
+    for(size_t i = 0; i < messageCount; i++)
+    {
+        UnicodeStringStream keyStream;
+        keyStream << NOTIFICATION_KEY_PREFIX_NAME << (static_cast<int>(messageCount) + i);
+        const UnicodeString key = keyStream.str();
+        SystemProperty<int>::Clear(NOTIFICATION_SECTION_NAME, key);
     }
 }
 
 void NotificationStore::DisplayNotifications()
 {
     // TODO: Call LUA action
+    ClearNotifications();
 }
 
 }} // namespace ultraschall::reaper

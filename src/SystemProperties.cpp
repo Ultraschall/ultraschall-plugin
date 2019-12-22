@@ -31,6 +31,35 @@
 namespace ultraschall { namespace reaper {
 
 template<>
+void SystemProperty<UnicodeString>::Save(
+    const UnicodeString& section, const UnicodeString& key, const UnicodeString& value)
+{
+    PRECONDITION(section.empty() == false);
+    PRECONDITION(key.empty() == false);
+
+    ReaperGateway::SaveSystemValue(section, key, value);
+}
+
+template<> void SystemProperty<bool>::Save(const UnicodeString& section, const UnicodeString& key, const bool& value)
+{
+    PRECONDITION(section.empty() == false);
+    PRECONDITION(key.empty() == false);
+
+    const UnicodeString boolValue = (value == true) ? "true" : "false";
+    ReaperGateway::SaveSystemValue(section, key, boolValue);
+}
+
+template<> void SystemProperty<int>::Save(const UnicodeString& section, const UnicodeString& key, const int& value)
+{
+    PRECONDITION(section.empty() == false);
+    PRECONDITION(key.empty() == false);
+
+    UnicodeStringStream is;
+    is << value;
+    ReaperGateway::SaveSystemValue(section, key, is.str());
+}
+
+template<>
 void SystemProperty<UnicodeString>::Set(
     const UnicodeString& section, const UnicodeString& key, const UnicodeString& value)
 {
@@ -49,9 +78,7 @@ template<> void SystemProperty<bool>::Set(const UnicodeString& section, const Un
     ReaperGateway::SetSystemValue(section, key, boolValue);
 }
 
-template<>
-void SystemProperty<int>::Set(
-    const UnicodeString& section, const UnicodeString& key, const int& value)
+template<> void SystemProperty<int>::Set(const UnicodeString& section, const UnicodeString& key, const int& value)
 {
     PRECONDITION(section.empty() == false);
     PRECONDITION(key.empty() == false);
