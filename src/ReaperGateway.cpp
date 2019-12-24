@@ -57,7 +57,7 @@ UnicodeString ReaperGateway::CurrentProjectPath()
 {
     UnicodeString result;
 
-    char buffer[MAX_REAPER_STRING_BUFFER_SIZE] = {0};
+    char             buffer[MAX_REAPER_STRING_BUFFER_SIZE] = {0};
     ProjectReference projectReference = reaper_api::EnumProjects(-1, buffer, MAX_REAPER_STRING_BUFFER_SIZE);
     if((projectReference != nullptr) && (strlen(buffer) > 0))
     {
@@ -249,6 +249,16 @@ UnicodeString ReaperGateway::ProjectNotes(ProjectReference projectReference)
     return projectNotes;
 }
 
+bool IsEditMarker(const UnicodeString& name)
+{
+    PRECONDITION_RETURN(name.empty() == false, false);
+
+    const UnicodeString normalizedName = UnicodeStringCopyTrimLeft(name);
+    PRECONDITION_RETURN(normalizedName.empty() == false, false);
+
+    return normalizedName[0] == '_';
+}
+
 MarkerArray ReaperGateway::Markers(ProjectReference projectReference)
 {
     PRECONDITION_RETURN(projectReference != nullptr, MarkerArray());
@@ -261,13 +271,12 @@ MarkerArray ReaperGateway::Markers(ProjectReference projectReference)
     const char* name     = 0;
     int         number   = 0;
     int         color    = 0;
-
     ReaProject* nativeReference = reinterpret_cast<ReaProject*>(projectReference);
     int         nextIndex
         = reaper_api::EnumProjectMarkers3(nativeReference, 0, &isRegion, &position, &duration, &name, &number, &color);
     while(nextIndex > 0)
     {
-        if(color != Globals::DEFAULT_EDIT_MARKER_COLOR) // remove edit markers
+        if(IsEditMarker(name) == false) // remove edit markers
         {
             if(false == isRegion) // remove regions
             {
