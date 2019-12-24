@@ -73,7 +73,7 @@ bool ID3V2Writer::InsertProperties(const UnicodeString& targetName, const Unicod
     PRECONDITION_RETURN(pContext_ != nullptr, false);
 
     static const UnicodeStringArray mediaDataKeys
-        = {"podcast", "author", "episode", "publicationDate", "category", "description"};
+        = {"podcast", "author", "episode", "category", "publicationDate", "description"};
 
     bool success = true;
 
