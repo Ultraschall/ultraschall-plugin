@@ -33,7 +33,7 @@ const UnicodeString NotificationStore::NOTIFICATION_SECTION_NAME("ultraschall_me
 const UnicodeString NotificationStore::NOTIFICATION_VALUE_COUNT_NAME("message_count");
 const UnicodeString NotificationStore::NOTIFICATION_KEY_PREFIX_NAME("message_");
 
-NotificationStore::NotificationStore() {}
+NotificationStore::NotificationStore(const UnicodeString& messageContext) : messageContext_(messageContext) {}
 
 NotificationStore::~NotificationStore()
 {
@@ -85,6 +85,7 @@ void NotificationStore::DispatchNotifications()
                 break;
         }
 
+        valueStream << ";" << ((messageContext_.empty() == false) ? messageContext_ : "<Unknown>");
         valueStream << ";" << messages_[i].Str() << std::endl;
         const UnicodeString value = valueStream.str();
         SystemProperty<UnicodeString>::Set(NOTIFICATION_SECTION_NAME, key, value);

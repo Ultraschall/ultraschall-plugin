@@ -36,7 +36,7 @@ namespace ultraschall { namespace reaper {
 class NotificationStore
 {
 public:
-    NotificationStore();
+    NotificationStore(const UnicodeString& messageContext);
     ~NotificationStore();
 
     inline void RegisterSuccess(const UnicodeString& str);
@@ -55,7 +55,7 @@ private:
 
     void DisplayNotifications();
 
-
+    UnicodeString messageContext_;
     NotificationQueue messageQueue_;
     //void*               projectReference_;
 };

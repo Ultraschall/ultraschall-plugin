@@ -136,8 +136,8 @@ void UpdateCheck()
                         UnicodeStringTrim(remoteVersion);
                         if(remoteVersion > ULTRASCHALL_VERSION)
                         {
-                            NotificationStore supervisor;
-                            std::string         message = "An update for Ultraschall is available. Go to "
+                            NotificationStore supervisor("UpdateAvailable");
+                            std::string       message = "An update for Ultraschall is available. Go to "
                                                   "https://ultraschall.fm/install to download the updated version ";
                             message += remoteVersion + ".";
                             supervisor.RegisterSuccess(message);

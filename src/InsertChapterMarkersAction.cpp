@@ -45,7 +45,7 @@ ServiceStatus InsertChapterMarkersAction::Execute()
     PRECONDITION_RETURN(AreChapterMarkersValid(chapterMarkers_) == true, SERVICE_FAILURE);
 
     ServiceStatus       status = SERVICE_FAILURE;
-    NotificationStore supervisor;
+    NotificationStore supervisor("InsertChapterMarker");
 
     ReaperProject         currentProject = ReaperProject::Current();
     size_t addedTags = 0;
@@ -76,8 +76,8 @@ ServiceStatus InsertChapterMarkersAction::Execute()
 
 bool InsertChapterMarkersAction::ConfigureTargets()
 {
-    NotificationStore supervisor;
-    MarkerArray         chapterMarkers;
+    NotificationStore supervisor("InsertChapterMarker");
+    MarkerArray       chapterMarkers;
 
     FileManager::FILE_TYPE mediaType = FileManager::QueryFileType(source_);
     switch(mediaType)
@@ -113,8 +113,8 @@ MarkerArray InsertChapterMarkersAction::ReadTextFile(const UnicodeString& filena
 {
     PRECONDITION_RETURN(filename.empty() == false, MarkerArray());
 
-    NotificationStore supervisor;
-    MarkerArray         chapterMarkers;
+    NotificationStore supervisor("InsertChapterMarker");
+    MarkerArray       chapterMarkers;
 
     const UnicodeStringArray lines = FileManager::ReadTextFile(filename);
     if(lines.empty() == false)
@@ -169,8 +169,8 @@ MarkerArray InsertChapterMarkersAction::ReadMP3File(const UnicodeString& filenam
 {
     PRECONDITION_RETURN(filename.empty() == false, MarkerArray());
 
-    NotificationStore supervisor;
-    MarkerArray         chapterMarkers;
+    NotificationStore supervisor("InsertChapterMarker");
+    MarkerArray       chapterMarkers;
 
     return chapterMarkers;
 }

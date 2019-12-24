@@ -53,7 +53,7 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
     PRECONDITION_RETURN(AreChapterMarkersValid(chapterMarkers_) == true, SERVICE_FAILURE);
 
     ServiceStatus     status = SERVICE_FAILURE;
-    NotificationStore supervisor;
+    NotificationStore supervisor("FinalizeMP3");
     size_t            errorCount = 0;
 
     for(size_t i = 0; i < targets_.size(); i++)
@@ -122,7 +122,7 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
 bool InsertMediaPropertiesAction::ConfigureSources()
 {
     bool              result = false;
-    NotificationStore supervisor;
+    NotificationStore supervisor("FinalizeMP3");
 
     mediaData_.clear();
     coverImage_.clear();
@@ -163,11 +163,11 @@ bool InsertMediaPropertiesAction::ConfigureSources()
     }
 
     return result;
-} // namespace reaper
+} 
 
 bool InsertMediaPropertiesAction::ConfigureTargets()
 {
-    NotificationStore supervisor;
+    NotificationStore supervisor("FinalizeMP3");
 
     targets_.clear();
 
