@@ -43,7 +43,7 @@ public:
 
 protected:
     static bool HasValidProject();
-    static bool AreChapterMarkersValid(const MarkerArray& markers);
+    static bool AreChapterMarkersValid(const ChapterTagArray& markers);
 
 protected:
     static ReaperProject CurrentProject();

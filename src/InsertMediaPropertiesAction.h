@@ -62,7 +62,7 @@ private:
 
     UnicodeStringArray targets_;
     UnicodeString      coverImage_;
-    MarkerArray        chapterMarkers_;
+    ChapterTagArray        chapterMarkers_;
     UnicodeStringDictionary mediaData_;
 };
 

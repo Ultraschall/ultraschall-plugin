@@ -35,7 +35,7 @@ namespace ultraschall { namespace reaper {
 class MP4CHAPSReader : public ITagReader
 {
 public:
-    virtual bool QueryChapterMarkers(const UnicodeString& sourceName, MarkerArray& chapterMarkers);
+    virtual bool QueryChapterMarkers(const UnicodeString& sourceName, ChapterTagArray& chapterMarkers);
 
 protected:
     virtual ~MP4CHAPSReader() {}

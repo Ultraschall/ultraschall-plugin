@@ -60,7 +60,7 @@ public:
 
     bool InsertChapterMarker(const UnicodeString& name, const double position = Globals::INVALID_MARKER_POSITION);
 
-    MarkerArray AllMarkers() const;
+    ChapterTagArray AllMarkers() const;
 
     UnicodeStringDictionary ParseNotes() const;
 

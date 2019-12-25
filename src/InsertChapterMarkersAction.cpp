@@ -77,7 +77,7 @@ ServiceStatus InsertChapterMarkersAction::Execute()
 bool InsertChapterMarkersAction::ConfigureTargets()
 {
     NotificationStore supervisor("InsertChapterMarker");
-    MarkerArray       chapterMarkers;
+    ChapterTagArray       chapterMarkers;
 
     FileManager::FILE_TYPE mediaType = FileManager::QueryFileType(source_);
     switch(mediaType)
@@ -109,12 +109,12 @@ bool InsertChapterMarkersAction::ConfigureSources()
     return source_.empty() == false;
 }
 
-MarkerArray InsertChapterMarkersAction::ReadTextFile(const UnicodeString& filename)
+ChapterTagArray InsertChapterMarkersAction::ReadTextFile(const UnicodeString& filename)
 {
-    PRECONDITION_RETURN(filename.empty() == false, MarkerArray());
+    PRECONDITION_RETURN(filename.empty() == false, ChapterTagArray());
 
     NotificationStore supervisor("InsertChapterMarker");
-    MarkerArray       chapterMarkers;
+    ChapterTagArray       chapterMarkers;
 
     const UnicodeStringArray lines = FileManager::ReadTextFile(filename);
     if(lines.empty() == false)
@@ -166,12 +166,12 @@ MarkerArray InsertChapterMarkersAction::ReadTextFile(const UnicodeString& filena
     return chapterMarkers;
 }
 
-MarkerArray InsertChapterMarkersAction::ReadMP3File(const UnicodeString& filename)
+ChapterTagArray InsertChapterMarkersAction::ReadMP3File(const UnicodeString& filename)
 {
-    PRECONDITION_RETURN(filename.empty() == false, MarkerArray());
+    PRECONDITION_RETURN(filename.empty() == false, ChapterTagArray());
 
     NotificationStore supervisor("InsertChapterMarker");
-    MarkerArray       chapterMarkers;
+    ChapterTagArray       chapterMarkers;
 
     return chapterMarkers;
 }

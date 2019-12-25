@@ -45,7 +45,7 @@ public:
 
     virtual bool InsertCoverImage(const UnicodeString& targetName, const UnicodeString& coverImage) = 0;
 
-    virtual bool InsertChapterMarkers(const UnicodeString& targetName, const MarkerArray& chapterMarkers) = 0;
+    virtual bool InsertChapterMarkers(const UnicodeString& targetName, const ChapterTagArray& chapterMarkers) = 0;
 
 protected:
     virtual ~ITagWriter() {}

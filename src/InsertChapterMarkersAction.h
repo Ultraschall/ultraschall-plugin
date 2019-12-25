@@ -54,13 +54,13 @@ public:
 
 private:
     UnicodeString source_;
-    MarkerArray   chapterMarkers_;
+    ChapterTagArray   chapterMarkers_;
 
     bool ConfigureTargets();
     bool ConfigureSources();
 
-    static MarkerArray ReadTextFile(const UnicodeString& filename);
-    static MarkerArray ReadMP3File(const UnicodeString& filename);
+    static ChapterTagArray ReadTextFile(const UnicodeString& filename);
+    static ChapterTagArray ReadMP3File(const UnicodeString& filename);
 };
 
 }} // namespace ultraschall::reaper

@@ -29,7 +29,7 @@
 
 namespace ultraschall { namespace reaper {
 
-bool MP4CHAPSReader::QueryChapterMarkers(const UnicodeString& sourceName, MarkerArray& chapterMarkers)
+bool MP4CHAPSReader::QueryChapterMarkers(const UnicodeString& sourceName, ChapterTagArray& chapterMarkers)
 {
     PRECONDITION_RETURN(sourceName.empty() == false, false);
 

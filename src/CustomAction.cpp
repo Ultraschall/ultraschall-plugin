@@ -78,7 +78,7 @@ UnicodeString CustomAction::CreateProjectPath(const UnicodeString& extension)
     return path;
 }
 
-bool CustomAction::AreChapterMarkersValid(const MarkerArray& markers)
+bool CustomAction::AreChapterMarkersValid(const ChapterTagArray& markers)
 {
     PRECONDITION_RETURN(HasValidProject() == true, false);
 

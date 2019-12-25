@@ -145,7 +145,7 @@ bool ID3V2Writer::InsertCoverImage(const UnicodeString& targetName, const Unicod
     return ID3V2InsertCoverPictureFrame(pContext_, coverImage);
 }
 
-bool ID3V2Writer::InsertChapterMarkers(const UnicodeString& targetName, const MarkerArray& chapterMarkers)
+bool ID3V2Writer::InsertChapterMarkers(const UnicodeString& targetName, const ChapterTagArray& chapterMarkers)
 {
     PRECONDITION_RETURN(targetName.empty() == false, false);
     PRECONDITION_RETURN(chapterMarkers.empty() == false, false);

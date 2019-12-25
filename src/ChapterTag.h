@@ -71,7 +71,7 @@ private:
     UnicodeString url_;
 };
 
-typedef std::vector<ChapterTag> MarkerArray;
+typedef std::vector<ChapterTag> ChapterTagArray;
 
 }} // namespace ultraschall::reaper
 

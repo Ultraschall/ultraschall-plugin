@@ -54,7 +54,7 @@ public:
 
 private:
     UnicodeString target_;
-    MarkerArray   chapterMarkers_;
+    ChapterTagArray   chapterMarkers_;
 
     bool ConfigureSources();
     bool ConfigureTargets();

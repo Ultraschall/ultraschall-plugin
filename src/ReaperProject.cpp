@@ -204,9 +204,9 @@ bool ReaperProject::IsValidPosition(const double position)
     return (position >= 0) && (position <= MaxPosition());
 }
 
-MarkerArray ReaperProject::AllMarkers() const
+ChapterTagArray ReaperProject::AllMarkers() const
 {
-    PRECONDITION_RETURN(nativeReference_ != 0, MarkerArray());
+    PRECONDITION_RETURN(nativeReference_ != 0, ChapterTagArray());
 
     return ReaperGateway::Markers(nativeReference_);
 }

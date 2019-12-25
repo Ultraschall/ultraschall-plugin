@@ -43,7 +43,7 @@ public:
 
     virtual bool InsertCoverImage(const UnicodeString& targetName, const UnicodeString& coverImage);
 
-    virtual bool InsertChapterMarkers(const UnicodeString& targetName, const MarkerArray& chapterMarkers);
+    virtual bool InsertChapterMarkers(const UnicodeString& targetName, const ChapterTagArray& chapterMarkers);
 
 protected:
     virtual ~MP4CHAPSWriter() {}

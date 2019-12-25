@@ -30,7 +30,7 @@
 
 namespace ultraschall { namespace reaper { 
 
-bool ID3V2Reader::QueryChapterMarkers(const UnicodeString& sourceName, MarkerArray& chapterMarkers)
+bool ID3V2Reader::QueryChapterMarkers(const UnicodeString& sourceName, ChapterTagArray& chapterMarkers)
 {
     PRECONDITION_RETURN(sourceName.empty() == false, false);
 

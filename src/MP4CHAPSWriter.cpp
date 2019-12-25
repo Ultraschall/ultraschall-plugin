@@ -47,7 +47,7 @@ bool MP4CHAPSWriter::InsertCoverImage(const UnicodeString& targetName, const Uni
     return true;
 }
 
-bool MP4CHAPSWriter::InsertChapterMarkers(const UnicodeString& targetName, const MarkerArray& chapterMarkers)
+bool MP4CHAPSWriter::InsertChapterMarkers(const UnicodeString& targetName, const ChapterTagArray& chapterMarkers)
 {
     PRECONDITION_RETURN(targetName.empty() == false, false);
     PRECONDITION_RETURN(chapterMarkers.empty() == false, false);

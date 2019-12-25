@@ -55,7 +55,7 @@ public:
     static UnicodeString    ProjectPath(ProjectReference projectReference);
     static UnicodeString    ProjectNotes(ProjectReference projectReference);
 
-    static MarkerArray Markers(ProjectReference projectReference);
+    static ChapterTagArray Markers(ProjectReference projectReference);
 
     static size_t CountMarkers(ProjectReference projectReference);
     static bool   ClearMarkers(ProjectReference projectReference);

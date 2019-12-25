@@ -259,11 +259,11 @@ bool IsEditMarker(const UnicodeString& name)
     return normalizedName[0] == '_';
 }
 
-MarkerArray ReaperGateway::Markers(ProjectReference projectReference)
+ChapterTagArray ReaperGateway::Markers(ProjectReference projectReference)
 {
-    PRECONDITION_RETURN(projectReference != nullptr, MarkerArray());
+    PRECONDITION_RETURN(projectReference != nullptr, ChapterTagArray());
 
-    MarkerArray allMarkers;
+    ChapterTagArray allMarkers;
 
     bool        isRegion = false;
     double      position = 0;

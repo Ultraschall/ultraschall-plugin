@@ -37,7 +37,7 @@ namespace ultraschall { namespace reaper {
 class ITagReader : public SharedObject
 {
 public:
-    virtual bool QueryChapterMarkers(const UnicodeString& sourceName, MarkerArray& chapterMarkers) = 0;
+    virtual bool QueryChapterMarkers(const UnicodeString& sourceName, ChapterTagArray& chapterMarkers) = 0;
 
 protected:
     virtual ~ITagReader() {}
