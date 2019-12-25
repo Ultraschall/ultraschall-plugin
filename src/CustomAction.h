@@ -30,7 +30,7 @@
 #include "Common.h"
 #include "ICustomAction.h"
 #include "ReaperProject.h"
-#include "Marker.h"
+#include "ChapterTag.h"
 
 namespace ultraschall { namespace reaper {
 

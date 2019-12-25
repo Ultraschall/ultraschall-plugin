@@ -88,8 +88,8 @@ bool CustomAction::AreChapterMarkersValid(const MarkerArray& markers)
 
     for(size_t i = 0; i < markers.size(); i++)
     {
-        const Marker&       current      = markers[i];
-        const UnicodeString safeName     = current.Name();
+        const ChapterTag&       current      = markers[i];
+        const UnicodeString safeName     = current.Title();
         const double        safePosition = current.Position();
 
         if(CurrentProject().IsValidPosition(current.Position()) == false)
@@ -101,7 +101,7 @@ bool CustomAction::AreChapterMarkersValid(const MarkerArray& markers)
             valid = false;
         }
 
-        if(current.Name().empty() == true)
+        if(current.Title().empty() == true)
         {
             UnicodeStringStream os;
             os << "The Chapter marker at '" << SecondsToString(safePosition) << "' has no name.";

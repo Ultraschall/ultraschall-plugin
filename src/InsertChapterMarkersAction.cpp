@@ -51,14 +51,14 @@ ServiceStatus InsertChapterMarkersAction::Execute()
     size_t addedTags = 0;
     for(size_t i = 0; i < chapterMarkers_.size(); i++)
     {
-        if(currentProject.InsertChapterMarker(chapterMarkers_[i].Name(), chapterMarkers_[i].Position()) == true)
+        if(currentProject.InsertChapterMarker(chapterMarkers_[i].Title(), chapterMarkers_[i].Position()) == true)
         {
             addedTags++;
         }
         else
         {
             UnicodeStringStream os;
-            os << "Chapter marker '" << chapterMarkers_[i].Name() << "' at position '"
+            os << "Chapter marker '" << chapterMarkers_[i].Title() << "' at position '"
                << SecondsToString(chapterMarkers_[i].Position()) << "' could not be added.";
             supervisor.RegisterError(os.str());
         }
@@ -138,7 +138,8 @@ MarkerArray InsertChapterMarkersAction::ReadTextFile(const UnicodeString& filena
                         name += " " + items[j];
                     }
 
-                    chapterMarkers.push_back(Marker(position, name, 0));
+                    //chapterMarkers.push_back(Marker(position, name));
+                    chapterMarkers.push_back(ChapterTag(position, name));
                 }
                 else
                 {

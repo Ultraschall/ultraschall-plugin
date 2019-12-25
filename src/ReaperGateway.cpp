@@ -280,7 +280,7 @@ MarkerArray ReaperGateway::Markers(ProjectReference projectReference)
         {
             if(false == isRegion) // remove regions
             {
-                allMarkers.push_back(Marker(position, name, color));
+                allMarkers.push_back(ChapterTag(position, name));
             }
         }
 
@@ -324,13 +324,13 @@ bool ReaperGateway::InsertMarker(ProjectReference projectReference, const Unicod
     return reaper_api::AddProjectMarker2(nativeReference, false, position, 0, name.c_str(), -1, 0) != -1;
 }
 
-bool ReaperGateway::InsertMarker(ProjectReference projectReference, const Marker& marker)
+bool ReaperGateway::InsertMarker(ProjectReference projectReference, const ChapterTag& marker)
 {
     PRECONDITION_RETURN(projectReference != nullptr, false);
 
     ReaProject* nativeReference = reinterpret_cast<ReaProject*>(projectReference);
     return reaper_api::AddProjectMarker2(
-               nativeReference, false, marker.Position(), 0, marker.Name().c_str(), -1, marker.Color())
+               nativeReference, false, marker.Position(), 0, marker.Title().c_str(), -1, Globals::DEFAULT_CHAPTER_MARKER_COLOR)
            != -1;
 }
 

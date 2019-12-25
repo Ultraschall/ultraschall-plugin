@@ -29,7 +29,7 @@
 #define __ULTRASCHALL_REAPER_GATEWAY_H_INCL__
 
 #include "Common.h"
-#include "Marker.h"
+#include "ChapterTag.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -61,7 +61,7 @@ public:
     static bool   ClearMarkers(ProjectReference projectReference);
 
     static bool InsertMarker(ProjectReference projectReference, const UnicodeString& name, const double position);
-    static bool InsertMarker(ProjectReference projectReference, const Marker& marker);
+    static bool InsertMarker(ProjectReference projectReference, const ChapterTag& marker);
     static bool UndoMarker(ProjectReference projectReference, const double position);
 
     static int    PlayState(ProjectReference projectReference);

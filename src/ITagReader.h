@@ -28,7 +28,7 @@
 #define __ULTRASCHALL_REAPER_ITAG_READER_H_INCL__
 
 #include "Common.h"
-#include "Marker.h"
+#include "ChapterTag.h"
 #include "ServiceStatus.h"
 #include "SharedObject.h"
 

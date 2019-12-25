@@ -167,7 +167,7 @@ bool ID3V2Writer::InsertChapterMarkers(const UnicodeString& targetName, const Ma
         const uint32_t endTime   = (i < (chapterMarkers.size() - 1)) ?
                                      static_cast<uint32_t>(chapterMarkers[i + 1].Position() * 1000) :
                                      pContext_->Duration();
-        success = ID3V2InsertChapterFrame(pContext_, tableOfContensItem, chapterMarkers[i].Name(), startTime, endTime);
+        success = ID3V2InsertChapterFrame(pContext_, tableOfContensItem, chapterMarkers[i].Title(), startTime, endTime);
     }
 
     if(true == success)

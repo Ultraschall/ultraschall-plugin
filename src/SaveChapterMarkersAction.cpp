@@ -50,7 +50,7 @@ ServiceStatus SaveChapterMarkersAction::Execute()
     for(size_t i = 0; i < chapterMarkers_.size(); i++)
     {
         const UnicodeString timestamp = SecondsToString(chapterMarkers_[i].Position());
-        const UnicodeString item      = timestamp + " " + chapterMarkers_[i].Name();
+        const UnicodeString item      = timestamp + " " + chapterMarkers_[i].Title();
         os << item << std::endl;
     }
 

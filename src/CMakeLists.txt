@@ -37,6 +37,7 @@ include_directories(
 set(COMMON_INCLUDES
   Application.h
   BinaryStream.h
+  ChapterTag.h
   Common.h
   CustomAction.h
   CustomActionFactory.h
@@ -56,8 +57,6 @@ set(COMMON_INCLUDES
   ITagWriter.h
   SharedObject.h
   Malloc.h
-  Marker.h
-#  MediaProperties.h
   MP4CHAPSReader.h
   MP4CHAPSWriter.h
   Picture.h
@@ -96,7 +95,6 @@ set(COMMON_SOURCES
   ID3V2Writer.cpp
   InsertChapterMarkersAction.cpp
   InsertMediaPropertiesAction.cpp
- # MediaProperties.cpp
   MP4CHAPSReader.cpp
   MP4CHAPSWriter.cpp
   Picture.cpp

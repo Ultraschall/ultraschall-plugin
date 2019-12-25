@@ -144,11 +144,11 @@ bool InsertMediaPropertiesAction::ConfigureSources()
     if(chapterMarkers_.empty() == false)
     {
         bool errorFound = false;
-        std::for_each(chapterMarkers_.begin(), chapterMarkers_.end(), [&](const Marker& chapterMarker) {
-            if(chapterMarker.Name().length() > Globals::MAX_CHAPTER_TITLE_LENGTH)
+        std::for_each(chapterMarkers_.begin(), chapterMarkers_.end(), [&](const ChapterTag& chapterMarker) {
+            if(chapterMarker.Title().length() > Globals::MAX_CHAPTER_TITLE_LENGTH)
             {
                 UnicodeStringStream os;
-                os << "The chapter marker title '" << chapterMarker.Name() << "' is too long. "
+                os << "The chapter marker title '" << chapterMarker.Title() << "' is too long. "
                    << "Make sure that is does not exceed " << Globals::MAX_CHAPTER_TITLE_LENGTH << " characters.";
                 supervisor.RegisterError(os.str());
                 errorFound = true;

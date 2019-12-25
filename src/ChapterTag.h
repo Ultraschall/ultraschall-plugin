@@ -24,20 +24,24 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_MARKER_H_INCL__
-#define __ULTRASCHALL_REAPER_MARKER_H_INCL__
+#ifndef __ULTRASCHALL_REAPER_CHAPTER_TAG_H_INCL__
+#define __ULTRASCHALL_REAPER_CHAPTER_TAG_H_INCL__
 
 #include "Common.h"
 
 namespace ultraschall { namespace reaper {
 
-class Marker
+class ChapterTag
 {
 public:
-    Marker() : position_(-1), color_(0xffffffff) {}
+    ChapterTag() : position_(Globals::INVALID_MARKER_POSITION) {}
 
-    Marker(const double position, const UnicodeString& name, const int color) :
-        position_(position), name_(name), color_(color)
+    ChapterTag(const double position, const UnicodeString& title) : position_(position), title_(title) {}
+
+    ChapterTag(
+        const double position, const UnicodeString& title, const UnicodeString& image, const UnicodeString& url) :
+        position_(position),
+        title_(title), image_(image), url_(url)
     {}
 
     double Position() const
@@ -45,24 +49,30 @@ public:
         return position_;
     }
 
-    const std::string& Name() const
+    const UnicodeString& Title() const
     {
-        return name_;
+        return title_;
     }
 
-    int Color() const
+    const UnicodeString& Image() const
     {
-        return color_;
+        return image_;
+    }
+
+    const UnicodeString& Url() const
+    {
+        return url_;
     }
 
 private:
     double        position_;
-    UnicodeString name_;
-    int           color_;
+    UnicodeString title_;
+    UnicodeString image_;
+    UnicodeString url_;
 };
 
-typedef std::vector<Marker> MarkerArray;
+typedef std::vector<ChapterTag> MarkerArray;
 
 }} // namespace ultraschall::reaper
 
-#endif // #ifndef __ULTRASCHALL_REAPER_MARKER_H_INCL__
+#endif // #ifndef __ULTRASCHALL_REAPER_CHAPTER_TAG_H_INCL__
