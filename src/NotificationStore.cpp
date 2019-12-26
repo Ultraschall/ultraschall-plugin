@@ -57,8 +57,8 @@ void NotificationStore::DispatchNotifications()
         messageCountSeed = 0;
     }
 
-    const size_t messageCount = messageQueue_.ItemCount();
-    SystemProperty<int>::Set(NOTIFICATION_SECTION_NAME, "message_count", (int)messageCount);
+    const size_t messageCount = messageCountSeed + messageQueue_.ItemCount();
+    SystemProperty<int>::Set(NOTIFICATION_SECTION_NAME, "message_count", static_cast<int>(messageCount));
 
     const NotificationArray& messages_ = messageQueue_.Items();
     for(size_t i = 0; i < messages_.size(); ++i)
