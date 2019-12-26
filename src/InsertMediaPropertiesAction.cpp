@@ -53,7 +53,7 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
     PRECONDITION_RETURN(AreChapterMarkersValid(chapterMarkers_) == true, SERVICE_FAILURE);
 
     ServiceStatus     status = SERVICE_FAILURE;
-    NotificationStore supervisor(UniqueId());
+    NotificationStore notificationStore(UniqueId());
     size_t            errorCount = 0;
 
     for(size_t i = 0; i < targets_.size(); i++)
@@ -63,13 +63,29 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
         {
             if(pTagWriter->Start(targets_[i]) == true)
             {
-                if(mediaData_.empty() == false)
+                const UnicodeStringArray missingMediaDataFields = FindMissingMediaData();
+                const size_t             missingFieldCount      = missingMediaDataFields.size();
+                static const size_t      ALL_MEDIA_DATA_FIELDS  = 6;
+                if((missingFieldCount > 0) && (missingFieldCount < ALL_MEDIA_DATA_FIELDS))
+                {
+                    UnicodeStringStream os;
+                    os << "Some media data fields are missing.";
+                    notificationStore.RegisterWarning(os.str());
+                }
+                else if(missingFieldCount == ALL_MEDIA_DATA_FIELDS)
+                {
+                    UnicodeStringStream os;
+                    os << "Found no media data.";
+                    notificationStore.RegisterWarning(os.str());
+                }
+
+                if(missingFieldCount < ALL_MEDIA_DATA_FIELDS)
                 {
                     if(pTagWriter->InsertProperties(targets_[i], mediaData_) == false)
                     {
                         UnicodeStringStream os;
                         os << "Failed to insert tags into " << targets_[i] << ".";
-                        supervisor.RegisterError(os.str());
+                        notificationStore.RegisterError(os.str());
                         errorCount++;
                     }
                 }
@@ -80,9 +96,15 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
                     {
                         UnicodeStringStream os;
                         os << "Failed to insert cover image into " << targets_[i] << ".";
-                        supervisor.RegisterError(os.str());
+                        notificationStore.RegisterError(os.str());
                         errorCount++;
                     }
+                }
+                else
+                {
+                    UnicodeStringStream os;
+                    os << "Found no cover image.";
+                    notificationStore.RegisterWarning(os.str());
                 }
 
                 if(chapterMarkers_.empty() == false)
@@ -91,9 +113,15 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
                     {
                         UnicodeStringStream os;
                         os << "Failed to insert chapter markers into " << targets_[i] << ".";
-                        supervisor.RegisterError(os.str());
+                        notificationStore.RegisterError(os.str());
                         errorCount++;
                     }
+                }
+                else
+                {
+                    UnicodeStringStream os;
+                    os << "Found no chapter markers.";
+                    notificationStore.RegisterWarning(os.str());
                 }
 
                 pTagWriter->Stop(0 == errorCount);
@@ -109,7 +137,7 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
         {
             UnicodeStringStream os;
             os << targets_[i] << " has been updated successfully.";
-            supervisor.RegisterSuccess(os.str());
+            notificationStore.RegisterSuccess(os.str());
         }
 
         status = SERVICE_SUCCESS;
@@ -120,24 +148,14 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
 
 bool InsertMediaPropertiesAction::ConfigureSources()
 {
-    bool              result = true;
-    NotificationStore supervisor(UniqueId());
+    bool result = true;
 
     mediaData_.clear();
     coverImage_.clear();
     chapterMarkers_.clear();
 
-    mediaData_ = ReaperProject::Current().ParseNotes();
-    if(mediaData_.empty() == true)
-    {
-        supervisor.RegisterWarning("ID3v2 tags have not been defined yet.");
-    }
-
+    mediaData_  = ReaperProject::Current().ParseNotes();
     coverImage_ = FindCoverImage();
-    if(coverImage_.empty() == true)
-    {
-        supervisor.RegisterWarning("Cover image is missing.");
-    }
 
     chapterMarkers_ = CurrentProject().AllMarkers();
     if(chapterMarkers_.empty() == false)
@@ -149,16 +167,13 @@ bool InsertMediaPropertiesAction::ConfigureSources()
                 UnicodeStringStream os;
                 os << "The chapter marker title '" << chapterMarker.Title() << "' is too long. "
                    << "Make sure that is does not exceed " << Globals::MAX_CHAPTER_TITLE_LENGTH << " characters.";
-                supervisor.RegisterError(os.str());
+                NotificationStore notificationStore(UniqueId());
+                notificationStore.RegisterError(os.str());
                 errorFound = true;
             }
         });
 
         result = (false == errorFound);
-    }
-    else
-    {
-        supervisor.RegisterWarning("No chapters have been set.");
     }
 
     return result;
@@ -214,6 +229,31 @@ UnicodeString InsertMediaPropertiesAction::FindCoverImage()
     }
 
     return coverImage;
+}
+
+UnicodeStringArray InsertMediaPropertiesAction::FindMissingMediaData()
+{
+    UnicodeStringArray missingMediaDataFields;
+
+    static const UnicodeStringArray mediaDataKeys
+        = {"podcast", "author", "episode", "category", "publicationDate", "description"};
+    std::for_each(mediaDataKeys.begin(), mediaDataKeys.end(), [&](const UnicodeString& mediaDataKey) {
+        const UnicodeStringDictionary::const_iterator mediaDataIterator = mediaData_.find(mediaDataKey);
+        if(mediaDataIterator != mediaData_.end())
+        {
+            UnicodeString mediaDataField = mediaDataIterator->second;
+            if(mediaDataField.empty() == true)
+            {
+                missingMediaDataFields.push_back(mediaDataKey);
+            }
+        }
+        else
+        {
+            missingMediaDataFields.push_back(mediaDataKey);
+        }
+    });
+
+    return missingMediaDataFields;
 }
 
 }} // namespace ultraschall::reaper

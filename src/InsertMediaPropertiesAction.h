@@ -59,10 +59,11 @@ private:
     bool ConfigureSources();
 
     static UnicodeString FindCoverImage();
+    UnicodeStringArray   FindMissingMediaData();
 
-    UnicodeStringArray targets_;
-    UnicodeString      coverImage_;
-    ChapterTagArray        chapterMarkers_;
+    UnicodeStringArray      targets_;
+    UnicodeString           coverImage_;
+    ChapterTagArray         chapterMarkers_;
     UnicodeStringDictionary mediaData_;
 };
 
