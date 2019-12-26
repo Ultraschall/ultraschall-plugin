@@ -28,6 +28,7 @@
 #include "Application.h"
 #include "FileManager.h"
 #include "StringUtilities.h"
+#include "NotificationStore.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -142,13 +143,21 @@ UnicodeStringDictionary ReaperProject::ParseNotes() const
         = {"podcast", "author", "episode", "publicationDate", "category", "description"};
 
     UnicodeStringDictionary notesDictionary;
-    UnicodeString notes = ReaperGateway::ProjectNotes(nativeReference_);
+    UnicodeString           notes = ReaperGateway::ProjectNotes(nativeReference_);
     if(notes.empty() == false)
     {
         UnicodeStringArray values = UnicodeStringTokenize(notes, '\n');
-        for(size_t i = 0; i < values.size(); i++)
+        if(values.size() <= keys.size())
         {
-            notesDictionary.insert(std::pair<UnicodeString, UnicodeString>(keys[i], values[i]));
+            for(size_t i = 0; i < values.size(); i++)
+            {
+                notesDictionary.insert(std::pair<UnicodeString, UnicodeString>(keys[i], values[i]));
+            }
+        }
+        else
+        {
+            NotificationStore notificationStore("ULTRASCHALL_PROJECT_VALIDITY_CHECK");
+            notificationStore.RegisterError("The project media data is corrupted. Please check an retry.");
         }
     }
 
