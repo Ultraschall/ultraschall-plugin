@@ -53,7 +53,7 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
     PRECONDITION_RETURN(AreChapterMarkersValid(chapterMarkers_) == true, SERVICE_FAILURE);
 
     ServiceStatus     status = SERVICE_FAILURE;
-    NotificationStore supervisor("FinalizeMP3");
+    NotificationStore supervisor(UniqueId());
     size_t            errorCount = 0;
 
     for(size_t i = 0; i < targets_.size(); i++)
@@ -63,25 +63,20 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
         {
             if(pTagWriter->Start(targets_[i]) == true)
             {
-                bool commit = false;
-
-                if(pTagWriter->InsertProperties(targets_[i], mediaData_) == true)
+                if(mediaData_.empty() == false)
                 {
-                    if(pTagWriter->InsertCoverImage(targets_[i], coverImage_) == true)
+                    if(pTagWriter->InsertProperties(targets_[i], mediaData_) == false)
                     {
-                        if(pTagWriter->InsertChapterMarkers(targets_[i], chapterMarkers_) == true)
-                        {
-                            commit = true;
-                        }
-                        else
-                        {
-                            UnicodeStringStream os;
-                            os << "Failed to insert chapter markers into " << targets_[i] << ".";
-                            supervisor.RegisterError(os.str());
-                            errorCount++;
-                        }
+                        UnicodeStringStream os;
+                        os << "Failed to insert tags into " << targets_[i] << ".";
+                        supervisor.RegisterError(os.str());
+                        errorCount++;
                     }
-                    else
+                }
+
+                if(coverImage_.empty() == false)
+                {
+                    if(pTagWriter->InsertCoverImage(targets_[i], coverImage_) == false)
                     {
                         UnicodeStringStream os;
                         os << "Failed to insert cover image into " << targets_[i] << ".";
@@ -89,15 +84,19 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
                         errorCount++;
                     }
                 }
-                else
+
+                if(chapterMarkers_.empty() == false)
                 {
-                    UnicodeStringStream os;
-                    os << "Failed to insert tags into " << targets_[i] << ".";
-                    supervisor.RegisterError(os.str());
-                    errorCount++;
+                    if(pTagWriter->InsertChapterMarkers(targets_[i], chapterMarkers_) == false)
+                    {
+                        UnicodeStringStream os;
+                        os << "Failed to insert chapter markers into " << targets_[i] << ".";
+                        supervisor.RegisterError(os.str());
+                        errorCount++;
+                    }
                 }
 
-                pTagWriter->Stop(commit);
+                pTagWriter->Stop(0 == errorCount);
             }
 
             SafeRelease(pTagWriter);
@@ -121,8 +120,8 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
 
 bool InsertMediaPropertiesAction::ConfigureSources()
 {
-    bool              result = false;
-    NotificationStore supervisor("FinalizeMP3");
+    bool              result = true;
+    NotificationStore supervisor(UniqueId());
 
     mediaData_.clear();
     coverImage_.clear();
@@ -163,11 +162,11 @@ bool InsertMediaPropertiesAction::ConfigureSources()
     }
 
     return result;
-} 
+}
 
 bool InsertMediaPropertiesAction::ConfigureTargets()
 {
-    NotificationStore supervisor("FinalizeMP3");
+    NotificationStore supervisor(UniqueId());
 
     targets_.clear();
 

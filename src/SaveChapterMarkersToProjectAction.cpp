@@ -44,8 +44,7 @@ ServiceStatus SaveChapterMarkersToProjectAction::Execute()
     PRECONDITION_RETURN(AreChapterMarkersValid(chapterMarkers_) == true, SERVICE_FAILURE);
 
     ServiceStatus       status = SERVICE_FAILURE;
-    NotificationStore supervisor("SaveChapterMarkersToProject");
-
+    NotificationStore supervisor(UniqueId());
     std::ostringstream os;
     for(size_t i = 0; i < chapterMarkers_.size(); i++)
     {
@@ -75,7 +74,7 @@ bool SaveChapterMarkersToProjectAction::ConfigureTargets()
 bool SaveChapterMarkersToProjectAction::ConfigureSources()
 {
     bool                status = false;
-    NotificationStore supervisor("SaveChapterMarkersToProject");
+    NotificationStore supervisor(UniqueId());
 
     ReaperProject currentProject = ReaperProject::Current();
     chapterMarkers_              = currentProject.AllMarkers();

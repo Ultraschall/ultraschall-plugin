@@ -38,7 +38,7 @@ bool CustomAction::IsValidCustomActionId(const int32_t id)
 
 bool CustomAction::HasValidProject()
 {
-    NotificationStore supervisor("ProjectDirty");
+    NotificationStore supervisor("ULTRASCHALL_PROJECT_VALIDITY_CHECK");
 
     const bool isValid = (CurrentProjectDirectory().empty() == false) && (CurrentProjectName().empty() == false);
     if(isValid == false)
@@ -82,7 +82,7 @@ bool CustomAction::AreChapterMarkersValid(const ChapterTagArray& markers)
 {
     PRECONDITION_RETURN(HasValidProject() == true, false);
 
-    NotificationStore supervisor("ChapterMarkerOutOfRange");
+    NotificationStore supervisor("ULTRASCHALL_CHAPTER_VALIDITY_CHECK");
 
     bool valid = true;
 

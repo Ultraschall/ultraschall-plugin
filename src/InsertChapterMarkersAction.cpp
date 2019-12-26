@@ -45,7 +45,7 @@ ServiceStatus InsertChapterMarkersAction::Execute()
     PRECONDITION_RETURN(AreChapterMarkersValid(chapterMarkers_) == true, SERVICE_FAILURE);
 
     ServiceStatus       status = SERVICE_FAILURE;
-    NotificationStore supervisor("InsertChapterMarker");
+    NotificationStore supervisor(UniqueId());
 
     ReaperProject         currentProject = ReaperProject::Current();
     size_t addedTags = 0;
@@ -76,8 +76,8 @@ ServiceStatus InsertChapterMarkersAction::Execute()
 
 bool InsertChapterMarkersAction::ConfigureTargets()
 {
-    NotificationStore supervisor("InsertChapterMarker");
-    ChapterTagArray       chapterMarkers;
+    NotificationStore supervisor(UniqueId());
+    ChapterTagArray   chapterMarkers;
 
     FileManager::FILE_TYPE mediaType = FileManager::QueryFileType(source_);
     switch(mediaType)
@@ -86,7 +86,7 @@ bool InsertChapterMarkersAction::ConfigureTargets()
             chapterMarkers = ReadTextFile(source_);
             break;
         case FileManager::FILE_TYPE::MP3:
-            chapterMarkers = ReadMP3File(source_);
+            //chapterMarkers = ReadMP3File(source_);
             break;
         default:
             break;
@@ -113,8 +113,8 @@ ChapterTagArray InsertChapterMarkersAction::ReadTextFile(const UnicodeString& fi
 {
     PRECONDITION_RETURN(filename.empty() == false, ChapterTagArray());
 
-    NotificationStore supervisor("InsertChapterMarker");
-    ChapterTagArray       chapterMarkers;
+    NotificationStore supervisor(UniqueId());
+    ChapterTagArray   chapterMarkers;
 
     const UnicodeStringArray lines = FileManager::ReadTextFile(filename);
     if(lines.empty() == false)
@@ -162,16 +162,6 @@ ChapterTagArray InsertChapterMarkersAction::ReadTextFile(const UnicodeString& fi
         os << "The file '" << filename << "' does not contain chapter markers";
         supervisor.RegisterWarning(os.str());
     }
-
-    return chapterMarkers;
-}
-
-ChapterTagArray InsertChapterMarkersAction::ReadMP3File(const UnicodeString& filename)
-{
-    PRECONDITION_RETURN(filename.empty() == false, ChapterTagArray());
-
-    NotificationStore supervisor("InsertChapterMarker");
-    ChapterTagArray       chapterMarkers;
 
     return chapterMarkers;
 }
