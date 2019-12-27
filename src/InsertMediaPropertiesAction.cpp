@@ -49,9 +49,6 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
     PRECONDITION_RETURN(ConfigureTargets() == true, SERVICE_FAILURE);
     PRECONDITION_RETURN(ConfigureSources() == true, SERVICE_FAILURE);
 
-    // caution! requires ConfigureSources() to be called beforehand
-    PRECONDITION_RETURN(AreChapterMarkersValid(chapterMarkers_) == true, SERVICE_FAILURE);
-
     ServiceStatus     status = SERVICE_FAILURE;
     NotificationStore notificationStore(UniqueId());
     size_t            errorCount = 0;
@@ -69,13 +66,13 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
                 if((missingFieldCount > 0) && (missingFieldCount < ALL_MEDIA_DATA_FIELDS))
                 {
                     UnicodeStringStream os;
-                    os << "Some media data fields are missing.";
+                    os << "Some ID3v2 fields are missing ";
                     notificationStore.RegisterWarning(os.str());
                 }
                 else if(missingFieldCount == ALL_MEDIA_DATA_FIELDS)
                 {
                     UnicodeStringStream os;
-                    os << "Found no media data.";
+                    os << "Found no ID3v2 data.";
                     notificationStore.RegisterWarning(os.str());
                 }
 
@@ -84,7 +81,7 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
                     if(pTagWriter->InsertProperties(targets_[i], mediaData_) == false)
                     {
                         UnicodeStringStream os;
-                        os << "Failed to insert tags into " << targets_[i] << ".";
+                        os << "Failed to insert ID3v2 data into " << targets_[i] << ".";
                         notificationStore.RegisterError(os.str());
                         errorCount++;
                     }
@@ -107,7 +104,20 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
                     notificationStore.RegisterWarning(os.str());
                 }
 
-                if(chapterMarkers_.empty() == false)
+                if(chapterMarkers_.empty() == true)
+                {
+                    UnicodeStringStream os;
+                    os << "Found no chapter markers.";
+                    notificationStore.RegisterWarning(os.str());
+                }
+                else if(AreChapterMarkersValid(chapterMarkers_) == false)
+                {
+                    UnicodeStringStream os;
+                    os << "Found invalid chapter markers.";
+                    notificationStore.RegisterError(os.str());
+                    errorCount++;
+                }
+                else
                 {
                     if(pTagWriter->InsertChapterMarkers(targets_[i], chapterMarkers_) == false)
                     {
@@ -116,12 +126,6 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
                         notificationStore.RegisterError(os.str());
                         errorCount++;
                     }
-                }
-                else
-                {
-                    UnicodeStringStream os;
-                    os << "Found no chapter markers.";
-                    notificationStore.RegisterWarning(os.str());
                 }
 
                 pTagWriter->Stop(0 == errorCount);
@@ -241,8 +245,12 @@ UnicodeStringArray InsertMediaPropertiesAction::FindMissingMediaData()
         const UnicodeStringDictionary::const_iterator mediaDataIterator = mediaData_.find(mediaDataKey);
         if(mediaDataIterator != mediaData_.end())
         {
-            UnicodeString mediaDataField = mediaDataIterator->second;
+            const UnicodeString mediaDataField = UnicodeStringCopyTrimLeft(mediaDataIterator->second);
             if(mediaDataField.empty() == true)
+            {
+                missingMediaDataFields.push_back(mediaDataKey);
+            }
+            else if(mediaDataField[0] == '\n')
             {
                 missingMediaDataFields.push_back(mediaDataKey);
             }
