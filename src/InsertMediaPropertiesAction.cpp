@@ -100,20 +100,20 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
                 else
                 {
                     UnicodeStringStream os;
-                    os << "Found no cover image.";
+                    os << "The cover image is missing.";
                     notificationStore.RegisterWarning(os.str());
                 }
 
                 if(chapterMarkers_.empty() == true)
                 {
                     UnicodeStringStream os;
-                    os << "Found no chapter markers.";
+                    os << "The chapter markers are missing.";
                     notificationStore.RegisterWarning(os.str());
                 }
                 else if(AreChapterMarkersValid(chapterMarkers_) == false)
                 {
                     UnicodeStringStream os;
-                    os << "Found invalid chapter markers.";
+                    os << "One or more chapter markers are invalid.";
                     notificationStore.RegisterError(os.str());
                     errorCount++;
                 }
