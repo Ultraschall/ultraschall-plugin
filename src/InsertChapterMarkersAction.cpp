@@ -138,7 +138,6 @@ ChapterTagArray InsertChapterMarkersAction::ReadTextFile(const UnicodeString& fi
                         name += " " + items[j];
                     }
 
-                    //chapterMarkers.push_back(Marker(position, name));
                     chapterMarkers.push_back(ChapterTag(position, name));
                 }
                 else
