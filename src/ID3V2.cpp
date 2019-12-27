@@ -30,7 +30,7 @@
 #include "Picture.h"
 #include "StringUtilities.h"
 
-namespace ultraschall { namespace reaper { 
+namespace ultraschall { namespace reaper {
 
 ID3V2Context* ID3V2StartTransaction(const UnicodeString& targetName)
 {
@@ -44,7 +44,8 @@ bool ID3V2CommitTransaction(ID3V2Context*& context)
     PRECONDITION_RETURN(context != 0, false);
     PRECONDITION_RETURN(context->Tags() != 0, false);
 
-    const bool success = context->Target()->save(taglib_mp3::File::AllTags, true, 3);
+    context->Target()->strip(taglib_mp3::File::ID3v1 | taglib_mp3::File::APE);
+    const bool success = context->Target()->save(taglib_mp3::File::ID3v2, true, 3);
     SafeDelete(context);
 
     return success;
@@ -55,62 +56,17 @@ void ID3V2AbortTransaction(ID3V2Context*& context)
     SafeDelete(context);
 }
 
-bool ID3V2RemoveFrames(ID3V2Context* context, const UnicodeString& id)
+void ID3V2RemoveAllFrames(ID3V2Context* context)
 {
-    PRECONDITION_RETURN(context != 0, false);
-    PRECONDITION_RETURN(context->Tags() != 0, false);
-    PRECONDITION_RETURN(id.empty() == false, false);
+    PRECONDITION(context != 0);
+    PRECONDITION(context->Tags() != 0);
 
-    bool success = false;
-
-    std::vector<taglib_id3v2::Frame*> selectedFrames;
-
-    taglib_id3v2::FrameList frames = context->Tags()->frameList(id.c_str());
-    for(unsigned int i = 0; i < frames.size(); i++)
-    {
-        taglib_id3v2::Frame* frame = frames[i];
-        selectedFrames.push_back(frame);
-    }
-
-    if(selectedFrames.empty() == false)
-    {
-        for(size_t j = 0; j < selectedFrames.size(); j++)
-        {
-            context->Tags()->removeFrame(selectedFrames[j], false);
-        }
-
-        success = true;
-    }
-
-    return success;
-}
-
-bool ID3V2RemoveAllFrames(ID3V2Context* context)
-{
-    PRECONDITION_RETURN(context != 0, false);
-    PRECONDITION_RETURN(context->Tags() != 0, false);
-
-    bool success = false;
-
-    std::vector<taglib_id3v2::Frame*> selectedFrames;
-    taglib_id3v2::FrameList           frames = context->Tags()->frameList();
-    for(unsigned int i = 0; i < frames.size(); i++)
-    {
-        taglib_id3v2::Frame* frame = frames[i];
-        selectedFrames.push_back(frame);
-    }
-
-    if(selectedFrames.empty() == false)
-    {
-        for(size_t j = 0; j < selectedFrames.size(); j++)
-        {
-            context->Tags()->removeFrame(selectedFrames[j], false);
-        }
-
-        success = true;
-    }
-
-    return success;
+    UnicodeStringArray FRAME_IDS
+        = {"TALB", "TPE1", "TIT2", "TCON", "TYER", "TENC", "TLEN", "COMM", "APIC", "CTOC", "CHAP"};
+    std::for_each(FRAME_IDS.begin(), FRAME_IDS.end(), [&](const UnicodeString& FRAME_ID) {
+        taglib::ByteVector frameId = taglib::ByteVector::fromCString(FRAME_ID.c_str());
+        context->Tags()->removeFrames(frameId);
+    });
 }
 
 bool InsertUTF16TextFrame(ID3V2Context* context, const UnicodeString& id, const UnicodeString& text)
@@ -169,7 +125,8 @@ bool InsertUTF8TextFrame(ID3V2Context* context, const UnicodeString& id, const U
     return success;
 }
 
-bool ID3V2InsertTextFrame(ID3V2Context* context, const UnicodeString& id, const UnicodeString& text, const CHAR_ENCODING encoding)
+bool ID3V2InsertTextFrame(
+    ID3V2Context* context, const UnicodeString& id, const UnicodeString& text, const CHAR_ENCODING encoding)
 {
     if(encoding == UTF16)
     {
@@ -374,4 +331,4 @@ bool ID3V2QueryChapterFrames(ID3V2Context* pContext)
     return true;
 }
 
-}} // namespace ultraschall::reaper::id3v2
+}} // namespace ultraschall::reaper
