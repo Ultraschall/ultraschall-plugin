@@ -37,8 +37,7 @@ ID3V2Context* ID3V2StartTransaction(const UnicodeString& targetName);
 bool     ID3V2CommitTransaction(ID3V2Context*& context);
 void     ID3V2AbortTransaction(ID3V2Context*& context);
 
-bool ID3V2RemoveFrames(ID3V2Context* context, const UnicodeString& id);
-bool ID3V2RemoveAllFrames(ID3V2Context*);
+void ID3V2RemoveAllFrames(ID3V2Context*);
 bool ID3V2QueryChapterFrames(ID3V2Context* context);
 
 bool ID3V2InsertTextFrame(
