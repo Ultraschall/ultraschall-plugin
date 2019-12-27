@@ -60,7 +60,6 @@ set(COMMON_INCLUDES
   MP4CHAPSReader.h
   MP4CHAPSWriter.h
   Picture.h
-  Platform.h
   ReaperProject.h
   reaper_plugin_functions.h
   ReaperEntryPoints.h
@@ -148,11 +147,14 @@ message(STATUS "COMMON_INCLUDES   = ${COMMON_INCLUDES}")
 message(STATUS "COMMON_SOURCES    = ${COMMON_SOURCES}")
 message(STATUS "PLATFORM_INCLUDES = ${PLATFORM_INCLUDES}")
 message(STATUS "PLATFORM_SOURCES  = ${PLATFORM_SOURCES}")
-message(STATUS "EXTRA_INCLUDES    = ${EXTERNAL_INCLUDES}")
+message(STATUS "EXTRA_INCLUDES    = ${EXTRA_INCLUDES}")
 message(STATUS "EXTRA_SOURCES     = ${EXTRA_SOURCES}")
+message(STATUS "EXTERNAL_INCLUDES = ${EXTERNAL_INCLUDES}")
+message(STATUS "EXTERNAL_SOURCES  = ${EXTERNAL_SOURCES}")
 
 source_group("Header Files" FILES ${COMMON_INCLUDES} ${PLATFORM_INCLUDES})
-source_group("Source Files" FILES ${COMMON_SOURCES} ${PLATFORM_SOURCES} ${EXTRA_SOURCES} ${EXTERNAL_SOURCES})
+source_group("Source Files" FILES ${COMMON_SOURCES} ${PLATFORM_SOURCES})
+source_group("External Files" FILES ${EXTRA_SOURCES} ${EXTERNAL_SOURCES})
 
 add_library(reaper_ultraschall SHARED
   ${COMMON_INCLUDES}
