@@ -135,6 +135,38 @@ UnicodeString ReaperProject::Name() const
     return result;
 }
 
+UnicodeStringArray ReaperProject::SanitizeNotes(const UnicodeString& source)
+{
+    PRECONDITION_RETURN(source.empty() == false, UnicodeStringArray());
+
+    UnicodeStringArray result;
+
+    static const UnicodeChar TOKEN_DELIMITER      = '\n';
+    static const size_t      REQUIRED_TOKEN_COUNT = 6;
+
+    UnicodeStringArray sanitizedSource = UnicodeStringTokenize(source, TOKEN_DELIMITER);
+    if(sanitizedSource.size() <= REQUIRED_TOKEN_COUNT)
+    {
+        while(sanitizedSource.size() < REQUIRED_TOKEN_COUNT)
+        {
+            sanitizedSource.push_back("");
+        }
+
+        std::for_each(sanitizedSource.begin(), sanitizedSource.end(), [&](const UnicodeString str) {
+            if(str == "\n")
+            {
+                result.push_back("");
+            }
+            else
+            {
+                result.push_back(str);
+            }
+        });
+    }
+
+    return result;
+}
+
 UnicodeStringDictionary ReaperProject::ParseNotes() const
 {
     PRECONDITION_RETURN(nativeReference_ != 0, UnicodeStringDictionary());
@@ -146,8 +178,8 @@ UnicodeStringDictionary ReaperProject::ParseNotes() const
     UnicodeString           notes = ReaperGateway::ProjectNotes(nativeReference_);
     if(notes.empty() == false)
     {
-        UnicodeStringArray values = UnicodeStringTokenize(notes, '\n');
-        if(values.size() <= keys.size())
+        const UnicodeStringArray values = SanitizeNotes(notes);
+        if(values.size() == keys.size())
         {
             for(size_t i = 0; i < values.size(); i++)
             {
@@ -157,7 +189,7 @@ UnicodeStringDictionary ReaperProject::ParseNotes() const
         else
         {
             NotificationStore notificationStore("ULTRASCHALL_PROJECT_VALIDITY_CHECK");
-            notificationStore.RegisterError("The project media data is corrupted. Please check an retry.");
+            notificationStore.RegisterWarning("The ID3v2 data is invalid. Please check and retry.");
         }
     }
 

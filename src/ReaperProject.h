@@ -53,10 +53,10 @@ public:
     UnicodeString FileName() const;
     UnicodeString Name() const;
 
-    double              CurrentPosition() const;
-    double              MinPosition() const;
-    double              MaxPosition() const;
-    bool                IsValidPosition(const double position);
+    double CurrentPosition() const;
+    double MinPosition() const;
+    double MaxPosition() const;
+    bool   IsValidPosition(const double position);
 
     bool InsertChapterMarker(const UnicodeString& name, const double position = Globals::INVALID_MARKER_POSITION);
 
@@ -66,6 +66,8 @@ public:
 
 private:
     ProjectReference nativeReference_ = nullptr;
+
+    static UnicodeStringArray SanitizeNotes(const UnicodeString& notes);
 };
 
 }} // namespace ultraschall::reaper
