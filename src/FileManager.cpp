@@ -260,7 +260,7 @@ bool FileManager::WriteTextFile(const UnicodeString& filename, const UnicodeStri
     std::ofstream os(U2H(filename).c_str());
     if(os.is_open() == true)
     {
-        os << str << std::endl;
+        os << str;
         os.close();
         status = true;
     }
