@@ -37,6 +37,7 @@ ID3V2Context::ID3V2Context(const UnicodeString& targetName) : target_(new taglib
             duration_ = target_->audioProperties()->length() * 1000;
         }
 
+        target_->strip(taglib_mp3::File::ID3v1 | taglib_mp3::File::APE);
         tags_ = target_->ID3v2Tag();
     }
 }
