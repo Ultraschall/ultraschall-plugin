@@ -66,13 +66,13 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
                 if((missingFieldCount > 0) && (missingFieldCount < ALL_MEDIA_DATA_FIELDS))
                 {
                     UnicodeStringStream os;
-                    os << "Some ID3v2 fields are missing ";
+                    os << "MP3 metadata is incomplete.";
                     notificationStore.RegisterWarning(os.str());
                 }
                 else if(missingFieldCount == ALL_MEDIA_DATA_FIELDS)
                 {
                     UnicodeStringStream os;
-                    os << "Found no ID3v2 data.";
+                    os << "MP3 metadata is missing";
                     notificationStore.RegisterWarning(os.str());
                 }
 
@@ -81,7 +81,7 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
                     if(pTagWriter->InsertProperties(targets_[i], mediaData_) == false)
                     {
                         UnicodeStringStream os;
-                        os << "Failed to insert ID3v2 data into " << targets_[i] << ".";
+                        os << "Failed to insert MP3 metadata into " << targets_[i] << ".";
                         notificationStore.RegisterError(os.str());
                         errorCount++;
                     }

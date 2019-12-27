@@ -189,7 +189,7 @@ UnicodeStringDictionary ReaperProject::ParseNotes() const
         else
         {
             NotificationStore notificationStore("ULTRASCHALL_PROJECT_VALIDITY_CHECK");
-            notificationStore.RegisterWarning("The ID3v2 data is invalid. Please check and retry.");
+            notificationStore.RegisterWarning("The MP3 metadata is invalid. Please check and retry.");
         }
     }
 
