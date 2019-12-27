@@ -44,11 +44,11 @@ ServiceStatus InsertChapterMarkersAction::Execute()
 
     PRECONDITION_RETURN(AreChapterMarkersValid(chapterMarkers_) == true, SERVICE_FAILURE);
 
-    ServiceStatus       status = SERVICE_FAILURE;
+    ServiceStatus     status = SERVICE_FAILURE;
     NotificationStore supervisor(UniqueId());
 
-    ReaperProject         currentProject = ReaperProject::Current();
-    size_t addedTags = 0;
+    ReaperProject currentProject = ReaperProject::Current();
+    size_t        addedTags      = 0;
     for(size_t i = 0; i < chapterMarkers_.size(); i++)
     {
         if(currentProject.InsertChapterMarker(chapterMarkers_[i].Title(), chapterMarkers_[i].Position()) == true)
@@ -86,7 +86,7 @@ bool InsertChapterMarkersAction::ConfigureTargets()
             chapterMarkers = ReadTextFile(source_);
             break;
         case FileManager::FILE_TYPE::MP3:
-            //chapterMarkers = ReadMP3File(source_);
+            // chapterMarkers = ReadMP3File(source_);
             break;
         default:
             break;
@@ -121,37 +121,47 @@ ChapterTagArray InsertChapterMarkersAction::ReadTextFile(const UnicodeString& fi
     {
         for(size_t i = 0; i < lines.size(); i++)
         {
-            const UnicodeStringArray items = UnicodeStringTokenize(lines[i], ' ');
-            if(items.empty() == false)
+            const UnicodeString normalizedLine = UnicodeStringCopyTrimLeft(lines[i]);
+            if(normalizedLine.empty() == false)
             {
-                const double position = StringToSeconds(items[0]);
-                if(position >= 0)
+                if(normalizedLine.size() >= Globals::MIN_CHAPTER_MARKER_LINE_LENGTH)
                 {
-                    UnicodeString name;
-                    if(items.size() > 1)
+                    const UnicodeStringArray items = UnicodeStringTokenize(normalizedLine, ' ');
+                    if(items.empty() == false)
                     {
-                        name = items[1];
-                    }
+                        const double position = StringToSeconds(items[0]);
+                        if(position >= 0)
+                        {
+                            UnicodeString title;
+                            for(size_t j = 1; j < items.size(); j++)
+                            {
+                                if(items[j].empty() == false)
+                                {
+                                    if(title.empty() == false)
+                                    {
+                                        title += ' ';
+                                    }
 
-                    for(size_t j = 2; j < items.size(); j++)
-                    {
-                        name += " " + items[j];
-                    }
+                                    title += items[j];
+                                }
+                            }
 
-                    chapterMarkers.push_back(ChapterTag(position, name));
+                            chapterMarkers.push_back(ChapterTag(position, title));
+                        }
+                        else
+                        {
+                            UnicodeStringStream os;
+                            os << "Line " << (i + 1) << ": Invalid timestamp in '" << lines[i] << "'.";
+                            supervisor.RegisterError(os.str());
+                        }
+                    }
                 }
                 else
                 {
                     UnicodeStringStream os;
-                    os << "Line " << (i + 1) << ": Invalid timestamp in '" << lines[i] << "'.";
+                    os << "Line " << (i + 1) << ": Invalid format in '" << lines[i] << "'.";
                     supervisor.RegisterError(os.str());
                 }
-            }
-            else
-            {
-                UnicodeStringStream os;
-                os << "Line " << (i + 1) << ": Invalid format in '" << lines[i] << "'.";
-                supervisor.RegisterError(os.str());
             }
         }
     }
