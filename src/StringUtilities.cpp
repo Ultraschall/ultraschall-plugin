@@ -46,12 +46,12 @@ UnicodeStringArray UnicodeStringTokenize(const UnicodeString& input, const char 
 
 void UnicodeStringTrimLeft(UnicodeString& str)
 {
-    str.erase(str.begin(), std::find_if(str.begin(), str.end(), [](int ch) { return !std::isspace(ch); }));
+    str.erase(str.begin(), std::find_if(str.begin(), str.end(), [](int ch) { return (ch != ' '); }));
 }
 
 void UnicodeStringTrimRight(UnicodeString& str)
 {
-    str.erase(std::find_if(str.rbegin(), str.rend(), [](int ch) { return !std::isspace(ch); }).base(), str.end());
+    str.erase(std::find_if(str.rbegin(), str.rend(), [](int ch) { return (ch != ' '); }).base(), str.end());
 }
 
 void UnicodeStringTrim(UnicodeString& str)
