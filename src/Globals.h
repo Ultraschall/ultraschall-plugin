@@ -38,6 +38,8 @@ struct Globals
     static constexpr const int DEFAULT_EDIT_MARKER_COLOR = 0x010000ff;
 
     static constexpr const int DEFAULT_CHAPTER_MARKER_COLOR = 0x00000000;
+
+    static constexpr const size_t MIN_CHAPTER_MARKER_LINE_LENGTH = 5;  
 };
 
 }} // namespace ultraschall::reaper
