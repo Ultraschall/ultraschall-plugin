@@ -50,9 +50,9 @@ bool CustomAction::HasValidProject()
     return isValid;
 }
 
-ReaperProject CustomAction::CurrentProject() 
+ReaperProject CustomAction::CurrentProject()
 {
-  return ReaperProject::Current();
+    return ReaperProject::Current();
 }
 
 UnicodeString CustomAction::CurrentProjectDirectory()
@@ -84,11 +84,11 @@ bool CustomAction::AreChapterMarkersValid(const ChapterTagArray& markers)
 
     NotificationStore supervisor("ULTRASCHALL_CHAPTER_VALIDITY_CHECK");
 
-    bool valid = true;
+    size_t errorCount = 0;
 
     for(size_t i = 0; i < markers.size(); i++)
     {
-        const ChapterTag&       current      = markers[i];
+        const ChapterTag&   current      = markers[i];
         const UnicodeString safeName     = current.Title();
         const double        safePosition = current.Position();
 
@@ -98,19 +98,19 @@ bool CustomAction::AreChapterMarkersValid(const ChapterTagArray& markers)
             os << "The chapter marker '" << ((safeName.empty() == false) ? safeName : UnicodeString("Unknown"))
                << "' is out of track range.";
             supervisor.RegisterError(os.str());
-            valid = false;
+            ++errorCount;
         }
 
         if(current.Title().empty() == true)
         {
             UnicodeStringStream os;
-            os << "The Chapter marker at '" << SecondsToString(safePosition) << "' has no name.";
+            os << "The chapter marker at '" << SecondsToString(safePosition) << "' has no name.";
             supervisor.RegisterError(os.str());
-            valid = false;
+            ++errorCount;
         }
     }
 
-    return valid;
+    return (0 == errorCount);
 }
 
 }} // namespace ultraschall::reaper
