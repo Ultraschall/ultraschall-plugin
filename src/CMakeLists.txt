@@ -49,16 +49,12 @@ set(COMMON_INCLUDES
   ICustomAction.h
   ID3V2.h
   ID3V2Context.h
-  ID3V2Reader.h
   ID3V2Writer.h
   InsertChapterMarkersAction.h
   InsertMediaPropertiesAction.h
-  ITagReader.h
   ITagWriter.h
   SharedObject.h
   Malloc.h
-  MP4CHAPSReader.h
-  MP4CHAPSWriter.h
   Picture.h
   ReaperProject.h
   reaper_plugin_functions.h
@@ -71,7 +67,6 @@ set(COMMON_INCLUDES
   StringUtilities.h
   SystemProperties.h
   taglib_include.h
-  TagReaderFactory.h
   TagWriterFactory.h
   Notification.h
   NotificationClass.h
@@ -90,12 +85,9 @@ set(COMMON_SOURCES
   FileManager.cpp
   ID3V2.cpp
   ID3V2Context.cpp
-  ID3V2Reader.cpp
   ID3V2Writer.cpp
   InsertChapterMarkersAction.cpp
   InsertMediaPropertiesAction.cpp
-  MP4CHAPSReader.cpp
-  MP4CHAPSWriter.cpp
   Picture.cpp
   ReaperProject.cpp
   ReaperEntryPoints.cpp
@@ -104,7 +96,6 @@ set(COMMON_SOURCES
   SaveChapterMarkersToProjectAction.cpp
   StringUtilities.cpp
   SystemProperties.cpp
-  TagReaderFactory.cpp
   TagWriterFactory.cpp
   Notification.cpp
   NotificationQueue.cpp
