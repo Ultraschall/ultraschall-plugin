@@ -205,6 +205,103 @@ bool ID3V2InsertChapterFrame(
     return success;
 }
 
+bool ID3V2InsertChapterFrame(
+    ID3V2Context* context, const UnicodeString& id, const UnicodeString& text, const uint32_t startTime,
+    const uint32_t endTime, const UnicodeString& image, const UnicodeString& url)
+{
+    PRECONDITION_RETURN(context != 0, false);
+    PRECONDITION_RETURN(context->Tags() != 0, false);
+    PRECONDITION_RETURN(id.empty() == false, false);
+    PRECONDITION_RETURN(text.empty() == false, false);
+    PRECONDITION_RETURN(startTime != 0xffffffff, false);
+    PRECONDITION_RETURN(endTime != 0xffffffff, false);
+
+    size_t errorCount = 0;
+
+    const uint32_t              startOffset   = 0xffffffff;
+    const uint32_t              endOffset     = 0xffffffff;
+    taglib_id3v2::ChapterFrame* pChapterFrame = new taglib_id3v2::ChapterFrame(
+        taglib::ByteVector::fromCString(id.c_str(), static_cast<unsigned int>(id.length())), startTime, endTime,
+        startOffset, endOffset);
+    if(pChapterFrame != nullptr)
+    {
+        taglib_id3v2::TextIdentificationFrame* pTextIdFrame = new taglib_id3v2::TextIdentificationFrame(
+            taglib::ByteVector::fromCString("TIT2"), taglib::String::Type::UTF16);
+        if(pTextIdFrame != nullptr)
+        {
+            pTextIdFrame->setTextEncoding(taglib::String::Type::UTF16);
+            pTextIdFrame->setText(taglib::String(text, taglib::String::Type::UTF8));
+            pChapterFrame->addEmbeddedFrame(pTextIdFrame);
+
+            if(image.empty() == false)
+            {
+                BinaryStream* pData = FileManager::ReadBinaryFile(image);
+                if(pData != nullptr)
+                {
+                    uint8_t      imageHeader[10] = {0};
+                    const size_t imageHeaderSize = 10;
+                    if(pData->Read(0, imageHeader, imageHeaderSize) == true)
+                    {
+                        const UnicodeString mimeType = Picture::FormatString(imageHeader, imageHeaderSize);
+                        if(mimeType.empty() == false)
+                        {
+                            taglib_id3v2::AttachedPictureFrame* pPictureFrame
+                                = new taglib_id3v2::AttachedPictureFrame();
+                            if(pPictureFrame != nullptr)
+                            {
+                                pPictureFrame->setMimeType(mimeType);
+                                taglib::ByteVector coverData(
+                                    (const char*)pData->Data(), (unsigned int)pData->DataSize());
+                                pPictureFrame->setPicture(coverData);
+                                pChapterFrame->addEmbeddedFrame(pPictureFrame);
+
+                                if(url.empty() == false)
+                                {
+                                    taglib_id3v2::UrlLinkFrame* pUrlFrame
+                                        = new taglib_id3v2::UrlLinkFrame(taglib::ByteVector::fromCString("WXXX"));
+                                    if(pUrlFrame != nullptr)
+                                    {
+                                        pUrlFrame->setText("chapter");
+                                        pUrlFrame->setUrl(url.c_str());
+                                        pChapterFrame->addEmbeddedFrame(pUrlFrame);
+                                    }
+                                    else
+                                    {
+                                        errorCount++;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                errorCount++;
+                            }
+                        }
+                        else
+                        {
+                            errorCount++;
+                        }
+                    }
+                    else
+                    {
+                        errorCount++;
+                    }
+
+                    SafeRelease(pData);
+                }
+            }
+
+            context->Tags()->addFrame(pChapterFrame);
+        }
+        else
+        {
+            errorCount++;
+            SafeDelete(pChapterFrame);
+        }
+    }
+
+    return 0 == errorCount;
+}
+
 bool ID3V2InsertTableOfContentsFrame(ID3V2Context* context, const UnicodeStringArray& tableOfContentsItems)
 {
     PRECONDITION_RETURN(context != 0, false);

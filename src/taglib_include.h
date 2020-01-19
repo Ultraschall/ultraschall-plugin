@@ -51,6 +51,7 @@
 #include <commentsframe.h>
 #include <tableofcontentsframe.h>
 #include <podcastframe.h>
+#include <urllinkframe.h>
 
 namespace taglib = TagLib;
 namespace taglib_id3v2 = TagLib::ID3v2;

@@ -31,24 +31,32 @@
 #include "ID3V2Context.h"
 #include "ChapterTag.h"
 
-namespace ultraschall { namespace reaper { 
+namespace ultraschall { namespace reaper {
 
 ID3V2Context* ID3V2StartTransaction(const UnicodeString& targetName);
-bool     ID3V2CommitTransaction(ID3V2Context*& context);
-void     ID3V2AbortTransaction(ID3V2Context*& context);
+bool          ID3V2CommitTransaction(ID3V2Context*& context);
+void          ID3V2AbortTransaction(ID3V2Context*& context);
 
 void ID3V2RemoveAllFrames(ID3V2Context*);
 bool ID3V2QueryChapterFrames(ID3V2Context* context);
 
 bool ID3V2InsertTextFrame(
     ID3V2Context* context, const UnicodeString& id, const UnicodeString& text, const CHAR_ENCODING encoding);
+
 bool ID3V2InsertCommentsFrame(ID3V2Context* context, const UnicodeString& text);
+
 bool ID3V2InsertChapterFrame(
     ID3V2Context* context, const UnicodeString& id, const UnicodeString& text, const uint32_t startTime,
     const uint32_t endTime);
+
+bool ID3V2InsertChapterFrame(
+    ID3V2Context* context, const UnicodeString& id, const UnicodeString& text, const uint32_t startTime,
+    const uint32_t endTime, const UnicodeString& image, const UnicodeString& url);
+
 bool ID3V2InsertTableOfContentsFrame(ID3V2Context* context, const UnicodeStringArray& tableOfContentsItems);
+
 bool ID3V2InsertCoverPictureFrame(ID3V2Context* context, const UnicodeString& image);
 
-}} // namespace ultraschall::reaper::id3v2
+}} // namespace ultraschall::reaper
 
 #endif // #ifndef __ULTRASCHALL_REAPER_ID3V2_H_INCL__
