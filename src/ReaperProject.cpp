@@ -245,11 +245,94 @@ bool ReaperProject::IsValidPosition(const double position)
     return (position >= 0) && (position <= MaxPosition());
 }
 
-ChapterTagArray ReaperProject::AllMarkers() const
+ChapterTagArray ReaperProject::ChapterMarkers() const
 {
     PRECONDITION_RETURN(nativeReference_ != 0, ChapterTagArray());
 
-    return ReaperGateway::Markers(nativeReference_);
+    ChapterTagArray markers = ReaperGateway::Markers(nativeReference_);
+    if(markers.empty() == false)
+    {
+        ChapterImageArray images = ChapterImages();
+        ChapterUrlArray   urls   = ChapterUrls();
+        MapImagesAndUrlsToChapters(images, urls, markers);
+    }
+
+    return markers;
+}
+
+ChapterImageArray ReaperProject::ChapterImages() const
+{
+    PRECONDITION_RETURN(nativeReference_ != 0, ChapterImageArray());
+
+    ChapterImageArray images;
+
+    UnicodeStringDictionary locatedImages = ReaperGateway::QueryProjectValues(nativeReference_, "chapterimages");
+    if(locatedImages.empty() == false)
+    {
+        std::for_each(
+            locatedImages.begin(), locatedImages.end(), [&](const std::pair<UnicodeString, UnicodeString>& item) {
+                const double        position = std::stod(item.first);
+                const UnicodeString uri      = item.second;
+                images.push_back(ChapterImage(position, uri));
+            });
+    }
+
+    UnicodeStringDictionary unlocatedImages = ReaperGateway::QueryProjectValues(nativeReference_, "lostimages");
+    if(unlocatedImages.empty() == false)
+    {
+        std::for_each(
+            unlocatedImages.begin(), unlocatedImages.end(), [&](const std::pair<UnicodeString, UnicodeString>& item) {
+                const double        position = std::stod(item.first);
+                const UnicodeString uri      = item.second;
+                images.push_back(ChapterImage(position, uri));
+            });
+    }
+
+    return images;
+}
+
+ChapterUrlArray ReaperProject::ChapterUrls() const
+{
+    PRECONDITION_RETURN(nativeReference_ != 0, ChapterUrlArray());
+
+    ChapterUrlArray urls;
+
+    UnicodeStringDictionary urlDictionary = ReaperGateway::QueryProjectValues(nativeReference_, "chapterurls");
+    if(urlDictionary.empty() == false)
+    {
+        std::for_each(
+            urlDictionary.begin(), urlDictionary.end(), [&](const std::pair<UnicodeString, UnicodeString>& item) {
+                const double        position = std::stod(item.first);
+                const UnicodeString uri      = item.second;
+                urls.push_back(ChapterUrl(position, uri));
+            });
+    }
+
+    return urls;
+}
+
+void ReaperProject::MapImagesAndUrlsToChapters(
+    const ChapterImageArray& images, const ChapterUrlArray& urls, ChapterTagArray& chapters)
+{
+    PRECONDITION(chapters.empty() == false);
+
+    std::for_each(images.begin(), images.end(), [&](const ChapterImage& image) {
+        std::for_each(chapters.begin(), chapters.end(), [&](ChapterTag& chapter) {
+            if(std::fabs(image.Position() - chapter.Position()) < 1.0)
+            {
+                chapter.SetImage(image.Uri());
+            }
+        });
+    });
+
+    std::for_each(urls.begin(), urls.end(), [&](const ChapterUrl& url) {
+        std::for_each(chapters.begin(), chapters.end(), [&](ChapterTag& chapter) {
+            if(std::fabs(url.Position() - chapter.Position()) < 1.0)
+            {
+                chapter.SetUrl(url.Uri());
+            }
+        });
+    });
 }
 
 }} // namespace ultraschall::reaper

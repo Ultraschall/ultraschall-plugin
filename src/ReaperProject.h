@@ -28,7 +28,9 @@
 #define __ULTRASCHALL_REAPER_PROJECT_H_INCL__
 
 #include "Common.h"
+#include "ChapterImage.h"
 #include "ChapterTag.h"
+#include "ChapterUrl.h"
 #include "ReaperGateway.h"
 
 namespace ultraschall { namespace reaper {
@@ -60,7 +62,7 @@ public:
 
     bool InsertChapterMarker(const UnicodeString& name, const double position = Globals::INVALID_MARKER_POSITION);
 
-    ChapterTagArray AllMarkers() const;
+    ChapterTagArray ChapterMarkers() const;
 
     UnicodeStringDictionary ParseNotes() const;
 
@@ -68,6 +70,12 @@ private:
     ProjectReference nativeReference_ = nullptr;
 
     static UnicodeStringArray SanitizeNotes(const UnicodeString& notes);
+
+    ChapterImageArray ChapterImages() const;
+    ChapterUrlArray   ChapterUrls() const;
+
+    static void MapImagesAndUrlsToChapters(
+        const ChapterImageArray& images, const ChapterUrlArray& urls, ChapterTagArray& chapters);
 };
 
 }} // namespace ultraschall::reaper
