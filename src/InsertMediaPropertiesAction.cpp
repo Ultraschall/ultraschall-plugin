@@ -161,7 +161,7 @@ bool InsertMediaPropertiesAction::ConfigureSources()
     mediaData_  = ReaperProject::Current().ParseNotes();
     coverImage_ = FindCoverImage();
 
-    chapterMarkers_ = CurrentProject().AllMarkers();
+    chapterMarkers_ = CurrentProject().ChapterMarkers();
     if(chapterMarkers_.empty() == false)
     {
         bool errorFound = false;

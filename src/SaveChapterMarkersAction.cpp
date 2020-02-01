@@ -94,7 +94,7 @@ bool SaveChapterMarkersAction::ConfigureSources()
     NotificationStore supervisor(UniqueId());
 
     ReaperProject currentProject = ReaperProject::Current();
-    chapterMarkers_              = currentProject.AllMarkers();
+    chapterMarkers_              = currentProject.ChapterMarkers();
     if(chapterMarkers_.empty() == true)
     {
         supervisor.RegisterWarning("No chapters have been set.");

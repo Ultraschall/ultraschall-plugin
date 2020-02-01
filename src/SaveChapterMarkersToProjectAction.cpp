@@ -77,7 +77,7 @@ bool SaveChapterMarkersToProjectAction::ConfigureSources()
     NotificationStore supervisor(UniqueId());
 
     ReaperProject currentProject = ReaperProject::Current();
-    chapterMarkers_              = currentProject.AllMarkers();
+    chapterMarkers_              = currentProject.ChapterMarkers();
     if(chapterMarkers_.empty() == false)
     {
         status = true;
