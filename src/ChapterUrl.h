@@ -24,65 +24,37 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_CHAPTER_TAG_H_INCL__
-#define __ULTRASCHALL_REAPER_CHAPTER_TAG_H_INCL__
+#ifndef __ULTRASCHALL_REAPER_CHAPTER_URL_H_INCL__
+#define __ULTRASCHALL_REAPER_CHAPTER_URL_H_INCL__
 
 #include "Common.h"
 
 namespace ultraschall { namespace reaper {
 
-class ChapterTag
+class ChapterUrl
 {
 public:
-    ChapterTag() : position_(Globals::INVALID_MARKER_POSITION) {}
+    ChapterUrl() : position_(Globals::INVALID_MARKER_POSITION) {}
 
-    ChapterTag(const double position, const UnicodeString& title) : position_(position), title_(title) {}
-
-    ChapterTag(
-        const double position, const UnicodeString& title, const UnicodeString& image, const UnicodeString& url) :
-        position_(position),
-        title_(title), image_(image), url_(url)
-    {}
+    ChapterUrl(const double position, const UnicodeString& uri) : position_(position), uri_(uri) {}
 
     double Position() const
     {
         return position_;
     }
 
-    const UnicodeString& Title() const
+    const UnicodeString& Uri() const
     {
-        return title_;
-    }
-
-    const UnicodeString& Image() const
-    {
-        return image_;
-    }
-
-    void SetImage(const UnicodeString& image)
-    {
-        image_ = image;
-    }
-
-    const UnicodeString& Url() const
-    {
-        return url_;
-    }
-
-    void SetUrl(const UnicodeString& url)
-    {
-        url_ = url;
+        return uri_;
     }
 
 private:
     double        position_;
-    UnicodeString title_;
-    UnicodeString image_;
-    UnicodeString url_;
+    UnicodeString uri_;
 };
 
-typedef std::vector<ChapterTag> ChapterTagArray;
+typedef std::vector<ChapterUrl> ChapterUrlArray;
 
 }} // namespace ultraschall::reaper
 
-#endif // #ifndef __ULTRASCHALL_REAPER_CHAPTER_TAG_H_INCL__
+#endif // #ifndef __ULTRASCHALL_REAPER_CHAPTER_URL_H_INCL__
