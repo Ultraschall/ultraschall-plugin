@@ -62,6 +62,7 @@
 #define REAPERAPI_WANT_GetSetProjectNotes
 #define REAPERAPI_WANT_SetProjExtState
 #define REAPERAPI_WANT_GetProjExtState
+#define REAPERAPI_WANT_EnumProjExtState
 #define REAPERAPI_WANT_HasExtState
 #define REAPERAPI_WANT_SetExtState
 #define REAPERAPI_WANT_GetExtState

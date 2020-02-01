@@ -46,12 +46,18 @@ double (*parse_timestr)(const char* buf);
 void (*PreventUIRefresh)(int prevent_count);
 
 int (*CountProjectMarkers)(ReaProject* proj, int* num_markersOut, int* num_regionsOut);
-int (*EnumProjectMarkers)(int idx, bool* isrgnOut, double* posOut, double* rgnendOut, const char** nameOut, int* markrgnindexnumberOut);
-int (*EnumProjectMarkers2)(ReaProject* proj, int idx, bool* isrgnOut, double* posOut, double* rgnendOut, const char** nameOut, int* markrgnindexnumberOut);
+int (*EnumProjectMarkers)(
+    int idx, bool* isrgnOut, double* posOut, double* rgnendOut, const char** nameOut, int* markrgnindexnumberOut);
+int (*EnumProjectMarkers2)(
+    ReaProject* proj, int idx, bool* isrgnOut, double* posOut, double* rgnendOut, const char** nameOut,
+    int* markrgnindexnumberOut);
 int (*EnumProjectMarkers3)(
-    ReaProject* proj, int idx, bool* isrgnOut, double* posOut, double* rgnendOut, const char** nameOut, int* markrgnindexnumberOut, int* colorOut);
-int (*AddProjectMarker2)(ReaProject* proj, bool isrgn, double pos, double rgnend, const char* name, int wantidx, int color);
-bool (*SetProjectMarker3)(ReaProject* proj, int markrgnindexnumber, bool isrgn, double pos, double rgnend, const char* name, int color);
+    ReaProject* proj, int idx, bool* isrgnOut, double* posOut, double* rgnendOut, const char** nameOut,
+    int* markrgnindexnumberOut, int* colorOut);
+int (*AddProjectMarker2)(
+    ReaProject* proj, bool isrgn, double pos, double rgnend, const char* name, int wantidx, int color);
+bool (*SetProjectMarker3)(
+    ReaProject* proj, int markrgnindexnumber, bool isrgn, double pos, double rgnend, const char* name, int color);
 bool (*DeleteProjectMarker)(ReaProject* proj, int markrgnindexnumber, bool isrgn);
 void (*GetLastMarkerAndCurRegion)(ReaProject* proj, double time, int* markeridxOut, int* regionidxOut);
 bool (*DeleteProjectMarkerByIndex)(ReaProject* proj, int markrgnidx);
@@ -62,7 +68,11 @@ double (*GetPlayPositionEx)(ReaProject* proj);
 
 void (*GetSetProjectNotes)(ReaProject* proj, bool set, char* notesNeedBig, int notesNeedBig_sz);
 int (*SetProjExtState)(ReaProject* proj, const char* extname, const char* key, const char* value);
-int (*GetProjExtState)(ReaProject* proj, const char* extname, const char* key, char* valOutNeedBig, int valOutNeedBig_sz);
+int (*GetProjExtState)(
+    ReaProject* proj, const char* extname, const char* key, char* valOutNeedBig, int valOutNeedBig_sz);
+bool (*EnumProjExtState)(
+    ReaProject* proj, const char* extname, int idx, char* keyOutOptional, int keyOutOptional_sz, char* valOutOptional,
+    int valOutOptional_sz);
 
 bool (*HasExtState)(const char* section, const char* key);
 void (*SetExtState)(const char* section, const char* key, const char* value, bool persist);
@@ -86,7 +96,7 @@ bool ImportReaperEntryPoint(reaper_plugin_info_t* ppi, void*& entryPoint, const 
     PRECONDITION_RETURN(entryPointName.empty() == false, false);
 
     (*((void**)&(entryPoint)) = (void*)ppi->GetFunc(entryPointName.c_str()));
-    if (entryPoint != 0)
+    if(entryPoint != 0)
     {
         return true;
     }
@@ -99,7 +109,7 @@ bool ImportReaperEntryPoint(reaper_plugin_info_t* ppi, void*& entryPoint, const 
 #define LOAD_AND_VERIFY_REAPER_ENTRY_POINT(__rp__, __ep__, __ep_name__)                         \
     {                                                                                           \
         const bool __ep_loaded__ = ImportReaperEntryPoint(__rp__, (void*&)__ep__, __ep_name__); \
-        if ((__ep_loaded__ == false) || (0 == __ep__))                                          \
+        if((__ep_loaded__ == false) || (0 == __ep__))                                           \
         {                                                                                       \
             return false;                                                                       \
         }                                                                                       \
@@ -136,6 +146,7 @@ bool ReaperEntryPoints::LoadEntryPoints(REAPER_PLUGIN_HINSTANCE instance, reaper
     LOAD_AND_VERIFY_REAPER_ENTRY_POINT(ppi, reaper_api::GetSetProjectNotes, "GetSetProjectNotes");
     LOAD_AND_VERIFY_REAPER_ENTRY_POINT(ppi, reaper_api::SetProjExtState, "SetProjExtState");
     LOAD_AND_VERIFY_REAPER_ENTRY_POINT(ppi, reaper_api::GetProjExtState, "GetProjExtState");
+    LOAD_AND_VERIFY_REAPER_ENTRY_POINT(ppi, reaper_api::EnumProjExtState, "EnumProjExtState");
     LOAD_AND_VERIFY_REAPER_ENTRY_POINT(ppi, reaper_api::HasExtState, "HasExtState");
     LOAD_AND_VERIFY_REAPER_ENTRY_POINT(ppi, reaper_api::SetExtState, "SetExtState");
     LOAD_AND_VERIFY_REAPER_ENTRY_POINT(ppi, reaper_api::GetExtState, "GetExtState");

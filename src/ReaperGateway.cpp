@@ -265,12 +265,12 @@ ChapterTagArray ReaperGateway::Markers(ProjectReference projectReference)
 
     ChapterTagArray allMarkers;
 
-    bool        isRegion = false;
-    double      position = 0;
-    double      duration = 0;
-    const char* name     = 0;
-    int         number   = 0;
-    int         color    = 0;
+    bool        isRegion        = false;
+    double      position        = 0;
+    double      duration        = 0;
+    const char* name            = 0;
+    int         number          = 0;
+    int         color           = 0;
     ReaProject* nativeReference = reinterpret_cast<ReaProject*>(projectReference);
     int         nextIndex
         = reaper_api::EnumProjectMarkers3(nativeReference, 0, &isRegion, &position, &duration, &name, &number, &color);
@@ -330,7 +330,8 @@ bool ReaperGateway::InsertMarker(ProjectReference projectReference, const Chapte
 
     ReaProject* nativeReference = reinterpret_cast<ReaProject*>(projectReference);
     return reaper_api::AddProjectMarker2(
-               nativeReference, false, marker.Position(), 0, marker.Title().c_str(), -1, Globals::DEFAULT_CHAPTER_MARKER_COLOR)
+               nativeReference, false, marker.Position(), 0, marker.Title().c_str(), -1,
+               Globals::DEFAULT_CHAPTER_MARKER_COLOR)
            != -1;
 }
 
@@ -540,6 +541,35 @@ void ReaperGateway::ClearProjectValues(ProjectReference projectReference, const 
 
     ReaProject* nativeReference = reinterpret_cast<ReaProject*>(projectReference);
     reaper_api::SetProjExtState(nativeReference, U2H(section).c_str(), nullptr, nullptr);
+}
+
+UnicodeStringDictionary ReaperGateway::QueryProjectValues(
+    ProjectReference projectReference, const UnicodeString& section)
+{
+    PRECONDITION_RETURN(projectReference != nullptr, UnicodeStringDictionary());
+    PRECONDITION_RETURN(section.empty() == false, UnicodeStringDictionary());
+
+    ReaProject*         nativeReference        = reinterpret_cast<ReaProject*>(projectReference);
+    static const size_t MAX_BUFFER_SIZE        = 4096;
+    char                key[MAX_BUFFER_SIZE]   = {0};
+    char                value[MAX_BUFFER_SIZE] = {0};
+
+    UnicodeStringDictionary values;
+
+    int  i        = 0;
+    bool hasValue = reaper_api::EnumProjExtState(
+        nativeReference, U2H(section).c_str(), i++, key, MAX_BUFFER_SIZE, value, MAX_BUFFER_SIZE);
+    while(true == hasValue)
+    {
+        values.insert(std::pair<UnicodeString, UnicodeString>(key, value));
+
+        memset(key, 0, MAX_BUFFER_SIZE * sizeof(char));
+        memset(value, 0, MAX_BUFFER_SIZE * sizeof(char));
+        hasValue = reaper_api::EnumProjExtState(
+            nativeReference, U2H(section).c_str(), i++, key, MAX_BUFFER_SIZE, value, MAX_BUFFER_SIZE);
+    }
+
+    return values;
 }
 
 }} // namespace ultraschall::reaper
