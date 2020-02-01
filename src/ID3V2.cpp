@@ -292,8 +292,6 @@ bool ID3V2InsertChapterFrame(
     PRECONDITION_RETURN(startTime != 0xffffffff, false);
     PRECONDITION_RETURN(endTime != 0xffffffff, false);
 
-    size_t errorCount = 0;
-
     const uint32_t           startOffset = 0xffffffff;
     const uint32_t           endOffset   = 0xffffffff;
     taglib_id3v2::FrameList* pFrameList  = CreateEmbeddedFrames(text, image, url);
@@ -375,69 +373,6 @@ bool ID3V2InsertCoverPictureFrame(ID3V2Context* pContext, const UnicodeString& i
     }
 
     return success;
-}
-
-bool ID3V2QueryChapterFrames(ID3V2Context* pContext)
-{
-    PRECONDITION_RETURN(pContext != nullptr, false);
-    PRECONDITION_RETURN(pContext->Tags() != nullptr, false);
-
-    static const taglib::ByteVector CHAPTER_FRAME_ID = taglib::ByteVector::fromCString("CHAP", 4);
-    static const taglib::ByteVector TEXT_FRAME_ID    = taglib::ByteVector::fromCString("TIT2", 4);
-
-    taglib_id3v2::FrameList frames = pContext->Tags()->frameList();
-    if(frames.isEmpty() == false)
-    {
-        taglib_id3v2::FrameList::Iterator frameIterator = frames.begin();
-        while(frameIterator != frames.end())
-        {
-            taglib_id3v2::Frame* pFrame = *frameIterator;
-            if(pFrame != nullptr)
-            {
-                if(pFrame->frameID() == CHAPTER_FRAME_ID)
-                {
-                    taglib_id3v2::ChapterFrame* pChapterFrame = reinterpret_cast<taglib_id3v2::ChapterFrame*>(pFrame);
-                    if(pChapterFrame != nullptr)
-                    {
-                        taglib_id3v2::FrameList embeddedFrames = pChapterFrame->embeddedFrameList();
-                        if(embeddedFrames.isEmpty() == false)
-                        {
-                            taglib_id3v2::FrameList::Iterator embeddedFrameIterator = embeddedFrames.begin();
-                            while(embeddedFrameIterator != embeddedFrames.end())
-                            {
-                                taglib_id3v2::Frame* pEmbeddedFrame = *embeddedFrameIterator;
-                                if(pEmbeddedFrame != nullptr)
-                                {
-                                    if(pEmbeddedFrame->frameID() == TEXT_FRAME_ID)
-                                    {
-                                        taglib_id3v2::TextIdentificationFrame* pTextIdFrame
-                                            = reinterpret_cast<taglib_id3v2::TextIdentificationFrame*>(
-                                                *embeddedFrameIterator);
-                                        if(pTextIdFrame != nullptr)
-                                        {
-                                            taglib::StringList strings = pTextIdFrame->fieldList();
-                                            if(strings.isEmpty() == false)
-                                            {
-                                                taglib::String str           = strings.front().to8Bit(true);
-                                                UnicodeString  unicodeString = str.toCString();
-                                                unicodeString                = unicodeString;
-                                            }
-                                        }
-                                    }
-                                }
-
-                                embeddedFrameIterator++;
-                            }
-                        }
-                    }
-                }
-            }
-
-            frameIterator++;
-        }
-    }
-
-    return true;
 }
 
 }} // namespace ultraschall::reaper

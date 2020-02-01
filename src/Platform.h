@@ -34,22 +34,21 @@
 #define FastByteSwap32(x) _byteswap_ulong(x)
 #define FastByteSwap64(x) _byteswap_uint64(x)
 #else
-#ifdef __GCC__
 #define FastByteSwap16(x) __builtin_bswap16(x)
 #define FastByteSwap32(x) __builtin_bswap32(x)
 #define FastByteSwap64(x) __builtin_bswap64(x)
-#endif // #ifdef __GCC__
 #endif // #ifdef _MSC_VER
 
-namespace ultraschall { namespace reaper {
+namespace ultraschall {
+namespace reaper {
 
-class Platform
-{
+class Platform {
 public:
-    static UnicodeChar QueryPathSeparator();
-    static size_t      QueryAvailableDiskSpace(const UnicodeString& directory);
+  static UnicodeChar QueryPathSeparator();
+  static size_t QueryAvailableDiskSpace(const UnicodeString &directory);
 };
 
-}} // namespace ultraschall::reaper
+} // namespace reaper
+} // namespace ultraschall
 
 #endif // #ifndef __ULTRASCHALL_REAPER_PLATFORM_H_INCL__

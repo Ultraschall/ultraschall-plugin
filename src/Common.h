@@ -43,6 +43,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <cmath>
 
 #include <sstream>
 #include <fstream>
