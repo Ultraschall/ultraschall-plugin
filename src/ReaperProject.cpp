@@ -29,6 +29,7 @@
 #include "FileManager.h"
 #include "StringUtilities.h"
 #include "NotificationStore.h"
+#include "HttpClient.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -303,7 +304,7 @@ ChapterUrlArray ReaperProject::ChapterUrls() const
         std::for_each(
             urlDictionary.begin(), urlDictionary.end(), [&](const std::pair<UnicodeString, UnicodeString>& item) {
                 const double        position = std::stod(item.first);
-                const UnicodeString uri      = item.second;
+                const UnicodeString uri      = UnicodeStringCopyTrim(item.second);
                 urls.push_back(ChapterUrl(position, uri));
             });
     }
@@ -329,7 +330,7 @@ void ReaperProject::MapImagesAndUrlsToChapters(
         std::for_each(chapters.begin(), chapters.end(), [&](ChapterTag& chapter) {
             if(std::fabs(url.Position() - chapter.Position()) < 1.0)
             {
-                chapter.SetUrl(url.Uri());
+                chapter.SetUrl(HttpClient::EncodeUrl(url.Uri()));
             }
         });
     });

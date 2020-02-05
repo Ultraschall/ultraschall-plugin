@@ -48,6 +48,7 @@ set(COMMON_INCLUDES
   FileDialog.h
   FileManager.h
   Globals.h
+  HttpClient.h
   ICommand.h
   ICustomAction.h
   ID3V2.h
@@ -86,6 +87,7 @@ set(COMMON_SOURCES
   CustomActionFactory.cpp
   CustomActionManager.cpp
   FileManager.cpp
+  HttpClient.cpp
   ID3V2.cpp
   ID3V2Context.cpp
   ID3V2Writer.cpp
