@@ -27,9 +27,9 @@
 #include "ReaperProject.h"
 #include "Application.h"
 #include "FileManager.h"
-#include "StringUtilities.h"
 #include "NotificationStore.h"
 #include "HttpClient.h"
+#include "StringUtilities.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -317,9 +317,11 @@ void ReaperProject::MapImagesAndUrlsToChapters(
 {
     PRECONDITION(chapters.empty() == false);
 
+    static const double POSITION_DEAD_BAND = 2.0;
+
     std::for_each(images.begin(), images.end(), [&](const ChapterImage& image) {
         std::for_each(chapters.begin(), chapters.end(), [&](ChapterTag& chapter) {
-            if(std::fabs(image.Position() - chapter.Position()) < 1.0)
+            if(std::fabs(image.Position() - chapter.Position()) < POSITION_DEAD_BAND)
             {
                 chapter.SetImage(image.Uri());
             }
@@ -328,7 +330,7 @@ void ReaperProject::MapImagesAndUrlsToChapters(
 
     std::for_each(urls.begin(), urls.end(), [&](const ChapterUrl& url) {
         std::for_each(chapters.begin(), chapters.end(), [&](ChapterTag& chapter) {
-            if(std::fabs(url.Position() - chapter.Position()) < 1.0)
+            if(std::fabs(url.Position() - chapter.Position()) < POSITION_DEAD_BAND)
             {
                 chapter.SetUrl(HttpClient::EncodeUrl(url.Uri()));
             }

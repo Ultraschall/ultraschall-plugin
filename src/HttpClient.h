@@ -24,27 +24,23 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_PICTURE_H_INCL__
-#define __ULTRASCHALL_REAPER_PICTURE_H_INCL__
+#ifndef __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__
+#define __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__
 
+#include "Common.h"
 #include "BinaryStream.h"
 
 namespace ultraschall { namespace reaper {
 
-class Picture
+class HttpClient
 {
 public:
-    enum class FORMAT { JPEG, PNG, UNKNOWN_PICTURE, MAX_FORMAT = UNKNOWN_PICTURE };
+    static BinaryStream* Download(const UnicodeString& url);
 
-    static FORMAT Format(const uint8_t* data, const size_t dataSize);
-    static FORMAT Format(const BinaryStream* pStream);
-    static FORMAT Format(const UnicodeString& filename);
-
-    static UnicodeString FormatString(const uint8_t* data, const size_t dataSize);
-    static UnicodeString FormatString(const BinaryStream* pStream);
-    static UnicodeString FormatString(const UnicodeString& filename);
+    static UnicodeString EncodeUrl(const UnicodeString& url);
+    static UnicodeString DecodeUrl(const UnicodeString& url);
 };
 
 }} // namespace ultraschall::reaper
 
-#endif // #ifndef __ULTRASCHALL_REAPER_PICTURE_H_INCL__
+#endif // #ifndef __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__
