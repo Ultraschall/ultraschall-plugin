@@ -43,10 +43,6 @@ public:
     static UnicodeString FormatString(const uint8_t* data, const size_t dataSize);
     static UnicodeString FormatString(const BinaryStream* pStream);
     static UnicodeString FormatString(const UnicodeString& filename);
-
-    static bool IsSquare(const uint8_t* data, const size_t dataSize);
-    static bool IsSquare(const BinaryStream* pStream);
-    static bool IsSquare(const UnicodeString& filename);
 };
 
 }} // namespace ultraschall::reaper

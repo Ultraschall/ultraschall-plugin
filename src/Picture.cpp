@@ -25,11 +25,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Picture.h"
-#include "Platform.h"
 #include "FileManager.h"
-
-#include "jpeglib.h"
-#include "turbojpeg.h"
+#include "Platform.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -91,15 +88,18 @@ UnicodeString Picture::FormatString(const uint8_t* data, const size_t dataSize)
     const FORMAT pictureFormat = Format(data, dataSize);
     switch(pictureFormat)
     {
-        case FORMAT::JPEG: {
+        case FORMAT::JPEG:
+        {
             formatString = "image/jpeg";
             break;
         }
-        case FORMAT::PNG: {
+        case FORMAT::PNG:
+        {
             formatString = "image/png";
             break;
         }
-        default: {
+        default:
+        {
             break;
         }
     }
@@ -127,67 +127,6 @@ UnicodeString Picture::FormatString(const UnicodeString& filename)
     }
 
     return formatString;
-}
-
-bool Picture::IsSquare(const uint8_t* pData, const size_t dataSize)
-{
-    PRECONDITION_RETURN(pData != nullptr, false);
-    PRECONDITION_RETURN(dataSize > 0, false);
-
-    uint32_t x = -1;
-    uint32_t y = -1;
-
-    const Picture::FORMAT format = Format(pData, dataSize);
-    if(format == FORMAT::JPEG)
-    {
-        tjhandle turboHandle = tjInitDecompress();
-        if(turboHandle != nullptr)
-        {
-            int turboWidth      = -1;
-            int turboHeight     = -1;
-            int turboSubsamp    = -1;
-            int turboColorspace = -1;
-            if(tjDecompressHeader3(
-                   turboHandle, pData, static_cast<unsigned long>(dataSize), &turboWidth, &turboHeight, &turboSubsamp, &turboColorspace)
-               != -1)
-            {
-                x = turboWidth;
-                y = turboHeight;
-            }
-
-            tjDestroy(turboHandle);
-            turboHandle = nullptr;
-        }
-    }
-    else if((format == FORMAT::PNG) && (dataSize >= 24))
-    {
-        x = FastByteSwap32(pData[16]);
-        y = FastByteSwap32(pData[20]);
-    }
-
-    return (x >= 0) && (y >= 0) && (x = y);
-}
-
-bool Picture::IsSquare(const BinaryStream* pStream)
-{
-    PRECONDITION_RETURN(pStream != nullptr, false);
-
-    return IsSquare(pStream->Data(), pStream->DataSize());
-}
-
-bool Picture::IsSquare(const UnicodeString& filename)
-{
-    PRECONDITION_RETURN(filename.empty() == false, false);
-
-    bool          isSquare = false;
-    BinaryStream* pStream  = FileManager::ReadBinaryFile(filename);
-    if(pStream != nullptr)
-    {
-        isSquare = IsSquare(pStream);
-        SafeRelease(pStream);
-    }
-
-    return isSquare;
 }
 
 }} // namespace ultraschall::reaper

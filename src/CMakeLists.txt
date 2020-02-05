@@ -30,7 +30,6 @@ include_directories(
   ${LIBZ_INCLUDE_PATH}
   ${LIBCURL_INCLUDE_PATH}
   ${LIBTAG_INCLUDE_PATH}
-  ${LIBJPEG_INCLUDE_PATH}
   ${LIBWDL_INCLUDE_PATH}
   ${REAPER_INCLUDE_PATH}
 )
@@ -162,14 +161,12 @@ add_library(reaper_ultraschall SHARED
 add_dependencies(reaper_ultraschall zlib-build)
 add_dependencies(reaper_ultraschall curl-build)
 add_dependencies(reaper_ultraschall taglib-build)
-add_dependencies(reaper_ultraschall libjpeg-build)
 add_dependencies(reaper_ultraschall wdl-build)
 
 target_link_libraries(reaper_ultraschall
   ${LIBZ_LIBRARY_PATH}
   ${LIBCURL_LIBRARY_PATH}
   ${LIBTAG_LIBRARY_PATH}
-  ${LIBJPEG_LIBRARY_PATH}
   ${EXTRA_LIBRARIES}
 )
 
