@@ -236,10 +236,10 @@ taglib_id3v2::FrameList* CreateEmbeddedFrames(
 
         if(url.empty() == false)
         {
-            taglib_id3v2::UrlLinkFrame* pUrlFrame
-                = new taglib_id3v2::UrlLinkFrame(taglib::ByteVector::fromCString("WXXX"));
-            pUrlFrame->setText("chapter");
-            pUrlFrame->setUrl(url.c_str());
+            taglib_id3v2::UserUrlLinkFrame* pUrlFrame
+                = new taglib_id3v2::UserUrlLinkFrame(taglib::ByteVector::fromCString("WXXX"));
+            pUrlFrame->setDescription(taglib::String("chapter url"));
+            pUrlFrame->setUrl(url);
 
             pFrameList->append(pUrlFrame);
         }

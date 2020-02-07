@@ -332,7 +332,8 @@ void ReaperProject::MapImagesAndUrlsToChapters(
         std::for_each(chapters.begin(), chapters.end(), [&](ChapterTag& chapter) {
             if(std::fabs(url.Position() - chapter.Position()) < POSITION_DEAD_BAND)
             {
-                chapter.SetUrl(HttpClient::EncodeUrl(url.Uri()));
+                //chapter.SetUrl(HttpClient::EncodeUrl(url.Uri()));
+                chapter.SetUrl(url.Uri());
             }
         });
     });
