@@ -62,7 +62,7 @@ void ID3V2RemoveAllFrames(ID3V2Context* pContext)
     PRECONDITION(pContext->Tags() != nullptr);
 
     UnicodeStringArray FRAME_IDS
-        = {"TALB", "TPE1", "TIT2", "TCON", "TYER", "TENC", "TLEN", "COMM", "APIC", "CTOC", "CHAP"};
+        = {"TALB", "TPE1", "TIT2", "TCON", "TYER", "TLEN", "COMM", "APIC", "CTOC", "CHAP"};
     std::for_each(FRAME_IDS.begin(), FRAME_IDS.end(), [&](const UnicodeString& FRAME_ID) {
         taglib::ByteVector frameId = taglib::ByteVector::fromCString(FRAME_ID.c_str());
         pContext->Tags()->removeFrames(frameId);

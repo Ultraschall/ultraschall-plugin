@@ -90,10 +90,9 @@ bool ID3V2Writer::InsertProperties(const UnicodeString& targetName, const Unicod
         }
     });
 
-    const UnicodeString duration = UnicodeStringFromInt(pContext_->Duration());
-    const UnicodeString encoder  = "ultraschall4";
+    const UnicodeString durationString = UnicodeStringFromInt(pContext_->Duration());
 
-    static const size_t MAX_SIMPLE_FRAME_MAPPINGS  = 7;
+    static const size_t MAX_SIMPLE_FRAME_MAPPINGS  = 6;
     static const size_t MAX_COMPLEX_FRAME_MAPPINGS = 1;
     struct MAP_ULTRASCHALL_PROPERTIES_TO_ID3V2_TAGS
     {
@@ -109,14 +108,17 @@ bool ID3V2Writer::InsertProperties(const UnicodeString& targetName, const Unicod
       {"TIT2", UTF16, mediaDataValues[2]}, 
       {"TCON", UTF16, mediaDataValues[3]},
       {"TYER", UTF8,  mediaDataValues[4]},   
-      {"TENC", UTF8,  encoder},   
-      {"TLEN", UTF8,  duration}
+      {"TLEN", UTF8,  durationString}
     },
-    complexFrameMapping[MAX_COMPLEX_FRAME_MAPPINGS] =
+    complexFrameMappings[MAX_COMPLEX_FRAME_MAPPINGS] =
     {
       {"COMM", UTF16, mediaDataValues[5]}
     };
     // clang-format on
+
+    // FIXME: use these two lines instead of predefined size values
+    //const size_t maxSimpleFrames  = sizeof(simpleFrameMappings) / sizeof(simpleFrameMappings[0]);
+    //const size_t maxComplexFrames = sizeof(complexFrameMappings) / sizeof(complexFrameMappings[0]);
 
     for(size_t i = 0; (i < MAX_SIMPLE_FRAME_MAPPINGS) && (true == success); i++)
     {
@@ -129,7 +131,7 @@ bool ID3V2Writer::InsertProperties(const UnicodeString& targetName, const Unicod
     {
         for(size_t i = 0; (i < MAX_COMPLEX_FRAME_MAPPINGS) && (true == success); i++)
         {
-            success = ID3V2InsertCommentsFrame(pContext_, complexFrameMapping[i].text);
+            success = ID3V2InsertCommentsFrame(pContext_, complexFrameMappings[i].text);
         }
     }
 
