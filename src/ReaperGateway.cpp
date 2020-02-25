@@ -256,7 +256,7 @@ bool IsEditMarker(const UnicodeString& name)
     const UnicodeString normalizedName = UnicodeStringCopyTrimLeft(name);
     PRECONDITION_RETURN(normalizedName.empty() == false, false);
 
-    return normalizedName[0] == '_';
+    return (normalizedName.size() >= 5) && (normalizedName.substr(0, 5) == "_Edit");
 }
 
 ChapterTagArray ReaperGateway::Markers(ProjectReference projectReference)
