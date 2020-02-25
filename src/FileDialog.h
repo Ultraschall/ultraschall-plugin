@@ -34,7 +34,7 @@ namespace ultraschall { namespace reaper {
 class FileDialog
 {
 public:
-    FileDialog(const UnicodeString& caption, const UnicodeString& initialDirectory = "");
+    FileDialog(const UnicodeString& caption, const UnicodeString& initialDirectory = "", const UnicodeString& initialFile = "");
     virtual ~FileDialog();
 
     UnicodeString SelectChaptersFile();
@@ -46,6 +46,7 @@ public:
 private:
     UnicodeString caption_;
     UnicodeString initialDirectory_;
+    UnicodeString initialFile_;
 };
 
 }} // namespace ultraschall::reaper

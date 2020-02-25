@@ -73,7 +73,7 @@ bool SaveChapterMarkersAction::ConfigureTargets()
 
     target_.clear();
 
-    FileDialog fileDialog("Export chapter markers", CurrentProjectDirectory());
+    FileDialog fileDialog("Export chapter markers", CurrentProjectDirectory(), CurrentProjectName());
     target_ = fileDialog.ChooseChaptersFileName();
     if(target_.empty() == false)
     {

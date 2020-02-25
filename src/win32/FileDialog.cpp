@@ -36,8 +36,10 @@
 
 namespace ultraschall { namespace reaper {
 
-FileDialog::FileDialog(const UnicodeString& caption, const UnicodeString& initialDirectory) :
-    caption_(caption), initialDirectory_(initialDirectory)
+FileDialog::FileDialog(
+    const UnicodeString& caption, const UnicodeString& initialDirectory, const UnicodeString& initialFile) :
+    caption_(caption),
+    initialDirectory_(initialDirectory), initialFile_(initialFile)
 {}
 
 FileDialog::~FileDialog() {}
@@ -266,6 +268,11 @@ UnicodeString FileDialog::ChooseChaptersFileName()
                     pfsd->SetFolder(psi);
                     SafeRelease(psi);
                 }
+            }
+
+            if(initialFile_.empty() == false)
+            {
+                pfsd->SetFileName(reinterpret_cast<LPCWSTR>(U2WU(initialFile_).c_str()));
             }
 
             FILEOPENDIALOGOPTIONS fos = FOS_OVERWRITEPROMPT | FOS_CREATEPROMPT;
