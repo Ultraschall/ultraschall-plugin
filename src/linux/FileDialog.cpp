@@ -32,7 +32,7 @@
 
 namespace ultraschall { namespace reaper {
 
-FileDialog::FileDialog(const UnicodeString& caption, const UnicodeString& initialDirectory) {}
+FileDialog::FileDialog(const UnicodeString& caption, const UnicodeString& initialDirectory, const UnicodeString& initialFile) : caption_(caption), initialDirectory_(initialDirectory), initialFile_(initialFile) {}
 
 FileDialog::~FileDialog() {}
 
