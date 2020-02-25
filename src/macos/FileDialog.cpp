@@ -33,7 +33,7 @@
 
 namespace ultraschall { namespace reaper {
 
-FileDialog::FileDialog(const UnicodeString& caption, const UnicodeString& initialDirectory) {}
+FileDialog::FileDialog(const UnicodeString& caption, const UnicodeString& initialDirectory, const UnicodeString& initialFile) : caption_(caption), initialDirectory_(initialDirectory), initialFile_(initialFile){}
 
 FileDialog::~FileDialog() {}
 
@@ -128,9 +128,23 @@ UnicodeString FileDialog::ChooseChaptersFileName()
         fileDialog.allowsOtherFileTypes = NO;
         fileDialog.canCreateDirectories = YES;
         fileDialog.title                = [NSString stringWithUTF8String:caption_.c_str()];
+       
+        NSString* initialDirectory = nil;
+        if(initialDirectory_.empty() == false)
+        {
+            initialDirectory = [NSString stringWithUTF8String:initialDirectory_.c_str()];
+        }
+        
+        NSString* initialFile = nil;
+        if(initialFile_.empty() == false)
+        {
+            initialFile = [NSString stringWithUTF8String:initialFile_.c_str()];
+        }
+        
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        if([fileDialog runModal] == NSFileHandlingPanelOKButton)
+//        if([fileDialog runModal] == NSFileHandlingPanelOKButton)
+        if([fileDialog runModalForDirectory:initialDirectory file:initialFile] == NSFileHandlingPanelOKButton)
 #pragma clang diagnostic pop
         {
             result = [[fileDialog URL] fileSystemRepresentation];
