@@ -2,7 +2,7 @@
 
 Mit [Podlove](http://podlove.org/) und [Auphonic](https://auphonic.com/) wurden uns Produzierenden von Podcasts mächtige Werkzeuge an die Hand gegeben. Was jedoch fehlte, war eine für Podcasts optimierte Umgebung für Aufnahme und Produktion der eigentlichen Podcasts.
 
-Die verschiedenen DAWs (Digital Audio Workstations) haben verschiedene Vor- und Nachteile, seien sie finanzieller Natur oder in Bezug auf Features. [Reaper](http://www.reaper.fm/) besetzt hier nach Meinung vieler einen Sweet Spot: für schlanke 44 € erhält man das Schweizer Offiziersmesser unter den DAWs, entwickelt von Audio-Nerds (das alte Winamp-Team). Das Problem: Ästhetisch ist Reaper - in der Windowswelt verankert - eine mittlere Zumutung. Zudem sind dutzende Presets gut für Musikproduktionen eingestellt, out-of-the-box jedoch nahezu **absurd falsch** für uns Podcaster - etwa die Orientierung an Takten statt an Zeiteinheiten.
+Die verschiedenen DAWs (Digital Audio Workstations) haben verschiedene Vor- und Nachteile, seien sie finanzieller Natur oder in Bezug auf Features. [Reaper](http://www.reaper.fm/) besetzt hier nach Meinung vieler einen Sweet Spot: für schlanke 65 € erhält man das Schweizer Offiziersmesser unter den DAWs, entwickelt von Audio-Nerds (das alte Winamp-Team). Das Problem: Ästhetisch ist Reaper - in der Windowswelt verankert - eine mittlere Zumutung. Zudem sind dutzende Presets gut für Musikproduktionen eingestellt, out-of-the-box jedoch nahezu **absurd falsch** für uns Podcaster - etwa die Orientierung an Takten statt an Zeiteinheiten.
 
 **Ultraschall optimiert Reaper soweit wie nur irgend möglich für Podcasting**. Eine DAW von Podcastern für Podcaster. Hierbei werden drei Ebenen angegangen:
 
@@ -18,7 +18,7 @@ Die Feature-Entwicklung von Ultraschall erfolgt entlang dem dreigeteilten Workfl
 ### Vorbereitung
 
 * **Mehrspuraufnahme:** Jeder Sprecher bekommt eine eigene Spur (ein passendes Soundinterface vorausgesetzt), ebenso wie Skype/Mumble-Partner oder Einspieler. Dies ermöglicht maximale Freiheit und Kreativität bei der Nachbearbeitung.
-* **Skype N-1:** Binde externe Teilnehmer ein, ohne ein einziges Kabel zu ziehen. Allein in Software wird eine saubere N-1 Schaltung aufgebaut, so dass alle Teilnehmer alles hören und einen perfekten Klang ohne Echos genießen. Die Skype-Teilnehmer landen auf einer separaten Spur, die man zur Not auch durch die Aufnahme eines Double-Enders ersetzen kann. Natürlich funktioniert der Aufbau ebenso mit Mumble.
+* **StudioLink:** Binde externe Teilnehmer ein, ohne ein einziges Kabel zu ziehen. Allein in Software wird eine saubere N-1 Schaltung aufgebaut, so dass alle Teilnehmer alles hören und einen perfekten Klang ohne Echos genießen. Die StudioLink-Teilnehmer landen auf einer separaten Spur, die man zur Not auch durch die Aufnahme eines Double-Enders ersetzen kann. 
 * **Eigener HUB-Soundtreiber:** Um komplexere Aufnahmen - etwa Skype N-1 - in Software modelliert durchführen zu können, benötigte man bisher das nicht mehr weiter entwickelte [Soundflower](https://rogueamoeba.com/freebies/soundflower/). Wir haben entlang der aktuellsten Audio-APIs eine vollständige Neuimplementierung vorgenommen die stabil und zukunftssicher läuft.
 * **Routing:** Das Routing von Spuren kann komfortabel über eine Matrix (Kreuzschiene) verwaltet werden. Die vorbereiteten Routing-Presets werden während der Sendung mit einem Klick abgerufen – ganz wie bei einem digitalen Mischpult. Man schaltet problemlos zwischen Preshow (Nur Musik auf dem Livestream, aber alle PodcasterInnen können sich bereits hören und warmlaufen, Sendung (alles auf dem Stream), Postshow mit leisem Musikteppich und Schnitt (nichts auf dem Stream) hin und her. Beliebige eigene Routing-Presets können abgelegt werden.
 * **Multifunktionsdock** Im Dockbereich können verschiedene Werkzeuge abgerufen und geordnet werden: Spurenmixer, Mastermix, Medienbrowser, Navigator, Kapitelmarken, Routingmatrix, Routingpresets, Effekte, Uhr. Der Dockbereich kann in zwei oder drei Teile gegliedert werden. Über Reiter können wiederum Werkzeuge pro Dock verwaltet werden.
@@ -68,8 +68,6 @@ Alle Kanäle ist lesend frei geschaltet. Wenn du beitragen möchtest, melde dich
 
 
 ### Bedienung
-
-Diese Distribution krempelt viele Bereiche von Reaper um - man muss umlernen, egal ob man von einer anderen DAW oder der Reaper-Originalversion kommt. Ein erster Anlaufpunkt mit kompakter Erklärung der drei Workflow-Views und der Icons findet sich im der Release beiliegenden Release-Poster (zur 1.0 - teilweise überholt, siehe Release-History unten).
 
 Begleitend sei unser Screencast empfohlen, in dem ich auf Details eingehe. Fragen gern an mich oder noch besser im Forum <https://sendegate.de/c/ultraschall>
 
