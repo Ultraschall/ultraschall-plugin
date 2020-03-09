@@ -8,7 +8,8 @@ The following features will be presented in detail in our Ultraschall tutorial v
 ### REAPER
 
 - REAPER: **Support of version 6.05**  
-Ultraschall 4.0 is optimized for version 6.05 of REAPER All other versions are not executable._ **It is therefore absolutely necessary to refrain from a manual update of REAPER in the future**, _the ultrasound extensions will then be deactivated._
+Ultraschall 4.0 is optimized for version 6.05 of REAPER. All other versions are not executable._  
+**It is therefore absolutely necessary to refrain from a manual update of REAPER in the future**, _the Ultraschall extensions will then be deactivated._
 
 - SWS: **SWS Version 2.11**
 _Ultraschall now includes version 2.11.0 of the SWS plug-in._
@@ -97,7 +98,7 @@ _`cmd/strg`+`Enter` shows the current soundboard slot, which would be played wit
     Attention: not all shortcuts work on all keyboards, especially under Windows. However, the corresponding actions can easily be mapped manually to suitable keys._
   
 - Soundboard: **Display of the Soundboard**  
-Press the 'TAB' button to display the soundboard. If no soundboard track is loaded in the project yet, you get the possibility to insert one directly._
+_Press the 'TAB' button to display the soundboard. If no soundboard track is loaded in the project yet, you get the possibility to insert one directly._  
 
 - Soundboard: **New layout**  
 _The important folder icon for loading sounds has moved to the far left so that you can always reach it directly, even on very small monitors._
@@ -108,7 +109,7 @@ _All relevant functions of the soundboard can now be called directly as actions 
 ### StudioLink
 
 - StudioLink: **Version v20.03.3-stable**  
-Ultraschall now includes the latest StudioLink version. Also for the OnAir Live-Streaming module.
+_Ultraschall now includes the latest StudioLink version. Also for the OnAir Live-Streaming module._  
 
 ### editing
 
@@ -119,37 +120,37 @@ _`alt`+`delete` deletes selected items without moving subsequent items, even if 
 _`alt`+`x` deletes selected items from a time selection, ignoring ripple globally. If no item is selected, all items in the selection are deleted._
 
 - Editing: **RippleCut copies items to the clipboard**  
-Items cut out with 'cmd/strg' + 'x' by RippleCut are copied to the clipboard. So you can paste them again._
+_Items cut out with 'cmd/strg' + 'x' by RippleCut are copied to the clipboard. So you can paste them again._  
 
 - Editing: **Temporary ripple-all mode when moving**  
-If an item is moved while holding down the 'cmd/strg' key, the Ripple All mode is activated for the duration of the move. Extremely useful for quickly making room or closing gaps._
+_If an item is moved while holding down the 'cmd/strg' key, the Ripple All mode is activated for the duration of the move. Extremely useful for quickly making room or closing gaps._  
 
 - Editing: **Edit cursor jumps to RippleCut at interface**  
-When applying Ripplecut, the edit cursor now jumps to the position of the cut. So you can continue working there quickly._
+_When applying Ripplecut, the edit cursor now jumps to the position of the cut. So you can continue working there quickly._  
 
 - Editing: **Rapid Cut**  
-With 'alt' + 'click' the item under the mouse pointer is split and the right half is selected. With `alt`+`cmd`+`click` the item under the mouse cursor is split and the left half is deleted. These two shortcuts are very powerful for the fast editing of complex projects._
+_With 'alt' + 'click' the item under the mouse pointer is split and the right half is selected. With `alt`+`cmd`+`click` the item under the mouse cursor is split and the left half is deleted. These two shortcuts are very powerful for the fast editing of complex projects._  
 
 - editing: **Remove Silence**  
-In the context menu of items, in the podcast menu as well as via the shortcut 'shift' + 'd' you will find a new function: Remove Silence. First, selected items are normalized to -23LUFS and then cut along very quiet passages. The silent passages are removed, but not pushed together. The remaining blocks are gently faded in and out with 500ms duration._  
+_In the context menu of items, in the podcast menu as well as via the shortcut 'shift' + 'd' you will find a new function: Remove Silence. First, selected items are normalized to -23LUFS and then cut along very quiet passages. The silent passages are removed, but not pushed together. The remaining blocks are gently faded in and out with 500ms duration._  
 
 - Navigation: **Accelerate cursor movement with arrow keys**  
-If you move the edit cursor with the arrow keys 'left'/'right' and keep the key pressed, the movement of the cursor accelerates with time. This makes navigating through larger parts of the project using the arrow keys easier and more efficient._
+_If you move the edit cursor with the arrow keys 'left'/'right' and keep the key pressed, the movement of the cursor accelerates with time. This makes navigating through larger parts of the project using the arrow keys easier and more efficient._  
 
 - Editing: **Renaming Takes**  
-_Takes can now be quickly renamed with the 'alt' + 'n' shortcut. This also helps to get a better overview in the storyboard view of the ProjectBay, because takes are no longer cryptically named _01_audio_002_, but e.g. _MyBestTake_.
+_Takes can now be quickly renamed with the 'alt' + 'n' shortcut. This also helps to get a better overview in the storyboard view of the ProjectBay, because takes are no longer cryptically named _01_audio_002_, but e.g. _MyBestTake_._  
 
 - Editing: **Chapter bell**  
-If you activate the chapter bell in the new 'Ultraschall Settings', a bell sound will be heard when the play cursor passes a chapter marker. This way you can turn your eyes away from the screen (e.g. when writing shownotes) and still hear when there is a chapter change. The sound is different for edit markers, yet unnamed markers and already named markers._
+_If you activate the chapter bell in the new 'Ultraschall Settings', a bell sound will be heard when the play cursor passes a chapter marker. This way you can turn your eyes away from the screen (e.g. when writing shownotes) and still hear when there is a chapter change. The sound is different for edit markers, yet unnamed markers and already named markers._  
 
 - navigation: **Jump to edges**  
-With 'old' + 'left' / 'right' you jump to the edges of the items. If tracks are selected, only the items of this track(s) are jumped to.
+_With 'alt' + 'left' / 'right' you jump to the edges of the items. If tracks are selected, only the items of this track(s) are jumped to._  
 
 - Editing: **MediaItem end snap to project templates now**  
-If you use the Ultraschall project templates, you can have items "snapped" not only at the beginning when you slide them together, but also at the end._
+_If you use the Ultraschall project templates, you can have items "snapped" not only at the beginning when you slide them together, but also at the end._  
 
 - Navigation: **JKL Shuttle**  
-The three buttons 'j', 'k' and 'l' function like a shuttle wheel. You can navigate very fast in the timeline with three fingers on the keyboard. The speed levels are: 1, 2, 3, 5, 8, 20, 40 and 100 -speed.  
+_The three buttons 'j', 'k' and 'l' function like a shuttle wheel. You can navigate very fast in the timeline with three fingers on the keyboard. The speed levels are: 1, 2, 3, 5, 8, 20, 40 and 100 -speed._  
 _ 'l' plays forward. The playback speed can be increased by pressing several times._  
 _`k` ends the shuttle mode and stops playback._  
 _`j` behaves like the l button but in reverse._
@@ -158,7 +159,7 @@ _`j` behaves like the l button but in reverse._
 _If the keyboard focus does not make the zoom per `+`/`-` usable, you can now combine it with `cmd/strg`._
 
 - navigation: **Zoom to current region**  
-You can now zoom in on the current region with 'old' + 'e'. Current region is the one where the edit cursor is currently positioned._
+You can now zoom in on the current region with 'alt' + 'e'. Current region is the one where the edit cursor is currently positioned._
 
 - Navigation: **Manual Follow Mode**  
 _In the previous version there was an automatism that switched off the Follow Mode in certain useful situations. This automatism did not work for some people and can now be turned off in the new 'Ultraschall Settings'. The follow mode then remains switched on until it is switched off in a dedicated way.
