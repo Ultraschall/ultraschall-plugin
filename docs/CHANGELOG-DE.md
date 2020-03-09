@@ -9,8 +9,8 @@ Die nachfolgenden Features werden ausführlich in unseren Ultraschall-Tutorial-V
 - REAPER: **Unterstützung der Version 6.05**  
 _Ultraschall 4.0 ist für die Version 6.05 von REAPER optimiert. Alle anderen Versionen sind nicht lauffähig._ **Von einem manuellen Update von REAPER ist daher in Zukunft unbedingt abzusehen**, _die Ultraschall-Erweiterungen werden dann deaktiviert._
 
-- SWS: **SWS Version 2.10**
-_Ultraschall enthält nun die Version 2.10.0 des SWS Plug-ins._
+- SWS: **SWS Version 2.11**
+_Ultraschall enthält nun die Version 2.11.0 des SWS Plug-ins._  
 
 ### MagicRouting
 
