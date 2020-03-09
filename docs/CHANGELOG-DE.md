@@ -2,9 +2,266 @@
 
 Die nachfolgenden Features werden ausführlich in unseren Ultraschall-Tutorial-Videos erklärt: [https://ultraschall.fm/tutorials/](https://ultraschall.fm/tutorials/)
 
-## 3.2 Miedinger - August 2019
+## 4.0 Aicher - 2020-03-09
 
-### Änderungsprotokoll
+### REAPER
+
+- REAPER: **Unterstützung der Version 6.05**  
+_Ultraschall 4.0 ist für die Version 6.05 von REAPER optimiert. Alle anderen Versionen sind nicht lauffähig._ **Von einem manuellen Update von REAPER ist daher in Zukunft unbedingt abzusehen**, _die Ultraschall-Erweiterungen werden dann deaktiviert._
+
+- SWS: **SWS Version 2.10**
+_Ultraschall enthält nun die Version 2.10.0 des SWS Plug-ins._
+
+### MagicRouting
+
+- MagicRouting: **Automatisiertes Routing**  
+_Mit den neuen MagicRouting Buttons links im Bereich Routing entfällt das manuelle setzen der Routing-Matrix vollständig. Grundsätzlich bietet MagicRouting zwei verschiedene Modi: Vollautomatisch und Halbautomatisch.
+Man schaltet den Modus um, indem man den Zauberstab aktiviert (vollautomatisch) oder deaktiviert (halbautomatisch). Der Standardwert für ein neues Projekt ist vollautomatisch, Routing-Preset: Recording.  
+  
+    Es werden drei Routing-Presets ausgeliefert, die über die drei Buttons unter dem Zauberstab umgeschaltet werden können:  
+  
+    **Preshow:** Macht dann Sinn, wenn über `StudioLink OnAir` gestreamt wird und ferner ein Ùltraschall Soundboard` aktiv ist. Dieses Preset bildet die Situation ab, dass vor Sendungsbeginn der Stream über das Soundboard schon mit Musik versorgt wird, die Stimmen der Podcaster jedoch noch nicht "OnAir" sind. Alle Podcastenden sollen sich jedoch schon untereinander hören, ebenfalls auf Wunsch leise die Musik. Im Detail: 
+  - Das Routing der StudioLink-Spuren wird automatisch eingestellt
+  - Das Soundboard geht als einziger Track auf den Master und ist damit im Stream zu hören.
+  - Alle anderen Spuren hören sich nur lokal, aber gehen nicht auf den Stream (kein Send auf den Master)
+  - Man kann über die neuen Ultraschall-Settings (`shift`+`,`) einstellen, ob im lokalen Kopfhörer-Mix auch ein Anteil der Soundboard(Musik)-Spur zu hören sein soll um sich etwas einzustimmen.
+
+  **Recording:** Die Normale Aufnahmesituation
+  - Ist der Preset beim neu Anlegen eines Projektes
+  - Alle Spuren gehen auf den Master und damit auf einen möglichen Stream
+  - Das Routing der StudioLink-Spuren wird automatisch eingestellt
+  - Abhängig davon, ob in den Ultraschall-Settings (`shift`+`,`) für das gerade aktive Soundinterface `Lokales Monitoring` aktiviert (Preset) oder deaktiviert ist, gehen die lokalen Spuren in den Kopfhörer-Mix oder nicht.  
+
+  **Editing**: Das Preset für Schnitt und Mastering der Aufnahme
+  - Alle Spuren gehen auf den Master (wichtig für den Export)
+  - Der Master geht in den Kopfhörer-Mix
+
+  #### Umschaltung
+    Folgende Wege gibt es, um die Presets umzuschalten:  
+  - Jederzeit per Drücken des jeweiligen Buttons
+  - Wählt man `Prepare all tracks for editing` aus, wird automatisch auf den Preset `Editing` umgestellt
+
+  #### Ducking
+    Für die Presets `Preshow` und `Recording` kann die Sondboard-Spur mit einem Ducking versehen werden. Ist dies in den `Ultraschall-Settings` aktiviert (`shift`+`,`) so fadet das Soundboard automatisiert etwas runter, wenn irgendjemand spricht. Im Preset `editing` ist das Ducking immer deaktiviert.  
+
+    #### Manuell/Automatisch
+    Ist der Zauberstab aktiviert (Preset), dann wird bei jeder Änderung der Anzahl der Spuren im Projekt die Routing-Matrix entsprechend des gerade ausgewählten Presets neu aufgebaut.  
+    Ist das Zahnrad deaktiviert, bleibt das Routing in seinem Status Quo - bis es entweder händisch geändert wird oder über einen der Preset-Buttons umgestellt wird.  
+    Man kann jederzeit zwischen Automatik oder Manuell umschalten.
+
+
+### Soundcheck
+
+- Soundcheck: **Warnhinweise für diverse Probleme**  
+_Um diverse Probleme zu vermeiden, gibt es jetzt den Ultraschall Soundcheck. Er meldet sich von selbst, wenn ein Problem vorliegt oder kann manuell über `alt`+`shift`+`,` angezeigt werden. Jeder Soundcheck kann entweder vorübergehend mit `Ignore` ignoriert werden oder in den neuen `Ultrachall Settings` dauerhaft deaktiviert werden. Bei jedem Problem helfen `Call to Action`-Buttons bei der schnellen Lösung des jeweiligen Problems._  
+_Folgende Situationen werden permanent im Hintergrund überwacht:_  
+  
+    _**Echo-Warnung:** Wenn das gerade verwendete Soundinterface _kein_ `lokales Monitoring` beherrscht, muss die sogenannte `Block Size` kleiner eingestellt werden um ungewünschte Echo-Effekte zu vermeiden. Sinnvoll sind dann Werte von 64 oder 128, ansonsten empfehlen wir 512 um Verzerrungen zu vermeiden._  
+  
+    _**Unbekanntes Soundinterface:** Wenn ein Soundinterface zum ersten mal an Ultraschall 4 angeschlossen wird bzw. es nicht in unserer mitgelieferten Datenbank erfasst ist, muss einmalig angegeben werden, ob es `Local Monitoring` unterstützt (siehe `Ultraschall Settings`)_  
+  
+    _**Internes Mikrofon:** Hiermit wird verhindert, dass aus Versehen mit dem internen Mikro - etwa des Notebooks - aufgenommen wird anstatt mit dem ebenfalls angeschlossenem Soundinterface._  
+  
+    _**Starte Aufnahme nur am Ende:** Verhindert, dass beim Fortsetzen einer Aufnahme ein bereits aufgenommener Teil überschrieben wird bzw. ein alternativer Take angelegt wird._  
+  
+    _**Prepare all Tracks for Editing:** Nach jeder Aufnahme kann (und muss!) man hiermit den Modus von Ultraschall von Aufnahme auf Schnitt umschalten._  
+  
+    _**48KHz Samplerate:** Wenn StudioLink Spuren aktiv sind oder ein StudioLink OnAir Streaming aktiv ist, muss die Samplerate auf 48KHz eingestellt sein um Klangstörungen zu vermeiden._  
+  
+    _**Nicht gespeichertes Projekt:** So früh wie möglich, in jedem Fall aber vor Beginn der Aufnahme, sollte ein Projekt unter eigenem Namen gespeichert werden._  
+
+### Ultraschall Settings
+
+- Settings: **eigene Ultraschall Settings**  
+_Es gibt jetzt eine zentrale Stelle für Ultraschall-Settings beheimatet im Podcastmenü oder mithilfe des Shortcuts `shift`+`,`. Dort können auf der linken Seite diverse Ultraschall spezifische Einstellungen gemacht werden. Darunter kann jedes Modul des neuen SoundChecks dauerhaft deaktiviert werden. In der rechten Spalte sind alle Soundinterfaces aufgeführt, die bisher an Ultraschall 4 angeschlossen wurden. Für diese kann (und muss! damit MagicRouting funktioniert) einmalig eingestellt werden, ob sie `lokales Monitoring` unterstützen. Einfache Regel: wenn Kopfhörer/Headset zum Abhören an dem Gerät angeschlossen ist, dann muss `local monitoring` aktiviert werden. Mit dem `x`-Button können überflüssige Interfaces aus der Liste gelöscht werden. Mit den richtigen Einstellungen zum lokalen Monitoring in dieser Liste ist es problemlos möglich, den Podcast mit einem dezidierten Soundinterface aufzunehmen, dann aber im Zug auf dem Laptop nur mit der eingebauten Soundkarte zu schneiden - ohne sich um das Routing Gedanken machen zu müssen._
+
+### Soundboard
+
+- Soundboard: **Kontrolle per Nummernblock und Playlist-Feature**  
+_Das Soundboard ist nun per Nummernblock auf der Tastatur steuerbar(auch mit externem Nummernblock):_   
+_`1` bis `9` - toggelt Play/Pause der entsprechenden Soundboard-Slots_  
+_`,` stoppt alle derzeitig spielenden Sounds (eine Art Not-Aus)_  
+_`+` erhöht die Lautstärke des Soundboards_  
+_`-` verringert die Lautstärke des Soundboards_  
+_`0` fährt die Lautstärke des Soundboards auf einen niedrigen Wert bzw. wieder auf den Ursprungswert (manuelles Ducking)_  
+  
+- Soundboard: **Playlist-Feature**   
+_Es gibt nun auch ein einfaches Playlist-Feature. Es erlaubt die einzelnen Sounds durchzugehen und abzuspielen. Man kann sich so mehrere O-Töne ins Soundboard in der richtigen Reihenfolge packen und diese dann der Reihe nach abspielen._  
+_`*` spielt den nächsten Sound im Soundboard ab(zuerst 1, dann 2, dann 3, etc)_  
+_`/` spielt den vorherigen Sound im Soundboard ab_  
+_`Enter` pausiert/spielt den aktuellen Soundboard-Slot(nochmal) ab_  
+_`alt`+`Enter` stoppt derzeitigen Soundboard-Slot_   
+_`cmd/strg`+`Enter` zeigt den aktuellen Soundboard-Slot an, der mit Enter abgespielt würde_ 
+
+    _Achtung: nicht alle Shortcuts funktionieren auf allen Tastaturen, insbesondere unter Windows. Die entsprechenden Aktionen können jedoch leicht manuell auf passende Tasten gemappt werden._
+  
+- Soundboard: **Anzeige des Soundboards**  
+_Mit der `TAB`-Taste wird das Soundboard angezeigt. Ist noch keine Soundboard-Spur im Projekt geladen, bekommt man die Möglichkeit direkt eine einzufügen._
+
+- Soundboard: **Neues Layout**  
+_Das wichtige Ordner-Icon zum laden von Sounds ist ganz nach links gewandert, damit man es auch auf sehr kleinen Monitoren immer direkt erreichen kann._
+
+- Soundboard: **Midi Aktionen**  
+_Alle relevanten Funktionen des Soundboards können nun direkt als Aktionen aufgerufen und auf eigene Midi-Interfaces gemappt werden._
+
+### StudioLink
+
+- StudioLink: **Version v20.03.3-stable**  
+_Ultraschall liefert nun die aktuellste StudioLink Version mit. Ebenso für das OnAir Live-Streamingmodul._
+
+### Editing
+
+- Editing: **Ripple Cut an/aus mit Modifier**  
+_`cmd/strg`+`x` macht nur noch einen Ripple-Cut auf Zeitselektionen. Item Selektionen werden ignoriert._  
+_`cmd/strg`+`delete` macht nun einen Ripple-Cut auf eines oder mehrere Items. das ganze unter Berücksichtigung von Envelopes, Undo etc._  
+_`alt`+`delete` löscht selektierte Items, ohne dass nachfolgende Items verschoben werden, selbst wenn Ripple global aktiv ist._  
+_`alt`+`x` löscht entsprechend selektierte Items aus einer Zeitauswahl, wobei Ripple global ignoriert wird. Ist kein Item selektiert, werden alle in der Auswahl gelöscht._
+
+- Editing: **RippleCut kopiert Items ins Clipboard**  
+_Items, die mit `cmd/strg`+`x` per RippleCut herausgeschnitten werden, werden ins Clipboard kopiert. Somit kann man diese wieder neu einfügen._
+
+- Editing: **Vorübergehender Ripple-All Modus beim Verschieben**  
+_Wird eine Item mit gedrückter `cmd/strg` -Taste bewegt, dann wird der Ripple All Modus für die Zeitdauer des Schiebens aktiviert. Ausgesprochen nützlich, um schnell Platz zu schaffen oder aber Lücken zu schließen._
+
+- Editing: **Editcursor springt nach RippleCut an Schnittstelle**  
+_Wenn man Ripplecut anwendet, springt der Editcursor nun an die Stelle des Schnitts. So kann man dort schnell weiterarbeiten._
+
+- Editing: **Schneller Schnitt**  
+_Mit `alt`+`Klick` wird das unter dem Mauszeiger befindliche Item geteilt und die rechte Hälfte ausgewählt. Mit `alt`+`cmd`+`Klick` wird das unter dem Mauszeiger befindliche Item geteilt und die linke Hälfte gelöscht. Diese beiden Shortcuts sind ausgesprochen mächtig für den schnellen Schnitt gebauter Beiträge._
+
+- Editing: **Remove Silence**  
+_Im Kontextmenü von Items, im Podcast-Menü sowie über den Shortcut `shift`+`d` findet sich eine neue Funktion: Remove Silence. Zuerst werden selektierte Items auf -23LUFS normalisiert und danach entlang sehr stiller Passagen zerschnitten. Die stillen Passagen werden entfernt, jedoch nicht zusammengeschoben. Die übrig bleibenden Blöcke werden mit 500ms Dauer sanft ein- und ausgeblendet._
+- Navigation: **Beschleunigung der Cursorbewegung mit Pfeiltasten**  
+_Wenn man mit den Pfeiltasten `links`/`rechts` den Edit-Cursor bewegt und die Taste gedrückt hält, so beschleunigt sich die Bewegung des Cursors mit der Zeit. Somit ist das Navigieren durch größere Teile des Projekts mit Hilfe der Pfeiltasten einfacher und effizienter._
+
+- Editing: **Umbenennen von Takes**  
+_Takes können nun schnell mit dem Shortcut `alt`+`n` umbenannt werden. Das hilft auch dabei in der ProjectBay im Storyboard-View einen besseren Überblick zu bekommen, da Takes nicht mehr kryptisch _01_audio_002_ heißen, sondern z.B. _MeinBesterTake_
+
+- Editing: **Kapitelglocke**  
+_Aktiviert man die Kapitelglocke in den neuen `Ultraschall Settings`, so ertönt ein Glockenklang, wenn der Playcursor an einer Kapitelmarke vorbeikommt. So kann man die Augen vom Bildschirm wenden (z.B. wenn man Shownotes schreibt) und bekommt trotzdem mit, wenn ein Kapitelwechsel ist. Der Klang ist unterschiedlich für Edit-Marker, noch unbenannte Marker und bereits mit Namen versehene Marker._
+
+- Navigation: **Springen zu Kanten**  
+_Mit `alt`+`links`/`rechts` springt man zu den Kanten der Items. Wenn Spuren selektiert sind, werden nur die Items dieser Spur(en) angesprungen._
+
+- Editing: **MediaItem Enden snappen jetzt in Projekttemplates**  
+_Wenn man die Ultraschall-Projekttemplates benutzt, kann man Items nicht nur an den Anfang "snappen" lassen, wenn man sie aneinander schiebt, sondern auch ans Ende._
+
+- Navigation: **JKL-Shuttle**  
+Die drei Tasten `j`, `k` und `l` funktionieren wie ein Shuttle-Rad. Man kann damit mit drei Fingern auf der Tastatur sehr schnell in der Timeline navigieren. Die Geschwindigkeitsstufen sind: 1, 2, 3, 5, 8, 20, 40 und 100 -fach._  
+_`l` spielt vorwärts. Die Wiedergabegeschwindigkeit lässt sich durch mehrfaches Drücken erhöhen._  
+_`k` beendet den Shuttlemodus und stoppt die Wiedergabe._  
+_`j` verhält sich wie die l-Taste, aber rückwärts._
+
+- Navigation: **Zoom-Tasten +/- funktionieren auch kombiniert mit CMD**  
+_Wenn der Keyboardfokus den Zoom per `+`/`-` nicht nutzbar macht, kann man sie nun kombinieren mit `cmd/strg`._
+
+- Navigation: **Zoom auf aktuelle Region**  
+_Man kann jetzt auf die aktuelle Region zoomen mit `alt`+`ä`. Aktuelle Region ist diejenige, in der der Edit-Cursor gerade positioniert ist._
+
+- Navigation: **Manueller Follow Mode**  
+_In der vorherigen Version gab es einen Automatismus, der den Follow Mode in bestimmten, sinnvollen Situationen ausgeschaltet hat. Dieser Automatismus funktionierte für Einige nicht und kann nun in den neuen `Ultraschall Settings` ausgeschaltet werden. Der Followmode bleibt dann solange eingeschaltet, bis man ihn dediziert ausschaltet._
+
+- Navigation: **Belegung der Maus**  
+_Mit gedrückter Mausrad-Taste kann man die Inhalte des Editierfensters frei verschieben. Das Mausrad scrollt zur Mauszeiger-Position hinein und heraus. Mit `shift` und dem Mausrad scrollt die Timeline horizontal, mit `alt` und Mausrad vertikal._
+
+- Zeitselektion: **Beschleunigung der Zeitselektion mit Shift+Pfeiltasten**  
+_Wenn man mit `shift`+`links`/`rechts` eine Zeitselektion erstellt und diese Tastenkombination gedrückt hält, so beschleunigt das Größer-werden der Zeitselektion. So kann man größere Zeitselektionen schneller per Tastatur auswählen._
+
+- Mastering: **Shortcut für Normalisierung**  
+_Der Shortcut auf einem Item `shift`+`alt`+`Klick` startet nun eine Analyse der Lautheit des Items und normalisiert dann auf gemittelte -23 LUFS. Bei langen Spuren kann dies eine Weile dauern. Diese Normalisierung ist eine gute Grundlage für den `Dynamics 2`-Effekt sowie Bestandteil der neuen `Remove Silence` Funktion. Im Kontextmenü für Items gibt es ferner den Eintrag `Toggle normalize items` der eine Standard-Normalisierung (Maximierung der höchsten Spitze) vornimmt bzw. bei erneuter Auswahl wieder rückgängig macht. Auch eine -23 LUFS-Normalisierung kann hiermit rückgängig gemacht werden._
+
+- Editing: **Fileinfo**  
+_Im Kontextmenü für Items gibt es einen neuen Eintrag `Open item path in explorer/finder' der die Quelldatei des Items im Dateisystem anzeigt._
+
+- Mastering: **Vorlagen für Effektwege**  
+_In den Vorlagen von Tracks und Projekten (normale Spuren, StudioLink) werden jetzt immer `ReaEQ` und `Ultraschall Dynamics 2` mit eingerichtet - müssen aber händisch aktiviert werden._
+
+- Shortcuts: **Tab schließen**  
+_`cmd/strg`+`w` schießt den aktuellen Projekte-Tab._
+
+- Editing: **Abhören während man Items löscht**  
+_Wenn man das Projekt abspielt, `Ripple-All` eingeschaltet hat und man Items löscht, so springt die Abspielposition passend zurück, um nahtlos das Projekt weiter abhören zu können._
+
+- Editing: **Doppelklick für Play**  
+_Ein Doppelklick in der Zeitleiste oder dem Editierfenster spielt wie bisher ab der angeklickten Position ab. Zusätzlich kann nun auch mit einem Doppelklick auf Leerstellen zwischen Items das Abspielen gestartet werden._
+
+- Marker: **Marker mit Zeitstempel**  
+_Mit dem Shortcut `alt`+`cmd`+`m` setzt man eine Kapitelmarke, die als Namen den aktuellen Zeitstempel enthält im Format YYYY-MM-DD; HH:MM:SS_
+
+
+### Theme
+
+- Theme: **Retina Unterstützung**  
+_Alle relevanten Teile der Nutzeroberfläche werden unter MacOS nun auch in Retina-Auflösung angezeigt. Unter Windows ist dies bei einer HiDPI-Einstellung prinzipiell auch der Fall, jedoch sind hier noch nicht alle Abhängigkeiten zu REAPER erforscht._
+
+- Startscreen: **Neuer Startscreen und Quick-Tutorial**  
+_Beim Start wird ein neuer Screen angezeigt, der die Neuerungen der 4.0 Release präsentiert. Hier lässt sich auch ein Quick-Tutorial starten, dass verschiedene Aspekte von Ultraschall kompakt erklärt._
+
+- Theme: **Neues Iconset**  
+_Sämtliche Icons der Buttonleisten wurden als Vektoren neu gezeichnet und liegen nun auch in Retina-Auflösung vor._
+
+- Ultraclock: **Immer sichtbar und Settings**  
+_Die stark erweiterte Ultracklock ist nun in allen Views voreingestellt. Über das Zahnrad können viele zusätzliche Informationen zur Uhr hinzugefügt werden, etwa: Zeitselektion, Länge des Projekts, letzter/nächster Marker und die Möglichkeit sich die Länge des restlichen Projekts anzuzeigen(aktuelle Position bis Ende des Projekts)._
+
+
+### Export
+
+- Export: **Rich Chapters mit Bildern und URLs**  
+_Das neue `Ultraschall Marker Dashboard` des Export-Assistenten - auch zu erreichen über `alt`+`shift`+`m` - erweitert Kapitelmarken: man kann nun dort direkt Kapitelmarken editieren sowie Kapitelbilder und -URLs verwalten. Um einem Kapitel ein Bild zuzuordnen, erstellt man in der Timeline eine leere Spur, in die man per Drag and Drop einfach beliebige Bilder positionieren kann. Jedes Bild muss dabei an derselben Position liegen wie eine klassische Kapitelmarke. Jeder Kapitelmarke kann ferner eine URL zugewiesen werden, die mit `http://` oder `https://` beginnen muss. Eine Ampel informiert über mögliche Probleme beim Export der erweiterten Kapitelmarken._
+
+- Export: **Metadaten-Dialog**  
+_Im Eingabedialog für die MP3-Metadaten sind nun auch Kommas erlaubt, so dass man Kommas nun auch z.B. im Titel eines MP3 haben kann._
+
+- Export: **Export Assistent**  
+_Das Episodenbild des Podcats wird alle 2 Sekunden abgefragt, so dass man das Fenster nicht mehr schließen muss um zu sehen, ob es richtig erkannt wurde. Die Positionierung der Texte ist nun robust gegenüber unterschiedlichen Schriften._
+
+- Export: **Plausibilitätscheck vor dem rendern**  
+_Vor dem Export wird geprüft, ob Track stumm geschaltet sind und eine entsprechende Warnung ausgegeben._
+
+### Sonstiges und Bugfixes
+
+- Backend: **Ultraschall-API** 
+_Ultraschall verfügt nun über ein eigenes programmierbares API mit 1000+ Endpunkten, auf welchem zukünftig viele Features basieren werden. Informationen, wie man mit dem API eigene Features programmieren kann: ultraschall.fm/api_
+
+- Update: **Ultraschall State-Inspector**  
+_Das Developertool Ultraschall StateInspector erhielt einige Bugfixes und Layoutkorrekturen._
+
+- Fix: Die Zeit, nach der ein erneuter Update-Check ausgeführt werden soll, wird falsch berechnet. (Danke, [@343max](https://twitter.com/343max))
+  [https://github.com/Ultraschall/ultraschall-portable/issues/26](https://github.com/Ultraschall/ultraschall-portable/issues/26)
+
+- Fix: Absturz beim Import von Kapitelmarken, wenn die ausgewählte Datei fehlerhafte Zeiteinträge enthält. (Danke, [@moritzklenk](https://twitter.com/moritzklenk))
+  [https://github.com/Ultraschall/ultraschall-portable/issues/111](https://github.com/Ultraschall/ultraschall-portable/issues/111)
+
+- Fix: Beim Export von Chaptermarks werden auch Regions exportiert.
+  [https://github.com/Ultraschall/ultraschall-portable/issues/46](https://github.com/Ultraschall/ultraschall-portable/issues/46)
+
+- Fix: Der Export von Kapitelmarken schlägt fehl, wenn eine Kapitelmarke eine oder mehrere Nicht-ANSI-Zeichen enthält. (Danke, Marcus von [@diezugfunker](https://twitter.com/diezugfunker))
+  [https://github.com/Ultraschall/ultraschall-portable/issues/110](https://github.com/Ultraschall/ultraschall-portable/issues/110)
+
+- Fix: Der Export von Kapitelmarken schlägt fehl, wenn die Länge eines Kapitelmarkentitels 62 Zeichen überschreitet.
+  [https://github.com/Ultraschall/ultraschall-portable/issues/109](https://github.com/Ultraschall/ultraschall-portable/issues/109)
+
+- Fix: Der Zoomlimiter schlug bei zu kurzen/neuen Projekten zu heftig zu, so dass man sich keinen Überblick verschaffen konnte. [https://github.com/Ultraschall/ultraschall-portable/issues/1](https://github.com/Ultraschall/ultraschall-portable/issues/1)
+
+- Fix: Wenn mehere Items ausgewählt waren und man auf eines geklickt hat, wurde es nicht mehr exklusiv ausgewählt. [https://github.com/Ultraschall/ultraschall-portable/issues/20](https://github.com/Ultraschall/ultraschall-portable/issues/20)
+
+- Fix: Der Followmode schaltete sich manchmal aus, wenn man etwas in die Mutespur setzte und mit der Maus über die Mute-Spur fuhr. [https://github.com/Ultraschall/ultraschall-portable/pull/93](https://github.com/Ultraschall/ultraschall-portable/pull/93)
+
+- Fix: Wenn man Enter oder Space gedrückt hielt, sprangen Reaper-Dialoge auf, die nicht für Endnutzende notwendig waren.
+ [https://github.com/Ultraschall/ultraschall-portable/issues/69](https://github.com/Ultraschall/ultraschall-portable/issues/69) - Danke an [@timpritlove](https://twitter.com/timpritlove)
+
+- Fix: Wenn man Umlaute im Userpace-Namen hatte (Björn), konnte funktionierten einige Ultraschall-Features nicht mehr.
+ [https://github.com/Ultraschall/ultraschall-portable/issues/71](https://github.com/Ultraschall/ultraschall-portable/issues/71) Danke an [@HobbyQA](https://twitter.com/HobbyQS) und [@fairsein](https://twitter.com/fair_sein)
+
+- Fix: Wenn es Punkte in der Mute-Spur gab und man RippleCut angewendet hat, konnte es sein, dass zuviel stummgeschaltet wurde. [https://github.com/Ultraschall/ultraschall-portable/issues/58](https://github.com/Ultraschall/ultraschall-portable/issues/58)
+ 
+- Fix: Unter Umständen wurden Marker an falsche Stellen gesetzt, nicht an die Playposition. [https://github.com/Ultraschall/ultraschall-portable/issues/64](https://github.com/Ultraschall/ultraschall-portable/issues/64)
+
+### Deprecated
+
+- Ultraschall unterstützt nicht mehr das Metadaten-Tagging von MP4 Dateien. Es wird empfohlen, nun ausschließlich MP3 zu verwenden.
+
+## 3.2 Miedinger - August 2019
 
 - [UPDATE] Ultraschall enthält jetzt die Version 2.10.0 des SWS Plug-ins.
   [https://github.com/Ultraschall/ultraschall-portable/issues/112](https://github.com/Ultraschall/ultraschall-portable/issues/112)
