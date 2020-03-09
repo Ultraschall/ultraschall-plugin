@@ -1,4 +1,4 @@
-# Installation instructions for Ultraschall 3.1
+# Installation instructions for Ultraschall 4
 
 The Ultraschall installation comprises **three mandatory steps (Windows: four)**.
 We also explain these steps in a separate [screencast video](https://youtu.be/RTshDTPBMes) in German language.
@@ -11,23 +11,24 @@ We also explain these steps in a separate [screencast video](https://youtu.be/RT
 
 ### Update / Install REAPER
 
-The Ultraschall open-source project is an extension for the commercially available REAPER audio production software. Ultraschall 3.1 is only compatible to REAPER version 5.70.
+The Ultraschall open-source project is an extension for the commercially available REAPER audio production software. Ultraschall 4 is only compatible to REAPER version 6.05. Since version 6, a special Catalina version has been offered for REAPER, which contains additional licenses. It is essential to choose the appropriate version:
 
-[**Download REAPER version v5.70 OS X 64-bit**](http://www.reaper.fm/files/5.x/reaper570_x86_64.dmg)
+[**Download REAPER Version v6.05 OS X 64-bit**](https://www.reaper.fm/files/6.x/reaper605_x86_64.dmg)
+[**Download REAPER Version v6.05 OS X 64-bit Catalina**](https://www.reaper.fm/files/6.x/reaper605_x86_64_catalina.dmgg)
 
-* Download and open the `.dmg`, and install REAPER or update to version 5.70 respectively.
-* Using any other REAPER version will lead to the Ultraschall plugin being deactivated and not being launched. We strongly advise you NOT to update REAPER manually to any other version than 5.70.
+* Download and open the `.dmg`, and install REAPER or update to version 6.05 respectively.
+* Using any other REAPER version will lead to the Ultraschall plugin being deactivated and not being launched. We strongly advise you NOT to update REAPER manually to any other version than 6.05.
 * The test version of REAPER is _fully functional for 60 days_ and costs US$ 60 afterwards.
 
 # 2.
 
 ### Download Ultraschall and launch the Ultraschall installer
 
-Download our Ultraschall 3.1 distribution and open the `.dmg` file:
+Download our Ultraschall 4 distribution and open the `.dmg` file:
 
-[**Download Ultraschall 3.1**](http://url.ultraschall-podcast.de/us31)
+[**Download Ultraschall 4**](http://url.ultraschall-podcast.de/us4mac)
 
-* In the new window, run and complete the `Ultraschall-3.1.pkg` installation program.
+* In the new window, run and complete the `Ultraschall-4.0.pkg` installation program.
 * **Caution:** Should you experience an error message at the end of the installation routine, please restart macOS and run the Installer again.
 * If you launch REAPER now, you would be presented with a couple of nice error messages – so **rather proceed** to step 3:
 
@@ -36,18 +37,17 @@ Download our Ultraschall 3.1 distribution and open the `.dmg` file:
 ### Install REAPER Ultraschall Configuration
 
 * Launch REAPER. A warning about the theme not being installed or being outdated will be shown.
-* Now drag the file `Ultraschall_3.1.ReaperConfigZip` into the **open REAPER main window** and click `Import`.
+* Now drag the file `Ultraschall_4.0.ReaperConfigZip` into the **open REAPER main window** and click `Import`.
 
 # 4.
 
 ### Verify Success of the Installation
 
 * REAPER will restart automatically after step 3.
-* In the new Ultraschall welcome screen click on “Details” and check that all components have been installed correctly and no more error messages appear upon launch.
 * Error messages upon launch will notify you that either the plugin (step 2) or theme (step 3) have not been installed correctly. Ultraschall will only work when **both** components have been installed. Should you experience such error messages, please repeat steps 2 and 3.
-* Should you experience further error messages please verify that you have REAPER version 5.70 installed (step 1). If in doubt, re-install REAPER.
+* Should you experience further error messages please verify that you have REAPER version 6.05 installed (step 1). If in doubt, re-install REAPER.
 * It may also help to restart your computer and run the `First Aid` option in the macOS Disk Utility application.
-* In case of persisting issues or when you want to update an outdated version of Ultraschall prior to 2.0 we recommend to run the scripts `Uninstall.command` and `Remove legacy audio devices.commend` provided in the .dmg and subsequently restart your computer. After restart please repeat steps 1 to 3.
+* In case of persisting issues or when you want to update an outdated version of Ultraschall prior to 3.0 we recommend to run the scripts `Uninstall.command` and `Remove legacy audio devices.commend` provided in the .dmg and subsequently restart your computer. After restart please repeat steps 1 to 3.
   Should _any of these measures_ fail, you can ask for help in our user forum: [Ultraschall at Sendegate](https://sendegate.de/c/ultraschall)
 * We recommend you watch the release screencast in our [Tutorials area](http://ultraschall.fm/tutorials/) to find out about the new features.
 
@@ -63,27 +63,27 @@ In case you want to use purely software-defined N-1 audio-routing for Skype reco
 
 ---
 
-# Windows Version 7 or above
+# Windows Version 10 or above
 
 # 1.
 
 ### Update / Install REAPER
 
-The Ultraschall open-source project is an extension for the commercially available REAPER audio production software. Ultraschall 3.1 is only compatible to REAPER version 5.70.
+The Ultraschall open-source project is an extension for the commercially available REAPER audio production software. Ultraschall 4 is only compatible to REAPER version 6.05.
 
-[**Download REAPER version v5.70 Windows 64-bit**](http://www.reaper.fm/files/5.x/reaper570_x64-install.exe)
+[**Download REAPER version v6.05 Windows 64-bit**](https://www.reaper.fm/files/6.x/reaper605_x64-install.exe)
 
-* Download the `.exe`, and install REAPER or update to version 5.70 respectively.
-* Using any other REAPER version will lead to the Ultraschall plugin being deactivated and not being launched. We strongly advise you NOT to update REAPER manually to any other version than 5.70.
+* Download the `.exe`, and install REAPER or update to version 6.05 respectively.
+* Using any other REAPER version will lead to the Ultraschall plugin being deactivated and not being launched. We strongly advise you NOT to update REAPER manually to any other version than 6.05.
 * The test version of REAPER is _fully functional for 60 days_ and costs US$ 60 afterwards.
 
 # 2.
 
 ### Download Ultraschall and launch the Ultraschall installer
 
-Download our Ultraschall 3.1 distribution and open the `.msi` file:
+Download our Ultraschall 4 distribution and open the `.msi` file:
 
-[**Download Ultraschall-3.1.msi (24.1 MB)**](http://url.ultraschall-podcast.de/us31win)
+[**Download Ultraschall-4.0.msi (24.1 MB)**](http://url.ultraschall-podcast.de/us4win)
 
 * Run and finish the Installer.
 * If you launch REAPER now, you would be presented with a couple of nice error messages – so **rather proceed** to step 3:
@@ -107,9 +107,8 @@ Download our Ultraschall 3.1 distribution and open the `.msi` file:
 ### Verify Success of the Installation
 
 * REAPER will restart automatically after step 3.
-* In the new Ultraschall welcome screen click on “Details” and check that all components have been installed correctly and no more error messages appear upon launch.
 * Error messages upon launch will notify you that either the plugin (step 2) or theme (step 3) have not been installed correctly. Ultraschall will only work when **both** components have been installed. Should you experience such error messages, please repeat steps 2 and 3.
-* Should you experience further error messages please verify that you have REAPER 64-bit version 5.70 installed (step 1). If in doubt, re-install REAPER.
+* Should you experience further error messages please verify that you have REAPER 64-bit version 6.05 installed (step 1). If in doubt, re-install REAPER.
 * Try restarting your computer to solve your issue.
   Should _any of these measures_ fail, you can ask for help in our user forum: [Ultraschall at Sendegate](https://sendegate.de/c/ultraschall)
 * We recommend you watch the release screencast in our [Tutorials area](http://ultraschall.fm/tutorials/) to find out about the new features.
