@@ -43,18 +43,18 @@ You switch the mode by activating (fully automatic) or deactivating (semi-automa
   - Selecting 'Prepare all tracks for editing' will automatically switch to the 'Editing' preset
 
   #### Ducking
-    For the presets 'Preseshow' and 'Recording' the specialboard track can be provided with a ducking. If this is activated (`shift`+`,`) in the `Ultraschall Settings`, the soundboard will automatically fade down a bit when someone speaks. In the preset `editing` the ducking is always deactivated.  
+    For the presets 'Preseshow' and 'Recording' the soundboard track can be provided with a ducking. If this is activated (`shift`+`,`) in the `Ultraschall Settings`, the soundboard will automatically fade down a bit when someone speaks. In the preset `editing` the ducking is always deactivated.  
 
     #### Manual/Automatic
     If the magic wand is activated (Preset), the routing matrix is rebuilt according to the currently selected preset each time the number of tracks in the project is changed.  
-    If the cogwheel is deactivated, the routing remains in its status quo - until it is either changed manually or switched via one of the preset buttons.  
+    If the magic wand is deactivated, the routing remains in its status quo - until it is either changed manually or switched via one of the preset buttons.  
     You can switch between automatic and manual at any time.
 
 
 ### Soundcheck
 
 - Sound check: **Warnings for various problems**  
-In order to avoid various problems, there is now the ultrasonic sound check. It reports itself if there is a problem or can be displayed manually via 'alt' + 'shift' + '`. Each soundcheck can either be temporarily ignored with 'Ignore' or permanently disabled in the new 'Ultraschall Settings'. For each problem, 'Call to Action' buttons help to solve the respective problem quickly._  
+In order to avoid various problems, there is now the Ultraschall Soundcheck. It reports itself if there is a problem or can be displayed manually via 'alt' + 'shift' + '`. Each soundcheck can either be temporarily ignored with 'Ignore' or permanently disabled in the new 'Ultraschall Settings'. For each problem, 'Call to Action' buttons help to solve the respective problem quickly._  
 The following situations are permanently monitored in the background:_  
   
     _**Echo warning:** If the currently used sound interface _no_ supports 'local monitoring', the so-called 'Block Size' must be set smaller to avoid unwanted echo effects. Values of 64 or 128 are then useful, otherwise we recommend 512 to avoid distortion._  
@@ -73,8 +73,8 @@ The following situations are permanently monitored in the background:_
 
 ### Ultraschall Settings
 
-- Settings: **own ultrasonic settings**  
-There is now a central location for ultrasound settings located in the podcast menu or using the 'Shift' + '+' shortcut. There you can make various ultrasound specific settings on the left side. Among them, each module of the new SoundCheck can be permanently deactivated. The right column lists all sound interfaces that have been connected to Ultraschall 4 so far. For these interfaces you can (and must! in order for MagicRouting to work) set once whether they support 'local monitoring'. Simple rule: if headphones/headset are connected to the device for monitoring, then 'local monitoring' must be activated. With the 'x' button you can delete unnecessary interfaces from the list. With the correct settings for local monitoring in this list, it is possible to record the podcast with a dedicated sound interface without any problems, but then to edit on the laptop in the train using only the built-in sound card - without having to worry about the routing._
+- Settings: **own Ultraschall settings**  
+There is now a central location for Ultraschall settings located in the podcast menu or using the 'Shift' + '+' shortcut. There you can make various Ultraschall specific settings on the left side. Among them, each module of the new Soundcheck can be permanently deactivated. The right column lists all sound interfaces that have been connected to Ultraschall 4 so far. For these interfaces you can (and must! in order for MagicRouting to work) set once whether they support 'local monitoring'. Simple rule: if headphones/headset are connected to the device for monitoring, then 'local monitoring' must be activated. With the 'x' button you can delete unnecessary interfaces from the list. With the correct settings for local monitoring in this list, it is possible to record the podcast with a dedicated sound interface without any problems, but then to edit on the laptop in the train using only the built-in sound card - without having to worry about the routing._
 
 ### Soundboard
 
@@ -128,10 +128,11 @@ If an item is moved while holding down the 'cmd/strg' key, the Ripple All mode i
 When applying Ripplecut, the edit cursor now jumps to the position of the cut. So you can continue working there quickly._
 
 - Editing: **Rapid Cut**  
-With 'alt' + 'click' the item under the mouse pointer is split and the right half is selected. With `alt`+`cmd`+`click` the item under the mouse cursor is split and the left half is deleted. These two shortcuts are very powerful for the fast editing of built posts._
+With 'alt' + 'click' the item under the mouse pointer is split and the right half is selected. With `alt`+`cmd`+`click` the item under the mouse cursor is split and the left half is deleted. These two shortcuts are very powerful for the fast editing of complex projects._
 
 - editing: **Remove Silence**  
-In the context menu of items, in the podcast menu as well as via the shortcut 'Shift' + 'd' you will find a new function: Remove Silence. First, selected items are normalized to -23LUFS and then cut along very quiet passages. The silent passages are removed, but not pushed together. The remaining blocks are gently faded in and out with 500ms duration._
+In the context menu of items, in the podcast menu as well as via the shortcut 'shift' + 'd' you will find a new function: Remove Silence. First, selected items are normalized to -23LUFS and then cut along very quiet passages. The silent passages are removed, but not pushed together. The remaining blocks are gently faded in and out with 500ms duration._  
+
 - Navigation: **Accelerate cursor movement with arrow keys**  
 If you move the edit cursor with the arrow keys 'left'/'right' and keep the key pressed, the movement of the cursor accelerates with time. This makes navigating through larger parts of the project using the arrow keys easier and more efficient._
 
@@ -145,7 +146,7 @@ If you activate the chapter bell in the new 'Ultraschall Settings', a bell sound
 With 'old' + 'left' / 'right' you jump to the edges of the items. If tracks are selected, only the items of this track(s) are jumped to.
 
 - Editing: **MediaItem end snap to project templates now**  
-If you use the ultrasonic project templates, you can have items "snapped" not only at the beginning when you slide them together, but also at the end._
+If you use the Ultraschall project templates, you can have items "snapped" not only at the beginning when you slide them together, but also at the end._
 
 - Navigation: **JKL Shuttle**  
 The three buttons 'j', 'k' and 'l' function like a shuttle wheel. You can navigate very fast in the timeline with three fingers on the keyboard. The speed levels are: 1, 2, 3, 5, 8, 20, 40 and 100 -speed.  
@@ -163,13 +164,13 @@ You can now zoom in on the current region with 'old' + 'e'. Current region is th
 _In the previous version there was an automatism that switched off the Follow Mode in certain useful situations. This automatism did not work for some people and can now be turned off in the new 'Ultraschall Settings'. The follow mode then remains switched on until it is switched off in a dedicated way.
 
 - Navigation: **Mouse assignment**  
-By keeping the mouse wheel key pressed down, the contents of the editing window can be moved freely. The mouse wheel scrolls in and out to the mouse pointer position. With 'shift' and the mouse wheel the timeline scrolls horizontally, with 'old' and mouse wheel vertically._
+By keeping the mouse wheel pressed down, the contents of the editing window can be moved freely. The mouse wheel scrolls in and out to the mouse pointer position. With 'shift' and the mouse wheel the timeline scrolls horizontally, with 'alt' and mouse wheel vertically._
 
 - Time selection: **Accelerate the time selection with shift+arrow keys**  
 If you create a time selection with 'Shift' + 'left' / 'right' and keep this key combination pressed, the time selection gets bigger faster. So you can select larger time selections faster by keyboard._
 
 - Mastering: **Shortcut for normalization**  
-_The shortcut on an item 'shift'+ 'old'+ 'click' now starts an analysis of the loudness of the item and then normalizes to averaged -23 LUFS. For long tracks this may take a while. This normalization is a good basis for the 'Dynamics 2' effect and part of the new 'Remove Silence' function. In the context menu for items there is also the entry 'Toggle normalize items' which performs a standard normalization (maximizing the highest peak) or undoes it when selected again. A -23 LUFS normalization can also be undone with this entry._
+_The shortcut on an item 'shift'+ 'alt'+ 'click' now starts an analysis of the loudness of the item and then normalizes to averaged -23 LUFS. For long tracks this may take a while. This normalization is a good basis for the 'Dynamics 2' effect and part of the new 'Remove Silence' function. In the context menu for items there is also the entry 'Toggle normalize items' which performs a standard normalization (maximizing the highest peak) or undoes it when selected again. A -23 LUFS normalization can also be undone with this entry._
 
 - editing: **File info**  
 _In the context menu for items there is a new entry 'Open item path in explorer/finder' which shows the source file of the item in the file system._
@@ -193,10 +194,10 @@ With the shortcut `alt`+`cmd`+`m` you can set a chapter mark, which contains the
 ### Theme
 
 - Theme: **Retina support**  
-All relevant parts of the user interface are now also displayed in retina resolution under MacOS. Under Windows this is also the case with a HiDPI setting, but not all dependencies to REAPER have been researched yet.
+_All relevant parts of the user interface are now also displayed in retina resolution under MacOS. Under Windows this is also the case with a HiDPI setting, but not all dependencies to REAPER have been researched yet._  
 
 - start screen: **New start screen and quick tutorial**  
-When you start the program, a new screen is displayed that presents the new features of the 4.0 releases. Here you can also start a quick tutorial that explains various aspects of ultrasound in a compact way.
+_When you start the program, a new screen is displayed that presents the new features of the 4.0 releases. Here you can also start a quick tutorial that explains various aspects of ultrasound in a compact way._  
 
 - Theme: **New icon set**  
 _All button bar icons have been redrawn as vectors and are now also available in retina resolution._
@@ -208,21 +209,21 @@ _The greatly enhanced Ultracklock is now preset in all views. Via the gear wheel
 ### Export
 
 - Export: **Rich Chapters with images and URLs**  
-The new `Ultraschall Marker Dashboard` of the Export Assistant - also accessible via `alt`+`shift`+`m` - extends chapter markers: you can now edit chapter markers directly there and manage chapter images and URLs. To assign a picture to a chapter, create an empty track in the timeline, into which you can easily position any picture via drag and drop. Each picture must be in the same position as a classic chapter marker. Each chapter marker can also be assigned a URL, which must begin with 'http://' or 'https://'. A traffic light informs about possible problems with the export of the extended chapter markers._
+_The new `Ultraschall Marker Dashboard` of the Export Assistant - also accessible via `alt`+`shift`+`m` - extends chapter markers: you can now edit chapter markers directly there and manage chapter images and URLs. To assign a picture to a chapter, create an empty track in the timeline, into which you can easily position any picture via drag and drop. Each picture must be in the same position as a classic chapter marker. Each chapter marker can also be assigned a URL, which must begin with 'http://' or 'https://'. A traffic light informs about possible problems with the export of the extended chapter markers._
 
 - export: **Metadata dialog**  
-In the input dialog for MP3 metadata, commas are now also allowed, so that you can now have commas in the title of an MP3, for example.
+_In the input dialog for MP3 metadata, commas are now also allowed, so that you can now have commas in the title of an MP3, for example._  
 
 - Export: **Export Assistant**  
-The podcat's episode image is queried every 2 seconds, so you don't have to close the window to see if it was recognized correctly. The positioning of the texts is now robust against different fonts._
+_The podcat's episode image is queried every 2 seconds, so you don't have to close the window to see if it was recognized correctly. The positioning of the texts is now robust against different fonts._
 
 - Export: **Plausibility check before rendering**  
-Before the export, the system checks whether tracks are muted and issues a corresponding warning.
+_Before the export, the system checks whether tracks are muted and issues a corresponding warning._  
 
 ### Miscellaneous and bugfixes
 
-- Backend: **ultrasonic API** 
-Ultraschall now has its own programmable API with 1000+ endpoints, on which many features will be based in the future. Information on how to program your own features with the API: ultraschall.fm/api_
+- Backend: **Ultraschall API** 
+_Ultraschall now has its own programmable API with 1000+ endpoints, on which many features will be based in the future. Information on how to program your own features with the API: ultraschall.fm/api_  
 
 - Update: **Ultraschall State Inspector**  
 _The developer tool Ultraschall StateInspector received some bug fixes and layout corrections._
