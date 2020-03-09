@@ -55,7 +55,7 @@ You switch the mode by activating (fully automatic) or deactivating (semi-automa
 ### Soundcheck
 
 - Sound check: **Warnings for various problems**  
-In order to avoid various problems, there is now the Ultraschall Soundcheck. It reports itself if there is a problem or can be displayed manually via 'alt' + 'shift' + '`. Each soundcheck can either be temporarily ignored with 'Ignore' or permanently disabled in the new 'Ultraschall Settings'. For each problem, 'Call to Action' buttons help to solve the respective problem quickly._  
+In order to avoid various problems, there is now the Ultraschall Soundcheck. It reports itself if there is a problem or can be displayed manually via `alt`+`shift`+`,`. Each soundcheck can either be temporarily ignored with 'Ignore' or permanently disabled in the new 'Ultraschall Settings'. For each problem, 'Call to Action' buttons help to solve the respective problem quickly._  
 The following situations are permanently monitored in the background:_  
   
     _**Echo warning:** If the currently used sound interface _no_ supports 'local monitoring', the so-called 'Block Size' must be set smaller to avoid unwanted echo effects. Values of 64 or 128 are then useful, otherwise we recommend 512 to avoid distortion._  
@@ -151,7 +151,7 @@ _If you use the Ultraschall project templates, you can have items "snapped" not 
 
 - Navigation: **JKL Shuttle**  
 _The three buttons `j`, `k` and `l` function like a shuttle wheel. You can navigate very fast in the timeline with three fingers on the keyboard. The speed levels are: 1, 2, 3, 5, 8, 20, 40 and 100 -speed._  
-_ `l` plays forward. The playback speed can be increased by pressing several times._  
+_`l` plays forward. The playback speed can be increased by pressing several times._  
 _`k` ends the shuttle mode and stops playback._  
 _`j` behaves like the l button but in reverse._
 
