@@ -81,24 +81,24 @@ _There is now a central location for Ultraschall settings located in the podcast
 
 - Soundboard: **Control by number pad and playlist feature**  
 _The soundboard is now controllable by the numeric keypad on the keyboard (also with external numeric keypad):_   
-_'1' to '9' - toggles play/pause of the corresponding soundboard slots  
-``Stops all sounds currently playing (a kind of emergency stop)_  
-_`+` increases the volume of the soundboard  
-_`-` decreases the volume of the soundboard  
-0' sets the volume of the soundboard to a low value or back to the original value (manual ducking)_  
+_`1` to `9` - toggles play/pause of the corresponding soundboard slots_  
+`,`Stops all sounds currently playing (a kind of emergency stop)_  
+_`+` increases the volume of the soundboard_  
+_`-` decreases the volume of the soundboard_  
+_`0` sets the volume of the soundboard to a low value or back to the original value (manual ducking)_  
   
 - Soundboard: **playlist feature**   
 _There is now also a simple playlist feature. It allows you to browse and play the individual sounds. You can put several original sounds into the soundboard in the right order and play them in sequence._  
 _`*` plays the next sound in the soundboard (first 1, then 2, then 3, etc)_  
-_`/` plays the previous sound on the soundboard  
-_`Enter` pauses/plays the current soundboard slot (again)  
-_`old`+`Enter` stops current soundboard slot   
-_`cmd/strg`+`Enter` shows the current soundboard slot, which would be played with Enter 
+_`/` plays the previous sound on the soundboard_  
+_`Enter` pauses/plays the current soundboard slot (again)_  
+_`alt`+`Enter` stops current soundboard slot_   
+_`cmd/strg`+`Enter` shows the current soundboard slot, which would be played with Enter_  
 
     Attention: not all shortcuts work on all keyboards, especially under Windows. However, the corresponding actions can easily be mapped manually to suitable keys._
   
 - Soundboard: **Display of the Soundboard**  
-_Press the 'TAB' button to display the soundboard. If no soundboard track is loaded in the project yet, you get the possibility to insert one directly._  
+_Press the `TAB` button to display the soundboard. If no soundboard track is loaded in the project yet, you get the possibility to insert one directly._  
 
 - Soundboard: **New layout**  
 _The important folder icon for loading sounds has moved to the far left so that you can always reach it directly, even on very small monitors._
@@ -114,44 +114,44 @@ _Ultraschall now includes the latest StudioLink version. Also for the OnAir Live
 ### editing
 
 - Editing: **Ripple cut on/off with modifier**  
-_`cmd/strg`+`x` only makes a ripple cut on time selections. Item selections are ignored.  
-_`cmd/strg`+`delete` now makes a ripple-cut on one or more items, taking into account envelopes, undo etc.  
+_`cmd/strg`+`x` only makes a ripple cut on time selections. Item selections are ignored._  
+_`cmd/strg`+`delete` now makes a ripple-cut on one or more items, taking into account envelopes, undo etc._  
 _`alt`+`delete` deletes selected items without moving subsequent items, even if ripple is globally active._  
 _`alt`+`x` deletes selected items from a time selection, ignoring ripple globally. If no item is selected, all items in the selection are deleted._
 
 - Editing: **RippleCut copies items to the clipboard**  
-_Items cut out with 'cmd/strg' + 'x' by RippleCut are copied to the clipboard. So you can paste them again._  
+_Items cut out with `cmd/strg` + `x` by RippleCut are copied to the clipboard. So you can paste them again._  
 
 - Editing: **Temporary ripple-all mode when moving**  
-_If an item is moved while holding down the 'cmd/strg' key, the Ripple All mode is activated for the duration of the move. Extremely useful for quickly making room or closing gaps._  
+_If an item is moved while holding down the `cmd/strg` key, the Ripple All mode is activated for the duration of the move. Extremely useful for quickly making room or closing gaps._  
 
 - Editing: **Edit cursor jumps to RippleCut at interface**  
 _When applying Ripplecut, the edit cursor now jumps to the position of the cut. So you can continue working there quickly._  
 
 - Editing: **Rapid Cut**  
-_With 'alt' + 'click' the item under the mouse pointer is split and the right half is selected. With `alt`+`cmd`+`click` the item under the mouse cursor is split and the left half is deleted. These two shortcuts are very powerful for the fast editing of complex projects._  
+_With `alt` + `click` the item under the mouse pointer is split and the right half is selected. With `alt`+`cmd`+`click` the item under the mouse cursor is split and the left half is deleted. These two shortcuts are very powerful for the fast editing of complex projects._  
 
 - editing: **Remove Silence**  
-_In the context menu of items, in the podcast menu as well as via the shortcut 'shift' + 'd' you will find a new function: Remove Silence. First, selected items are normalized to -23LUFS and then cut along very quiet passages. The silent passages are removed, but not pushed together. The remaining blocks are gently faded in and out with 500ms duration._  
+_In the context menu of items, in the podcast menu as well as via the shortcut `shift` + `d` you will find a new function: Remove Silence. First, selected items are normalized to -23LUFS and then cut along very quiet passages. The silent passages are removed, but not pushed together. The remaining blocks are gently faded in and out with 500ms duration._  
 
 - Navigation: **Accelerate cursor movement with arrow keys**  
-_If you move the edit cursor with the arrow keys 'left'/'right' and keep the key pressed, the movement of the cursor accelerates with time. This makes navigating through larger parts of the project using the arrow keys easier and more efficient._  
+_If you move the edit cursor with the arrow keys `left`/`right` and keep the key pressed, the movement of the cursor accelerates with time. This makes navigating through larger parts of the project using the arrow keys easier and more efficient._  
 
 - Editing: **Renaming Takes**  
-_Takes can now be quickly renamed with the 'alt' + 'n' shortcut. This also helps to get a better overview in the storyboard view of the ProjectBay, because takes are no longer cryptically named _01_audio_002_, but e.g. _MyBestTake_._  
+_Takes can now be quickly renamed with the `alt` + `n` shortcut. This also helps to get a better overview in the storyboard view of the ProjectBay, because takes are no longer cryptically named _01_audio_002_, but e.g. _MyBestTake_._  
 
 - Editing: **Chapter bell**  
-_If you activate the chapter bell in the new 'Ultraschall Settings', a bell sound will be heard when the play cursor passes a chapter marker. This way you can turn your eyes away from the screen (e.g. when writing shownotes) and still hear when there is a chapter change. The sound is different for edit markers, yet unnamed markers and already named markers._  
+_If you activate the chapter bell in the new `Ultraschall Settings`, a bell sound will be heard when the play cursor passes a chapter marker. This way you can turn your eyes away from the screen (e.g. when writing shownotes) and still hear when there is a chapter change. The sound is different for edit markers, yet unnamed markers and already named markers._  
 
 - navigation: **Jump to edges**  
-_With 'alt' + 'left' / 'right' you jump to the edges of the items. If tracks are selected, only the items of this track(s) are jumped to._  
+_With `alt` + `left`/`right` you jump to the edges of the items. If tracks are selected, only the items of this track(s) are jumped to._  
 
 - Editing: **MediaItem end snap to project templates now**  
 _If you use the Ultraschall project templates, you can have items "snapped" not only at the beginning when you slide them together, but also at the end._  
 
 - Navigation: **JKL Shuttle**  
-_The three buttons 'j', 'k' and 'l' function like a shuttle wheel. You can navigate very fast in the timeline with three fingers on the keyboard. The speed levels are: 1, 2, 3, 5, 8, 20, 40 and 100 -speed._  
-_ 'l' plays forward. The playback speed can be increased by pressing several times._  
+_The three buttons `j`, `k` and `l` function like a shuttle wheel. You can navigate very fast in the timeline with three fingers on the keyboard. The speed levels are: 1, 2, 3, 5, 8, 20, 40 and 100 -speed._  
+_ `l` plays forward. The playback speed can be increased by pressing several times._  
 _`k` ends the shuttle mode and stops playback._  
 _`j` behaves like the l button but in reverse._
 
@@ -159,37 +159,37 @@ _`j` behaves like the l button but in reverse._
 _If the keyboard focus does not make the zoom per `+`/`-` usable, you can now combine it with `cmd/strg`._
 
 - navigation: **Zoom to current region**  
-You can now zoom in on the current region with 'alt' + 'e'. Current region is the one where the edit cursor is currently positioned._
+You can now zoom in on the current region with `alt` + `e`. Current region is the one where the edit cursor is currently positioned._
 
 - Navigation: **Manual Follow Mode**  
-_In the previous version there was an automatism that switched off the Follow Mode in certain useful situations. This automatism did not work for some people and can now be turned off in the new 'Ultraschall Settings'. The follow mode then remains switched on until it is switched off in a dedicated way.
+_In the previous version there was an automatism that switched off the Follow Mode in certain useful situations. This automatism did not work for some people and can now be turned off in the new `Ultraschall Settings`. The follow mode then remains switched on until it is switched off in a dedicated way._  
 
 - Navigation: **Mouse assignment**  
-By keeping the mouse wheel pressed down, the contents of the editing window can be moved freely. The mouse wheel scrolls in and out to the mouse pointer position. With 'shift' and the mouse wheel the timeline scrolls horizontally, with 'alt' and mouse wheel vertically._
+_By keeping the mouse wheel pressed down, the contents of the editing window can be moved freely. The mouse wheel scrolls in and out to the mouse pointer position. With `shift` and the mouse wheel the timeline scrolls horizontally, with `alt` and mouse wheel vertically._  
 
 - Time selection: **Accelerate the time selection with shift+arrow keys**  
-If you create a time selection with 'Shift' + 'left' / 'right' and keep this key combination pressed, the time selection gets bigger faster. So you can select larger time selections faster by keyboard._
+_If you create a time selection with `Shift` + `left` / `right` and keep this key combination pressed, the time selection gets bigger faster. So you can select larger time selections faster by keyboard._  
 
 - Mastering: **Shortcut for normalization**  
-_The shortcut on an item 'shift'+ 'alt'+ 'click' now starts an analysis of the loudness of the item and then normalizes to averaged -23 LUFS. For long tracks this may take a while. This normalization is a good basis for the 'Dynamics 2' effect and part of the new 'Remove Silence' function. In the context menu for items there is also the entry 'Toggle normalize items' which performs a standard normalization (maximizing the highest peak) or undoes it when selected again. A -23 LUFS normalization can also be undone with this entry._
+_The shortcut on an item `shift`+`alt`+`click` now starts an analysis of the loudness of the item and then normalizes to averaged -23 LUFS. For long tracks this may take a while. This normalization is a good basis for the `Dynamics 2` effect and part of the new `Remove Silence` function. In the context menu for items there is also the entry `Toggle normalize items` which performs a standard normalization (maximizing the highest peak) or undoes it when selected again. A -23 LUFS normalization can also be undone with this entry._
 
 - editing: **File info**  
-_In the context menu for items there is a new entry 'Open item path in explorer/finder' which shows the source file of the item in the file system._
+_In the context menu for items there is a new entry `Open item path in explorer/finder` which shows the source file of the item in the file system._  
 
 - mastering: **Templates for effect paths**  
-In the templates of tracks and projects (normal tracks, StudioLink) 'ReaEQ' and 'Ultraschall Dynamics 2' are now always set up - but must be activated manually.
+_In the templates of tracks and projects (normal tracks, StudioLink) `ReaEQ` and `Ultraschall Dynamics 2` are now always set up - but must be activated manually._  
 
 - shortcuts: **Close tab**  
 _`cmd/strg`+`w` shoots the current projects tab._
 
 - editing: **listening while deleting items**  
-If you play the project, have 'Ripple-All' turned on, and you delete items, the playback position jumps back to the correct position to continue listening to the project seamlessly.
+_If you play the project, have `Ripple-All` turned on, and you delete items, the playback position jumps back to the correct position to continue listening to the project seamlessly._  
 
 - Editing: **Double click for play**  
-A double click in the timeline or the editing window plays as before from the clicked position. In addition, double-clicking on spaces between items can now also start playback._
+_A double click in the timeline or the editing window plays as before from the clicked position. In addition, double-clicking on spaces between items can now also start playback._  
 
 - markers: **Marker with timestamp**  
-With the shortcut `alt`+`cmd`+`m` you can set a chapter mark, which contains the current time stamp as name in the format YYYY-MM-DD; HH:MM:SS_
+_With the shortcut `alt`+`cmd`+`m` you can set a chapter mark, which contains the current time stamp as name in the format YYYY-MM-DD; HH:MM:SS_  
 
 
 ### Theme
@@ -210,7 +210,7 @@ _The greatly enhanced Ultracklock is now preset in all views. Via the gear wheel
 ### Export
 
 - Export: **Rich Chapters with images and URLs**  
-_The new `Ultraschall Marker Dashboard` of the Export Assistant - also accessible via `alt`+`shift`+`m` - extends chapter markers: you can now edit chapter markers directly there and manage chapter images and URLs. To assign a picture to a chapter, create an empty track in the timeline, into which you can easily position any picture via drag and drop. Each picture must be in the same position as a classic chapter marker. Each chapter marker can also be assigned a URL, which must begin with 'http://' or 'https://'. A traffic light informs about possible problems with the export of the extended chapter markers._
+_The new `Ultraschall Marker Dashboard` of the Export Assistant - also accessible via `alt`+`shift`+`m` - extends chapter markers: you can now edit chapter markers directly there and manage chapter images and URLs. To assign a picture to a chapter, create an empty track in the timeline, into which you can easily position any picture via drag and drop. Each picture must be in the same position as a classic chapter marker. Each chapter marker can also be assigned a URL, which must begin with `http://` or `https://`. A traffic light informs about possible problems with the export of the extended chapter markers._
 
 - export: **Metadata dialog**  
 _In the input dialog for MP3 metadata, commas are now also allowed, so that you can now have commas in the title of an MP3, for example._  
