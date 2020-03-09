@@ -8,7 +8,7 @@ The following features will be presented in detail in our Ultraschall tutorial v
 ### REAPER
 
 - REAPER: **Support of version 6.05**  
-Ultraschall 4.0 is optimized for version 6.05 of REAPER. All other versions are not executable._  
+_Ultraschall 4.0 is optimized for version 6.05 of REAPER. All other versions are not executable._  
 **It is therefore absolutely necessary to refrain from a manual update of REAPER in the future**, _the Ultraschall extensions will then be deactivated._
 
 - SWS: **SWS Version 2.11**
@@ -17,8 +17,8 @@ _Ultraschall now includes version 2.11.0 of the SWS plug-in._
 ### MagicRouting
 
 - MagicRouting: **Automated Routing**  
-With the new MagicRouting buttons on the left in the Routing area, manual setting of the routing matrix is no longer necessary. Basically MagicRouting offers two different modes: Fully automatic and semi-automatic.
-You switch the mode by activating (fully automatic) or deactivating (semi-automatic) the magic wand. The default value for a new project is fully automatic, Routing-Preset: Recording.  
+_With the new MagicRouting buttons on the left in the Routing area, manual setting of the routing matrix is no longer necessary. Basically MagicRouting offers two different modes: Fully automatic and semi-automatic.
+You switch the mode by activating (fully automatic) or deactivating (semi-automatic) the magic wand. The default value for a new project is fully automatic, Routing-Preset: Recording._  
   
     There are three Routing Presets shipped, which can be switched using the three buttons under the magic wand:  
   
@@ -44,7 +44,7 @@ You switch the mode by activating (fully automatic) or deactivating (semi-automa
   - Selecting 'Prepare all tracks for editing' will automatically switch to the 'Editing' preset
 
   #### Ducking
-    For the presets 'Preseshow' and 'Recording' the soundboard track can be provided with a ducking. If this is activated (`shift`+`,`) in the `Ultraschall Settings`, the soundboard will automatically fade down a bit when someone speaks. In the preset `editing` the ducking is always deactivated.  
+    _For the presets 'Preseshow' and 'Recording' the soundboard track can be provided with a ducking. If this is activated (`shift`+`,`) in the `Ultraschall Settings`, the soundboard will automatically fade down a bit when someone speaks. In the preset `editing` the ducking is always deactivated._  
 
     #### Manual/Automatic
     If the magic wand is activated (Preset), the routing matrix is rebuilt according to the currently selected preset each time the number of tracks in the project is changed.  
@@ -60,11 +60,11 @@ The following situations are permanently monitored in the background:_
   
     _**Echo warning:** If the currently used sound interface _no_ supports 'local monitoring', the so-called 'Block Size' must be set smaller to avoid unwanted echo effects. Values of 64 or 128 are then useful, otherwise we recommend 512 to avoid distortion._  
   
-    Unknown sound interface:** If a sound interface is connected to Ultraschall 4 for the first time or it is not included in our database, you must specify once whether it supports 'Local Monitoring' (see 'Ultraschall Settings').  
+    _**Unknown sound interface:** If a sound interface is connected to Ultraschall 4 for the first time or it is not included in our database, you must specify once whether it supports 'Local Monitoring' (see 'Ultraschall Settings')._  
   
-    Internal Microphone:** This prevents accidental recording with the internal microphone of the notebook instead of the connected sound interface.  
+    _**Internal Microphone:** This prevents accidental recording with the internal microphone of the notebook instead of the connected sound interface._  
 
-    Start recording only at the end:** Prevents that when continuing a recording an already recorded part is overwritten or an alternative take is created._  
+    _**Start recording only at the end:** Prevents that when continuing a recording an already recorded part is overwritten or an alternative take is created._  
   
     _**Prepare all Tracks for Editing:** After each recording, you can (and must!) use this function to switch the ultrasonic mode from recording to editing._  
   
@@ -75,12 +75,12 @@ The following situations are permanently monitored in the background:_
 ### Ultraschall Settings
 
 - Settings: **own Ultraschall settings**  
-There is now a central location for Ultraschall settings located in the podcast menu or using the 'Shift' + '+' shortcut. There you can make various Ultraschall specific settings on the left side. Among them, each module of the new Soundcheck can be permanently deactivated. The right column lists all sound interfaces that have been connected to Ultraschall 4 so far. For these interfaces you can (and must! in order for MagicRouting to work) set once whether they support 'local monitoring'. Simple rule: if headphones/headset are connected to the device for monitoring, then 'local monitoring' must be activated. With the 'x' button you can delete unnecessary interfaces from the list. With the correct settings for local monitoring in this list, it is possible to record the podcast with a dedicated sound interface without any problems, but then to edit on the laptop in the train using only the built-in sound card - without having to worry about the routing._
+_There is now a central location for Ultraschall settings located in the podcast menu or using the 'Shift' + '+' shortcut. There you can make various Ultraschall specific settings on the left side. Among them, each module of the new Soundcheck can be permanently deactivated. The right column lists all sound interfaces that have been connected to Ultraschall 4 so far. For these interfaces you can (and must! in order for MagicRouting to work) set once whether they support 'local monitoring'. Simple rule: if headphones/headset are connected to the device for monitoring, then 'local monitoring' must be activated. With the 'x' button you can delete unnecessary interfaces from the list. With the correct settings for local monitoring in this list, it is possible to record the podcast with a dedicated sound interface without any problems, but then to edit on the laptop in the train using only the built-in sound card - without having to worry about the routing._  
 
 ### Soundboard
 
 - Soundboard: **Control by number pad and playlist feature**  
-The soundboard is now controllable by the numeric keypad on the keyboard (also with external numeric keypad):_   
+_The soundboard is now controllable by the numeric keypad on the keyboard (also with external numeric keypad):_   
 _'1' to '9' - toggles play/pause of the corresponding soundboard slots  
 ``Stops all sounds currently playing (a kind of emergency stop)_  
 _`+` increases the volume of the soundboard  
@@ -88,7 +88,7 @@ _`-` decreases the volume of the soundboard
 0' sets the volume of the soundboard to a low value or back to the original value (manual ducking)_  
   
 - Soundboard: **playlist feature**   
-There is now also a simple playlist feature. It allows you to browse and play the individual sounds. You can put several original sounds into the soundboard in the right order and play them in sequence._  
+_There is now also a simple playlist feature. It allows you to browse and play the individual sounds. You can put several original sounds into the soundboard in the right order and play them in sequence._  
 _`*` plays the next sound in the soundboard (first 1, then 2, then 3, etc)_  
 _`/` plays the previous sound on the soundboard  
 _`Enter` pauses/plays the current soundboard slot (again)  
