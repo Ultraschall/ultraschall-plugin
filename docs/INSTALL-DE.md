@@ -13,8 +13,9 @@ Diese Schritte werden auch in einem [Screencast-Video](https://youtu.be/RTshDTPB
 
 Das Open-Source-Projekt Ultraschall erweitert die kommerzielle Musiksoftware REAPER. Ultraschall 4 läuft nur mit der Version REAPER 6.05. Seit Version 6 wird für REAPER eine spezielle Catalina-Version angeboten, die zusätzliche Lizensierungen enthält. Es ist unbedingt die passende Version zu wählen: 
 
-[**REAPER Version v6.05 OS X 64-bit herunterladen**](https://www.reaper.fm/files/6.x/reaper605_x86_64.dmg)
-[**REAPER Version v6.05 OS X 64-bit Catalina herunterladen**](https://www.reaper.fm/files/6.x/reaper605_x86_64_catalina.dmgg)
+[**REAPER Version v6.05 OS X 64-bit herunterladen**](https://www.reaper.fm/files/6.x/reaper605_x86_64.dmg)  
+
+[**REAPER Version v6.05 OS X 64-bit Catalina herunterladen**](https://www.reaper.fm/files/6.x/reaper605_x86_64_catalina.dmg)
 
 * Das `.dmg` laden und starten, dann REAPER installieren bzw. auf die Version 6.05 aktualisieren.
 * Der Einsatz jeder anderen Version von REAPER führt dazu, dass das Ultraschall-Plugin nicht gestartet wird. Von einem manuellen Update von REAPER auf eine andere Version als 6.05 ist daher zwingend abzusehen.
