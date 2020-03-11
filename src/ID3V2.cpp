@@ -292,6 +292,8 @@ bool ID3V2InsertChapterFrame(
     PRECONDITION_RETURN(startTime != 0xffffffff, false);
     PRECONDITION_RETURN(endTime != 0xffffffff, false);
 
+    bool success = false;
+
     const uint32_t           startOffset = 0xffffffff;
     const uint32_t           endOffset   = 0xffffffff;
     taglib_id3v2::FrameList* pFrameList  = CreateEmbeddedFrames(text, image, url);
@@ -303,10 +305,11 @@ bool ID3V2InsertChapterFrame(
         if(pChapterFrame != nullptr)
         {
             pContext->Tags()->addFrame(pChapterFrame);
+            success = true;
         }
     }
 
-    return true;
+    return success;
 }
 
 bool ID3V2InsertTableOfContentsFrame(ID3V2Context* pContext, const UnicodeStringArray& tableOfContentsItems)
