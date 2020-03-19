@@ -46,7 +46,7 @@ size_t Platform::QueryAvailableDiskSpace(const UnicodeString& directory)
 
     size_t availableSpace = -1;
     ULARGE_INTEGER freeBytesAvailableToUser = {0};
-    if(GetDiskFreeSpaceEx(directory.c_str(), &freeBytesAvailableToUser, nullptr, nullptr) != FALSE)
+    if(GetDiskFreeSpaceEx(U2H(directory).c_str(), &freeBytesAvailableToUser, nullptr, nullptr) != FALSE)
     {
         availableSpace = freeBytesAvailableToUser.QuadPart;
     }
