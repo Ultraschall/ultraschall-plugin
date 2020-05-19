@@ -89,6 +89,8 @@ public:
     static void                    ClearProjectValues(ProjectReference projectReference, const UnicodeString& section);
     static UnicodeStringDictionary QueryProjectValues(ProjectReference projectReference, const UnicodeString& section);
 
+    static UnicodeString ProjectMetaData(ProjectReference projectReference, const UnicodeString& key);
+
 private:
     static const size_t MAX_REAPER_STRING_BUFFER_SIZE = 4096;
 };

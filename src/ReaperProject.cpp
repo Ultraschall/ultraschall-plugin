@@ -168,33 +168,39 @@ UnicodeStringArray ReaperProject::SanitizeNotes(const UnicodeString& source)
     return result;
 }
 
-UnicodeStringDictionary ReaperProject::ParseNotes() const
+UnicodeString ReaperProject::ProjectMetaDataKey(const UnicodeString& prefix, const UnicodeString& name) 
+{
+  PRECONDITION_RETURN(prefix.empty() == false, UnicodeString());
+  PRECONDITION_RETURN(name.empty() == false, UnicodeString());
+
+  return prefix + ":" + name;
+}
+
+UnicodeStringDictionary ReaperProject::ProjectMetaData() const
 {
     PRECONDITION_RETURN(nativeReference_ != 0, UnicodeStringDictionary());
 
-    static const UnicodeStringArray keys
-        = {"podcast", "author", "episode", "publicationDate", "category", "description"};
+    UnicodeStringDictionary metaData;
 
-    UnicodeStringDictionary notesDictionary;
-    UnicodeString           notes = ReaperGateway::ProjectNotes(nativeReference_);
-    if(notes.empty() == false)
-    {
-        const UnicodeStringArray values = SanitizeNotes(notes);
-        if(values.size() == keys.size())
-        {
-            for(size_t i = 0; i < values.size(); i++)
-            {
-                notesDictionary.insert(std::pair<UnicodeString, UnicodeString>(keys[i], values[i]));
-            }
-        }
-        else
-        {
-            NotificationStore notificationStore("ULTRASCHALL_PROJECT_VALIDITY_CHECK");
-            notificationStore.RegisterWarning("The MP3 metadata is invalid. Please check and retry.");
-        }
-    }
+    const UnicodeString prefix("ID3");
+    UnicodeString value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "TALB"));
+    metaData.insert(std::pair<UnicodeString, UnicodeString>("podcast", value));
+    value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "TPE1"));
+    metaData.insert(std::pair<UnicodeString, UnicodeString>("author", value));
+    value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "TIT2"));
+    metaData.insert(std::pair<UnicodeString, UnicodeString>("episode", value));
+    value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "TYER"));
+    metaData.insert(std::pair<UnicodeString, UnicodeString>("publicationDate", value));
+    value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "TCON"));
+    metaData.insert(std::pair<UnicodeString, UnicodeString>("category", value));
+    value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "TLEN"));
+    metaData.insert(std::pair<UnicodeString, UnicodeString>("duration", value));
+    value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "COMM"));
+    metaData.insert(std::pair<UnicodeString, UnicodeString>("description", value));
+    value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "APIC_FILE"));
+    metaData.insert(std::pair<UnicodeString, UnicodeString>("coverImage", value));
 
-    return notesDictionary;
+    return metaData;
 }
 
 bool ReaperProject::InsertChapterMarker(const UnicodeString& name, const double position)

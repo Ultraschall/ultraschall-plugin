@@ -81,6 +81,8 @@ void (*DeleteExtState)(const char* section, const char* key, bool persist);
 
 MediaItem* (*GetMediaItem)(ReaProject* proj, int itemidx);
 double (*GetMediaItemInfo_Value)(MediaItem* item, const char* parmname);
+
+bool (*GetSetProjectInfo_String)(ReaProject* project, const char* desc, char* valuestrNeedBig, bool is_set);
 } // namespace reaper_api
 
 namespace ultraschall { namespace reaper {
@@ -153,6 +155,7 @@ bool ReaperEntryPoints::LoadEntryPoints(REAPER_PLUGIN_HINSTANCE instance, reaper
     LOAD_AND_VERIFY_REAPER_ENTRY_POINT(ppi, reaper_api::DeleteExtState, "DeleteExtState");
     LOAD_AND_VERIFY_REAPER_ENTRY_POINT(ppi, reaper_api::GetMediaItem, "GetMediaItem");
     LOAD_AND_VERIFY_REAPER_ENTRY_POINT(ppi, reaper_api::GetMediaItemInfo_Value, "GetMediaItemInfo_Value");
+    LOAD_AND_VERIFY_REAPER_ENTRY_POINT(ppi, reaper_api::GetSetProjectInfo_String, "GetSetProjectInfo_String");
 
     reaper_api::plugin_register("hookcommand2", (void*)OnCustomAction);
 

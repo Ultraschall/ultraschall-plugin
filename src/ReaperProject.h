@@ -64,7 +64,7 @@ public:
 
     ChapterTagArray ChapterMarkers() const;
 
-    UnicodeStringDictionary ParseNotes() const;
+    UnicodeStringDictionary ProjectMetaData() const;
 
 private:
     ProjectReference nativeReference_ = nullptr;
@@ -76,6 +76,8 @@ private:
 
     static void MapImagesAndUrlsToChapters(
         const ChapterImageArray& images, const ChapterUrlArray& urls, ChapterTagArray& chapters);
+
+    static UnicodeString ProjectMetaDataKey(const UnicodeString& prefix, const UnicodeString& name);
 };
 
 }} // namespace ultraschall::reaper

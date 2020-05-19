@@ -58,7 +58,7 @@ private:
     bool ConfigureTargets();
     bool ConfigureSources();
 
-    static UnicodeString FindCoverImage();
+    UnicodeString FindCoverImage();
     UnicodeStringArray   FindMissingMediaData();
 
     UnicodeStringArray      targets_;

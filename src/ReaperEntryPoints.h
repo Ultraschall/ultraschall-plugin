@@ -69,6 +69,7 @@
 #define REAPERAPI_WANT_DeleteExtState
 #define REAPERAPI_WANT_GetMediaItem
 #define REAPERAPI_WANT_GetMediaItemInfo_Value
+#define REAPERAPI_WANT_GetSetProjectInfo_String
 
 namespace reaper_api {
 #include "reaper_plugin_functions.h"
