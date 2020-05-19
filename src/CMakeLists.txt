@@ -60,7 +60,6 @@ set(COMMON_INCLUDES
   Malloc.h
   Picture.h
   ReaperProject.h
-  reaper_plugin_functions.h
   ReaperEntryPoints.h
   ReaperGateway.h
   resource.h
