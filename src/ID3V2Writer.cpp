@@ -69,10 +69,22 @@ void ID3V2Writer::Stop(const bool commit)
 
 bool ID3V2Writer::InsertProperties(const UnicodeString& targetName, const UnicodeStringDictionary& mediaData)
 {
-  PRECONDITION_RETURN(targetName.empty() == false, false);
   PRECONDITION_RETURN(pContext_ != nullptr, false);
+  PRECONDITION_RETURN(targetName.empty() == false, false);
+  PRECONDITION_RETURN(mediaData.empty() == false, false);
 
   bool success = true;
+
+  UnicodeString durationString;
+  if(mediaData.count("TLEN") > 0)
+  {
+    durationString = mediaData.at("TLEN");
+  }
+
+  if(durationString.empty() == true)
+  {
+    durationString = UnicodeStringFromInt(pContext_->Duration());
+  }
 
   static const size_t MAX_COMPLEX_FRAME_MAPPINGS = 1;
   struct MAP_ULTRASCHALL_PROPERTIES_TO_ID3V2_TAGS
@@ -85,7 +97,7 @@ bool ID3V2Writer::InsertProperties(const UnicodeString& targetName, const Unicod
   MAP_ULTRASCHALL_PROPERTIES_TO_ID3V2_TAGS simpleFrameMappings[] = {
     {"TALB", UTF16, mediaData.at("podcast")},        {"TPE1", UTF16, mediaData.at("author")},
     {"TIT2", UTF16, mediaData.at("episode")},        {"TCON", UTF16, mediaData.at("category")},
-    {"TYER", UTF8, mediaData.at("publicationDate")}, {"TLEN", UTF8, mediaData.at("duration")}};
+    {"TYER", UTF8, mediaData.at("publicationDate")}, {"TLEN", UTF8, durationString}};
   const size_t maxSimpleFrames = sizeof(simpleFrameMappings) / sizeof(simpleFrameMappings[0]);
 
   MAP_ULTRASCHALL_PROPERTIES_TO_ID3V2_TAGS complexFrameMappings[] = {{"COMM", UTF16, mediaData.at("description")}};

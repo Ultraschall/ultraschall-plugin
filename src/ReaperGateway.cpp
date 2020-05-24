@@ -577,11 +577,12 @@ UnicodeString ReaperGateway::ProjectMetaData(ProjectReference projectReference, 
 
   UnicodeString data;
 
-  ReaProject*         nativeReference      = reinterpret_cast<ReaProject*>(projectReference);
-  static const size_t MAX_BUFFER_SIZE      = 4096;
+  ReaProject*         nativeReference        = reinterpret_cast<ReaProject*>(projectReference);
+  static const size_t MAX_BUFFER_SIZE        = 4096;
   char                value[MAX_BUFFER_SIZE] = {0};
 
-  if(reaper_api::GetSetProjectInfo_String(nativeReference, key.c_str(), value, false)) 
+  strncpy(value, key.c_str(), key.length());
+  if(reaper_api::GetSetProjectInfo_String(nativeReference, "RENDER_METADATA", value, false))
   {
     data = H2U(value);
   }

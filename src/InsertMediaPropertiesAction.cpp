@@ -62,7 +62,7 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
       {
         const UnicodeStringArray missingMediaDataFields = FindMissingMediaData();
         const size_t             missingFieldCount      = missingMediaDataFields.size();
-        static const size_t      ALL_MEDIA_DATA_FIELDS  = 6;
+        static const size_t      ALL_MEDIA_DATA_FIELDS  = 8;
         if((missingFieldCount > 0) && (missingFieldCount < ALL_MEDIA_DATA_FIELDS))
         {
           UnicodeStringStream os;
