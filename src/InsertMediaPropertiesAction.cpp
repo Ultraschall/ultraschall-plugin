@@ -62,7 +62,7 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
       {
         const UnicodeStringArray missingMediaDataFields = FindMissingMediaData();
         const size_t             missingFieldCount      = missingMediaDataFields.size();
-        static const size_t      ALL_MEDIA_DATA_FIELDS  = 8;
+        static const size_t      ALL_MEDIA_DATA_FIELDS  = 7;
         if((missingFieldCount > 0) && (missingFieldCount < ALL_MEDIA_DATA_FIELDS))
         {
           UnicodeStringStream os;
@@ -158,8 +158,8 @@ bool InsertMediaPropertiesAction::ConfigureSources()
   coverImage_.clear();
   chapterMarkers_.clear();
 
-  mediaData_  = ReaperProject::Current().ProjectMetaData();
-  coverImage_ = FindCoverImage();
+  mediaData_      = ReaperProject::Current().ProjectMetaData();
+  coverImage_     = FindCoverImage();
   chapterMarkers_ = CurrentProject().ChapterMarkers();
   if(chapterMarkers_.empty() == false)
   {
@@ -240,8 +240,8 @@ UnicodeStringArray InsertMediaPropertiesAction::FindMissingMediaData()
 {
   UnicodeStringArray missingMediaDataFields;
 
-  static const UnicodeStringArray mediaDataKeys = {"podcast",         "author",   "episode",     "category",
-                                                   "publicationDate", "duration", "description", "coverImage"};
+  static const UnicodeStringArray mediaDataKeys = {"podcast",         "author",      "episode",   "category",
+                                                   "publicationDate", "description", "coverImage"};
   std::for_each(mediaDataKeys.begin(), mediaDataKeys.end(), [&](const UnicodeString& mediaDataKey) {
     const UnicodeStringDictionary::const_iterator mediaDataIterator = mediaData_.find(mediaDataKey);
     if(mediaDataIterator != mediaData_.end())
