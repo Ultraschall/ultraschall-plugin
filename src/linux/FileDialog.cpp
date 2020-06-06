@@ -32,14 +32,18 @@
 
 namespace ultraschall { namespace reaper {
 
-FileDialog::FileDialog(const UnicodeString& caption, const UnicodeString& initialDirectory, const UnicodeString& initialFile) : caption_(caption), initialDirectory_(initialDirectory), initialFile_(initialFile) {}
+FileDialog::FileDialog(
+    const UnicodeString& caption, const UnicodeString& initialDirectory, const UnicodeString& initialFile) :
+    caption_(caption),
+    initialDirectory_(initialDirectory), initialFile_(initialFile)
+{}
 
 FileDialog::~FileDialog() {}
 
 UnicodeString FileDialog::SelectChaptersFile()
 {
     UnicodeString result;
-
+#if 0
     GtkWindow*           pParent = (GtkWindow*)ReaperGateway::View();
     GtkFileChooserAction action  = GTK_FILE_CHOOSER_ACTION_OPEN;
     GtkWidget*           pDialog = gtk_file_chooser_dialog_new(
@@ -73,14 +77,14 @@ UnicodeString FileDialog::SelectChaptersFile()
 
         gtk_widget_destroy(pDialog);
     }
-
+#endif
     return result;
 }
 
 UnicodeString FileDialog::SelectAudioFile()
 {
     UnicodeString result;
-
+#if 0
     GtkWindow*           pParent = (GtkWindow*)ReaperGateway::View();
     GtkFileChooserAction action  = GTK_FILE_CHOOSER_ACTION_OPEN;
     GtkWidget*           pDialog = gtk_file_chooser_dialog_new(
@@ -113,14 +117,14 @@ UnicodeString FileDialog::SelectAudioFile()
 
         gtk_widget_destroy(pDialog);
     }
-
+#endif
     return result;
 }
 
 UnicodeString FileDialog::SelectPictureFile()
 {
     UnicodeString result;
-
+#if 0
     GtkWindow*           pParent = (GtkWindow*)ReaperGateway::View();
     GtkFileChooserAction action  = GTK_FILE_CHOOSER_ACTION_OPEN;
     GtkWidget*           pDialog = gtk_file_chooser_dialog_new(
@@ -155,14 +159,14 @@ UnicodeString FileDialog::SelectPictureFile()
 
         gtk_widget_destroy(pDialog);
     }
-
+#endif
     return result;
 }
 
 UnicodeString FileDialog::ChooseChaptersFileName()
 {
     UnicodeString result;
-
+#if 0
     GtkWindow*           pParent = (GtkWindow*)ReaperGateway::View();
     GtkFileChooserAction action  = GTK_FILE_CHOOSER_ACTION_SAVE;
     GtkWidget*           pDialog = gtk_file_chooser_dialog_new(
@@ -196,7 +200,7 @@ UnicodeString FileDialog::ChooseChaptersFileName()
 
         gtk_widget_destroy(pDialog);
     }
-
+#endif
     return result;
 }
 
