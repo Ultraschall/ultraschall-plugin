@@ -110,7 +110,7 @@ if [ $CMAKE_INSTALL_FOUND -ne 0 ]; then
   echo "Done."
 
   echo "Building projects using $CMAKE_GENERATOR..."
-  cmake --build . $CMAKE_EXTRA_ARGS --target reaper_ultraschall --config Debug -- -j 6
+  cmake --build . $CMAKE_EXTRA_ARGS --target reaper_ultraschall --config Debug -- -j
   if [ $? -ne 0 ]; then
     echo "Failed to build projects."
     exit -1
