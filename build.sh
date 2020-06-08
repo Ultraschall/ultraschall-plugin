@@ -28,8 +28,8 @@
 
 source scripts/BuildTools.sh
 
-TOOLS_DIRECTORY=`pwd`/_tools
-BUILD_DIRECTORY=`pwd`/_build
+TOOLS_DIRECTORY=`pwd`/tools
+BUILD_DIRECTORY=`pwd`/build
 CMAKE_EXTRA_ARGS=""
 
 if [ "$1" = "--help" ]; then
@@ -46,7 +46,7 @@ elif [ "$1" = "--clean-all" ]; then
   exit 0
 elif [ "$1" = "--clean" ]; then
   RemoveDirectory $BUILD_DIRECTORY
-  exit 0
+  exit 0_
 elif [ "$1" == "--rebuild" ]; then
   CMAKE_EXTRA_ARGS="--clean-first"
 fi
