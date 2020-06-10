@@ -2,13 +2,13 @@
 .DS_Store
 
 # linux specific stuff
-_tools/
+tools/
 
 # win32 specific stuff
 *.aps
 
 # common build directory.
-_build/
+build/
 
 .vscode/
 .vs/

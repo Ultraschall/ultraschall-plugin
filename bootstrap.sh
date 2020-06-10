@@ -28,7 +28,7 @@
 
 source scripts/BuildTools.sh
 
-TOOLS_DIRECTORY=`pwd`/_tools
+TOOLS_DIRECTORY=`pwd`/tools
 
 CMAKE_INSTALL_DIRECTORY=$TOOLS_DIRECTORY/cmake
 CMAKE_SOURCE_DIRECTORY=$CMAKE_INSTALL_DIRECTORY/src
@@ -160,7 +160,7 @@ else
   exit -1
 fi
 
-BUILD_DIRECTORY=`pwd`/_build
+BUILD_DIRECTORY=`pwd`/build
 
 if [ ! -d $BUILD_DIRECTORY ]; then
   mkdir $BUILD_DIRECTORY
@@ -178,7 +178,7 @@ fi
 echo "Done."
 
 echo "Building projects using $CMAKE_GENERATOR..."
-cmake --build . --target reaper_ultraschall --config Debug -- -j 6
+cmake --build . --target reaper_ultraschall --config Debug -- -j
 if [ $? -ne 0 ]; then
   echo "Failed to build projects."
   exit -1
