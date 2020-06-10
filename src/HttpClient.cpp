@@ -25,59 +25,113 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifdef _WIN32
-#define CURL_STATICLIB
+    #define CURL_STATICLIB
 #endif // #ifdef _WIN32
 #include <curl/curl.h>
 #include <curl/easy.h>
 
 #include "HttpClient.h"
+#include "HttpRequest.h"
+#include "HttpResponse.h"
 
 namespace ultraschall { namespace reaper {
 
-static size_t ReceiveDataHandler(void* pData, size_t dataSize, size_t itemSize, void* pStream)
-{
-    PRECONDITION_RETURN(pData != 0, 0);
-    PRECONDITION_RETURN(itemSize > 0, 0);
-    PRECONDITION_RETURN(pStream != 0, 0);
+HttpClient::HttpClient() : handle_(curl_easy_init()) {}
 
-    std::string        data((const char*)pData, (size_t)dataSize * itemSize);
-    std::stringstream& os = *((std::stringstream*)pStream);
-    os << data << std::endl;
-    return dataSize * itemSize;
+HttpClient::~HttpClient()
+{
+    if(handle_ != nullptr)
+    {
+        curl_easy_cleanup(handle_);
+        handle_ = nullptr;
+    }
 }
 
-BinaryStream* HttpClient::Download(const UnicodeString& url)
+UnicodeString HttpClient::DownloadUrl(const UnicodeString& url)
 {
-    PRECONDITION_RETURN(url.empty(), nullptr);
+    PRECONDITION_RETURN(handle_ != nullptr, UnicodeString());
+    PRECONDITION_RETURN(url.empty(), UnicodeString());
 
-    BinaryStream* pStream = new BinaryStream(4096);
-    if(pStream != nullptr)
+    UnicodeString result;
+
+    const UnicodeString encodedUrl = EncodeUrl(url);
+    if(encodedUrl.empty() == false)
     {
-        void* curlHandle = curl_easy_init();
-        if(curlHandle != nullptr)
+        HttpRequest* pRequest = HttpRequest::Create(HttpRequestType::GET, encodedUrl);
+        if(pRequest != nullptr)
         {
-            const UnicodeString encodedUrl = EncodeUrl(url);
-            curl_easy_setopt(curlHandle, CURLOPT_URL, encodedUrl.c_str());
-            curl_easy_setopt(curlHandle, CURLOPT_FOLLOWLOCATION, 1L);
-            curl_easy_setopt(curlHandle, CURLOPT_NOSIGNAL, 1);
-            curl_easy_setopt(curlHandle, CURLOPT_ACCEPT_ENCODING, "deflate");
-            curl_easy_setopt(curlHandle, CURLOPT_WRITEFUNCTION, ReceiveDataHandler);
+            curl_easy_setopt(handle_, CURLOPT_URL, pRequest->Url());
+            curl_easy_setopt(handle_, CURLOPT_FOLLOWLOCATION, 1L);
+            curl_easy_setopt(handle_, CURLOPT_NOSIGNAL, 1);
+            curl_easy_setopt(handle_, CURLOPT_ACCEPT_ENCODING, "deflate");
+            curl_easy_setopt(handle_, CURLOPT_WRITEFUNCTION, ReceiveDataHandler);
 
-            std::stringstream out;
-            curl_easy_setopt(curlHandle, CURLOPT_WRITEDATA, &out);
-            const CURLcode curlResult = curl_easy_perform(curlHandle);
-            if(CURLE_OK == curlResult)
+            SequentialStream* pStream = new SequentialStream();
+            if(pStream != nullptr)
             {
-                const uint8_t* ptr = reinterpret_cast<const uint8_t*>(out.str().c_str());
-                pStream->Write(0, ptr, out.str().length());
+                curl_easy_setopt(handle_, CURLOPT_WRITEDATA, pStream);
+                const CURLcode curlResult = curl_easy_perform(handle_);
+                if(CURLE_OK == curlResult)
+                {
+                    HttpResponse* pResponse = HttpResponse::Create(HttpResultCode::SUCCESS, pStream);
+                    if(pResponse != nullptr)
+                    {
+                        result = StreamToString(pResponse->Result());
+                        SafeRelease(pResponse);
+                    }
+                }
+
+                SafeRelease(pStream);
             }
 
-            curl_easy_cleanup(curlHandle);
-            curlHandle = nullptr;
+            SafeRelease(pRequest);
         }
     }
 
-    return pStream;
+    return result;
+}
+
+size_t HttpClient::ReceiveDataHandler(void* pData, size_t dataSize, size_t itemSize, void* pParam)
+{
+    PRECONDITION_RETURN(pData != 0, 0);
+    PRECONDITION_RETURN(itemSize > 0, 0);
+    PRECONDITION_RETURN(pParam != 0, 0);
+
+    size_t result = -1;
+
+    SequentialStream* pStream = reinterpret_cast<SequentialStream*>(pParam);
+    if(pStream != nullptr)
+    {
+        if(pStream->Write(reinterpret_cast<uint8_t*>(pData), dataSize * itemSize) == true)
+        {
+            result = dataSize * itemSize;
+        }
+        
+    }
+
+    return result;
+}
+
+UnicodeString HttpClient::StreamToString(const SequentialStream* pStream)
+{
+    PRECONDITION_RETURN(pStream != nullptr, UnicodeString());
+    PRECONDITION_RETURN(pStream->Data() != nullptr, UnicodeString());
+    PRECONDITION_RETURN(pStream->DataSize() > 0, UnicodeString());
+
+    UnicodeString result;
+
+    const size_t stringSize = pStream->DataSize() + sizeof(UnicodeChar);
+    UnicodeChar* pString    = new UnicodeChar[stringSize];
+    if(pString != nullptr)
+    {
+        memset(pString, 0, stringSize);
+        memcpy(pString, pStream->Data(), pStream->DataSize());
+        result = pString;
+
+        SafeDeleteArray(pString);
+    }
+
+    return result;
 }
 
 UnicodeString HttpClient::EncodeUrl(const UnicodeString& url)

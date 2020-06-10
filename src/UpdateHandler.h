@@ -24,37 +24,31 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__
-#define __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__
+#ifndef __ULTRASCHALL_REAPER_UPDATE_CHECK_H_INCL__
+#define __ULTRASCHALL_REAPER_UPDATE_CHECK_H_INCL__
 
 #include "Common.h"
-#include "SequentialStream.h"
-#include "SharedObject.h"
 
 namespace ultraschall { namespace reaper {
 
-class HttpClient : public SharedObject
+class UpdateHandler
 {
 public:
-    HttpClient();
-    virtual ~HttpClient();
-
-    UnicodeString DownloadUrl(const UnicodeString& url);
-
-    static UnicodeString EncodeUrl(const UnicodeString& url);
-    static UnicodeString DecodeUrl(const UnicodeString& url);
+    static bool IsUpdateCheckRequired();
+    static void Check();
 
 private:
-    void* handle_ = nullptr;
+    static const UnicodeString UpdateHandler::LAST_UPDATE_CHECK_NAME;
+    static const double      UpdateHandler::ONE_DAY_IN_SECONDS;
 
-    HttpClient(const HttpClient&) = delete;
-    HttpClient& operator=(const HttpClient&) = delete;
+    static bool   WriteLastUpdateTimestamp(const double timestamp);
+    static double ReadLastUpdateTimestamp();
 
-    static size_t ReceiveDataHandler(void* pData, size_t dataSize, size_t itemSize, void* pParam);
+    static size_t ReceiveDataHandler(void* pData, size_t dataSize, size_t itemSize, void* pStream);
 
-    static UnicodeString HttpClient::StreamToString(const SequentialStream* pStream);
+    static double QueryCurrentTimeAsSeconds();
 };
 
 }} // namespace ultraschall::reaper
 
-#endif // #ifndef __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__
+#endif // #ifndef __ULTRASCHALL_REAPER_UPDATE_CHECK_H_INCL__

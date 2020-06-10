@@ -48,6 +48,8 @@ set(COMMON_INCLUDES
   FileManager.h
   Globals.h
   HttpClient.h
+  HttpRequest.h
+  HttpResponse.h
   ICommand.h
   ICustomAction.h
   ID3V2.h
@@ -65,6 +67,7 @@ set(COMMON_INCLUDES
   resource.h
   SaveChapterMarkersAction.h
   SaveChapterMarkersToProjectAction.h
+  SequentialStream.h
   ServiceStatus.h
   StringUtilities.h
   SystemProperties.h
@@ -74,7 +77,7 @@ set(COMMON_INCLUDES
   NotificationClass.h
   NotificationQueue.h
   NotificationStore.h
-  UpdateCheck.h
+  UpdateHandler.h
   UnicodeString.h
 )
 
@@ -86,6 +89,8 @@ set(COMMON_SOURCES
   CustomActionManager.cpp
   FileManager.cpp
   HttpClient.cpp
+  HttpRequest.cpp
+  HttpResponse.cpp
   ID3V2.cpp
   ID3V2Context.cpp
   ID3V2Writer.cpp
@@ -97,13 +102,14 @@ set(COMMON_SOURCES
   ReaperGateway.cpp
   SaveChapterMarkersAction.cpp
   SaveChapterMarkersToProjectAction.cpp
+  SequentialStream.cpp
   StringUtilities.cpp
   SystemProperties.cpp
   TagWriterFactory.cpp
   Notification.cpp
   NotificationQueue.cpp
   NotificationStore.cpp
-  UpdateCheck.cpp
+  UpdateHandler.cpp
   UnicodeString.cpp
   reaper_ultraschall.cpp
 )

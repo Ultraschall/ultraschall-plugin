@@ -24,15 +24,51 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_UPDATE_CHECK_H_INCL__
-#define __ULTRASCHALL_REAPER_UPDATE_CHECK_H_INCL__
+#ifndef __ULTRASCHALL_REAPER_HTTP_REQUEST_H_INCL__
+#define __ULTRASCHALL_REAPER_HTTP_REQUEST_H_INCL__
 
 #include "Common.h"
+#include "SharedObject.h"
 
 namespace ultraschall { namespace reaper {
 
-void UpdateCheck();
+enum class HttpRequestType
+{
+    GET
+};
+
+class HttpRequest : public SharedObject
+{
+public:
+    static HttpRequest* Create(const HttpRequestType type, const UnicodeString& url);
+    static HttpRequest* Create(
+        const HttpRequestType type, const UnicodeString& url, const UnicodeStringDictionary& header);
+
+    inline const UnicodeString&           Url() const;
+    inline const UnicodeStringDictionary& Header() const;
+
+protected:
+    virtual ~HttpRequest();
+
+    HttpRequest(const HttpRequestType type, const UnicodeString& url);
+    HttpRequest(const HttpRequestType type, const UnicodeString& url, const UnicodeStringDictionary& header);
+
+private:
+    HttpRequestType         type_;
+    UnicodeString           url_;
+    UnicodeStringDictionary header_;
+};
+
+inline const UnicodeString& HttpRequest::Url() const
+{
+    return url_;
+}
+
+inline const UnicodeStringDictionary& HttpRequest::Header() const
+{
+    return header_;
+}
 
 }} // namespace ultraschall::reaper
 
-#endif // #ifndef __ULTRASCHALL_REAPER_UPDATE_CHECK_H_INCL__
+#endif // #ifdef __ULTRASCHALL_REAPER_HTTP_REQUEST_H_INCL__

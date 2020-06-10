@@ -26,8 +26,8 @@
 
 . "./scripts/BuildTools.ps1"
 
-$ToolsDirectory = "./_tools"
-$BuildDirectory = "./_build"
+$ToolsDirectory = "./tools"
+$BuildDirectory = "./build"
 $CMakeExtraArgs = ""
 
 If ($args.Count -gt 0) {

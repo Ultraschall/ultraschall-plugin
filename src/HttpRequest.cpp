@@ -24,37 +24,27 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__
-#define __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__
-
-#include "Common.h"
-#include "SequentialStream.h"
-#include "SharedObject.h"
+#include "HttpRequest.h"
 
 namespace ultraschall { namespace reaper {
 
-class HttpClient : public SharedObject
+HttpRequest::HttpRequest(const HttpRequestType type, const UnicodeString& url) : type_(type), url_(url) {}
+
+HttpRequest::HttpRequest(const HttpRequestType type, const UnicodeString& url, const UnicodeStringDictionary& header) :
+    type_(type), url_(url), header_(header)
+{}
+
+HttpRequest::~HttpRequest() {}
+
+HttpRequest* HttpRequest::Create(const HttpRequestType type, const UnicodeString& url)
 {
-public:
-    HttpClient();
-    virtual ~HttpClient();
+    return new HttpRequest(HttpRequestType::GET, url);
+}
 
-    UnicodeString DownloadUrl(const UnicodeString& url);
-
-    static UnicodeString EncodeUrl(const UnicodeString& url);
-    static UnicodeString DecodeUrl(const UnicodeString& url);
-
-private:
-    void* handle_ = nullptr;
-
-    HttpClient(const HttpClient&) = delete;
-    HttpClient& operator=(const HttpClient&) = delete;
-
-    static size_t ReceiveDataHandler(void* pData, size_t dataSize, size_t itemSize, void* pParam);
-
-    static UnicodeString HttpClient::StreamToString(const SequentialStream* pStream);
-};
+HttpRequest* HttpRequest::Create(
+    const HttpRequestType type, const UnicodeString& url, const UnicodeStringDictionary& header)
+{
+    return new HttpRequest(HttpRequestType::GET, url, header);
+}
 
 }} // namespace ultraschall::reaper
-
-#endif // #ifndef __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__
