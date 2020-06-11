@@ -24,8 +24,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__
-#define __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__
+#ifndef __ULTRASCHALL_REAPER_HTTP_RESPONSE_H_INCL__
+#define __ULTRASCHALL_REAPER_HTTP_RESPONSE_H_INCL__
 
 #include "Common.h"
 #include "SequentialStream.h"
@@ -33,28 +33,39 @@
 
 namespace ultraschall { namespace reaper {
 
-class HttpClient : public SharedObject
+enum class HttpResultCode
+{
+    SUCCESS = 200
+};
+
+class HttpResponse : public SharedObject
 {
 public:
-    HttpClient();
-    virtual ~HttpClient();
+    static HttpResponse* Create(const HttpResultCode resultCode, SequentialStream* pStream = nullptr);
 
-    UnicodeString DownloadUrl(const UnicodeString& url);
+    inline HttpResultCode ResultCode() const;
+    inline SequentialStream* Result() const;
 
-    static UnicodeString EncodeUrl(const UnicodeString& url);
-    static UnicodeString DecodeUrl(const UnicodeString& url);
+protected:
+    HttpResponse(const HttpResultCode resultCode, SequentialStream* pStream);
+
+    virtual ~HttpResponse();
 
 private:
-    void* handle_ = nullptr;
-
-    HttpClient(const HttpClient&) = delete;
-    HttpClient& operator=(const HttpClient&) = delete;
-
-    static size_t ReceiveDataHandler(void* pData, size_t dataSize, size_t itemSize, void* pParam);
-
-    static UnicodeString StreamToString(const SequentialStream* pStream);
+    HttpResultCode resultCode_;
+    SequentialStream* pStream_;
 };
+
+inline HttpResultCode HttpResponse::ResultCode() const
+{
+    return resultCode_;
+}
+
+inline SequentialStream* HttpResponse::Result() const
+{
+    return pStream_;
+}
 
 }} // namespace ultraschall::reaper
 
-#endif // #ifndef __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__
+#endif // #ifdef __ULTRASCHALL_REAPER_HTTP_RESPONSE_H_INCL__

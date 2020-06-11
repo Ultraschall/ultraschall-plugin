@@ -31,7 +31,23 @@
 
 namespace ultraschall { namespace reaper {
 
-void UpdateCheck();
+class UpdateHandler
+{
+public:
+    static bool IsUpdateCheckRequired();
+    static void Check();
+
+private:
+    static const UnicodeString LAST_UPDATE_CHECK_NAME;
+    static const double      ONE_DAY_IN_SECONDS;
+
+    static bool   WriteLastUpdateTimestamp(const double timestamp);
+    static double ReadLastUpdateTimestamp();
+
+    static size_t ReceiveDataHandler(void* pData, size_t dataSize, size_t itemSize, void* pStream);
+
+    static double QueryCurrentTimeAsSeconds();
+};
 
 }} // namespace ultraschall::reaper
 
