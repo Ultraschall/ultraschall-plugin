@@ -26,6 +26,8 @@
 
 set(REAPER_INCLUDE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../include/reaper)
 
+add_definitions(-DWDL_NO_DEFINE_MINMAX)
+
 include_directories(
   ${LIBZ_INCLUDE_PATH}
   ${LIBCURL_INCLUDE_PATH}
@@ -112,9 +114,46 @@ set(EXTRA_INCLUDES)
 set(EXTRA_SOURCES
   ${LIBZ_SOURCE_PATH}/contrib/minizip/ioapi.c
   ${LIBZ_SOURCE_PATH}/contrib/minizip/unzip.c
+
 )
+
 set_source_files_properties(${LIBZ_SOURCE_PATH}/contrib/minizip/ioapi.c PROPERTIES GENERATED TRUE)
 set_source_files_properties(${LIBZ_SOURCE_PATH}/contrib/minizip/unzip.c PROPERTIES GENERATED TRUE)
+
+if(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "linux")
+  set(COCKOS_SOURCES
+    ${LIBWDL_SOURCE_PATH}/swell.cpp
+    ${LIBWDL_SOURCE_PATH}/swell-ini.cpp
+    ${LIBWDL_SOURCE_PATH}/swell-wnd-generic.cpp
+    ${LIBWDL_SOURCE_PATH}/swell-dlg-generic.cpp
+    ${LIBWDL_SOURCE_PATH}/swell-menu-generic.cpp
+    ${LIBWDL_SOURCE_PATH}/swell-gdi-generic.cpp
+    ${LIBWDL_SOURCE_PATH}/swell-miscdlg-generic.cpp
+    ${LIBWDL_SOURCE_PATH}/swell-generic-headless.cpp
+    ${LIBWDL_SOURCE_PATH}/swell-generic-gdk.cpp
+
+    ${LIBWDL_SOURCE_PATH}/swell-misc-generic.cpp
+    ${LIBWDL_SOURCE_PATH}/swell-gdi-lice.cpp
+    ${LIBWDL_SOURCE_PATH}/swell-kb-generic.cpp
+    ${LIBWDL_SOURCE_PATH}/swell-modstub-generic.cpp
+    ${LIBWDL_SOURCE_PATH}/swell-appstub-generic.cpp
+  )
+
+  set_source_files_properties(${LIBWDL_SOURCE_PATH}/swell.cpp PROPERTIES GENERATED TRUE)
+  set_source_files_properties(${LIBWDL_SOURCE_PATH}/swell-ini.cpp PROPERTIES GENERATED TRUE)
+  set_source_files_properties(${LIBWDL_SOURCE_PATH}/swell-wnd-generic.cpp PROPERTIES GENERATED TRUE)
+  set_source_files_properties(${LIBWDL_SOURCE_PATH}/swell-dlg-generic.cpp PROPERTIES GENERATED TRUE)
+  set_source_files_properties(${LIBWDL_SOURCE_PATH}/swell-menu-generic.cpp PROPERTIES GENERATED TRUE)
+  set_source_files_properties(${LIBWDL_SOURCE_PATH}/swell-misc-generic.cpp PROPERTIES GENERATED TRUE)
+  set_source_files_properties(${LIBWDL_SOURCE_PATH}/swell-gdi-generic.cpp PROPERTIES GENERATED TRUE)
+  set_source_files_properties(${LIBWDL_SOURCE_PATH}/swell-gdi-lice.cpp PROPERTIES GENERATED TRUE)
+  set_source_files_properties(${LIBWDL_SOURCE_PATH}/swell-kb-generic.cpp PROPERTIES GENERATED TRUE)
+  set_source_files_properties(${LIBWDL_SOURCE_PATH}/swell-miscdlg-generic.cpp PROPERTIES GENERATED TRUE)
+  set_source_files_properties(${LIBWDL_SOURCE_PATH}/swell-modstub-generic.cpp PROPERTIES GENERATED TRUE)
+  set_source_files_properties(${LIBWDL_SOURCE_PATH}/swell-appstub-generic.cpp PROPERTIES GENERATED TRUE)
+  set_source_files_properties(${LIBWDL_SOURCE_PATH}/swell-generic-headless.cpp PROPERTIES GENERATED TRUE)
+  set_source_files_properties(${LIBWDL_SOURCE_PATH}/swell-generic-gdk.cpp PROPERTIES GENERATED TRUE)
+endif()
 
 set(PLATFORM_INCLUDES FileDialog.h Platform.h)
 set(PLATFORM_SOURCES
@@ -157,6 +196,7 @@ add_library(reaper_ultraschall SHARED
   ${PLATFORM_SOURCES}
   ${EXTRA_INCLUDES}
   ${EXTRA_SOURCES}
+  ${COCKOS_SOURCES}
 )
 
 add_dependencies(reaper_ultraschall zlib-build)
