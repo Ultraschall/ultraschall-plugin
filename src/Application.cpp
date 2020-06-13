@@ -30,7 +30,7 @@
 #include "StringUtilities.h"
 #include "SystemProperties.h"
 #include "NotificationStore.h"
-#include "UpdateCheck.h"
+#include "UpdateHandler.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -51,7 +51,8 @@ ServiceStatus Application::Start(intptr_t handle)
     if(handle_ == 0)
     {
         handle_ = handle;
-        UpdateCheck();
+
+        UpdateHandler::Check();
         status = SERVICE_SUCCESS;
     }
 

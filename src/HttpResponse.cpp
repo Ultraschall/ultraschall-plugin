@@ -24,37 +24,28 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__
-#define __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__
-
-#include "Common.h"
-#include "SequentialStream.h"
-#include "SharedObject.h"
+#include "HttpResponse.h"
 
 namespace ultraschall { namespace reaper {
 
-class HttpClient : public SharedObject
+HttpResponse* HttpResponse::Create(const HttpResultCode resultCode, SequentialStream* pStream)
 {
-public:
-    HttpClient();
-    virtual ~HttpClient();
+    return new HttpResponse(resultCode, pStream);
+}
 
-    UnicodeString DownloadUrl(const UnicodeString& url);
+HttpResponse::HttpResponse(const HttpResultCode resultCode, SequentialStream* pStream) :
+    resultCode_(resultCode), pStream_(pStream)
+{
+    if(pStream_ != nullptr)
+    {
+        pStream_->AddRef();
+    }
+}
 
-    static UnicodeString EncodeUrl(const UnicodeString& url);
-    static UnicodeString DecodeUrl(const UnicodeString& url);
+HttpResponse::~HttpResponse()
+{
+    SafeRelease(pStream_);
+}
 
-private:
-    void* handle_ = nullptr;
-
-    HttpClient(const HttpClient&) = delete;
-    HttpClient& operator=(const HttpClient&) = delete;
-
-    static size_t ReceiveDataHandler(void* pData, size_t dataSize, size_t itemSize, void* pParam);
-
-    static UnicodeString StreamToString(const SequentialStream* pStream);
-};
 
 }} // namespace ultraschall::reaper
-
-#endif // #ifndef __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__

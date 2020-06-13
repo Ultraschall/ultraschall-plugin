@@ -24,37 +24,51 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__
-#define __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__
+#ifndef __ULTRASCHALL_REAPER_HTTP_REQUEST_H_INCL__
+#define __ULTRASCHALL_REAPER_HTTP_REQUEST_H_INCL__
 
 #include "Common.h"
-#include "SequentialStream.h"
 #include "SharedObject.h"
 
 namespace ultraschall { namespace reaper {
 
-class HttpClient : public SharedObject
+enum class HttpRequestType
+{
+    GET
+};
+
+class HttpRequest : public SharedObject
 {
 public:
-    HttpClient();
-    virtual ~HttpClient();
+    static HttpRequest* Create(const HttpRequestType type, const UnicodeString& url);
+    static HttpRequest* Create(
+        const HttpRequestType type, const UnicodeString& url, const UnicodeStringDictionary& header);
 
-    UnicodeString DownloadUrl(const UnicodeString& url);
+    inline const UnicodeString&           Url() const;
+    inline const UnicodeStringDictionary& Header() const;
 
-    static UnicodeString EncodeUrl(const UnicodeString& url);
-    static UnicodeString DecodeUrl(const UnicodeString& url);
+protected:
+    virtual ~HttpRequest();
+
+    HttpRequest(const HttpRequestType type, const UnicodeString& url);
+    HttpRequest(const HttpRequestType type, const UnicodeString& url, const UnicodeStringDictionary& header);
 
 private:
-    void* handle_ = nullptr;
-
-    HttpClient(const HttpClient&) = delete;
-    HttpClient& operator=(const HttpClient&) = delete;
-
-    static size_t ReceiveDataHandler(void* pData, size_t dataSize, size_t itemSize, void* pParam);
-
-    static UnicodeString StreamToString(const SequentialStream* pStream);
+    HttpRequestType         type_;
+    UnicodeString           url_;
+    UnicodeStringDictionary header_;
 };
+
+inline const UnicodeString& HttpRequest::Url() const
+{
+    return url_;
+}
+
+inline const UnicodeStringDictionary& HttpRequest::Header() const
+{
+    return header_;
+}
 
 }} // namespace ultraschall::reaper
 
-#endif // #ifndef __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__
+#endif // #ifdef __ULTRASCHALL_REAPER_HTTP_REQUEST_H_INCL__

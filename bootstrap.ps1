@@ -25,7 +25,7 @@
 ################################################################################
 
 if (Get-Command "cmake.exe" -ErrorAction SilentlyContinue) {
-  $BuildDirectory = "./_build"
+  $BuildDirectory = "./build"
   if (Test-Path -PathType Container $BuildDirectory) {
     Remove-Item -Force -Recurse $BuildDirectory
   }

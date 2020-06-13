@@ -24,37 +24,40 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__
-#define __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__
+#ifndef __ULTRASCHALL_REAPER_SEQUENTIAL_STREAM_H_INCL__
+#define __ULTRASCHALL_REAPER_SEQUENTIAL_STREAM_H_INCL__
 
 #include "Common.h"
-#include "SequentialStream.h"
 #include "SharedObject.h"
 
 namespace ultraschall { namespace reaper {
 
-class HttpClient : public SharedObject
+class SequentialStream : public SharedObject
 {
 public:
-    HttpClient();
-    virtual ~HttpClient();
+    static const size_t INVALID_DATA_SIZE = -1;
 
-    UnicodeString DownloadUrl(const UnicodeString& url);
+    SequentialStream();
 
-    static UnicodeString EncodeUrl(const UnicodeString& url);
-    static UnicodeString DecodeUrl(const UnicodeString& url);
+    size_t DataSize() const;
+
+    const uint8_t* Data() const;
+
+    bool Write(const uint8_t* buffer, const size_t bufferSize);
+    size_t Read(uint8_t* buffer, const size_t bufferSize);
+
+protected:
+    virtual ~SequentialStream();
 
 private:
-    void* handle_ = nullptr;
+    static const size_t DEFAULT_CHUNK_SIZE = 4096;
 
-    HttpClient(const HttpClient&) = delete;
-    HttpClient& operator=(const HttpClient&) = delete;
-
-    static size_t ReceiveDataHandler(void* pData, size_t dataSize, size_t itemSize, void* pParam);
-
-    static UnicodeString StreamToString(const SequentialStream* pStream);
+    size_t   writePosition_ = 0;
+    size_t   readPosition_  = 0;
+    size_t   dataSize_      = INVALID_DATA_SIZE;
+    uint8_t* data_          = nullptr;
 };
 
 }} // namespace ultraschall::reaper
 
-#endif // #ifndef __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__
+#endif // #ifdef __ULTRASCHALL_REAPER_SEQUENTIAL_STREAM_H_INCL__
