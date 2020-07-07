@@ -63,6 +63,7 @@ set(COMMON_INCLUDES
   SharedObject.h
   Malloc.h
   Picture.h
+  ProfileProperties.h
   ReaperProject.h
   ReaperEntryPoints.h
   ReaperGateway.h
@@ -99,6 +100,7 @@ set(COMMON_SOURCES
   InsertChapterMarkersAction.cpp
   InsertMediaPropertiesAction.cpp
   Picture.cpp
+  ProfileProperties.cpp
   ReaperProject.cpp
   ReaperEntryPoints.cpp
   ReaperGateway.cpp

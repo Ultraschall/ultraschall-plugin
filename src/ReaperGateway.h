@@ -77,6 +77,19 @@ public:
     static void ClearSystemValue(const UnicodeString& section, const UnicodeString& key);
     static void DeleteSystemValue(const UnicodeString& section, const UnicodeString& key);
 
+    static bool HasProfileValue(const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key);
+    static UnicodeString ProfileValue(
+        const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key);
+    static bool SetProfileValue(
+        const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key,
+        const UnicodeString& value);
+    static bool SaveProfileValue(
+        const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key,
+        const UnicodeString& value);
+    static void ClearProfileValue(const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key);
+    static void DeleteProfileValue(
+        const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key);
+
     static bool HasProjectValue(
         ProjectReference projectReference, const UnicodeString& section, const UnicodeString& key);
     static UnicodeString QueryProjectValue(
