@@ -38,8 +38,15 @@ public:
     static void Check();
 
 private:
-    static const UnicodeString LAST_UPDATE_CHECK_NAME;
-    static const double      ONE_DAY_IN_SECONDS;
+    static const UnicodeString CHECK_ENABLED_PROFILE_NAME;
+    static const UnicodeString CHECK_ENABLED_SECTION_NAME;
+    static const UnicodeString CHECK_ENABLED_VALUE_NAME;
+
+    static const UnicodeString LAST_CHECKPOINT_PROFILE_NAME;
+    static const UnicodeString LAST_CHECKPOINT_SECTION_NAME;
+    static const UnicodeString LAST_CHECKPOINT_VALUE_NAME;
+
+    static const double        ONE_DAY_IN_SECONDS;
 
     static bool   WriteLastUpdateTimestamp(const double timestamp);
     static double ReadLastUpdateTimestamp();

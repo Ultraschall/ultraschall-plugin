@@ -27,26 +27,41 @@
 #include "Common.h"
 #include "Platform.h"
 #include "StringUtilities.h"
-#include "SystemProperties.h"
+#include "ProfileProperties.h"
 #include "NotificationStore.h"
 #include "HttpClient.h"
 #include "UpdateHandler.h"
 
 namespace ultraschall { namespace reaper {
 
-const UnicodeString UpdateHandler::LAST_UPDATE_CHECK_NAME = "last_update_check";
-const double        UpdateHandler::ONE_DAY_IN_SECONDS     = 60.0 * 60.0 * 24.0;
+const UnicodeString UpdateHandler::CHECK_ENABLED_PROFILE_NAME = "ultraschall_settings.ini";
+const UnicodeString UpdateHandler::CHECK_ENABLED_SECTION_NAME = "ultraschall_settings_updatecheck";
+const UnicodeString UpdateHandler::CHECK_ENABLED_VALUE_NAME   = "Value";
+
+const UnicodeString UpdateHandler::LAST_CHECKPOINT_PROFILE_NAME = "ultraschall.ini";
+const UnicodeString UpdateHandler::LAST_CHECKPOINT_SECTION_NAME = "update_check";
+const UnicodeString UpdateHandler::LAST_CHECKPOINT_VALUE_NAME   = "last_checkpoint";
+
+const double UpdateHandler::ONE_DAY_IN_SECONDS = 60.0 * 60.0 * 24.0;
 
 bool UpdateHandler::IsUpdateCheckRequired()
 {
     bool updateCheckRequired = false;
 
-    const double lastUpdateTimestamp = ReadLastUpdateTimestamp();
-    if(lastUpdateTimestamp > 0)
+    if(ProfileProperty<bool>::Query(
+           CHECK_ENABLED_PROFILE_NAME, CHECK_ENABLED_SECTION_NAME, CHECK_ENABLED_VALUE_NAME) == true)
     {
-        const double now   = QueryCurrentTimeAsSeconds();
-        const double delta = (now - lastUpdateTimestamp);
-        if(delta > ONE_DAY_IN_SECONDS) // standard timeout (24h)
+        const double lastUpdateTimestamp = ReadLastUpdateTimestamp();
+        if(lastUpdateTimestamp > 0)
+        {
+            const double now   = QueryCurrentTimeAsSeconds();
+            const double delta = (now - lastUpdateTimestamp);
+            if(delta > ONE_DAY_IN_SECONDS) // standard timeout (24h)
+            {
+                updateCheckRequired = true;
+            }
+        }
+        else // first run
         {
             updateCheckRequired = true;
         }
@@ -57,28 +72,27 @@ bool UpdateHandler::IsUpdateCheckRequired()
 
 void UpdateHandler::Check()
 {
-    if(true == IsUpdateCheckRequired())
-    {
-        HttpClient* pClient = new HttpClient();
-        if(pClient != nullptr)
-        {
-            const std::string url           = "https://ultraschall.io/ultraschall_prerelease.txt";
-            UnicodeString     remoteVersion = pClient->DownloadUrl(url);
-            if(remoteVersion.empty() == false)
-            {
-                UnicodeStringTrim(remoteVersion);
-                if(remoteVersion > ULTRASCHALL_VERSION)
-                {
-                    NotificationStore supervisor("ULTRASCHALL_UPDATE_CHECK");
-                    std::string       message = "An update for Ultraschall is available. Go to "
-                                          "https://ultraschall.fm/install to download the updated version ";
-                    message += remoteVersion + ".";
-                    supervisor.RegisterSuccess(message);
-                }
-            }
+    PRECONDITION(IsUpdateCheckRequired() == true);
 
-            SafeRelease(pClient);
+    HttpClient* pClient = new HttpClient();
+    if(pClient != nullptr)
+    {
+        const UnicodeString url           = "https://ultraschall.io/ultraschall_prerelease.txt";
+        UnicodeString       remoteVersion = pClient->DownloadUrl(url);
+        if(remoteVersion.empty() == false)
+        {
+            UnicodeStringTrim(remoteVersion);
+            if(remoteVersion > ULTRASCHALL_VERSION)
+            {
+                NotificationStore supervisor("ULTRASCHALL_UPDATE_CHECK");
+                UnicodeString     message = "An update for Ultraschall is available. Go to "
+                                        "https://ultraschall.fm/install to download the updated version ";
+                message += remoteVersion + ".";
+                supervisor.RegisterSuccess(message);
+            }
         }
+
+        SafeRelease(pClient);
 
         const double lastUpdateTimestamp = QueryCurrentTimeAsSeconds();
         WriteLastUpdateTimestamp(lastUpdateTimestamp);
@@ -91,10 +105,11 @@ bool UpdateHandler::WriteLastUpdateTimestamp(const double timestamp)
 
     bool lastUpdateTimestampWritten = false;
 
-    const std::string checkpoint = std::to_string(timestamp);
+    const UnicodeString checkpoint = std::to_string(timestamp);
     if(checkpoint.empty() == false)
     {
-        SystemProperty<std::string>::Save(UPDATE_SECTION_NAME, LAST_UPDATE_CHECK_NAME, checkpoint);
+        ProfileProperty<UnicodeString>::Save(
+            LAST_CHECKPOINT_PROFILE_NAME, LAST_CHECKPOINT_SECTION_NAME, LAST_CHECKPOINT_VALUE_NAME, checkpoint);
     }
 
     return lastUpdateTimestampWritten;
@@ -102,46 +117,37 @@ bool UpdateHandler::WriteLastUpdateTimestamp(const double timestamp)
 
 double UpdateHandler::ReadLastUpdateTimestamp()
 {
-    double lastUpdateTimestamp = -1;
+    static const double INVALID_TIMESTAMP   = -1;
+    double              lastUpdateTimestamp = INVALID_TIMESTAMP;
 
-    const double DEFAULT_TIMESTAMP = QueryCurrentTimeAsSeconds() - (ONE_DAY_IN_SECONDS + 1);
-
-    if(SystemProperty<bool>::Query(UPDATE_SECTION_NAME, "update_check") == false)
+    if(ProfileProperty<UnicodeString>::Exists(
+           LAST_CHECKPOINT_PROFILE_NAME, LAST_CHECKPOINT_SECTION_NAME, LAST_CHECKPOINT_VALUE_NAME) == true)
     {
-        WriteLastUpdateTimestamp(DEFAULT_TIMESTAMP);
+        const UnicodeString previousUpdateCheckpoint = ProfileProperty<UnicodeString>::Query(
+            LAST_CHECKPOINT_PROFILE_NAME, LAST_CHECKPOINT_SECTION_NAME, LAST_CHECKPOINT_VALUE_NAME);
+        if(previousUpdateCheckpoint.empty() == false)
+        {
+            try
+            {
+                lastUpdateTimestamp = std::stod(previousUpdateCheckpoint);
+            }
+            catch(std::invalid_argument&) // inconsistency in reaper-extstate.ini (number format), force update check
+            {
+                lastUpdateTimestamp = INVALID_TIMESTAMP;
+            }
+            catch(std::out_of_range&) // inconsistency in reaper-extstate.ini (overflow), force update check
+            {
+                lastUpdateTimestamp = INVALID_TIMESTAMP;
+            }
+        }
+        else // inconsistency in reaper-extstate.ini, force update check
+        {
+            lastUpdateTimestamp = INVALID_TIMESTAMP;
+        }
     }
-
-    if(SystemProperty<bool>::Query(UPDATE_SECTION_NAME, "update_check") == true)
+    else // initial status, force update check
     {
-        if(SystemProperty<std::string>::Exists(UPDATE_SECTION_NAME, LAST_UPDATE_CHECK_NAME) == true)
-        {
-            const std::string previousUpdateCheckpoint =
-                SystemProperty<std::string>::Query(UPDATE_SECTION_NAME, LAST_UPDATE_CHECK_NAME);
-            if(previousUpdateCheckpoint.empty() == false)
-            {
-                try
-                {
-                    lastUpdateTimestamp = std::stod(previousUpdateCheckpoint);
-                }
-                catch(
-                    std::invalid_argument&) // inconsistency in reaper-extstate.ini (number format), force update check
-                {
-                    lastUpdateTimestamp = DEFAULT_TIMESTAMP;
-                }
-                catch(std::out_of_range&) // inconsistency in reaper-extstate.ini (overflow), force update check
-                {
-                    lastUpdateTimestamp = DEFAULT_TIMESTAMP;
-                }
-            }
-            else // inconsistency in reaper-extstate.ini, force update check
-            {
-                lastUpdateTimestamp = DEFAULT_TIMESTAMP;
-            }
-        }
-        else // initial status, force update check
-        {
-            lastUpdateTimestamp = DEFAULT_TIMESTAMP;
-        }
+        lastUpdateTimestamp = INVALID_TIMESTAMP;
     }
 
     return lastUpdateTimestamp;
