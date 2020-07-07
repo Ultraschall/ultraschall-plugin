@@ -41,7 +41,7 @@ If ($args.Count -gt 0) {
     . "bootstrap.ps1"
     Return
   }
-  ElseIf ($args[0] -eq "--clean-all") {
+  ElseIf (($args[0] -eq "--clean-all") -or ($args[0] -eq "--cleanall")) {
     Remove-Directory $BuildDirectory
     Remove-Directory $ToolsDirectory
     Return
