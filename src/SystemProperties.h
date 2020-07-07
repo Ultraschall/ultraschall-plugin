@@ -77,8 +77,6 @@ private:
     }
 };
 
-static UnicodeString UPDATE_SECTION_NAME = "ultraschall_update";
-
 }} // namespace ultraschall::reaper
 
 #endif // #ifndef __ULTRASCHALL_REAPER_SYSTEM_PROPERTIES_H_INCL__
