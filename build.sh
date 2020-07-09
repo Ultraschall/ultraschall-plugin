@@ -44,6 +44,10 @@ elif [ "$1" = "--clean-all" ]; then
   RemoveDirectory $BUILD_DIRECTORY
   RemoveDirectory $TOOLS_DIRECTORY
   exit 0
+elif [ "$1" = "--cleanall" ]; then
+  RemoveDirectory $BUILD_DIRECTORY
+  RemoveDirectory $TOOLS_DIRECTORY
+  exit 0
 elif [ "$1" = "--clean" ]; then
   RemoveDirectory $BUILD_DIRECTORY
   exit 0_
@@ -86,7 +90,8 @@ if [ $CMAKE_INSTALL_FOUND -ne 0 ]; then
   CMAKE_GENERATOR="<unknown>"
   HOST_SYSTEM_TYPE=`uname`
   if [ "$HOST_SYSTEM_TYPE" = "Linux" ]; then
-    CMAKE_GENERATOR="Unix Makefiles"
+    # CMAKE_GENERATOR="Unix Makefiles"
+    CMAKE_GENERATOR="Ninja"
   elif [ "$HOST_SYSTEM_TYPE" = "Darwin" ]; then
     CMAKE_GENERATOR="Xcode"
   else
@@ -102,7 +107,7 @@ if [ $CMAKE_INSTALL_FOUND -ne 0 ]; then
   pushd $BUILD_DIRECTORY > /dev/null
 
   echo "Configuring projects using $CMAKE_GENERATOR..."
-  cmake -G"$CMAKE_GENERATOR" -DCMAKE_BUILD_TYPE=Debug ../
+  cmake -G"$CMAKE_GENERATOR" -Wno-dev -Wno-deprecated --warn-uninitialized --warn-unused-vars -DCMAKE_BUILD_TYPE=Debug ../
   if [ $? -ne 0 ]; then
     echo "Failed to configure projects."
     exit -1
