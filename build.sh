@@ -30,6 +30,7 @@ source scripts/BuildTools.sh
 
 TOOLS_DIRECTORY=`pwd`/tools
 BUILD_DIRECTORY=`pwd`/build
+BUILD_CONFIGURATION=Debug
 CMAKE_EXTRA_ARGS=""
 
 if [ "$1" = "--help" ]; then
@@ -50,9 +51,11 @@ elif [ "$1" = "--cleanall" ]; then
   exit 0
 elif [ "$1" = "--clean" ]; then
   RemoveDirectory $BUILD_DIRECTORY
-  exit 0_
+  exit 0
 elif [ "$1" == "--rebuild" ]; then
   CMAKE_EXTRA_ARGS="--clean-first"
+elif [ "$1" == "--release" ]; then
+  BUILD_CONFIGURATION=Release
 fi
 
 CMAKE_INSTALL_DIRECTORY=$TOOLS_DIRECTORY/cmake
@@ -90,7 +93,6 @@ if [ $CMAKE_INSTALL_FOUND -ne 0 ]; then
   CMAKE_GENERATOR="<unknown>"
   HOST_SYSTEM_TYPE=`uname`
   if [ "$HOST_SYSTEM_TYPE" = "Linux" ]; then
-    # CMAKE_GENERATOR="Unix Makefiles"
     CMAKE_GENERATOR="Ninja"
   elif [ "$HOST_SYSTEM_TYPE" = "Darwin" ]; then
     CMAKE_GENERATOR="Xcode"
@@ -107,7 +109,7 @@ if [ $CMAKE_INSTALL_FOUND -ne 0 ]; then
   pushd $BUILD_DIRECTORY > /dev/null
 
   echo "Configuring projects using $CMAKE_GENERATOR..."
-  cmake -G"$CMAKE_GENERATOR" -Wno-dev -Wno-deprecated --warn-uninitialized --warn-unused-vars -DCMAKE_BUILD_TYPE=Debug ../
+  cmake -G"$CMAKE_GENERATOR" -Wno-dev -Wno-deprecated --warn-uninitialized --warn-unused-vars -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION ../
   if [ $? -ne 0 ]; then
     echo "Failed to configure projects."
     exit -1
@@ -115,7 +117,7 @@ if [ $CMAKE_INSTALL_FOUND -ne 0 ]; then
   echo "Done."
 
   echo "Building projects using $CMAKE_GENERATOR..."
-  cmake --build . $CMAKE_EXTRA_ARGS --target reaper_ultraschall --config Debug -j 8
+  cmake --build . $CMAKE_EXTRA_ARGS --target reaper_ultraschall --config $BUILD_CONFIGURATION -j 8
   if [ $? -ne 0 ]; then
     echo "Failed to build projects."
     exit -1
