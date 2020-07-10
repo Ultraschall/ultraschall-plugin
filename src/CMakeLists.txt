@@ -150,6 +150,16 @@ elseif(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "macos")
 elseif(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "linux")
   include_directories(${LIBGTK3_INCLUDE_PATH})
   set(EXTRA_LIBRARIES ${LIBGTK3_LIBRARY_PATH})
+  set(COCKOS_SOURCES
+    ${LIBSWELL_SOURCE_PATH}/swell.cpp
+    ${LIBSWELL_SOURCE_PATH}/swell-ini.cpp
+    ${LIBSWELL_SOURCE_PATH}/swell-misc-generic.cpp
+    ${LIBSWELL_SOURCE_PATH}/swell-wnd-generic.cpp
+    ${LIBSWELL_SOURCE_PATH}/swell-gdi-generic.cpp
+    ${LIBSWELL_SOURCE_PATH}/swell-dlg-generic.cpp
+    ${LIBSWELL_SOURCE_PATH}/swell-kb-generic.cpp
+    ${LIBSWELL_SOURCE_PATH}/swell-menu-generic.cpp
+  )
 endif()
 
 message(STATUS "COMMON_INCLUDES   = ${COMMON_INCLUDES}")
@@ -158,12 +168,12 @@ message(STATUS "PLATFORM_INCLUDES = ${PLATFORM_INCLUDES}")
 message(STATUS "PLATFORM_SOURCES  = ${PLATFORM_SOURCES}")
 message(STATUS "EXTRA_INCLUDES    = ${EXTRA_INCLUDES}")
 message(STATUS "EXTRA_SOURCES     = ${EXTRA_SOURCES}")
-message(STATUS "EXTERNAL_INCLUDES = ${EXTERNAL_INCLUDES}")
-message(STATUS "EXTERNAL_SOURCES  = ${EXTERNAL_SOURCES}")
+message(STATUS "COCKOS_INCLUDES   = ${COCKOS_INCLUDES}")
+message(STATUS "COCKOS_SOURCES    = ${COCKOS_SOURCES}")
 
 source_group("Header Files"   FILES ${COMMON_INCLUDES} ${PLATFORM_INCLUDES})
 source_group("Source Files"   FILES ${COMMON_SOURCES} ${PLATFORM_SOURCES})
-source_group("External Files" FILES ${EXTRA_SOURCES} ${EXTERNAL_SOURCES})
+source_group("External Files" FILES ${EXTRA_SOURCES} ${EXTERNAL_SOURCES} ${COCKOS_SOURCES})
 
 add_library(reaper_ultraschall SHARED
   ${COMMON_INCLUDES}
