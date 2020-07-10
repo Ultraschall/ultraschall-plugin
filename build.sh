@@ -90,17 +90,6 @@ if [ $CMAKE_INSTALL_FOUND -eq 0 ]; then
 fi
 
 if [ $CMAKE_INSTALL_FOUND -ne 0 ]; then
-  CMAKE_GENERATOR="<unknown>"
-  HOST_SYSTEM_TYPE=`uname`
-  if [ "$HOST_SYSTEM_TYPE" = "Linux" ]; then
-    CMAKE_GENERATOR="Ninja"
-  elif [ "$HOST_SYSTEM_TYPE" = "Darwin" ]; then
-    CMAKE_GENERATOR="Ninja"
-  else
-    echo "Failed to detect the host system type. Only \"Linux\" or \"Darwin\" are supported. The current host system type is \"$HOST_SYSTEM_TYPE\""
-    exit -1
-  fi
-
   if [ ! -d $BUILD_DIRECTORY ]; then
     mkdir $BUILD_DIRECTORY
   fi
@@ -109,7 +98,7 @@ if [ $CMAKE_INSTALL_FOUND -ne 0 ]; then
   pushd $BUILD_DIRECTORY > /dev/null
 
   echo "Configuring projects using $CMAKE_GENERATOR..."
-  cmake -G"$CMAKE_GENERATOR" -Wno-dev -Wno-deprecated --warn-uninitialized --warn-unused-vars -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION ../
+  cmake -GNinja -Wno-dev -Wno-deprecated --warn-uninitialized --warn-unused-vars -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION ../
   if [ $? -ne 0 ]; then
     echo "Failed to configure projects."
     exit -1
