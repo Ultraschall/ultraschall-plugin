@@ -25,7 +25,7 @@
 ################################################################################
 
 cmake_minimum_required(VERSION 3.12)
-project(reaper_ultraschall VERSION 4.0)
+project(reaper_ultraschall VERSION 4.1.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -53,8 +53,6 @@ elseif(UNIX)
     message(FATAL_ERROR "Failed to run uname, result: ${UNAME_RESULT}")
   endif()
 endif()
-
-include(cmake/GlobalArgs.cmake)
 
 message(STATUS "ULTRASCHALL_TARGET_SYSTEM = " ${ULTRASCHALL_TARGET_SYSTEM})
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${ULTRASCHALL_TARGET_SYSTEM}.cmake)
