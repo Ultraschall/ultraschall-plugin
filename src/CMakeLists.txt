@@ -119,47 +119,7 @@ set(COMMON_SOURCES
 )
 
 set(EXTRA_INCLUDES)
-set(EXTRA_SOURCES
-  ${LIBZ_SOURCE_PATH}/contrib/minizip/ioapi.c
-  ${LIBZ_SOURCE_PATH}/contrib/minizip/unzip.c
-)
-
-set_source_files_properties(${LIBZ_SOURCE_PATH}/contrib/minizip/ioapi.c PROPERTIES GENERATED TRUE)
-set_source_files_properties(${LIBZ_SOURCE_PATH}/contrib/minizip/unzip.c PROPERTIES GENERATED TRUE)
-
-if(NOT ${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "win32")
-  set(COCKOS_SOURCES
-    ${LIBSWELL_SOURCE_PATH}/swell.cpp
-    ${LIBSWELL_SOURCE_PATH}/swell-ini.cpp
-    ${LIBSWELL_SOURCE_PATH}/swell-wnd-generic.cpp
-    ${LIBSWELL_SOURCE_PATH}/swell-dlg-generic.cpp
-    ${LIBSWELL_SOURCE_PATH}/swell-menu-generic.cpp
-    ${LIBSWELL_SOURCE_PATH}/swell-gdi-generic.cpp
-    ${LIBSWELL_SOURCE_PATH}/swell-miscdlg-generic.cpp
-    ${LIBSWELL_SOURCE_PATH}/swell-generic-headless.cpp
-    ${LIBSWELL_SOURCE_PATH}/swell-generic-gdk.cpp
-    ${LIBSWELL_SOURCE_PATH}/swell-misc-generic.cpp
-    ${LIBSWELL_SOURCE_PATH}/swell-gdi-lice.cpp
-    ${LIBSWELL_SOURCE_PATH}/swell-kb-generic.cpp
-    ${LIBSWELL_SOURCE_PATH}/swell-modstub-generic.cpp
-    ${LIBSWELL_SOURCE_PATH}/swell-appstub-generic.cpp
-  )
-
-  set_source_files_properties(${LIBSWELL_SOURCE_PATH}/swell.cpp PROPERTIES GENERATED TRUE)
-  set_source_files_properties(${LIBSWELL_SOURCE_PATH}/swell-ini.cpp PROPERTIES GENERATED TRUE)
-  set_source_files_properties(${LIBSWELL_SOURCE_PATH}/swell-wnd-generic.cpp PROPERTIES GENERATED TRUE)
-  set_source_files_properties(${LIBSWELL_SOURCE_PATH}/swell-dlg-generic.cpp PROPERTIES GENERATED TRUE)
-  set_source_files_properties(${LIBSWELL_SOURCE_PATH}/swell-menu-generic.cpp PROPERTIES GENERATED TRUE)
-  set_source_files_properties(${LIBSWELL_SOURCE_PATH}/swell-misc-generic.cpp PROPERTIES GENERATED TRUE)
-  set_source_files_properties(${LIBSWELL_SOURCE_PATH}/swell-gdi-generic.cpp PROPERTIES GENERATED TRUE)
-  set_source_files_properties(${LIBSWELL_SOURCE_PATH}/swell-gdi-lice.cpp PROPERTIES GENERATED TRUE)
-  set_source_files_properties(${LIBSWELL_SOURCE_PATH}/swell-kb-generic.cpp PROPERTIES GENERATED TRUE)
-  set_source_files_properties(${LIBSWELL_SOURCE_PATH}/swell-miscdlg-generic.cpp PROPERTIES GENERATED TRUE)
-  set_source_files_properties(${LIBSWELL_SOURCE_PATH}/swell-modstub-generic.cpp PROPERTIES GENERATED TRUE)
-  set_source_files_properties(${LIBSWELL_SOURCE_PATH}/swell-appstub-generic.cpp PROPERTIES GENERATED TRUE)
-  set_source_files_properties(${LIBSWELL_SOURCE_PATH}/swell-generic-headless.cpp PROPERTIES GENERATED TRUE)
-  set_source_files_properties(${LIBSWELL_SOURCE_PATH}/swell-generic-gdk.cpp PROPERTIES GENERATED TRUE)
-endif()
+set(EXTRA_SOURCES ${LIBZ_SOURCE_PATH}/contrib/minizip/ioapi.c ${LIBZ_SOURCE_PATH}/contrib/minizip/unzip.c)
 
 set(PLATFORM_INCLUDES FileDialog.h Platform.h)
 set(PLATFORM_SOURCES
@@ -177,6 +137,16 @@ elseif(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "macos")
   add_compile_options(-mmacosx-version-min=10.11)
   set_source_files_properties(macos/Platform.cpp macos/FileDialog.cpp PROPERTIES COMPILE_FLAGS "-x objective-c++")
   set(EXTRA_LIBRARIES "-framework AppKit" "-framework Carbon" "-framework IOKit" "-framework Security")
+  set(COCKOS_SOURCES
+    ${LIBSWELL_SOURCE_PATH}/swell.cpp
+    ${LIBSWELL_SOURCE_PATH}/swell-ini.cpp
+    ${LIBSWELL_SOURCE_PATH}/swell-misc.mm
+    ${LIBSWELL_SOURCE_PATH}/swell-wnd.mm
+    ${LIBSWELL_SOURCE_PATH}/swell-gdi.mm
+    ${LIBSWELL_SOURCE_PATH}/swell-dlg.mm
+    ${LIBSWELL_SOURCE_PATH}/swell-kb.mm
+    ${LIBSWELL_SOURCE_PATH}/swell-menu.mm
+  )
 elseif(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "linux")
   include_directories(${LIBGTK3_INCLUDE_PATH})
   set(EXTRA_LIBRARIES ${LIBGTK3_LIBRARY_PATH})
