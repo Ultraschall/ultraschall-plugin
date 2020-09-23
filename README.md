@@ -1,1 +1,1 @@
-ULTRASCHALL Podcasting Extensions for REAPER
+Ultraschall Podcasting Extensions for REAPER
