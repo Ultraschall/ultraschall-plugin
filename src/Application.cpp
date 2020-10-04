@@ -52,7 +52,8 @@ ServiceStatus Application::Start(intptr_t handle)
     {
         handle_ = handle;
 
-        UpdateHandler::Check();
+        // TODO disable for now
+        // UpdateHandler::Check();
         status = SERVICE_SUCCESS;
     }
 
