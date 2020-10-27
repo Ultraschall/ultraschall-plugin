@@ -24,11 +24,21 @@
 #
 ################################################################################
 
-cmake_minimum_required(VERSION 3.12)
-project(reaper_ultraschall VERSION 4.1.0)
+cmake_minimum_required(VERSION 3.12...3.15)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+project(reaper_ultraschall
+  VERSION 4.1.0
+  DESCRIPTION "Podcasting extensions for REAPER"
+  LANGUAGES C CXX
+)
+
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+  set(CMAKE_CXX_EXTENSIONS OFF)
+  set(CMAKE_CXX_STANDARD 17)
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+  set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+endif()
 
 if(WIN32)
     set(ULTRASCHALL_TARGET_SYSTEM "win32")
@@ -55,7 +65,7 @@ elseif(UNIX)
 endif()
 
 message(STATUS "ULTRASCHALL_TARGET_SYSTEM = " ${ULTRASCHALL_TARGET_SYSTEM})
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${ULTRASCHALL_TARGET_SYSTEM}.cmake)
+include(cmake/${ULTRASCHALL_TARGET_SYSTEM}.cmake)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)
+add_subdirectory(src)

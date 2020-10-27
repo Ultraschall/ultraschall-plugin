@@ -34,16 +34,12 @@ BUILD_CONFIGURATION=Debug
 CMAKE_EXTRA_ARGS=""
 
 if [ "$1" = "--help" ]; then
-  echo "Usage: build.sh [ --bootstrap | --rebuild | --clean | --clean-all ]"
+  echo "Usage: build.sh [ --bootstrap | --rebuild | --clean | --cleanall ]"
   exit 0
 elif [ "$1" = "--bootstrap" ]; then
   RemoveDirectory $BUILD_DIRECTORY
   RemoveDirectory $TOOLS_DIRECTORY
   source ./bootstrap.sh
-  exit 0
-elif [ "$1" = "--clean-all" ]; then
-  RemoveDirectory $BUILD_DIRECTORY
-  RemoveDirectory $TOOLS_DIRECTORY
   exit 0
 elif [ "$1" = "--cleanall" ]; then
   RemoveDirectory $BUILD_DIRECTORY

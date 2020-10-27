@@ -152,9 +152,9 @@ fi
 CMAKE_GENERATOR="<unknown>"
 HOST_SYSTEM_TYPE=`uname`
 if [ "$HOST_SYSTEM_TYPE" = "Linux" ]; then
-  CMAKE_GENERATOR="Unix Makefiles"
+  CMAKE_GENERATOR="Ninja"
 elif [ "$HOST_SYSTEM_TYPE" = "Darwin" ]; then
-  CMAKE_GENERATOR="Xcode"
+  CMAKE_GENERATOR="Ninja"
 else
   echo "Failed to detect the host system type. Only \"Linux\" or \"Darwin\" are supported. The current host system type is \"$HOST_SYSTEM_TYPE\""
   exit -1
@@ -170,17 +170,9 @@ echo "Entering build directory..."
 pushd $BUILD_DIRECTORY > /dev/null
 
 echo "Configuring projects using $CMAKE_GENERATOR..."
-cmake -G"$CMAKE_GENERATOR" -DCMAKE_BUILD_TYPE=Debug ../
+cmake -G"$CMAKE_GENERATOR" -Wno-dev -DCMAKE_BUILD_TYPE=Debug ../
 if [ $? -ne 0 ]; then
   echo "Failed to configure projects."
-  exit -1
-fi
-echo "Done."
-
-echo "Building projects using $CMAKE_GENERATOR..."
-cmake --build . --target reaper_ultraschall --config Debug -- -j
-if [ $? -ne 0 ]; then
-  echo "Failed to build projects."
   exit -1
 fi
 echo "Done."
