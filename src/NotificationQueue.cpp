@@ -30,7 +30,10 @@ namespace ultraschall { namespace reaper {
 
 NotificationQueue::NotificationQueue() {}
 
-NotificationQueue::~NotificationQueue() {}
+NotificationQueue::~NotificationQueue()
+{
+    Clear();
+}
 
 void NotificationQueue::Add(const Notification& message)
 {
@@ -40,21 +43,25 @@ void NotificationQueue::Add(const Notification& message)
 
 void NotificationQueue::Add(const NotificationClass severity, const UnicodeString& str)
 {
+    std::lock_guard<std::recursive_mutex> lock(itemsLock_);
     Add(Notification(severity, str));
 }
 
 void NotificationQueue::Clear()
 {
+    std::lock_guard<std::recursive_mutex> lock(itemsLock_);
     items_.clear();
 }
 
 const NotificationArray& NotificationQueue::Items() const
 {
+    std::lock_guard<std::recursive_mutex> lock(itemsLock_);
     return items_;
 }
 
 size_t NotificationQueue::ItemCount() const
 {
+    std::lock_guard<std::recursive_mutex> lock(itemsLock_);
     return items_.size();
 }
 

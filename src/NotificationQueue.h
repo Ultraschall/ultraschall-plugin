@@ -1,5 +1,5 @@
-////////////////////////////////////////////////////////////////////////////////
 //
+////////////////////////////////////////////////////////////////////////////////
 // Copyright (c) The Ultraschall Project (https://ultraschall.fm)
 //
 // The MIT License (MIT)
@@ -43,14 +43,14 @@ public:
     void Clear();
 
     const NotificationArray& Items() const;
-    size_t                     ItemCount() const;
+    size_t                   ItemCount() const;
 
 private:
     NotificationQueue(const NotificationQueue&) = delete;
     NotificationQueue& operator=(const NotificationQueue&) = delete;
 
-    NotificationArray  items_;
-    std::recursive_mutex itemsLock_;
+    NotificationArray            items_;
+    mutable std::recursive_mutex itemsLock_;
 };
 
 }} // namespace ultraschall::reaper
