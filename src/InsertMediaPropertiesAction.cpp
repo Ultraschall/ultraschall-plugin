@@ -28,15 +28,16 @@
 #include <vector>
 
 #include "CustomActionFactory.h"
+#include "FileDialog.h"
 #include "FileManager.h"
 #include "ITagWriter.h"
 #include "InsertMediaPropertiesAction.h"
+#include "NotificationStore.h"
 #include "StringUtilities.h"
 #include "SystemProperties.h"
 #include "TagWriterFactory.h"
 #include "TimeUtilities.h"
-#include "FileDialog.h"
-#include "NotificationStore.h"
+
 
 namespace ultraschall { namespace reaper {
 
@@ -217,7 +218,7 @@ UnicodeString InsertMediaPropertiesAction::FindCoverImage()
     if(coverImage.empty() == true)
     {
         UnicodeStringArray       files;
-        const UnicodeStringArray extensions {".jpg", ".jpeg", ".png"};
+        const UnicodeStringArray extensions{".jpg", ".jpeg", ".png"};
         for(size_t i = 0; i < extensions.size(); i++)
         {
             files.push_back(FileManager::AppendPath(CurrentProjectDirectory(), "cover") + extensions[i]);
@@ -240,8 +241,8 @@ UnicodeStringArray InsertMediaPropertiesAction::FindMissingMediaData()
 {
     UnicodeStringArray missingMediaDataFields;
 
-    static const UnicodeStringArray mediaDataKeys = {"podcast",  "author",          "episode",
-                                                     "category", "publicationDate", "description"};
+    static const UnicodeStringArray mediaDataKeys
+        = {"podcast", "author", "episode", "category", "publicationDate", "description"};
     std::for_each(mediaDataKeys.begin(), mediaDataKeys.end(), [&](const UnicodeString& mediaDataKey) {
         const UnicodeStringDictionary::const_iterator mediaDataIterator = mediaData_.find(mediaDataKey);
         if(mediaDataIterator != mediaData_.end())

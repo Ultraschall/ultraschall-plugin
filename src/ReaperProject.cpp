@@ -27,8 +27,8 @@
 #include "ReaperProject.h"
 #include "Application.h"
 #include "FileManager.h"
-#include "NotificationStore.h"
 #include "HttpClient.h"
+#include "NotificationStore.h"
 #include "StringUtilities.h"
 
 namespace ultraschall { namespace reaper {
@@ -168,12 +168,12 @@ UnicodeStringArray ReaperProject::SanitizeNotes(const UnicodeString& source)
     return result;
 }
 
-UnicodeString ReaperProject::ProjectMetaDataKey(const UnicodeString& prefix, const UnicodeString& name) 
+UnicodeString ReaperProject::ProjectMetaDataKey(const UnicodeString& prefix, const UnicodeString& name)
 {
-  PRECONDITION_RETURN(prefix.empty() == false, UnicodeString());
-  PRECONDITION_RETURN(name.empty() == false, UnicodeString());
+    PRECONDITION_RETURN(prefix.empty() == false, UnicodeString());
+    PRECONDITION_RETURN(name.empty() == false, UnicodeString());
 
-  return prefix + ":" + name;
+    return prefix + ":" + name;
 }
 
 UnicodeStringDictionary ReaperProject::ProjectMetaData() const
@@ -183,22 +183,53 @@ UnicodeStringDictionary ReaperProject::ProjectMetaData() const
     UnicodeStringDictionary metaData;
 
     const UnicodeString prefix("ID3");
-    UnicodeString value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "TALB"));
-    metaData.insert(std::pair<UnicodeString, UnicodeString>("podcast", value));
+    UnicodeString       value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "TALB"));
+    if(value.empty() == false)
+    {
+        metaData.insert(std::pair<UnicodeString, UnicodeString>("podcast", value));
+    }
+
     value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "TPE1"));
-    metaData.insert(std::pair<UnicodeString, UnicodeString>("author", value));
+    if(value.empty() == false)
+    {
+        metaData.insert(std::pair<UnicodeString, UnicodeString>("author", value));
+    }
+
     value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "TIT2"));
-    metaData.insert(std::pair<UnicodeString, UnicodeString>("episode", value));
+    if(value.empty() == false)
+    {
+        metaData.insert(std::pair<UnicodeString, UnicodeString>("episode", value));
+    }
+
     value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "TYER"));
-    metaData.insert(std::pair<UnicodeString, UnicodeString>("publicationDate", value));
+    if(value.empty() == false)
+    {
+        metaData.insert(std::pair<UnicodeString, UnicodeString>("publicationDate", value));
+    }
+
     value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "TCON"));
-    metaData.insert(std::pair<UnicodeString, UnicodeString>("category", value));
+    if(value.empty() == false)
+    {
+        metaData.insert(std::pair<UnicodeString, UnicodeString>("category", value));
+    }
+
     value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "TLEN"));
-    metaData.insert(std::pair<UnicodeString, UnicodeString>("duration", value));
+    if(value.empty() == false)
+    {
+        metaData.insert(std::pair<UnicodeString, UnicodeString>("duration", value));
+    }
+
     value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "COMM"));
-    metaData.insert(std::pair<UnicodeString, UnicodeString>("description", value));
+    if(value.empty() == false)
+    {
+        metaData.insert(std::pair<UnicodeString, UnicodeString>("description", value));
+    }
+
     value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "APIC_FILE"));
-    metaData.insert(std::pair<UnicodeString, UnicodeString>("coverImage", value));
+    if(value.empty() == false)
+    {
+        metaData.insert(std::pair<UnicodeString, UnicodeString>("coverImage", value));
+    }
 
     return metaData;
 }
@@ -338,7 +369,7 @@ void ReaperProject::MapImagesAndUrlsToChapters(
         std::for_each(chapters.begin(), chapters.end(), [&](ChapterTag& chapter) {
             if(std::fabs(url.Position() - chapter.Position()) < POSITION_DEAD_BAND)
             {
-                //chapter.SetUrl(HttpClient::EncodeUrl(url.Uri()));
+                // chapter.SetUrl(HttpClient::EncodeUrl(url.Uri()));
                 chapter.SetUrl(url.Uri());
             }
         });
