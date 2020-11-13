@@ -109,7 +109,8 @@ endif()
 set(CURRENT_EXTERNAL_PROJECT libswell)
 # message(STATUS "${CURRENT_EXTERNAL_PROJECT}<${CMAKE_BUILD_TYPE}>: Configuring...")
 FetchContent_Declare(${CURRENT_EXTERNAL_PROJECT}
-  GIT_REPOSITORY https://github.com/justinfrankel/WDL.git
+#   GIT_REPOSITORY https://github.com/justinfrankel/WDL.git
+  GIT_REPOSITORY https://github.com/heikopanjas/WDL.git
   SOURCE_SUBDIR wdl
 )
 FetchContent_GetProperties(${CURRENT_EXTERNAL_PROJECT})
