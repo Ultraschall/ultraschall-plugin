@@ -39,10 +39,11 @@ public:
 
     static bool Exists(const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key)
     {
+        PRECONDITION_RETURN(profile.empty() == false, false);
         PRECONDITION_RETURN(section.empty() == false, false);
         PRECONDITION_RETURN(key.empty() == false, false);
 
-        return ReaperGateway::HasSystemValue(section, key);
+        return ReaperGateway::HasProfileValue(profile, section, key);
     }
 
     static void Save(
@@ -59,7 +60,7 @@ public:
         PRECONDITION(section.empty() == false);
         PRECONDITION(key.empty() == false);
 
-        ReaperGateway::ClearSystemValue(section, key);
+        ReaperGateway::ClearProfileValue(profile, section, key);
     }
 
     static void Delete(const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key)
@@ -68,7 +69,7 @@ public:
         PRECONDITION(section.empty() == false);
         PRECONDITION(key.empty() == false);
 
-        ReaperGateway::DeleteSystemValue(section, key);
+        ReaperGateway::DeleteProfileValue(profile, section, key);
     }
 
 private:
@@ -78,7 +79,7 @@ private:
         PRECONDITION_RETURN(section.empty() == false, UnicodeString());
         PRECONDITION_RETURN(key.empty() == false, UnicodeString());
 
-        return ReaperGateway::SystemValue(section, key);
+        return ReaperGateway::ProfileValue(profile, section, key);
     }
 };
 

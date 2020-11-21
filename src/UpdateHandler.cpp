@@ -34,7 +34,8 @@
 
 namespace ultraschall { namespace reaper {
 
-const UnicodeString UpdateHandler::CHECK_ENABLED_PROFILE_NAME = "ultraschall_settings.ini";
+const UnicodeString UpdateHandler::CHECK_ENABLED_PROFILE_NAME =
+    "/Users/heiko/Library/Application Support/REAPER/ultraschall-settings.ini";
 const UnicodeString UpdateHandler::CHECK_ENABLED_SECTION_NAME = "ultraschall_settings_updatecheck";
 const UnicodeString UpdateHandler::CHECK_ENABLED_VALUE_NAME   = "Value";
 
@@ -48,22 +49,26 @@ bool UpdateHandler::IsUpdateCheckRequired()
 {
     bool updateCheckRequired = false;
 
-    if(ProfileProperty<bool>::Query(
+    if(ProfileProperty<bool>::Exists(
            CHECK_ENABLED_PROFILE_NAME, CHECK_ENABLED_SECTION_NAME, CHECK_ENABLED_VALUE_NAME) == true)
     {
-        const double lastUpdateTimestamp = ReadLastUpdateTimestamp();
-        if(lastUpdateTimestamp > 0)
+        if(ProfileProperty<bool>::Query(
+               CHECK_ENABLED_PROFILE_NAME, CHECK_ENABLED_SECTION_NAME, CHECK_ENABLED_VALUE_NAME) == true)
         {
-            const double now   = QueryCurrentTimeAsSeconds();
-            const double delta = (now - lastUpdateTimestamp);
-            if(delta > ONE_DAY_IN_SECONDS) // standard timeout (24h)
+            const double lastUpdateTimestamp = ReadLastUpdateTimestamp();
+            if(lastUpdateTimestamp > 0)
+            {
+                const double now   = QueryCurrentTimeAsSeconds();
+                const double delta = (now - lastUpdateTimestamp);
+                if(delta >= ONE_DAY_IN_SECONDS) // standard timeout (24h)
+                {
+                    updateCheckRequired = true;
+                }
+            }
+            else // first run
             {
                 updateCheckRequired = true;
             }
-        }
-        else // first run
-        {
-            updateCheckRequired = true;
         }
     }
 
@@ -77,25 +82,36 @@ void UpdateHandler::Check()
     HttpClient* pClient = new HttpClient();
     if(pClient != nullptr)
     {
-        const UnicodeString url           = "https://ultraschall.io/ultraschall_prerelease.txt";
-        UnicodeString       remoteVersion = pClient->DownloadUrl(url);
-        if(remoteVersion.empty() == false)
+        bool                     downloadSucceeded = false;
+        const UnicodeStringArray urls              = DownloadServers();
+        for(size_t i = 0; (downloadSucceeded == false) && (i < urls.size()); i++)
         {
-            UnicodeStringTrim(remoteVersion);
-            if(remoteVersion > ULTRASCHALL_VERSION)
+            const UnicodeString url           = urls[i];
+            UnicodeString       remoteVersion = pClient->DownloadUrl(url);
+            if(remoteVersion.empty() == false)
             {
-                NotificationStore supervisor("ULTRASCHALL_UPDATE_CHECK");
-                UnicodeString     message = "An update for Ultraschall is available. Go to "
-                                        "https://ultraschall.fm/install to download the updated version ";
-                message += remoteVersion + ".";
-                supervisor.RegisterSuccess(message);
+                downloadSucceeded = true;
+
+                UnicodeStringTrim(remoteVersion);
+                // TODO To be honst, this comparison needs more work
+                if(remoteVersion > ULTRASCHALL_VERSION)
+                {
+                    NotificationStore supervisor("ULTRASCHALL_UPDATE_CHECK");
+                    UnicodeString     message = "An update for Ultraschall is available. Go to "
+                                            "https://ultraschall.fm/install to download the updated version ";
+                    message += remoteVersion + ".";
+                    supervisor.RegisterSuccess(message);
+                }
             }
         }
 
         SafeRelease(pClient);
 
-        const double lastUpdateTimestamp = QueryCurrentTimeAsSeconds();
-        WriteLastUpdateTimestamp(lastUpdateTimestamp);
+        if(true == downloadSucceeded)
+        {
+            const double lastUpdateTimestamp = QueryCurrentTimeAsSeconds();
+            WriteLastUpdateTimestamp(lastUpdateTimestamp);
+        }
     }
 }
 
@@ -151,7 +167,7 @@ double UpdateHandler::ReadLastUpdateTimestamp()
     }
 
     return lastUpdateTimestamp;
-}
+} // namespace reaper
 
 double UpdateHandler::QueryCurrentTimeAsSeconds()
 {
@@ -159,6 +175,13 @@ double UpdateHandler::QueryCurrentTimeAsSeconds()
     const std::chrono::duration<double>                      seconds =
         std::chrono::duration_cast<std::chrono::seconds>(currentTime.time_since_epoch());
     return seconds.count();
+}
+
+UnicodeStringArray UpdateHandler::DownloadServers()
+{
+    const UnicodeStringArray urls = {
+        "https://ultraschall.io/ultraschall_prerelease.txt", "https://ultraschall.fm/ultraschall_prerelease.txt"};
+    return urls;
 }
 
 }} // namespace ultraschall::reaper

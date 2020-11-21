@@ -46,7 +46,9 @@ private:
     static const UnicodeString LAST_CHECKPOINT_SECTION_NAME;
     static const UnicodeString LAST_CHECKPOINT_VALUE_NAME;
 
-    static const double        ONE_DAY_IN_SECONDS;
+    static const double ONE_DAY_IN_SECONDS;
+
+    static UnicodeStringArray DownloadServers();
 
     static bool   WriteLastUpdateTimestamp(const double timestamp);
     static double ReadLastUpdateTimestamp();

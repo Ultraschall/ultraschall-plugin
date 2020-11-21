@@ -52,8 +52,6 @@ set(COMMON_INCLUDES
   FileManager.h
   Globals.h
   HttpClient.h
-  HttpRequest.h
-  HttpResponse.h
   ICommand.h
   ICustomAction.h
   ID3V2.h
@@ -65,7 +63,12 @@ set(COMMON_INCLUDES
   SharedObject.h
   Malloc.h
   Picture.h
+  Profile.h
   ProfileProperties.h
+  ProfileSection.h
+  ProfileSectionDictionary.h
+  ProfileValue.h
+  ProfileValueDictionary.h
   ReaperProject.h
   ReaperEntryPoints.h
   ReaperGateway.h
@@ -94,15 +97,16 @@ set(COMMON_SOURCES
   CustomActionManager.cpp
   FileManager.cpp
   HttpClient.cpp
-  HttpRequest.cpp
-  HttpResponse.cpp
   ID3V2.cpp
   ID3V2Context.cpp
   ID3V2Writer.cpp
   InsertChapterMarkersAction.cpp
   InsertMediaPropertiesAction.cpp
   Picture.cpp
+  Profile.cpp
   ProfileProperties.cpp
+  ProfileSection.cpp
+  ProfileValue.cpp
   ReaperProject.cpp
   ReaperEntryPoints.cpp
   ReaperGateway.cpp

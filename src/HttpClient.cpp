@@ -31,8 +31,6 @@
 #include <curl/easy.h>
 
 #include "HttpClient.h"
-#include "HttpRequest.h"
-#include "HttpResponse.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -50,42 +48,27 @@ HttpClient::~HttpClient()
 UnicodeString HttpClient::DownloadUrl(const UnicodeString& url)
 {
     PRECONDITION_RETURN(handle_ != nullptr, UnicodeString());
-    PRECONDITION_RETURN(url.empty(), UnicodeString());
+    PRECONDITION_RETURN(url.empty() == false, UnicodeString());
 
     UnicodeString result;
 
-    const UnicodeString encodedUrl = EncodeUrl(url);
-    if(encodedUrl.empty() == false)
+    curl_easy_setopt(handle_, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(handle_, CURLOPT_FOLLOWLOCATION, 1L);
+    curl_easy_setopt(handle_, CURLOPT_NOSIGNAL, 1);
+    curl_easy_setopt(handle_, CURLOPT_ACCEPT_ENCODING, "deflate");
+    curl_easy_setopt(handle_, CURLOPT_WRITEFUNCTION, ReceiveDataHandler);
+
+    SequentialStream* pStream = new SequentialStream();
+    if(pStream != nullptr)
     {
-        HttpRequest* pRequest = HttpRequest::Create(HttpRequestType::GET, encodedUrl);
-        if(pRequest != nullptr)
+        curl_easy_setopt(handle_, CURLOPT_WRITEDATA, pStream);
+        const CURLcode curlResult = curl_easy_perform(handle_);
+        if(CURLE_OK == curlResult)
         {
-            curl_easy_setopt(handle_, CURLOPT_URL, pRequest->Url().c_str());
-            curl_easy_setopt(handle_, CURLOPT_FOLLOWLOCATION, 1L);
-            curl_easy_setopt(handle_, CURLOPT_NOSIGNAL, 1);
-            curl_easy_setopt(handle_, CURLOPT_ACCEPT_ENCODING, "deflate");
-            curl_easy_setopt(handle_, CURLOPT_WRITEFUNCTION, ReceiveDataHandler);
-
-            SequentialStream* pStream = new SequentialStream();
-            if(pStream != nullptr)
-            {
-                curl_easy_setopt(handle_, CURLOPT_WRITEDATA, pStream);
-                const CURLcode curlResult = curl_easy_perform(handle_);
-                if(CURLE_OK == curlResult)
-                {
-                    HttpResponse* pResponse = HttpResponse::Create(HttpResultCode::SUCCESS, pStream);
-                    if(pResponse != nullptr)
-                    {
-                        result = StreamToString(pResponse->Result());
-                        SafeRelease(pResponse);
-                    }
-                }
-
-                SafeRelease(pStream);
-            }
-
-            SafeRelease(pRequest);
+            result = StreamToString(pStream);
         }
+
+        SafeRelease(pStream);
     }
 
     return result;
@@ -106,7 +89,6 @@ size_t HttpClient::ReceiveDataHandler(void* pData, size_t dataSize, size_t itemS
         {
             result = dataSize * itemSize;
         }
-
     }
 
     return result;
