@@ -24,8 +24,6 @@
 #
 ################################################################################
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated ")
-
 set(REAPER_INCLUDE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../include/reaper)
 
 add_definitions(-DWDL_NO_DEFINE_MINMAX)
