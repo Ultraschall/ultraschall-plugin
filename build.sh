@@ -94,7 +94,7 @@ if [ $CMAKE_INSTALL_FOUND -ne 0 ]; then
   pushd $BUILD_DIRECTORY > /dev/null
 
   echo "Configuring projects using $CMAKE_GENERATOR..."
-  cmake -GNinja -Wno-dev -Wno-deprecated --warn-uninitialized --warn-unused-vars -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION ../
+  cmake -GNinja -Wno-dev -Wno-deprecated --warn-uninitialized --warn-unused-vars -DCMAKE_WARN_DEPRECATED=OFF -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION ../
   if [ $? -ne 0 ]; then
     echo "Failed to configure projects."
     exit -1
