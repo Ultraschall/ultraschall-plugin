@@ -27,18 +27,18 @@
 #include "Application.h"
 #include "FileManager.h"
 #include "StringUtilities.h"
-#include "Platform.h"
+#include "PlatformGateway.h"
 
 namespace ultraschall { namespace reaper {
 
 UnicodeChar FileManager::PathSeparator()
 {
-    return Platform::QueryPathSeparator();
+    return PlatformGateway::QueryPathSeparator();
 }
 
 UnicodeString FileManager::AppendPath(const UnicodeString& prefix, const UnicodeString& appendix)
 {
-    return prefix + Platform::QueryPathSeparator() + appendix;
+    return prefix + PlatformGateway::QueryPathSeparator() + appendix;
 }
 
 UnicodeString FileManager::StripPath(const UnicodeString& path)
@@ -105,7 +105,7 @@ UnicodeString FileManager::QueryFileDirectory(const UnicodeString& filename)
 
     UnicodeString directory = ".";
 
-    size_t offset = filename.find_last_of(Platform::QueryPathSeparator());
+    size_t offset = filename.find_last_of(PlatformGateway::QueryPathSeparator());
     if(offset != std::string::npos)
     {
         directory = filename.substr(0, offset);
@@ -147,8 +147,8 @@ FileManager::FILE_TYPE FileManager::QueryFileType(const UnicodeString& filename)
     const size_t        extensionOffset  = cookedTargetName.rfind(".");
     if(extensionOffset != UnicodeString::npos)
     {
-        const UnicodeString fileExtension
-            = cookedTargetName.substr(extensionOffset + 1, cookedTargetName.length() - extensionOffset);
+        const UnicodeString fileExtension =
+            cookedTargetName.substr(extensionOffset + 1, cookedTargetName.length() - extensionOffset);
         if(fileExtension.empty() == false)
         {
             if((fileExtension == "txt") || (fileExtension == "mp4chaps"))
@@ -184,7 +184,7 @@ bool FileManager::IsDiskSpaceAvailable(const UnicodeString& filename, const size
 
     bool isAvailable = false;
 
-    const size_t availableSpace = Platform::QueryAvailableDiskSpace(QueryFileDirectory(filename));
+    const size_t availableSpace = PlatformGateway::QueryAvailableDiskSpace(QueryFileDirectory(filename));
     if(availableSpace != -1)
     {
         isAvailable = (requiredBytes <= availableSpace);

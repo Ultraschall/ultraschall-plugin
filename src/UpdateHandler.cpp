@@ -25,7 +25,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Common.h"
-#include "Platform.h"
+#include "PlatformGateway.h"
 #include "StringUtilities.h"
 #include "ProfileProperties.h"
 #include "NotificationStore.h"
@@ -60,7 +60,7 @@ bool UpdateHandler::IsUpdateCheckRequired()
             {
                 const double now   = QueryCurrentTimeAsSeconds();
                 const double delta = (now - lastUpdateTimestamp);
-                if(delta >= ONE_DAY_IN_SECONDS) // standard timeout (24h)
+                if(delta >= ONE_DAY_IN_SECONDS) // default timeout (24h)
                 {
                     updateCheckRequired = true;
                 }

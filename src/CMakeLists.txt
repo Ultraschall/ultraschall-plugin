@@ -46,7 +46,6 @@ set(COMMON_INCLUDES
   CustomAction.h
   CustomActionFactory.h
   CustomActionManager.h
-  FileDialog.h
   FileManager.h
   Globals.h
   HttpClient.h
@@ -61,12 +60,7 @@ set(COMMON_INCLUDES
   SharedObject.h
   Malloc.h
   Picture.h
-  Profile.h
   ProfileProperties.h
-  ProfileSection.h
-  ProfileSectionDictionary.h
-  ProfileValue.h
-  ProfileValueDictionary.h
   ReaperProject.h
   ReaperEntryPoints.h
   ReaperGateway.h
@@ -101,10 +95,7 @@ set(COMMON_SOURCES
   InsertChapterMarkersAction.cpp
   InsertMediaPropertiesAction.cpp
   Picture.cpp
-  Profile.cpp
   ProfileProperties.cpp
-  ProfileSection.cpp
-  ProfileValue.cpp
   ReaperProject.cpp
   ReaperEntryPoints.cpp
   ReaperGateway.cpp
@@ -125,10 +116,9 @@ set(COMMON_SOURCES
 set(EXTRA_INCLUDES)
 set(EXTRA_SOURCES ${LIBZ_SOURCE_PATH}/contrib/minizip/ioapi.c ${LIBZ_SOURCE_PATH}/contrib/minizip/unzip.c)
 
-set(PLATFORM_INCLUDES FileDialog.h Platform.h)
+set(PLATFORM_INCLUDES PlatformGateway.h)
 set(PLATFORM_SOURCES
-  ${ULTRASCHALL_TARGET_SYSTEM}/FileDialog.cpp
-  ${ULTRASCHALL_TARGET_SYSTEM}/Platform.cpp
+  ${ULTRASCHALL_TARGET_SYSTEM}/PlatformGateway.cpp
 )
 
 include_directories(${CMAKE_CURRENT_LIST_DIR})
@@ -139,7 +129,7 @@ if(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "win32")
   set(EXTRA_LIBRARIES version.lib ws2_32.lib crypt32.lib wldap32.lib mfplat.lib mf.lib mfuuid.lib shlwapi.lib comctl32.lib comdlg32.lib rpcrt4.lib)
 elseif(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "macos")
   add_compile_options(-mmacosx-version-min=10.11)
-  set_source_files_properties(macos/Platform.cpp macos/FileDialog.cpp PROPERTIES COMPILE_FLAGS "-x objective-c++")
+  set_source_files_properties(macos/PlatformGateway.cpp PROPERTIES COMPILE_FLAGS "-x objective-c++")
   set(EXTRA_LIBRARIES "-framework AppKit" "-framework Carbon" "-framework IOKit" "-framework Security")
   set(COCKOS_SOURCES
     ${LIBSWELL_SOURCE_PATH}/swell.cpp

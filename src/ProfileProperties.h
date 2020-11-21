@@ -28,6 +28,8 @@
 #define __ULTRASCHALL_REAPER_PROFILE_PROPERTIES_H_INCL__
 
 #include "Common.h"
+#include "FileManager.h"
+#include "PlatformGateway.h"
 #include "ReaperGateway.h"
 
 namespace ultraschall { namespace reaper {
@@ -43,7 +45,8 @@ public:
         PRECONDITION_RETURN(section.empty() == false, false);
         PRECONDITION_RETURN(key.empty() == false, false);
 
-        return ReaperGateway::HasProfileValue(profile, section, key);
+        UnicodeString profilePath = FileManager::AppendPath(PlatformGateway::QueryReaperProfilePath(), profile);
+        return ReaperGateway::HasProfileValue(profilePath, section, key);
     }
 
     static void Save(
@@ -60,7 +63,8 @@ public:
         PRECONDITION(section.empty() == false);
         PRECONDITION(key.empty() == false);
 
-        ReaperGateway::ClearProfileValue(profile, section, key);
+        UnicodeString profilePath = FileManager::AppendPath(PlatformGateway::QueryReaperProfilePath(), profile);
+        ReaperGateway::ClearProfileValue(profilePath, section, key);
     }
 
     static void Delete(const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key)
@@ -69,7 +73,8 @@ public:
         PRECONDITION(section.empty() == false);
         PRECONDITION(key.empty() == false);
 
-        ReaperGateway::DeleteProfileValue(profile, section, key);
+        UnicodeString profilePath = FileManager::AppendPath(PlatformGateway::QueryReaperProfilePath(), profile);
+        ReaperGateway::DeleteProfileValue(profilePath, section, key);
     }
 
 private:
@@ -79,7 +84,8 @@ private:
         PRECONDITION_RETURN(section.empty() == false, UnicodeString());
         PRECONDITION_RETURN(key.empty() == false, UnicodeString());
 
-        return ReaperGateway::ProfileValue(profile, section, key);
+        UnicodeString profilePath = FileManager::AppendPath(PlatformGateway::QueryReaperProfilePath(), profile);
+        return ReaperGateway::ProfileValue(profilePath, section, key);
     }
 };
 

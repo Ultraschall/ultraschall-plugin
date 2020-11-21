@@ -2,8 +2,6 @@
 //
 // Copyright (c) The Ultraschall Project (http://ultraschall.fm)
 //
-// The MIT License (MIT)
-//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
@@ -24,20 +22,54 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "FileDialog.h"
-#include "ReaperGateway.h"
-#include "StringUtilities.h"
+#ifdef min
+    #undef min
+#endif // #ifdef min
+#ifdef max
+    #undef max
+#endif // #ifdef max
 
 #import <AppKit/AppKit.h>
 #import <Foundation/Foundation.h>
 
+#include <sys/statvfs.h>
+
+#include "PlatformGateway.h"
+
 namespace ultraschall { namespace reaper {
 
-FileDialog::FileDialog(const UnicodeString& caption, const UnicodeString& initialDirectory, const UnicodeString& initialFile) : caption_(caption), initialDirectory_(initialDirectory), initialFile_(initialFile){}
+UnicodeString PlatformGateway::QueryReaperProfilePath()
+{
+    UnicodeString directory;
 
-FileDialog::~FileDialog() {}
+    NSString* userHomeDirectory = NSHomeDirectory();
+    directory                   = [userHomeDirectory UTF8String];
 
-UnicodeString FileDialog::SelectChaptersFile()
+    return directory + "REAPER";
+}
+
+UnicodeChar PlatformGateway::QueryPathSeparator()
+{
+    return '/';
+}
+
+size_t PlatformGateway::QueryAvailableDiskSpace(const UnicodeString& directory)
+{
+    PRECONDITION_RETURN(directory.empty() == false, -1);
+
+    size_t availableSpace = -1;
+
+    struct statvfs fsi    = {0};
+    const int      status = statvfs(directory.c_str(), &fsi);
+    if(status == 0)
+    {
+        availableSpace = fsi.f_bavail * fsi.f_frsize;
+    }
+
+    return availableSpace;
+}
+
+UnicodeString PlatformGateway::SelectChaptersFile(const UnicodeString& dialogCaption)
 {
     UnicodeString result;
 
@@ -48,11 +80,11 @@ UnicodeString FileDialog::SelectChaptersFile()
         fileDialog.canChooseDirectories    = NO;
         fileDialog.canCreateDirectories    = NO;
         fileDialog.allowsMultipleSelection = NO;
-        fileDialog.title                   = [NSString stringWithUTF8String:caption_.c_str()];
+        fileDialog.title                   = [NSString stringWithUTF8String:dialogCaption.c_str()];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        if([fileDialog runModalForTypes:[[NSArray alloc] initWithObjects:@"chapters.txt", @"mp4chaps", @"txt", nil]]
-           == NSFileHandlingPanelOKButton)
+        if([fileDialog runModalForTypes:[[NSArray alloc] initWithObjects:@"chapters.txt", @"mp4chaps", @"txt", nil]] ==
+           NSFileHandlingPanelOKButton)
 #pragma clang diagnostic pop
         {
             result = [[fileDialog URL] fileSystemRepresentation];
@@ -64,7 +96,7 @@ UnicodeString FileDialog::SelectChaptersFile()
     return result;
 }
 
-UnicodeString FileDialog::SelectAudioFile()
+UnicodeString PlatformGateway::SelectAudioFile(const UnicodeString& dialogCaption)
 {
     UnicodeString result;
 
@@ -75,7 +107,7 @@ UnicodeString FileDialog::SelectAudioFile()
         fileDialog.canChooseDirectories    = NO;
         fileDialog.canCreateDirectories    = NO;
         fileDialog.allowsMultipleSelection = NO;
-        fileDialog.title                   = [NSString stringWithUTF8String:caption_.c_str()];
+        fileDialog.title                   = [NSString stringWithUTF8String:dialogCaption.c_str()];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
         if([fileDialog runModalForTypes:[[NSArray alloc] initWithObjects:@"mp3", nil]] == NSFileHandlingPanelOKButton)
@@ -90,7 +122,7 @@ UnicodeString FileDialog::SelectAudioFile()
     return result;
 }
 
-UnicodeString FileDialog::SelectPictureFile()
+UnicodeString PlatformGateway::SelectPictureFile(const UnicodeString& dialogCaption)
 {
     UnicodeString result;
 
@@ -101,11 +133,11 @@ UnicodeString FileDialog::SelectPictureFile()
         fileDialog.canChooseDirectories    = NO;
         fileDialog.canCreateDirectories    = NO;
         fileDialog.allowsMultipleSelection = NO;
-        fileDialog.title                   = [NSString stringWithUTF8String:caption_.c_str()];
+        fileDialog.title                   = [NSString stringWithUTF8String:dialogCaption.c_str()];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        if([fileDialog runModalForTypes:[[NSArray alloc] initWithObjects:@"png", @"jpg", @"jpeg", nil]]
-           == NSFileHandlingPanelOKButton)
+        if([fileDialog runModalForTypes:[[NSArray alloc] initWithObjects:@"png", @"jpg", @"jpeg", nil]] ==
+           NSFileHandlingPanelOKButton)
 #pragma clang diagnostic pop
         {
             result = [[fileDialog URL] fileSystemRepresentation];
@@ -117,7 +149,8 @@ UnicodeString FileDialog::SelectPictureFile()
     return result;
 }
 
-UnicodeString FileDialog::ChooseChaptersFileName()
+UnicodeString PlatformGateway::SelectChaptersFileName(
+    const UnicodeString& dialogCaption, const UnicodeString& initialDirectory, const UnicodeString& initialFile)
 {
     UnicodeString result;
 
@@ -127,24 +160,23 @@ UnicodeString FileDialog::ChooseChaptersFileName()
         fileDialog.allowedFileTypes     = [[NSArray alloc] initWithObjects:@"chapters.txt", @"mp4chaps", @"txt", nil];
         fileDialog.allowsOtherFileTypes = NO;
         fileDialog.canCreateDirectories = YES;
-        fileDialog.title                = [NSString stringWithUTF8String:caption_.c_str()];
-       
-        NSString* initialDirectory = nil;
-        if(initialDirectory_.empty() == false)
+        fileDialog.title                = [NSString stringWithUTF8String:dialogCaption.c_str()];
+
+        NSString* initialDirectoryParam = nil;
+        if(initialDirectory.empty() == false)
         {
-            initialDirectory = [NSString stringWithUTF8String:initialDirectory_.c_str()];
+            initialDirectoryParam = [NSString stringWithUTF8String:initialDirectory.c_str()];
         }
-        
-        NSString* initialFile = nil;
-        if(initialFile_.empty() == false)
+
+        NSString* initialFileParam = nil;
+        if(initialFile.empty() == false)
         {
-            initialFile = [NSString stringWithUTF8String:initialFile_.c_str()];
+            initialFileParam = [NSString stringWithUTF8String:initialFile.c_str()];
         }
-        
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-//        if([fileDialog runModal] == NSFileHandlingPanelOKButton)
-        if([fileDialog runModalForDirectory:initialDirectory file:initialFile] == NSFileHandlingPanelOKButton)
+        if([fileDialog runModalForDirectory:initialDirectoryParam file:initialFileParam] == NSFileHandlingPanelOKButton)
 #pragma clang diagnostic pop
         {
             result = [[fileDialog URL] fileSystemRepresentation];

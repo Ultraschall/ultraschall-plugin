@@ -24,16 +24,38 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_PROFILE_SECTION_DICTIONARY_H_INCL__
-#define __ULTRASCHALL_REAPER_PROFILE_SECTION_DICTIONARY_H_INCL__
+#ifndef __ULTRASCHALL_REAPER_PLATFORM_H_INCL__
+#define __ULTRASCHALL_REAPER_PLATFORM_H_INCL__
 
 #include "Common.h"
-#include "ProfileSection.h"
+
+#ifdef _MSC_VER
+    #define FastByteSwap16(x) _byteswap_ushort(x)
+    #define FastByteSwap32(x) _byteswap_ulong(x)
+    #define FastByteSwap64(x) _byteswap_uint64(x)
+#else
+    #define FastByteSwap16(x) __builtin_bswap16(x)
+    #define FastByteSwap32(x) __builtin_bswap32(x)
+    #define FastByteSwap64(x) __builtin_bswap64(x)
+#endif // #ifdef _MSC_VER
 
 namespace ultraschall { namespace reaper {
 
-typedef std::map<UnicodeString, ProfileSection> ProfileSectionDictionary;
+class PlatformGateway
+{
+public:
+    static UnicodeString QueryReaperProfilePath();
+
+    static UnicodeChar QueryPathSeparator();
+    static size_t      QueryAvailableDiskSpace(const UnicodeString& directory);
+
+    static UnicodeString SelectChaptersFileName(
+        const UnicodeString& dialogCaption, const UnicodeString& initialDirectory, const UnicodeString& initialFile);
+    static UnicodeString SelectChaptersFile(const UnicodeString& dialogCaption);
+    static UnicodeString SelectAudioFile(const UnicodeString& dialogCaption);
+    static UnicodeString SelectPictureFile(const UnicodeString& dialogCaption);
+};
 
 }} // namespace ultraschall::reaper
 
-#endif // #ifndef __ULTRASCHALL_REAPER_PROFILE_SECTION_DICTIONARY_H_INCL__
+#endif // #ifndef __ULTRASCHALL_REAPER_PLATFORM_H_INCL__

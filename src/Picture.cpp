@@ -26,7 +26,7 @@
 
 #include "Picture.h"
 #include "FileManager.h"
-#include "Platform.h"
+#include "PlatformGateway.h"
 
 namespace ultraschall { namespace reaper {
 

@@ -28,7 +28,7 @@
 #include "CustomActionFactory.h"
 #include "StringUtilities.h"
 #include "FileManager.h"
-#include "FileDialog.h"
+#include "PlatformGateway.h"
 #include "NotificationStore.h"
 
 namespace ultraschall { namespace reaper {
@@ -43,7 +43,7 @@ ServiceStatus SaveChapterMarkersAction::Execute()
     PRECONDITION_RETURN(ConfigureSources() == true, SERVICE_FAILURE);
     PRECONDITION_RETURN(AreChapterMarkersValid(chapterMarkers_) == true, SERVICE_FAILURE);
 
-    ServiceStatus       status = SERVICE_FAILURE;
+    ServiceStatus     status = SERVICE_FAILURE;
     NotificationStore supervisor(UniqueId());
 
     std::ostringstream os;
@@ -60,21 +60,21 @@ ServiceStatus SaveChapterMarkersAction::Execute()
     }
     else
     {
-      supervisor.RegisterError("Failed to export chapter markers.");
+        supervisor.RegisterError("Failed to export chapter markers.");
     }
-      
+
     return status;
 }
 
 bool SaveChapterMarkersAction::ConfigureTargets()
 {
-    bool                result = false;
+    bool              result = false;
     NotificationStore supervisor(UniqueId());
 
     target_.clear();
 
-    FileDialog fileDialog("Export chapter markers", CurrentProjectDirectory(), CurrentProjectName());
-    target_ = fileDialog.ChooseChaptersFileName();
+    target_ = PlatformGateway::SelectChaptersFileName(
+        "Export chapter markers", CurrentProjectDirectory(), CurrentProjectName());
     if(target_.empty() == false)
     {
         result = true;
@@ -90,7 +90,7 @@ bool SaveChapterMarkersAction::ConfigureTargets()
 
 bool SaveChapterMarkersAction::ConfigureSources()
 {
-    bool                result = false;
+    bool              result = false;
     NotificationStore supervisor(UniqueId());
 
     ReaperProject currentProject = ReaperProject::Current();

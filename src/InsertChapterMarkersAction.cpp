@@ -28,7 +28,7 @@
 #include "CustomActionFactory.h"
 #include "FileManager.h"
 #include "StringUtilities.h"
-#include "FileDialog.h"
+#include "PlatformGateway.h"
 #include "NotificationStore.h"
 
 namespace ultraschall { namespace reaper {
@@ -104,8 +104,7 @@ bool InsertChapterMarkersAction::ConfigureSources()
 {
     source_.clear();
 
-    FileDialog fileDialog("Import chapter markers");
-    source_ = fileDialog.SelectChaptersFile();
+    source_ = PlatformGateway::SelectChaptersFile("Import chapter markers");
     return source_.empty() == false;
 }
 
