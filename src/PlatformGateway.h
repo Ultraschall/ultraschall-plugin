@@ -24,8 +24,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_PLATFORM_H_INCL__
-#define __ULTRASCHALL_REAPER_PLATFORM_H_INCL__
+#ifndef __ULTRASCHALL_REAPER_PLATFORM_GATEWAY_H_INCL__
+#define __ULTRASCHALL_REAPER_PLATFORM_GATEWAY_H_INCL__
 
 #include "Common.h"
 
@@ -58,4 +58,4 @@ public:
 
 }} // namespace ultraschall::reaper
 
-#endif // #ifndef __ULTRASCHALL_REAPER_PLATFORM_H_INCL__
+#endif // #ifndef __ULTRASCHALL_REAPER_PLATFORM_GATEWAY_H_INCL__
