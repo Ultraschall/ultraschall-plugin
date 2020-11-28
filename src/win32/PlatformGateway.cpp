@@ -24,22 +24,34 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-    #define WIN32_LEAN_AND_MEAN
-    #define NOMINMAX
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
 
-    #include <windows.h>
-    #include <shtypes.h>
+#include <windows.h>
+#include <shtypes.h>
 #include <shobjidl_core.h>
+#include <shlobj_core.h>
 
-    #include "PlatformGateway.h"
+#include "PlatformGateway.h"
 #include "ReaperGateway.h"
-    #include "StringUtilities.h"
+#include "StringUtilities.h"
 
 namespace ultraschall { namespace reaper {
 
 UnicodeString PlatformGateway::QueryReaperProfilePath()
 {
-    return "";
+    UnicodeString directory;
+
+    WideUnicodeChar* unicodeString = nullptr;
+    const HRESULT    hr            = SHGetKnownFolderPath(FOLDERID_RoamingAppData, 0, nullptr, (PWSTR*)&unicodeString);
+    if(SUCCEEDED(hr))
+    {
+        directory = WU2U(unicodeString);
+        CoTaskMemFree(unicodeString);
+        unicodeString = nullptr;
+    }
+
+    return directory;
 }
 
 UnicodeChar PlatformGateway::QueryPathSeparator()
@@ -328,4 +340,3 @@ UnicodeString PlatformGateway::SelectChaptersFileName(
 }
 
 }} // namespace ultraschall::reaper
-
