@@ -28,9 +28,7 @@
 #define NOMINMAX
 
 #include <windows.h>
-#include <shtypes.h>
-#include <shobjidl_core.h>
-#include <shlobj_core.h>
+#include <shlobj.h>
 
 #include "PlatformGateway.h"
 #include "ReaperGateway.h"
