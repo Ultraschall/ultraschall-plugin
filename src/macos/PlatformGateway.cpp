@@ -23,10 +23,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifdef min
-    #undef min
+#undef min
 #endif // #ifdef min
 #ifdef max
-    #undef max
+#undef max
 #endif // #ifdef max
 
 #import <AppKit/AppKit.h>
@@ -69,7 +69,8 @@ size_t PlatformGateway::QueryAvailableDiskSpace(const UnicodeString& directory)
     return availableSpace;
 }
 
-UnicodeString PlatformGateway::SelectChaptersFile(const UnicodeString& dialogCaption)
+UnicodeString PlatformGateway::SelectChaptersFile(
+    const UnicodeString& dialogCaption, const UnicodeString&, const UnicodeString&)
 {
     UnicodeString result;
 
@@ -83,8 +84,8 @@ UnicodeString PlatformGateway::SelectChaptersFile(const UnicodeString& dialogCap
         fileDialog.title                   = [NSString stringWithUTF8String:dialogCaption.c_str()];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        if([fileDialog runModalForTypes:[[NSArray alloc] initWithObjects:@"chapters.txt", @"mp4chaps", @"txt", nil]] ==
-           NSFileHandlingPanelOKButton)
+        if([fileDialog runModalForTypes:[[NSArray alloc] initWithObjects:@"chapters.txt", @"mp4chaps", @"txt", nil]]
+           == NSFileHandlingPanelOKButton)
 #pragma clang diagnostic pop
         {
             result = [[fileDialog URL] fileSystemRepresentation];
@@ -96,7 +97,8 @@ UnicodeString PlatformGateway::SelectChaptersFile(const UnicodeString& dialogCap
     return result;
 }
 
-UnicodeString PlatformGateway::SelectAudioFile(const UnicodeString& dialogCaption)
+UnicodeString PlatformGateway::SelectAudioFile(
+    const UnicodeString& dialogCaption, const UnicodeString&, const UnicodeString&)
 {
     UnicodeString result;
 
@@ -122,7 +124,8 @@ UnicodeString PlatformGateway::SelectAudioFile(const UnicodeString& dialogCaptio
     return result;
 }
 
-UnicodeString PlatformGateway::SelectPictureFile(const UnicodeString& dialogCaption)
+UnicodeString PlatformGateway::SelectPictureFile(
+    const UnicodeString& dialogCaption, const UnicodeString&, const UnicodeString&)
 {
     UnicodeString result;
 
@@ -136,8 +139,8 @@ UnicodeString PlatformGateway::SelectPictureFile(const UnicodeString& dialogCapt
         fileDialog.title                   = [NSString stringWithUTF8String:dialogCaption.c_str()];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        if([fileDialog runModalForTypes:[[NSArray alloc] initWithObjects:@"png", @"jpg", @"jpeg", nil]] ==
-           NSFileHandlingPanelOKButton)
+        if([fileDialog runModalForTypes:[[NSArray alloc] initWithObjects:@"png", @"jpg", @"jpeg", nil]]
+           == NSFileHandlingPanelOKButton)
 #pragma clang diagnostic pop
         {
             result = [[fileDialog URL] fileSystemRepresentation];

@@ -24,8 +24,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifdef _WIN32
-
     #define WIN32_LEAN_AND_MEAN
     #define NOMINMAX
 
@@ -64,7 +62,7 @@ size_t PlatformGateway::QueryAvailableDiskSpace(const UnicodeString& directory)
 }
 
 UnicodeString PlatformGateway::SelectChaptersFile(
-    const UnicodeString& dialogCaption)
+    const UnicodeString& dialogCaption, const UnicodeString&, const UnicodeString&)
 {
     static const UnicodeString fileExtensions = "MP4 chapters|*.chapters.txt|All files|*.*";
     WideUnicodeString          result;
@@ -125,7 +123,8 @@ UnicodeString PlatformGateway::SelectChaptersFile(
     return WU2U(result);
 }
 
-UnicodeString PlatformGateway::SelectAudioFile(const UnicodeString& dialogCaption)
+UnicodeString PlatformGateway::SelectAudioFile(
+    const UnicodeString& dialogCaption, const UnicodeString&, const UnicodeString&)
 {
     static const UnicodeString fileExtensions = "MP3 file|*.mp3|All files|*.*";
     WideUnicodeString          result;
@@ -186,7 +185,8 @@ UnicodeString PlatformGateway::SelectAudioFile(const UnicodeString& dialogCaptio
     return WU2U(result);
 }
 
-UnicodeString PlatformGateway::SelectPictureFile(const UnicodeString& dialogCaption)
+UnicodeString PlatformGateway::SelectPictureFile(
+    const UnicodeString& dialogCaption, const UnicodeString&, const UnicodeString&)
 {
     static const UnicodeString fileExtensions = "JPG file|*.jpg|PNG file|*.png|All files|*.*";
     WideUnicodeString          result;
@@ -329,4 +329,3 @@ UnicodeString PlatformGateway::SelectChaptersFileName(
 
 }} // namespace ultraschall::reaper
 
-#endif // #ifdef _WIN32

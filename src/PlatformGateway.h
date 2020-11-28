@@ -30,13 +30,13 @@
 #include "Common.h"
 
 #ifdef _MSC_VER
-    #define FastByteSwap16(x) _byteswap_ushort(x)
-    #define FastByteSwap32(x) _byteswap_ulong(x)
-    #define FastByteSwap64(x) _byteswap_uint64(x)
+#define FastByteSwap16(x) _byteswap_ushort(x)
+#define FastByteSwap32(x) _byteswap_ulong(x)
+#define FastByteSwap64(x) _byteswap_uint64(x)
 #else
-    #define FastByteSwap16(x) __builtin_bswap16(x)
-    #define FastByteSwap32(x) __builtin_bswap32(x)
-    #define FastByteSwap64(x) __builtin_bswap64(x)
+#define FastByteSwap16(x) __builtin_bswap16(x)
+#define FastByteSwap32(x) __builtin_bswap32(x)
+#define FastByteSwap64(x) __builtin_bswap64(x)
 #endif // #ifdef _MSC_VER
 
 namespace ultraschall { namespace reaper {
@@ -49,11 +49,18 @@ public:
     static UnicodeChar QueryPathSeparator();
     static size_t      QueryAvailableDiskSpace(const UnicodeString& directory);
 
+    static UnicodeString SelectChaptersFile(
+        const UnicodeString& dialogCaption, const UnicodeString& initialDirectory = "",
+        const UnicodeString& initialFile = "");
+    static UnicodeString SelectAudioFile(
+        const UnicodeString& dialogCaption, const UnicodeString& initialDirectory = "",
+        const UnicodeString& initialFile = "");
+    static UnicodeString SelectPictureFile(
+        const UnicodeString& dialogCaption, const UnicodeString& initialDirectory = "",
+        const UnicodeString& initialFile = "");
+
     static UnicodeString SelectChaptersFileName(
         const UnicodeString& dialogCaption, const UnicodeString& initialDirectory, const UnicodeString& initialFile);
-    static UnicodeString SelectChaptersFile(const UnicodeString& dialogCaption);
-    static UnicodeString SelectAudioFile(const UnicodeString& dialogCaption);
-    static UnicodeString SelectPictureFile(const UnicodeString& dialogCaption);
 };
 
 }} // namespace ultraschall::reaper
