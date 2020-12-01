@@ -25,11 +25,11 @@
 ################################################################################
 
 include(FetchContent)
+if(${CMAKE_VERSION} VERSION_LESS 3.14)
+    include(cmake/add_FetchContent_MakeAvailable.cmake)
+endif()
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "$ENV{HOME}/.config/REAPER/UserPlugins")
-set(CMAKE_POSITION_INDEPENDENT_CODE ON  CACHE INTERNAL  "")
-set(BUILD_SHARED_LIBS               OFF CACHE INTERNAL "")
-set(CMAKE_WARN_DEPRECATED           OFF CACHE INTERNAL "")
 
 # configure zlib
 set(CURRENT_EXTERNAL_PROJECT libz)

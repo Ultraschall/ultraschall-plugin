@@ -24,6 +24,9 @@
 #
 ################################################################################
 
+add_compile_options(-Wno-deprecated-declarations)
+add_compile_options(-Wno-delete-abstract-non-virtual-dtor)
+
 include(FetchContent)
 if(${CMAKE_VERSION} VERSION_LESS 3.14)
     include(cmake/add_FetchContent_MakeAvailable.cmake)
@@ -31,8 +34,6 @@ endif()
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "$ENV{HOME}/Library/Application\ Support/REAPER/UserPlugins")
 # set(CMAKE_OSX_DEPLOYMENT_TARGET 10.11 CACHE INTERNAL "")
-set(BUILD_SHARED_LIBS     OFF CACHE INTERNAL "")
-set(CMAKE_WARN_DEPRECATED OFF CACHE INTERNAL "")
 set(CMAKE_OSX_ARCHITECTURES arm64 x86_64)
 
 # configure zlib
@@ -67,15 +68,18 @@ if(NOT ${CURRENT_EXTERNAL_PROJECT}_POPULATED)
     set(LIBCURL_LIBRARY_PATH ${${CURRENT_EXTERNAL_PROJECT}_BINARY_DIR}/lib/libcurl.a)
   endif()
   set(BUILD_CURL_EXE      OFF CACHE INTERNAL "")
-  set(HTTP_ONLY           ON  CACHE INTERNAL "")
-  set(ENABLE_IPV6         ON  CACHE INTERNAL "")
-  set(BUILD_TESTING       OFF CACHE INTERNAL "")
   set(BUILD_BINDINGS      OFF CACHE INTERNAL "")
-  set(CMAKE_USE_WINSSL    OFF CACHE INTERNAL "")
+  set(BUILD_TESTING       OFF CACHE INTERNAL "")
   set(CMAKE_USE_DARWINSSL ON  CACHE INTERNAL "")
-  set(CMAKE_USE_OPENSSL   OFF CACHE INTERNAL "")
   set(CMAKE_USE_LIBSSH2   OFF CACHE INTERNAL "")
+  set(CMAKE_USE_OPENSSL   OFF CACHE INTERNAL "")
+  set(CMAKE_USE_WINSSL    OFF CACHE INTERNAL "")
   set(CURL_CA_PATH        none CACHE INTERNAL "")
+  set(CURL_DISABLE_LDAP   ON  CACHE INTERNAL "")
+  set(CURL_DISABLE_LDAPS  ON  CACHE INTERNAL "")
+  set(ENABLE_IPV6         ON  CACHE INTERNAL "")
+  set(ENABLE_MANUAL       OFF CACHE INTERNAL "")
+  set(HTTP_ONLY           ON  CACHE INTERNAL "")
   add_subdirectory(${${CURRENT_EXTERNAL_PROJECT}_SOURCE_DIR} ${${CURRENT_EXTERNAL_PROJECT}_BINARY_DIR})
 endif()
 

@@ -25,12 +25,11 @@
 ################################################################################
 
 include(FetchContent)
+if(${CMAKE_VERSION} VERSION_LESS 3.14)
+    include(cmake/add_FetchContent_MakeAvailable.cmake)
+endif()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "$ENV{USERPROFILE}/AppData/Roaming/REAPER/UserPlugins")
-set(BUILD_SHARED_LIBS     OFF CACHE INTERNAL "")
-set(CMAKE_WARN_DEPRECATED OFF CACHE INTERNAL "")
-
-# configure zlib
 
 set(CURRENT_EXTERNAL_PROJECT libz)
 message(STATUS "${CURRENT_EXTERNAL_PROJECT}<${CMAKE_BUILD_TYPE}>: Configuring...")
