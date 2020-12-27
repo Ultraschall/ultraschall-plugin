@@ -25,11 +25,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "ReaperGateway.h"
+#include "PlatformGateway.h"
 #include "FileManager.h"
 #include "ReaperEntryPoints.h"
 #include "StringUtilities.h"
 
 namespace ultraschall { namespace reaper {
+
+UnicodeString ReaperGateway::fullProfilePath_ = "";
 
 intptr_t ReaperGateway::View()
 {
@@ -487,10 +490,11 @@ UnicodeString ReaperGateway::ProfileValue(
     PRECONDITION_RETURN(section.empty() == false, UnicodeString());
     PRECONDITION_RETURN(key.empty() == false, UnicodeString());
 
-    UnicodeChar buffer[MAX_REAPER_STRING_BUFFER_SIZE] = {0};
-    uint32_t    bufferSize                            = MAX_REAPER_STRING_BUFFER_SIZE;
-    uint32_t    result =
-        GetPrivateProfileString(U2H(section).c_str(), U2H(key).c_str(), 0, buffer, bufferSize, U2H(profile).c_str());
+    const UnicodeString fullProfilePath                       = FullProfilePath(profile);
+    UnicodeChar         buffer[MAX_REAPER_STRING_BUFFER_SIZE] = {0};
+    uint32_t            bufferSize                            = MAX_REAPER_STRING_BUFFER_SIZE;
+    uint32_t            result                                = GetPrivateProfileString(
+        U2H(section).c_str(), U2H(key).c_str(), 0, buffer, bufferSize, U2H(fullProfilePath).c_str());
     if(result > 0)
     {
         value = H2U(buffer);
@@ -513,7 +517,9 @@ bool ReaperGateway::SaveProfileValue(
     PRECONDITION_RETURN(key.empty() == false, false);
     PRECONDITION_RETURN(value.empty() == false, false);
 
-    return WritePrivateProfileString(U2H(section).c_str(), U2H(key).c_str(), U2H(value).c_str(), U2H(profile).c_str());
+    const UnicodeString fullProfilePath = FullProfilePath(profile);
+    return WritePrivateProfileString(
+        U2H(section).c_str(), U2H(key).c_str(), U2H(value).c_str(), U2H(fullProfilePath).c_str());
 }
 
 void ReaperGateway::ClearProfileValue(
@@ -645,6 +651,16 @@ UnicodeString ReaperGateway::ProjectMetaData(ProjectReference projectReference, 
     }
 
     return data;
+}
+
+UnicodeString ReaperGateway::FullProfilePath(const UnicodeString& profile)
+{
+    if(fullProfilePath_.empty() == true)
+    {
+        fullProfilePath_ = PlatformGateway::QueryReaperProfilePath();
+    }
+
+    return FileManager::AppendPath(fullProfilePath_, profile);
 }
 
 }} // namespace ultraschall::reaper

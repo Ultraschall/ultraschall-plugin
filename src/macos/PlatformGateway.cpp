@@ -23,10 +23,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifdef min
-#undef min
+    #undef min
 #endif // #ifdef min
 #ifdef max
-#undef max
+    #undef max
 #endif // #ifdef max
 
 #import <AppKit/AppKit.h>
@@ -44,8 +44,7 @@ UnicodeString PlatformGateway::QueryReaperProfilePath()
 
     NSString* userHomeDirectory = NSHomeDirectory();
     directory                   = [userHomeDirectory UTF8String];
-
-    return directory + "REAPER";
+    return directory + "/Library/Application Support/REAPER";
 }
 
 UnicodeChar PlatformGateway::QueryPathSeparator()
@@ -84,8 +83,8 @@ UnicodeString PlatformGateway::SelectChaptersFile(
         fileDialog.title                   = [NSString stringWithUTF8String:dialogCaption.c_str()];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        if([fileDialog runModalForTypes:[[NSArray alloc] initWithObjects:@"chapters.txt", @"mp4chaps", @"txt", nil]]
-           == NSFileHandlingPanelOKButton)
+        if([fileDialog runModalForTypes:[[NSArray alloc] initWithObjects:@"chapters.txt", @"mp4chaps", @"txt", nil]] ==
+           NSFileHandlingPanelOKButton)
 #pragma clang diagnostic pop
         {
             result = [[fileDialog URL] fileSystemRepresentation];
@@ -139,8 +138,8 @@ UnicodeString PlatformGateway::SelectPictureFile(
         fileDialog.title                   = [NSString stringWithUTF8String:dialogCaption.c_str()];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        if([fileDialog runModalForTypes:[[NSArray alloc] initWithObjects:@"png", @"jpg", @"jpeg", nil]]
-           == NSFileHandlingPanelOKButton)
+        if([fileDialog runModalForTypes:[[NSArray alloc] initWithObjects:@"png", @"jpg", @"jpeg", nil]] ==
+           NSFileHandlingPanelOKButton)
 #pragma clang diagnostic pop
         {
             result = [[fileDialog URL] fileSystemRepresentation];

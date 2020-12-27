@@ -42,7 +42,8 @@ SequentialStream::~SequentialStream()
 
 size_t SequentialStream::DataSize() const
 {
-    return dataSize_;
+    // return dataSize_;
+    return writePosition_;
 }
 
 const uint8_t* SequentialStream::Data() const
@@ -55,10 +56,11 @@ bool SequentialStream::Write(const uint8_t* buffer, const size_t bufferSize)
     PRECONDITION_RETURN(data_ != nullptr, false);
     PRECONDITION_RETURN(buffer != nullptr, false);
     PRECONDITION_RETURN(bufferSize > 0, false);
+    PRECONDITION_RETURN(bufferSize <= DEFAULT_CHUNK_SIZE, false);
 
     bool spaceAvailable = true;
 
-    if(writePosition_ > dataSize_)
+    if((writePosition_ + bufferSize) > dataSize_)
     {
         uint8_t* pData = data_;
         data_          = new uint8_t[dataSize_ + DEFAULT_CHUNK_SIZE]();
@@ -90,6 +92,7 @@ size_t SequentialStream::Read(uint8_t* buffer, const size_t bufferSize)
     PRECONDITION_RETURN(data_ != nullptr, 0);
     PRECONDITION_RETURN(buffer != nullptr, 0);
     PRECONDITION_RETURN(bufferSize > 0, 0);
+    PRECONDITION_RETURN(readPosition_ < (writePosition_ - bufferSize), 0);
 
     size_t result = 0;
 

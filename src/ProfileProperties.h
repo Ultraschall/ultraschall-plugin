@@ -45,8 +45,7 @@ public:
         PRECONDITION_RETURN(section.empty() == false, false);
         PRECONDITION_RETURN(key.empty() == false, false);
 
-        UnicodeString profilePath = FileManager::AppendPath(PlatformGateway::QueryReaperProfilePath(), profile);
-        return ReaperGateway::HasProfileValue(profilePath, section, key);
+        return ReaperGateway::HasProfileValue(profile, section, key);
     }
 
     static void Save(
@@ -63,8 +62,7 @@ public:
         PRECONDITION(section.empty() == false);
         PRECONDITION(key.empty() == false);
 
-        UnicodeString profilePath = FileManager::AppendPath(PlatformGateway::QueryReaperProfilePath(), profile);
-        ReaperGateway::ClearProfileValue(profilePath, section, key);
+        ReaperGateway::ClearProfileValue(profile, section, key);
     }
 
     static void Delete(const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key)
@@ -73,8 +71,7 @@ public:
         PRECONDITION(section.empty() == false);
         PRECONDITION(key.empty() == false);
 
-        UnicodeString profilePath = FileManager::AppendPath(PlatformGateway::QueryReaperProfilePath(), profile);
-        ReaperGateway::DeleteProfileValue(profilePath, section, key);
+        ReaperGateway::DeleteProfileValue(profile, section, key);
     }
 
 private:
@@ -84,8 +81,7 @@ private:
         PRECONDITION_RETURN(section.empty() == false, UnicodeString());
         PRECONDITION_RETURN(key.empty() == false, UnicodeString());
 
-        UnicodeString profilePath = FileManager::AppendPath(PlatformGateway::QueryReaperProfilePath(), profile);
-        return ReaperGateway::ProfileValue(profilePath, section, key);
+        return ReaperGateway::ProfileValue(profile, section, key);
     }
 };
 

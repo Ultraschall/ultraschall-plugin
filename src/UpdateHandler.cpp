@@ -34,8 +34,7 @@
 
 namespace ultraschall { namespace reaper {
 
-const UnicodeString UpdateHandler::CHECK_ENABLED_PROFILE_NAME =
-    "/Users/heiko/Library/Application Support/REAPER/ultraschall-settings.ini";
+const UnicodeString UpdateHandler::CHECK_ENABLED_PROFILE_NAME = "ultraschall-settings.ini";
 const UnicodeString UpdateHandler::CHECK_ENABLED_SECTION_NAME = "ultraschall_settings_updatecheck";
 const UnicodeString UpdateHandler::CHECK_ENABLED_VALUE_NAME   = "Value";
 
@@ -44,6 +43,91 @@ const UnicodeString UpdateHandler::LAST_CHECKPOINT_SECTION_NAME = "update_check"
 const UnicodeString UpdateHandler::LAST_CHECKPOINT_VALUE_NAME   = "last_checkpoint";
 
 const double UpdateHandler::ONE_DAY_IN_SECONDS = 60.0 * 60.0 * 24.0;
+
+VERSION_TUPLE VERSION_TUPLE::ParseString(const UnicodeString& versionString)
+{
+    PRECONDITION_RETURN(versionString.size() >= 3, VERSION_TUPLE()); // must be at least "x.y"
+
+    VERSION_TUPLE result;
+
+    bool                     isValid = false;
+    const UnicodeStringArray tokens  = UnicodeStringTokenize(versionString, '.');
+    if(tokens.size() > 1)
+    {
+        isValid = TryEvaluateValue(tokens[0], MIN_MAJOR_VERSION, result.MAJOR);
+        if(true == isValid)
+        {
+            isValid = TryEvaluateValue(tokens[1], MIN_MINOR_VERSION, result.MINOR);
+            if(true == isValid)
+            {
+                result.PATCH = MIN_PATCH_VERSION;
+                if(tokens.size() > 2)
+                {
+                    isValid = TryEvaluateValue(tokens[2], MIN_PATCH_VERSION, result.PATCH);
+                }
+                else
+                {
+                    result.PATCH = MIN_PATCH_VERSION;
+                }
+            }
+        }
+    }
+
+    if(false == isValid)
+    {
+        result = VERSION_TUPLE();
+    }
+
+    return result;
+}
+
+bool VERSION_TUPLE::IsValid(const VERSION_TUPLE version)
+{
+    return (version.MAJOR >= MIN_MAJOR_VERSION) && (version.MINOR >= MIN_MINOR_VERSION) &&
+           (version.PATCH >= MIN_PATCH_VERSION);
+}
+
+bool operator==(const VERSION_TUPLE& lhs, const VERSION_TUPLE& rhs)
+{
+    return (lhs.MAJOR == rhs.MAJOR) && (lhs.MINOR == rhs.MINOR) && (lhs.PATCH == rhs.PATCH);
+}
+
+bool operator<(const VERSION_TUPLE& lhs, const VERSION_TUPLE& rhs)
+{
+    bool isLess = false;
+
+    if(lhs.MAJOR < rhs.MAJOR)
+    {
+        isLess = true;
+    }
+    else if(lhs.MINOR < rhs.MINOR)
+    {
+        isLess = true;
+    }
+    else if(lhs.PATCH < rhs.PATCH)
+    {
+        isLess = true;
+    }
+
+    return isLess;
+}
+
+bool VERSION_TUPLE::TryEvaluateValue(const UnicodeString& valueString, const int minValue, int& value)
+{
+    PRECONDITION_RETURN(valueString.empty() == false, false);
+
+    bool result = false;
+    value       = INVALID_VERSION;
+
+    const int version = UnicodeStringToInt(valueString);
+    if(version >= minValue)
+    {
+        value  = version;
+        result = true;
+    }
+
+    return result;
+}
 
 bool UpdateHandler::IsUpdateCheckRequired()
 {
@@ -58,9 +142,10 @@ bool UpdateHandler::IsUpdateCheckRequired()
             const double lastUpdateTimestamp = ReadLastUpdateTimestamp();
             if(lastUpdateTimestamp > 0)
             {
-                const double now   = QueryCurrentTimeAsSeconds();
-                const double delta = (now - lastUpdateTimestamp);
-                if(delta >= ONE_DAY_IN_SECONDS) // default timeout (24h)
+                const double now     = QueryCurrentTimeAsSeconds();
+                const double delta   = (now - lastUpdateTimestamp);
+                const double timeout = ONE_DAY_IN_SECONDS;
+                if(delta >= timeout) // default timeout (24h)
                 {
                     updateCheckRequired = true;
                 }
@@ -79,35 +164,43 @@ void UpdateHandler::Check()
 {
     PRECONDITION(IsUpdateCheckRequired() == true);
 
-    HttpClient* pClient = new HttpClient();
+    bool        messageDispatched = false;
+    HttpClient* pClient           = new HttpClient();
     if(pClient != nullptr)
     {
         bool                     downloadSucceeded = false;
-        const UnicodeStringArray urls              = DownloadServers();
+        const UnicodeStringArray urls              = DownloadServerUrls();
         for(size_t i = 0; (downloadSucceeded == false) && (i < urls.size()); i++)
         {
-            const UnicodeString url           = urls[i];
-            UnicodeString       remoteVersion = pClient->DownloadUrl(url);
-            if(remoteVersion.empty() == false)
+            const UnicodeString url                 = urls[i];
+            UnicodeString       remoteVersionString = pClient->DownloadUrl(url);
+            if(remoteVersionString.empty() == false)
             {
-                downloadSucceeded = true;
-
-                UnicodeStringTrim(remoteVersion);
-                // TODO To be honst, this comparison needs more work
-                if(remoteVersion > ULTRASCHALL_VERSION)
+                downloadSucceeded                 = true;
+                remoteVersionString               = SanitizeVersionString(remoteVersionString);
+                const VERSION_TUPLE remoteVersion = VERSION_TUPLE::ParseString(remoteVersionString);
+                if(VERSION_TUPLE::IsValid(remoteVersion) == true)
                 {
-                    NotificationStore supervisor("ULTRASCHALL_UPDATE_CHECK");
-                    UnicodeString     message = "An update for Ultraschall is available. Go to "
-                                            "https://ultraschall.fm/install to download the updated version ";
-                    message += remoteVersion + ".";
-                    supervisor.RegisterSuccess(message);
+                    const VERSION_TUPLE localVersion = VERSION_TUPLE::ParseString(ULTRASCHALL_VERSION);
+                    if(VERSION_TUPLE::IsValid(localVersion) == true)
+                    {
+                        if(localVersion < remoteVersion)
+                        {
+                            NotificationStore supervisor("ULTRASCHALL_UPDATE_CHECK");
+                            UnicodeString     message = "An update for Ultraschall is available.\n\n";
+                            message += "Go to https://ultraschall.fm/install to download the updated version ";
+                            message += remoteVersionString + ".";
+                            supervisor.RegisterSuccess(message);
+                            messageDispatched = true;
+                        }
+                    }
                 }
             }
         }
 
         SafeRelease(pClient);
 
-        if(true == downloadSucceeded)
+        if(true == messageDispatched)
         {
             const double lastUpdateTimestamp = QueryCurrentTimeAsSeconds();
             WriteLastUpdateTimestamp(lastUpdateTimestamp);
@@ -177,11 +270,31 @@ double UpdateHandler::QueryCurrentTimeAsSeconds()
     return seconds.count();
 }
 
-UnicodeStringArray UpdateHandler::DownloadServers()
+UnicodeStringArray UpdateHandler::DownloadServerUrls()
 {
     const UnicodeStringArray urls = {
-        "https://ultraschall.io/ultraschall_prerelease.txt", "https://ultraschall.fm/ultraschall_prerelease.txt"};
+#ifndef __OPTIMIZE__
+        "https://ultraschall.io/current_prerelease.txt", "https://ultraschall.fm/current_prerelease.txt"};
+#else
+        "https://ultraschall.io/current_release.txt", "https://ultraschall.fm/current_release.txt"};
+#endif
     return urls;
+}
+
+UnicodeString UpdateHandler::SanitizeVersionString(const UnicodeString& versionString)
+{
+    PRECONDITION_RETURN(versionString.empty() == false, UnicodeString());
+
+    UnicodeString result = versionString;
+    UnicodeStringTrim(result);
+
+    const size_t position = result.find_first_of('\n');
+    if(position != UnicodeString::npos)
+    {
+        result = versionString.substr(0, position);
+    }
+
+    return result;
 }
 
 }} // namespace ultraschall::reaper

@@ -31,6 +31,31 @@
 
 namespace ultraschall { namespace reaper {
 
+struct VERSION_TUPLE
+{
+    static const int INVALID_VERSION = -1;
+
+    static const int MIN_MAJOR_VERSION = 1;
+    static const int MIN_MINOR_VERSION = 0;
+    static const int MIN_PATCH_VERSION = 0;
+
+    int MAJOR;
+    int MINOR;
+    int PATCH;
+
+    static VERSION_TUPLE ParseString(const UnicodeString& versionString);
+
+    static bool IsValid(const VERSION_TUPLE version);
+
+private:
+    VERSION_TUPLE() : MAJOR(INVALID_VERSION), MINOR(INVALID_VERSION), PATCH(INVALID_VERSION) {}
+
+    static bool TryEvaluateValue(const UnicodeString& valueString, const int minValue, int& value);
+};
+
+bool operator==(const VERSION_TUPLE& lhs, const VERSION_TUPLE& rhs);
+bool operator<(const VERSION_TUPLE& lhs, const VERSION_TUPLE& rhs);
+
 class UpdateHandler
 {
 public:
@@ -48,7 +73,8 @@ private:
 
     static const double ONE_DAY_IN_SECONDS;
 
-    static UnicodeStringArray DownloadServers();
+    static UnicodeStringArray DownloadServerUrls();
+    static UnicodeString      SanitizeVersionString(const UnicodeString& versionString);
 
     static bool   WriteLastUpdateTimestamp(const double timestamp);
     static double ReadLastUpdateTimestamp();

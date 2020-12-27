@@ -38,8 +38,7 @@ void ProfileProperty<UnicodeString>::Save(
     PRECONDITION(section.empty() == false);
     PRECONDITION(key.empty() == false);
 
-    UnicodeString profilePath = FileManager::AppendPath(PlatformGateway::QueryReaperProfilePath(), profile);
-    ReaperGateway::SaveProfileValue(profilePath, section, key, value);
+    ReaperGateway::SaveProfileValue(profile, section, key, value);
 }
 
 template<>
@@ -51,9 +50,7 @@ void ProfileProperty<bool>::Save(
     PRECONDITION(key.empty() == false);
 
     const UnicodeString boolValue = (value == true) ? "true" : "false";
-
-    UnicodeString profilePath = FileManager::AppendPath(PlatformGateway::QueryReaperProfilePath(), profile);
-    ReaperGateway::SaveProfileValue(profilePath, section, key, boolValue);
+    ReaperGateway::SaveProfileValue(profile, section, key, boolValue);
 }
 
 template<>
@@ -66,9 +63,7 @@ void ProfileProperty<int>::Save(
 
     UnicodeStringStream is;
     is << value;
-
-    UnicodeString profilePath = FileManager::AppendPath(PlatformGateway::QueryReaperProfilePath(), profile);
-    ReaperGateway::SaveProfileValue(profilePath, section, key, is.str());
+    ReaperGateway::SaveProfileValue(profile, section, key, is.str());
 }
 
 template<>
@@ -79,8 +74,7 @@ void ProfileProperty<UnicodeString>::Set(
     PRECONDITION(section.empty() == false);
     PRECONDITION(key.empty() == false);
 
-    UnicodeString profilePath = FileManager::AppendPath(PlatformGateway::QueryReaperProfilePath(), profile);
-    ReaperGateway::SetProfileValue(profilePath, section, key, value);
+    ReaperGateway::SetProfileValue(profile, section, key, value);
 }
 
 template<>
@@ -92,9 +86,7 @@ void ProfileProperty<bool>::Set(
     PRECONDITION(key.empty() == false);
 
     const UnicodeString boolValue = (value == true) ? "true" : "false";
-
-    UnicodeString profilePath = FileManager::AppendPath(PlatformGateway::QueryReaperProfilePath(), profile);
-    ReaperGateway::SetProfileValue(profilePath, section, key, boolValue);
+    ReaperGateway::SetProfileValue(profile, section, key, boolValue);
 }
 
 template<>
@@ -107,9 +99,7 @@ void ProfileProperty<int>::Set(
 
     UnicodeStringStream is;
     is << value;
-
-    UnicodeString profilePath = FileManager::AppendPath(PlatformGateway::QueryReaperProfilePath(), profile);
-    ReaperGateway::SetProfileValue(profilePath, section, key, is.str());
+    ReaperGateway::SetProfileValue(profile, section, key, is.str());
 }
 
 template<>
@@ -120,8 +110,7 @@ UnicodeString ProfileProperty<UnicodeString>::Query(
     PRECONDITION_RETURN(section.empty() == false, UnicodeString());
     PRECONDITION_RETURN(key.empty() == false, UnicodeString());
 
-    UnicodeString profilePath = FileManager::AppendPath(PlatformGateway::QueryReaperProfilePath(), profile);
-    return RawValue(profilePath, section, key);
+    return RawValue(profile, section, key);
 }
 
 template<>

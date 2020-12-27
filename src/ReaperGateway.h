@@ -106,6 +106,9 @@ public:
 
 private:
     static const size_t MAX_REAPER_STRING_BUFFER_SIZE = 4096;
+
+    static UnicodeString fullProfilePath_;
+    static UnicodeString FullProfilePath(const UnicodeString& profile);
 };
 
 }} // namespace ultraschall::reaper

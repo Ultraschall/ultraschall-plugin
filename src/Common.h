@@ -28,8 +28,8 @@
 #define __ULTRASCHALL_REAPER_COMMON_H_INCL__
 
 #ifdef __GNUC__
-#undef min
-#undef max
+    #undef min
+    #undef max
 #endif // #ifdef __GNUC__
 
 #include <cctype>
@@ -78,6 +78,6 @@
         }                         \
     }
 
-#define ULTRASCHALL_VERSION "4.0"
+#define ULTRASCHALL_VERSION "5.0.0"
 
 #endif // #ifndef __ULTRASCHALL_REAPER_COMMON_H_INCL__
