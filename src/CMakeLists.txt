@@ -142,8 +142,6 @@ elseif(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "macos")
     ${LIBSWELL_SOURCE_PATH}/swell-menu.mm
   )
 elseif(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "linux")
-  include_directories(${LIBGTK3_INCLUDE_PATH})
-  set(EXTRA_LIBRARIES ${LIBGTK3_LIBRARY_PATH})
   set(COCKOS_SOURCES
     ${LIBSWELL_SOURCE_PATH}/swell.cpp
     ${LIBSWELL_SOURCE_PATH}/swell-ini.cpp
