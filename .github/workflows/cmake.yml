@@ -43,7 +43,7 @@ jobs:
         run: cmake -E make_directory ${{runner.workspace}}/build
 
       - name: Configure CMake
-        shell: zsh
+        shell: bash
         working-directory: ${{runner.workspace}}/build
         run: cmake -G"Xcode" -DCMAKE_BUILD_TYPE=$BUILD_TYPE $GITHUB_WORKSPACE
 
@@ -65,7 +65,7 @@ jobs:
       - name: Configure CMake
         shell: pwsh
         working-directory: ${{runner.workspace}}/build
-        run: cmake -G"Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=$BUILD_TYPE $GITHUB_WORKSPACE
+        run: cmake -G"Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
 
       - name: Build
         working-directory: ${{runner.workspace}}/build
