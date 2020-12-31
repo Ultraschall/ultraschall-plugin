@@ -12,7 +12,14 @@ env:
   BUILD_TARGET: reaper_ultraschall
 
 jobs:
+  prebuild:
+    runs-on: ubuntu-latest
+    steps:
+      -name: preflight
+      -run: echo Start build $GITHUB_RUN_NUMBER
+
   build:
+    needs: prebuild
     strategy:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
@@ -20,9 +27,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      - name: Identify build number
-        run: echo $GITHUB_RUN_ID     $GITHUB_RUN_NUMBER
 
       - name: Create Build Environment
         run: cmake -E make_directory ${{runner.workspace}}/build
@@ -36,3 +40,10 @@ jobs:
         working-directory: ${{runner.workspace}}/build
         shell: bash
         run: cmake --build . --target $BUILD_TARGET --config $BUILD_TYPE
+
+  postbuild:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      -name: postflight
+      -run: echo Finished build $GITHUB_RUN_NUMBER
