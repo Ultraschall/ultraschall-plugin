@@ -12,45 +12,45 @@ env:
   BUILD_TARGET: reaper_ultraschall
 
 jobs:
-  linux:
-    # runs-on: ubuntu-20.04
-    runs-on: ubuntu-latest
+  # linux:
+  #   # runs-on: ubuntu-20.04
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - name: Create Build Environment
-        run: cmake -E make_directory ${{runner.workspace}}/build
+  #     - name: Create Build Environment
+  #       run: cmake -E make_directory ${{runner.workspace}}/build
 
-      - name: Configure CMake
-        shell: bash
-        working-directory: ${{runner.workspace}}/build
-        run: cmake -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILD_TYPE $GITHUB_WORKSPACE
+  #     - name: Configure CMake
+  #       shell: bash
+  #       working-directory: ${{runner.workspace}}/build
+  #       run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
 
-      - name: Build
-        working-directory: ${{runner.workspace}}/build
-        shell: bash
-        run: cmake --build . --target $BUILD_TARGET --config $BUILD_TYPE
+  #     - name: Build
+  #       working-directory: ${{runner.workspace}}/build
+  #       shell: bash
+  #       run: cmake --build . --target $BUILD_TARGET --config $BUILD_TYPE
 
-  macos:
-    # runs-on: macos-11.0
-    runs-on: macos-latest
+  # macos:
+  #   # runs-on: macos-11.0
+  #   runs-on: macos-latest
 
-    steps:
-      - uses: actions/checkout@v2
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - name: Create Build Environment
-        run: cmake -E make_directory ${{runner.workspace}}/build
+  #     - name: Create Build Environment
+  #       run: cmake -E make_directory ${{runner.workspace}}/build
 
-      - name: Configure CMake
-        shell: bash
-        working-directory: ${{runner.workspace}}/build
-        run: cmake -G"Xcode" -DCMAKE_BUILD_TYPE=$BUILD_TYPE $GITHUB_WORKSPACE
+  #     - name: Configure CMake
+  #       shell: bash
+  #       working-directory: ${{runner.workspace}}/build
+  #       run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
 
-      - name: Build
-        working-directory: ${{runner.workspace}}/build
-        shell: bash
-        run: cmake --build . --target $BUILD_TARGET --config $BUILD_TYPE
+  #     - name: Build
+  #       working-directory: ${{runner.workspace}}/build
+  #       shell: bash
+  #       run: cmake --build . --target $BUILD_TARGET --config $BUILD_TYPE
 
   win32:
     # runs-on: windows-2019
@@ -60,17 +60,16 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Preflight
-        shell: cmd
-        working-directory: $GITHUB_WORKSPACE
-        run: dir
+        run: echo "$GITHUB_WORKSPACE"
 
       - name: Create Build Environment
         run: cmake -E make_directory ${{runner.workspace}}/build
 
       - name: Configure CMake
-        shell: pwsh
+        shell: bash
         working-directory: ${{runner.workspace}}/build
-        run: cmake -G"Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=$BUILD_TYPE $GITHUB_WORKSPACE
+        # run: cmake -G"Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=$BUILD_TYPE $GITHUB_WORKSPACE
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
 
       - name: Build
         working-directory: ${{runner.workspace}}/build
