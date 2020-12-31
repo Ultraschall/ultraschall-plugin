@@ -59,13 +59,18 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Preflight
+        shell: cmd
+        working-directory: $GITHUB_WORKSPACE
+        run: dir
+
       - name: Create Build Environment
         run: cmake -E make_directory ${{runner.workspace}}/build
 
       - name: Configure CMake
         shell: pwsh
         working-directory: ${{runner.workspace}}/build
-        run: cmake -G"Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=$BUILD_TYPE ${{runner.workspace}}
+        run: cmake -G"Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=$BUILD_TYPE $GITHUB_WORKSPACE
 
       - name: Build
         working-directory: ${{runner.workspace}}/build
