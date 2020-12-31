@@ -12,14 +12,15 @@ env:
   BUILD_TARGET: reaper_ultraschall
 
 jobs:
-  prebuild:
+  pre_flight:
     runs-on: ubuntu-latest
     steps:
-      -name: preflight
-      -run: echo Start build $GITHUB_RUN_NUMBER
+      - uses: actions/checkout@v2
+      - name: preflight
+      - run: echo Starting build $GITHUB_RUN_NUMBER...
 
   build:
-    needs: prebuild
+    needs: pre_flight
     strategy:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
@@ -41,9 +42,10 @@ jobs:
         shell: bash
         run: cmake --build . --target $BUILD_TARGET --config $BUILD_TYPE
 
-  postbuild:
+  post_flight:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      -name: postflight
-      -run: echo Finished build $GITHUB_RUN_NUMBER
+      - uses: actions/checkout@v2
+      - name: postflight
+      - run: echo Finished build $GITHUB_RUN_NUMBER.
