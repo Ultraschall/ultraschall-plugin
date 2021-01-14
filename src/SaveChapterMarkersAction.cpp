@@ -38,10 +38,8 @@ static DeclareCustomAction<SaveChapterMarkersAction> action;
 ServiceStatus SaveChapterMarkersAction::Execute()
 {
     PRECONDITION_RETURN(HasValidProject() == true, SERVICE_FAILURE);
-
-    PRECONDITION_RETURN(ConfigureTargets() == true, SERVICE_FAILURE);
     PRECONDITION_RETURN(ConfigureSources() == true, SERVICE_FAILURE);
-    PRECONDITION_RETURN(AreChapterMarkersValid(chapterMarkers_) == true, SERVICE_FAILURE);
+    PRECONDITION_RETURN(ConfigureTargets() == true, SERVICE_FAILURE);
 
     ServiceStatus     status = SERVICE_FAILURE;
     NotificationStore supervisor(UniqueId());
@@ -79,11 +77,6 @@ bool SaveChapterMarkersAction::ConfigureTargets()
     {
         result = true;
     }
-    else
-    {
-        supervisor.RegisterWarning("The export operation has been canceled.");
-        target_.clear();
-    }
 
     return result;
 }
@@ -95,13 +88,22 @@ bool SaveChapterMarkersAction::ConfigureSources()
 
     ReaperProject currentProject = ReaperProject::Current();
     chapterMarkers_              = currentProject.ChapterMarkers();
-    if(chapterMarkers_.empty() == true)
+    if(chapterMarkers_.empty() == false)
     {
-        supervisor.RegisterWarning("No chapters have been set.");
+        if(AreChapterMarkersValid(chapterMarkers_) == true)
+        {
+            result = true;
+        }
+        else
+        {
+            chapterMarkers_.clear();
+            result = false;
+        }
     }
     else
     {
-        result = true;
+        supervisor.RegisterWarning("No chapters have been set.");
+        result = false;
     }
 
     return result;

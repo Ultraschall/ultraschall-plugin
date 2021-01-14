@@ -38,13 +38,11 @@ static DeclareCustomAction<SaveChapterMarkersToProjectAction> action;
 ServiceStatus SaveChapterMarkersToProjectAction::Execute()
 {
     PRECONDITION_RETURN(HasValidProject() == true, SERVICE_FAILURE);
-
-    PRECONDITION_RETURN(ConfigureTargets() == true, SERVICE_FAILURE);
     PRECONDITION_RETURN(ConfigureSources() == true, SERVICE_FAILURE);
-    PRECONDITION_RETURN(AreChapterMarkersValid(chapterMarkers_) == true, SERVICE_FAILURE);
+    PRECONDITION_RETURN(ConfigureTargets() == true, SERVICE_FAILURE);
 
-    ServiceStatus       status = SERVICE_FAILURE;
-    NotificationStore supervisor(UniqueId());
+    ServiceStatus      status = SERVICE_FAILURE;
+    NotificationStore  supervisor(UniqueId());
     std::ostringstream os;
     for(size_t i = 0; i < chapterMarkers_.size(); i++)
     {
@@ -73,21 +71,30 @@ bool SaveChapterMarkersToProjectAction::ConfigureTargets()
 
 bool SaveChapterMarkersToProjectAction::ConfigureSources()
 {
-    bool                status = false;
+    bool              result = false;
     NotificationStore supervisor(UniqueId());
 
     ReaperProject currentProject = ReaperProject::Current();
     chapterMarkers_              = currentProject.ChapterMarkers();
     if(chapterMarkers_.empty() == false)
     {
-        status = true;
+        if(AreChapterMarkersValid(chapterMarkers_) == true)
+        {
+            result = true;
+        }
+        else
+        {
+            chapterMarkers_.clear();
+            result = false;
+        }
     }
     else
     {
         supervisor.RegisterWarning("No chapters have been set.");
+        result = false;
     }
 
-    return status;
+    return result;
 }
 
 }} // namespace ultraschall::reaper

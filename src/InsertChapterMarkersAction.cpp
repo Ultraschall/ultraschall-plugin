@@ -38,11 +38,8 @@ static DeclareCustomAction<InsertChapterMarkersAction> action;
 ServiceStatus InsertChapterMarkersAction::Execute()
 {
     PRECONDITION_RETURN(HasValidProject() == true, SERVICE_FAILURE);
-
     PRECONDITION_RETURN(ConfigureSources() == true, SERVICE_FAILURE);
     PRECONDITION_RETURN(ConfigureTargets() == true, SERVICE_FAILURE);
-
-    PRECONDITION_RETURN(AreChapterMarkersValid(chapterMarkers_) == true, SERVICE_FAILURE);
 
     ServiceStatus     status = SERVICE_FAILURE;
     NotificationStore supervisor(UniqueId());
@@ -76,36 +73,45 @@ ServiceStatus InsertChapterMarkersAction::Execute()
 
 bool InsertChapterMarkersAction::ConfigureTargets()
 {
-    NotificationStore supervisor(UniqueId());
-    ChapterTagArray   chapterMarkers;
-
-    FileManager::FILE_TYPE mediaType = FileManager::QueryFileType(source_);
-    switch(mediaType)
-    {
-        case FileManager::FILE_TYPE::MP4CHAPS:
-            chapterMarkers = ReadTextFile(source_);
-            break;
-        case FileManager::FILE_TYPE::MP3:
-            // chapterMarkers = ReadMP3File(source_);
-            break;
-        default:
-            break;
-    }
-
-    if(chapterMarkers.empty() == false)
-    {
-        chapterMarkers_ = chapterMarkers;
-    }
-
-    return chapterMarkers.empty() == false;
+    return true;
 }
 
 bool InsertChapterMarkersAction::ConfigureSources()
 {
+    bool result = false;
+
     source_.clear();
+    chapterMarkers_.clear();
 
     source_ = PlatformGateway::SelectChaptersFile("Import chapter markers");
-    return source_.empty() == false;
+    if(source_.empty() == false)
+    {
+        ChapterTagArray              chapterMarkers;
+        const FileManager::FILE_TYPE mediaType = FileManager::QueryFileType(source_);
+        switch(mediaType)
+        {
+            case FileManager::FILE_TYPE::MP4CHAPS:
+                chapterMarkers = ReadTextFile(source_);
+                break;
+            case FileManager::FILE_TYPE::MP3:
+                // TODO v6: Read chapters from MP3
+                // chapterMarkers = ReadMP3File(source_);
+                break;
+            default:
+                break;
+        }
+
+        if(chapterMarkers.empty() == false)
+        {
+            if(AreChapterMarkersValid(chapterMarkers) == true)
+            {
+                chapterMarkers_ = chapterMarkers;
+                result          = true;
+            }
+        }
+    }
+
+    return result;
 }
 
 ChapterTagArray InsertChapterMarkersAction::ReadTextFile(const UnicodeString& filename)
