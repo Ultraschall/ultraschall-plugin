@@ -49,8 +49,7 @@ ReaperProject::ReaperProject(const ReaperProject& rhs)
 
 ReaperProject& ReaperProject::operator=(const ReaperProject& rhs)
 {
-    if(this != &rhs)
-    {
+    if(this != &rhs) {
         nativeReference_ = rhs.nativeReference_;
     }
 
@@ -75,6 +74,7 @@ ReaperProject ReaperProject::Current()
 UnicodeString ReaperProject::PathName() const
 {
     PRECONDITION_RETURN(nativeReference_ != 0, UnicodeString());
+
     return ReaperGateway::ProjectPath(nativeReference_);
 }
 
@@ -83,17 +83,13 @@ UnicodeString ReaperProject::FolderName() const
     UnicodeString result;
 
     const UnicodeString fullPath = PathName();
-    if(fullPath.empty() == false)
-    {
+    if(fullPath.empty() == false) {
         const char               pathSeparator  = FileManager::PathSeparator();
         const UnicodeStringArray pathComponents = UnicodeStringTokenize(fullPath, pathSeparator);
-        if(pathComponents.empty() == false)
-        {
-            for(size_t i = 0; i < pathComponents.size() - 1; i++)
-            {
+        if(pathComponents.empty() == false) {
+            for(size_t i = 0; i < pathComponents.size() - 1; i++) {
                 result += pathComponents[i];
-                if(i < pathComponents.size() - 2)
-                {
+                if(i < pathComponents.size() - 2) {
                     result += pathSeparator;
                 }
             }
@@ -108,12 +104,10 @@ UnicodeString ReaperProject::FileName() const
     UnicodeString result;
 
     const UnicodeString fullPath = PathName();
-    if(fullPath.empty() == false)
-    {
+    if(fullPath.empty() == false) {
         const char               pathSeparator  = FileManager::PathSeparator();
         const UnicodeStringArray pathComponents = UnicodeStringTokenize(fullPath, pathSeparator);
-        if(pathComponents.empty() == false)
-        {
+        if(pathComponents.empty() == false) {
             result = pathComponents[pathComponents.size() - 1];
         }
     }
@@ -128,8 +122,7 @@ UnicodeString ReaperProject::Name() const
     UnicodeString result;
 
     const UnicodeString file = FileName();
-    if(file.empty() == false)
-    {
+    if(file.empty() == false) {
         result = file.substr(0, file.rfind('.'));
     }
 
@@ -146,20 +139,16 @@ UnicodeStringArray ReaperProject::SanitizeNotes(const UnicodeString& source)
     static const size_t      REQUIRED_TOKEN_COUNT = 6;
 
     UnicodeStringArray sanitizedSource = UnicodeStringTokenize(source, TOKEN_DELIMITER);
-    if(sanitizedSource.size() <= REQUIRED_TOKEN_COUNT)
-    {
-        while(sanitizedSource.size() < REQUIRED_TOKEN_COUNT)
-        {
+    if(sanitizedSource.size() <= REQUIRED_TOKEN_COUNT) {
+        while(sanitizedSource.size() < REQUIRED_TOKEN_COUNT) {
             sanitizedSource.push_back("");
         }
 
         std::for_each(sanitizedSource.begin(), sanitizedSource.end(), [&](const UnicodeString str) {
-            if(str == "\n")
-            {
+            if(str == "\n") {
                 result.push_back("");
             }
-            else
-            {
+            else {
                 result.push_back(str);
             }
         });
@@ -168,7 +157,7 @@ UnicodeStringArray ReaperProject::SanitizeNotes(const UnicodeString& source)
     return result;
 }
 
-UnicodeString ReaperProject::ProjectMetaDataKey(const UnicodeString& prefix, const UnicodeString& name)
+UnicodeString ReaperProject::CreateProjectMetaDataKey(const UnicodeString& prefix, const UnicodeString& name)
 {
     PRECONDITION_RETURN(prefix.empty() == false, UnicodeString());
     PRECONDITION_RETURN(name.empty() == false, UnicodeString());
@@ -183,53 +172,29 @@ UnicodeStringDictionary ReaperProject::ProjectMetaData() const
     UnicodeStringDictionary metaData;
 
     const UnicodeString prefix("ID3");
-    UnicodeString       value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "TALB"));
-    if(value.empty() == false)
-    {
-        metaData.insert(std::pair<UnicodeString, UnicodeString>("podcast", value));
-    }
+    UnicodeString value = ReaperGateway::ProjectMetaData(nativeReference_, CreateProjectMetaDataKey(prefix, "TALB"));
+    metaData.insert(std::pair<UnicodeString, UnicodeString>("podcast", value));
 
-    value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "TPE1"));
-    if(value.empty() == false)
-    {
-        metaData.insert(std::pair<UnicodeString, UnicodeString>("author", value));
-    }
+    value = ReaperGateway::ProjectMetaData(nativeReference_, CreateProjectMetaDataKey(prefix, "TPE1"));
+    metaData.insert(std::pair<UnicodeString, UnicodeString>("author", value));
 
-    value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "TIT2"));
-    if(value.empty() == false)
-    {
-        metaData.insert(std::pair<UnicodeString, UnicodeString>("episode", value));
-    }
+    value = ReaperGateway::ProjectMetaData(nativeReference_, CreateProjectMetaDataKey(prefix, "TIT2"));
+    metaData.insert(std::pair<UnicodeString, UnicodeString>("episode", value));
 
-    value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "TYER"));
-    if(value.empty() == false)
-    {
-        metaData.insert(std::pair<UnicodeString, UnicodeString>("publicationDate", value));
-    }
+    value = ReaperGateway::ProjectMetaData(nativeReference_, CreateProjectMetaDataKey(prefix, "TYER"));
+    metaData.insert(std::pair<UnicodeString, UnicodeString>("publicationDate", value));
 
-    value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "TCON"));
-    if(value.empty() == false)
-    {
-        metaData.insert(std::pair<UnicodeString, UnicodeString>("category", value));
-    }
+    value = ReaperGateway::ProjectMetaData(nativeReference_, CreateProjectMetaDataKey(prefix, "TCON"));
+    metaData.insert(std::pair<UnicodeString, UnicodeString>("category", value));
 
-    value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "TLEN"));
-    if(value.empty() == false)
-    {
-        metaData.insert(std::pair<UnicodeString, UnicodeString>("duration", value));
-    }
+    value = ReaperGateway::ProjectMetaData(nativeReference_, CreateProjectMetaDataKey(prefix, "TLEN"));
+    metaData.insert(std::pair<UnicodeString, UnicodeString>("duration", value));
 
-    value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "COMM"));
-    if(value.empty() == false)
-    {
-        metaData.insert(std::pair<UnicodeString, UnicodeString>("description", value));
-    }
+    value = ReaperGateway::ProjectMetaData(nativeReference_, CreateProjectMetaDataKey(prefix, "COMM"));
+    metaData.insert(std::pair<UnicodeString, UnicodeString>("description", value));
 
-    value = ReaperGateway::ProjectMetaData(nativeReference_, ProjectMetaDataKey(prefix, "APIC_FILE"));
-    if(value.empty() == false)
-    {
-        metaData.insert(std::pair<UnicodeString, UnicodeString>("coverImage", value));
-    }
+    value = ReaperGateway::ProjectMetaData(nativeReference_, CreateProjectMetaDataKey(prefix, "APIC_FILE"));
+    metaData.insert(std::pair<UnicodeString, UnicodeString>("coverImage", value));
 
     return metaData;
 }
@@ -250,12 +215,10 @@ double ReaperProject::CurrentPosition() const
 
     double    currentPosition = Globals::INVALID_MARKER_POSITION;
     const int playState       = ReaperGateway::PlayState(nativeReference_);
-    if((playState == 0) || (playState == 2))
-    {
+    if((playState == 0) || (playState == 2)) {
         currentPosition = ReaperGateway::CursorPosition(nativeReference_);
     }
-    else
-    {
+    else {
         currentPosition = ReaperGateway::PlayPosition(nativeReference_);
     }
 
@@ -287,93 +250,45 @@ ChapterTagArray ReaperProject::ChapterMarkers() const
 {
     PRECONDITION_RETURN(nativeReference_ != 0, ChapterTagArray());
 
-    ChapterTagArray markers = ReaperGateway::Markers(nativeReference_);
-    if(markers.empty() == false)
-    {
-        ChapterImageArray images = ChapterImages();
-        ChapterUrlArray   urls   = ChapterUrls();
-        MapImagesAndUrlsToChapters(images, urls, markers);
-    }
-
-    return markers;
-}
-
-ChapterImageArray ReaperProject::ChapterImages() const
-{
-    PRECONDITION_RETURN(nativeReference_ != 0, ChapterImageArray());
-
-    ChapterImageArray images;
-
-    UnicodeStringDictionary locatedImages = ReaperGateway::QueryProjectValues(nativeReference_, "chapterimages");
-    if(locatedImages.empty() == false)
-    {
-        std::for_each(
-            locatedImages.begin(), locatedImages.end(), [&](const std::pair<UnicodeString, UnicodeString>& item) {
-                const double        position = std::stod(item.first);
-                const UnicodeString uri      = item.second;
-                images.push_back(ChapterImage(position, uri));
-            });
-    }
-
-    UnicodeStringDictionary unlocatedImages = ReaperGateway::QueryProjectValues(nativeReference_, "lostimages");
-    if(unlocatedImages.empty() == false)
-    {
-        std::for_each(
-            unlocatedImages.begin(), unlocatedImages.end(), [&](const std::pair<UnicodeString, UnicodeString>& item) {
-                const double        position = std::stod(item.first);
-                const UnicodeString uri      = item.second;
-                images.push_back(ChapterImage(position, uri));
-            });
-    }
-
-    return images;
-}
-
-ChapterUrlArray ReaperProject::ChapterUrls() const
-{
-    PRECONDITION_RETURN(nativeReference_ != 0, ChapterUrlArray());
-
-    ChapterUrlArray urls;
-
-    UnicodeStringDictionary urlDictionary = ReaperGateway::QueryProjectValues(nativeReference_, "chapterurls");
-    if(urlDictionary.empty() == false)
-    {
-        std::for_each(
-            urlDictionary.begin(), urlDictionary.end(), [&](const std::pair<UnicodeString, UnicodeString>& item) {
-                const double        position = std::stod(item.first);
-                const UnicodeString uri      = UnicodeStringCopyTrim(item.second);
-                urls.push_back(ChapterUrl(position, uri));
-            });
-    }
-
-    return urls;
-}
-
-void ReaperProject::MapImagesAndUrlsToChapters(
-    const ChapterImageArray& images, const ChapterUrlArray& urls, ChapterTagArray& chapters)
-{
-    PRECONDITION(chapters.empty() == false);
-
     static const double POSITION_DEAD_BAND = 2.0;
 
-    std::for_each(images.begin(), images.end(), [&](const ChapterImage& image) {
+    ChapterTagArray chapters = ReaperGateway::Markers(nativeReference_);
+    if(chapters.empty() == false) {
+        UnicodeStringDictionary images = ReaperGateway::QueryProjectValues(nativeReference_, "chapterimages");
+        UnicodeStringDictionary urls   = ReaperGateway::QueryProjectValues(nativeReference_, "chapterurls");
         std::for_each(chapters.begin(), chapters.end(), [&](ChapterTag& chapter) {
-            if(std::fabs(image.Position() - chapter.Position()) < POSITION_DEAD_BAND)
-            {
-                chapter.SetImage(image.Uri());
-            }
+            chapter.SetImage(LookupValueInRange(images, chapter.Position(), POSITION_DEAD_BAND));
+            chapter.SetUrl(LookupValueInRange(urls, chapter.Position(), POSITION_DEAD_BAND));
         });
-    });
+    }
+    return chapters;
+}
 
-    std::for_each(urls.begin(), urls.end(), [&](const ChapterUrl& url) {
-        std::for_each(chapters.begin(), chapters.end(), [&](ChapterTag& chapter) {
-            if(std::fabs(url.Position() - chapter.Position()) < POSITION_DEAD_BAND)
-            {
-                // chapter.SetUrl(HttpClient::EncodeUrl(url.Uri()));
-                chapter.SetUrl(url.Uri());
+UnicodeString ReaperProject::LookupValueInRange(
+    const UnicodeStringDictionary& items, const double position, const double range)
+{
+    PRECONDITION_RETURN(items.empty() == false, UnicodeString());
+    PRECONDITION_RETURN(position >= 0, UnicodeString());
+    PRECONDITION_RETURN(range >= 0, UnicodeString());
+
+    UnicodeString result;
+
+    double minDelta = std::numeric_limits<double>::max();
+    std::for_each(items.begin(), items.end(), [&](const std::pair<UnicodeString, UnicodeString>& item) {
+        try {
+            const double itemPosition = std::stod(item.first);
+            const double delta        = std::fabs(position - itemPosition);
+            if((delta <= range) && (delta < minDelta)) {
+                result   = item.second;
+                minDelta = delta;
             }
-        });
+        }
+        catch(std::invalid_argument&) {
+        }
+        catch(std::out_of_range&) {
+        }
     });
+    return result;
 }
 
 }} // namespace ultraschall::reaper

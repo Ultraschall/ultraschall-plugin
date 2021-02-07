@@ -60,23 +60,23 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
         {
             if(pTagWriter->Start(targets_[i]) == true)
             {
-                const UnicodeStringArray missingMediaDataFields = FindMissingMediaData();
-                const size_t             missingFieldCount      = missingMediaDataFields.size();
-                static const size_t      ALL_MEDIA_DATA_FIELDS  = 6;
-                if((missingFieldCount > 0) && (missingFieldCount < ALL_MEDIA_DATA_FIELDS))
+                const UnicodeStringArray missingMediaDataFields     = FindMissingMediaData();
+                const size_t             missingFieldCount          = missingMediaDataFields.size();
+                static const size_t      REQUIRED_MEDIA_DATA_FIELDS = 6;
+                if((missingFieldCount > 0) && (missingFieldCount < REQUIRED_MEDIA_DATA_FIELDS))
                 {
                     UnicodeStringStream os;
                     os << "MP3 metadata is incomplete.";
                     notificationStore.RegisterWarning(os.str());
                 }
-                else if(missingFieldCount == ALL_MEDIA_DATA_FIELDS)
+                else if(missingFieldCount == REQUIRED_MEDIA_DATA_FIELDS)
                 {
                     UnicodeStringStream os;
                     os << "MP3 metadata is missing";
                     notificationStore.RegisterWarning(os.str());
                 }
 
-                if(missingFieldCount < ALL_MEDIA_DATA_FIELDS)
+                if(missingFieldCount < REQUIRED_MEDIA_DATA_FIELDS)
                 {
                     if(pTagWriter->InsertProperties(targets_[i], mediaData_) == false)
                     {
@@ -158,8 +158,16 @@ bool InsertMediaPropertiesAction::ConfigureSources()
     coverImage_.clear();
     chapterMarkers_.clear();
 
-    mediaData_      = ReaperProject::Current().ProjectMetaData();
-    coverImage_     = FindCoverImage();
+    mediaData_ = ReaperProject::Current().ProjectMetaData();
+    if(mediaData_.find("coverImage") != mediaData_.end())
+    {
+        coverImage_ = mediaData_.at("coverImage");
+    }
+    else
+    {
+        coverImage_ = FindCoverImage();
+    }
+
     chapterMarkers_ = CurrentProject().ChapterMarkers();
     if(chapterMarkers_.empty() == false)
     {

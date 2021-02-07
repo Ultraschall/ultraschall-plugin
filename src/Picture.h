@@ -34,7 +34,13 @@ namespace ultraschall { namespace reaper {
 class Picture
 {
 public:
-    enum class FORMAT { JPEG, PNG, UNKNOWN_PICTURE, MAX_FORMAT = UNKNOWN_PICTURE };
+    enum class FORMAT
+    {
+        JPEG,
+        PNG,
+        UNKNOWN_PICTURE,
+        MAX_FORMAT = UNKNOWN_PICTURE
+    };
 
     static FORMAT Format(const uint8_t* data, const size_t dataSize);
     static FORMAT Format(const BinaryStream* pStream);

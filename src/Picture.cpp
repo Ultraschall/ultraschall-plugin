@@ -36,17 +36,13 @@ Picture::FORMAT Picture::Format(const uint8_t* data, const size_t dataSize)
     PRECONDITION_RETURN(dataSize > 0, FORMAT::UNKNOWN_PICTURE);
 
     FORMAT format = FORMAT::UNKNOWN_PICTURE;
-    if(dataSize >= 2)
-    {
-        if((data[0] == 0xff) && (data[1] == 0xd8))
-        {
+    if(dataSize >= 2) {
+        if((data[0] == 0xff) && (data[1] == 0xd8)) {
             format = FORMAT::JPEG;
         }
 
-        if(dataSize >= 8)
-        {
-            if((data[0] == 0x89) && (data[1] == 0x50) && (data[2] == 0x4e) && (data[3] == 0x47))
-            {
+        if(dataSize >= 8) {
+            if((data[0] == 0x89) && (data[1] == 0x50) && (data[2] == 0x4e) && (data[3] == 0x47)) {
                 format = FORMAT::PNG;
             }
         }
@@ -68,8 +64,7 @@ Picture::FORMAT Picture::Format(const UnicodeString& filename)
 
     FORMAT        format  = FORMAT::UNKNOWN_PICTURE;
     BinaryStream* pStream = FileManager::ReadBinaryFile(filename);
-    if(pStream != nullptr)
-    {
+    if(pStream != nullptr) {
         format = Format(pStream);
 
         SafeRelease(pStream);
@@ -86,8 +81,7 @@ UnicodeString Picture::FormatString(const uint8_t* data, const size_t dataSize)
     UnicodeString formatString;
 
     const FORMAT pictureFormat = Format(data, dataSize);
-    switch(pictureFormat)
-    {
+    switch(pictureFormat) {
         case FORMAT::JPEG:
         {
             formatString = "image/jpeg";
@@ -120,8 +114,7 @@ UnicodeString Picture::FormatString(const UnicodeString& filename)
 
     UnicodeString formatString;
     BinaryStream* pStream = FileManager::ReadBinaryFile(filename);
-    if(pStream != nullptr)
-    {
+    if(pStream != nullptr) {
         formatString = FormatString(pStream);
         SafeRelease(pStream);
     }

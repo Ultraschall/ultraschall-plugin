@@ -39,9 +39,7 @@ include_directories(
 set(COMMON_INCLUDES
   Application.h
   BinaryStream.h
-  ChapterImage.h
   ChapterTag.h
-  ChapterUrl.h
   Common.h
   CustomAction.h
   CustomActionFactory.h

@@ -28,9 +28,7 @@
 #define __ULTRASCHALL_REAPER_PROJECT_H_INCL__
 
 #include "Common.h"
-#include "ChapterImage.h"
 #include "ChapterTag.h"
-#include "ChapterUrl.h"
 #include "ReaperGateway.h"
 
 namespace ultraschall { namespace reaper {
@@ -71,13 +69,13 @@ private:
 
     static UnicodeStringArray SanitizeNotes(const UnicodeString& notes);
 
-    ChapterImageArray ChapterImages() const;
-    ChapterUrlArray   ChapterUrls() const;
+    ChapterImageDictionary ChapterImages() const;
+    ChapterUrlDictionary   ChapterUrls() const;
 
-    static void MapImagesAndUrlsToChapters(
-        const ChapterImageArray& images, const ChapterUrlArray& urls, ChapterTagArray& chapters);
+    static UnicodeString LookupValueInRange(
+        const UnicodeStringDictionary& items, const double position, const double range);
 
-    static UnicodeString ProjectMetaDataKey(const UnicodeString& prefix, const UnicodeString& name);
+    static UnicodeString CreateProjectMetaDataKey(const UnicodeString& prefix, const UnicodeString& name);
 };
 
 }} // namespace ultraschall::reaper

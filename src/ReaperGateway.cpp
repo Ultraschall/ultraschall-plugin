@@ -644,7 +644,7 @@ UnicodeString ReaperGateway::ProjectMetaData(ProjectReference projectReference, 
     static const size_t MAX_BUFFER_SIZE        = 4096;
     char                value[MAX_BUFFER_SIZE] = {0};
 
-    strncpy(value, key.c_str(), key.length());
+    strncpy(value, key.c_str(), (key.length() < MAX_BUFFER_SIZE) ? key.length() : MAX_BUFFER_SIZE);
     if(reaper_api::GetSetProjectInfo_String(nativeReference, "RENDER_METADATA", value, false))
     {
         data = H2U(value);

@@ -81,7 +81,14 @@ private:
     UnicodeString url_;
 };
 
-typedef std::vector<ChapterTag> ChapterTagArray;
+typedef std::vector<ChapterTag>      ChapterTagArray;
+typedef std::map<double, ChapterTag> ChapterTagDictionary;
+
+typedef std::vector<UnicodeString>      ChapterImageArray;
+typedef std::map<double, UnicodeString> ChapterImageDictionary;
+
+typedef std::vector<UnicodeString>      ChapterUrlArray;
+typedef std::map<double, UnicodeString> ChapterUrlDictionary;
 
 }} // namespace ultraschall::reaper
 
