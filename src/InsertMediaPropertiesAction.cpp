@@ -53,33 +53,26 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
     NotificationStore notificationStore(UniqueId());
     size_t            errorCount = 0;
 
-    for(size_t i = 0; i < targets_.size(); i++)
-    {
+    for(size_t i = 0; i < targets_.size(); i++) {
         ITagWriter* pTagWriter = TagWriterFactory::Create(targets_[i]);
-        if(pTagWriter != 0)
-        {
-            if(pTagWriter->Start(targets_[i]) == true)
-            {
+        if(pTagWriter != 0) {
+            if(pTagWriter->Start(targets_[i]) == true) {
                 const UnicodeStringArray missingMediaDataFields     = FindMissingMediaData();
                 const size_t             missingFieldCount          = missingMediaDataFields.size();
                 static const size_t      REQUIRED_MEDIA_DATA_FIELDS = 6;
-                if((missingFieldCount > 0) && (missingFieldCount < REQUIRED_MEDIA_DATA_FIELDS))
-                {
+                if((missingFieldCount > 0) && (missingFieldCount < REQUIRED_MEDIA_DATA_FIELDS)) {
                     UnicodeStringStream os;
                     os << "MP3 metadata is incomplete.";
                     notificationStore.RegisterWarning(os.str());
                 }
-                else if(missingFieldCount == REQUIRED_MEDIA_DATA_FIELDS)
-                {
+                else if(missingFieldCount == REQUIRED_MEDIA_DATA_FIELDS) {
                     UnicodeStringStream os;
                     os << "MP3 metadata is missing";
                     notificationStore.RegisterWarning(os.str());
                 }
 
-                if(missingFieldCount < REQUIRED_MEDIA_DATA_FIELDS)
-                {
-                    if(pTagWriter->InsertProperties(targets_[i], mediaData_) == false)
-                    {
+                if(missingFieldCount < REQUIRED_MEDIA_DATA_FIELDS) {
+                    if(pTagWriter->InsertProperties(targets_[i], mediaData_) == false) {
                         UnicodeStringStream os;
                         os << "Failed to insert MP3 metadata into " << targets_[i] << ".";
                         notificationStore.RegisterError(os.str());
@@ -87,40 +80,33 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
                     }
                 }
 
-                if(coverImage_.empty() == false)
-                {
-                    if(pTagWriter->InsertCoverImage(targets_[i], coverImage_) == false)
-                    {
+                if(coverImage_.empty() == false) {
+                    if(pTagWriter->InsertCoverImage(targets_[i], coverImage_) == false) {
                         UnicodeStringStream os;
                         os << "Failed to insert cover image into " << targets_[i] << ".";
                         notificationStore.RegisterError(os.str());
                         errorCount++;
                     }
                 }
-                else
-                {
+                else {
                     UnicodeStringStream os;
                     os << "The cover image is missing.";
                     notificationStore.RegisterWarning(os.str());
                 }
 
-                if(chapterMarkers_.empty() == true)
-                {
+                if(chapterMarkers_.empty() == true) {
                     UnicodeStringStream os;
                     os << "The chapter markers are missing.";
                     notificationStore.RegisterWarning(os.str());
                 }
-                else if(AreChapterMarkersValid(chapterMarkers_) == false)
-                {
+                else if(AreChapterMarkersValid(chapterMarkers_) == false) {
                     UnicodeStringStream os;
                     os << "One or more chapter markers are invalid.";
                     notificationStore.RegisterError(os.str());
                     errorCount++;
                 }
-                else
-                {
-                    if(pTagWriter->InsertChapterMarkers(targets_[i], chapterMarkers_) == false)
-                    {
+                else {
+                    if(pTagWriter->InsertChapterMarkers(targets_[i], chapterMarkers_) == false) {
                         UnicodeStringStream os;
                         os << "Failed to insert chapter markers into " << targets_[i] << ".";
                         notificationStore.RegisterError(os.str());
@@ -135,10 +121,8 @@ ServiceStatus InsertMediaPropertiesAction::Execute()
         }
     }
 
-    if(0 == errorCount)
-    {
-        for(size_t i = 0; i < targets_.size(); i++)
-        {
+    if(0 == errorCount) {
+        for(size_t i = 0; i < targets_.size(); i++) {
             UnicodeStringStream os;
             os << targets_[i] << " has been updated successfully.";
             notificationStore.RegisterSuccess(os.str());
@@ -159,22 +143,19 @@ bool InsertMediaPropertiesAction::ConfigureSources()
     chapterMarkers_.clear();
 
     mediaData_ = ReaperProject::Current().ProjectMetaData();
-    if(mediaData_.find("coverImage") != mediaData_.end())
-    {
+    if(mediaData_.find("coverImage") != mediaData_.end()) {
         coverImage_ = mediaData_.at("coverImage");
     }
-    else
-    {
+
+    if(coverImage_.empty() == true) {
         coverImage_ = FindCoverImage();
     }
 
     chapterMarkers_ = CurrentProject().ChapterMarkers();
-    if(chapterMarkers_.empty() == false)
-    {
+    if(chapterMarkers_.empty() == false) {
         bool errorFound = false;
         std::for_each(chapterMarkers_.begin(), chapterMarkers_.end(), [&](const ChapterTag& chapterMarker) {
-            if(chapterMarker.Title().length() > Globals::MAX_CHAPTER_TITLE_LENGTH)
-            {
+            if(chapterMarker.Title().length() > Globals::MAX_CHAPTER_TITLE_LENGTH) {
                 UnicodeStringStream os;
                 os << "The chapter marker title '" << chapterMarker.Title() << "' is too long. "
                    << "Make sure that is does not exceed " << Globals::MAX_CHAPTER_TITLE_LENGTH << " characters.";
@@ -197,20 +178,16 @@ bool InsertMediaPropertiesAction::ConfigureTargets()
     targets_.clear();
 
     static const UnicodeStringArray fileExtensions = {".mp3"};
-    for(size_t i = 0; i < fileExtensions.size(); i++)
-    {
+    for(size_t i = 0; i < fileExtensions.size(); i++) {
         UnicodeString targetName = CreateProjectPath(fileExtensions[i]);
-        if(FileManager::FileExists(targetName) != false)
-        {
+        if(FileManager::FileExists(targetName) != false) {
             targets_.push_back(targetName);
         }
     }
 
-    if(targets_.empty() == true)
-    {
+    if(targets_.empty() == true) {
         const UnicodeString target = PlatformGateway::SelectAudioFile("Select audio file");
-        if(target.empty() == false)
-        {
+        if(target.empty() == false) {
             targets_.push_back(target);
         }
     }
@@ -220,24 +197,20 @@ bool InsertMediaPropertiesAction::ConfigureTargets()
 
 UnicodeString InsertMediaPropertiesAction::FindCoverImage()
 {
-    UnicodeString coverImage = mediaData_["coverImage"];
-    if(coverImage.empty() == true)
-    {
-        UnicodeStringArray       files;
-        const UnicodeStringArray extensions {".jpg", ".jpeg", ".png"};
-        for(size_t i = 0; i < extensions.size(); i++)
-        {
-            files.push_back(FileManager::AppendPath(CurrentProjectDirectory(), "cover") + extensions[i]);
-            files.push_back(FileManager::AppendPath(CurrentProjectDirectory(), "Cover") + extensions[i]);
-            files.push_back(FileManager::AppendPath(CurrentProjectDirectory(), "COVER") + extensions[i]);
-            files.push_back(FileManager::AppendPath(CurrentProjectDirectory(), CurrentProjectName()) + extensions[i]);
-        }
+    UnicodeString coverImage;
 
-        const size_t imageIndex = FileManager::FileExists(files);
-        if(imageIndex != -1)
-        {
-            coverImage = files[imageIndex];
-        }
+    UnicodeStringArray       files;
+    const UnicodeStringArray extensions {".jpg", ".jpeg", ".png"};
+    for(size_t i = 0; i < extensions.size(); i++) {
+        files.push_back(FileManager::AppendPath(CurrentProjectDirectory(), "cover") + extensions[i]);
+        files.push_back(FileManager::AppendPath(CurrentProjectDirectory(), "Cover") + extensions[i]);
+        files.push_back(FileManager::AppendPath(CurrentProjectDirectory(), "COVER") + extensions[i]);
+        files.push_back(FileManager::AppendPath(CurrentProjectDirectory(), CurrentProjectName()) + extensions[i]);
+    }
+
+    const size_t imageIndex = FileManager::FileExists(files);
+    if(imageIndex != -1) {
+        coverImage = files[imageIndex];
     }
 
     return coverImage;
@@ -251,20 +224,16 @@ UnicodeStringArray InsertMediaPropertiesAction::FindMissingMediaData()
                                                      "category", "publicationDate", "description"};
     std::for_each(mediaDataKeys.begin(), mediaDataKeys.end(), [&](const UnicodeString& mediaDataKey) {
         const UnicodeStringDictionary::const_iterator mediaDataIterator = mediaData_.find(mediaDataKey);
-        if(mediaDataIterator != mediaData_.end())
-        {
+        if(mediaDataIterator != mediaData_.end()) {
             const UnicodeString mediaDataField = UnicodeStringCopyTrimLeft(mediaDataIterator->second);
-            if(mediaDataField.empty() == true)
-            {
+            if(mediaDataField.empty() == true) {
                 missingMediaDataFields.push_back(mediaDataKey);
             }
-            else if(mediaDataField[0] == '\n')
-            {
+            else if(mediaDataField[0] == '\n') {
                 missingMediaDataFields.push_back(mediaDataKey);
             }
         }
-        else
-        {
+        else {
             missingMediaDataFields.push_back(mediaDataKey);
         }
     });
