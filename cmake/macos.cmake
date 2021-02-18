@@ -33,8 +33,20 @@ if(${CMAKE_VERSION} VERSION_LESS 3.14)
 endif()
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "$ENV{HOME}/Library/Application\ Support/REAPER/UserPlugins")
-# set(CMAKE_OSX_DEPLOYMENT_TARGET 10.11 CACHE INTERNAL "")
-set(CMAKE_OSX_ARCHITECTURES arm64 x86_64)
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+  if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 12)
+    message(STATUS "Building for x86_64 using clang ${CMAKE_CXX_COMPILER_VERSION}.")
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.11 CACHE INTERNAL "")
+    set(CMAKE_OSX_ARCHITECTURES x86_64)
+  else()
+    message(STATUS "Building for x86_64 and arm64 using clang ${CMAKE_CXX_COMPILER_VERSION}.")
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.14 CACHE INTERNAL "")
+    set(CMAKE_OSX_ARCHITECTURES arm64 x86_64)
+  endif()
+else()
+    message(FATAL_ERROR "macOS builds require clang.")
+endif()
 
 # configure zlib
 set(CURRENT_EXTERNAL_PROJECT libz)

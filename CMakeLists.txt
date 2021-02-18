@@ -24,7 +24,7 @@
 #
 ################################################################################
 
-cmake_minimum_required(VERSION 3.12...3.15)
+cmake_minimum_required(VERSION 3.19)
 
 project(reaper_ultraschall
   VERSION 4.1.0
