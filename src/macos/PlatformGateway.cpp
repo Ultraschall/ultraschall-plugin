@@ -60,8 +60,7 @@ size_t PlatformGateway::QueryAvailableDiskSpace(const UnicodeString& directory)
 
     struct statvfs fsi    = {0};
     const int      status = statvfs(directory.c_str(), &fsi);
-    if(status == 0)
-    {
+    if(status == 0) {
         availableSpace = fsi.f_bavail * fsi.f_frsize;
     }
 
@@ -74,8 +73,7 @@ UnicodeString PlatformGateway::SelectChaptersFile(
     UnicodeString result;
 
     NSOpenPanel* fileDialog = [NSOpenPanel openPanel];
-    if(nil != fileDialog)
-    {
+    if(nil != fileDialog) {
         fileDialog.canChooseFiles          = YES;
         fileDialog.canChooseDirectories    = NO;
         fileDialog.canCreateDirectories    = NO;
@@ -102,8 +100,7 @@ UnicodeString PlatformGateway::SelectAudioFile(
     UnicodeString result;
 
     NSOpenPanel* fileDialog = [NSOpenPanel openPanel];
-    if(nil != fileDialog)
-    {
+    if(nil != fileDialog) {
         fileDialog.canChooseFiles          = YES;
         fileDialog.canChooseDirectories    = NO;
         fileDialog.canCreateDirectories    = NO;
@@ -129,8 +126,7 @@ UnicodeString PlatformGateway::SelectPictureFile(
     UnicodeString result;
 
     NSOpenPanel* fileDialog = [NSOpenPanel openPanel];
-    if(nil != fileDialog)
-    {
+    if(nil != fileDialog) {
         fileDialog.canChooseFiles          = YES;
         fileDialog.canChooseDirectories    = NO;
         fileDialog.canCreateDirectories    = NO;
@@ -157,22 +153,19 @@ UnicodeString PlatformGateway::SelectChaptersFileName(
     UnicodeString result;
 
     NSSavePanel* fileDialog = [NSSavePanel savePanel];
-    if(nil != fileDialog)
-    {
+    if(nil != fileDialog) {
         fileDialog.allowedFileTypes     = [[NSArray alloc] initWithObjects:@"chapters.txt", @"mp4chaps", @"txt", nil];
         fileDialog.allowsOtherFileTypes = NO;
         fileDialog.canCreateDirectories = YES;
         fileDialog.title                = [NSString stringWithUTF8String:dialogCaption.c_str()];
 
         NSString* initialDirectoryParam = nil;
-        if(initialDirectory.empty() == false)
-        {
+        if(initialDirectory.empty() == false) {
             initialDirectoryParam = [NSString stringWithUTF8String:initialDirectory.c_str()];
         }
 
         NSString* initialFileParam = nil;
-        if(initialFile.empty() == false)
-        {
+        if(initialFile.empty() == false) {
             initialFileParam = [NSString stringWithUTF8String:initialFile.c_str()];
         }
 

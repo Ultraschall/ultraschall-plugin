@@ -24,9 +24,6 @@
 #
 ################################################################################
 
-add_compile_options(-Wno-deprecated-declarations)
-add_compile_options(-Wno-delete-abstract-non-virtual-dtor)
-
 include(FetchContent)
 if(${CMAKE_VERSION} VERSION_LESS 3.14)
     include(cmake/add_FetchContent_MakeAvailable.cmake)
@@ -35,18 +32,25 @@ endif()
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "$ENV{HOME}/Library/Application\ Support/REAPER/UserPlugins")
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+  set(EXTRA_LIBRARIES "-framework AppKit" "-framework Carbon" "-framework IOKit" "-framework Security")
   if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 12)
     message(STATUS "Building for x86_64 using clang ${CMAKE_CXX_COMPILER_VERSION}.")
     set(CMAKE_OSX_DEPLOYMENT_TARGET 10.11 CACHE INTERNAL "")
-    set(CMAKE_OSX_ARCHITECTURES x86_64)
+    set(CMAKE_OSX_ARCHITECTURES x86_64 CACHE INTERNAL "")
+    add_compile_options(-mmacosx-version-min=10.11)
+    add_compile_options(-Wno-delete-abstract-non-virtual-dtor)
   else()
     message(STATUS "Building for x86_64 and arm64 using clang ${CMAKE_CXX_COMPILER_VERSION}.")
     set(CMAKE_OSX_DEPLOYMENT_TARGET 10.14 CACHE INTERNAL "")
-    set(CMAKE_OSX_ARCHITECTURES arm64 x86_64)
+    set(CMAKE_OSX_ARCHITECTURES arm64 x86_64 CACHE INTERNAL "")
+    add_compile_options(-mmacosx-version-min=10.14)
+    add_compile_options(-Wno-delete-abstract-non-virtual-dtor)
   endif()
 else()
     message(FATAL_ERROR "macOS builds require clang.")
 endif()
+
+add_compile_options(-Wno-deprecated-declarations)
 
 # configure zlib
 set(CURRENT_EXTERNAL_PROJECT libz)
@@ -115,8 +119,7 @@ endif()
 # configure swell
 set(CURRENT_EXTERNAL_PROJECT libswell)
 FetchContent_Declare(${CURRENT_EXTERNAL_PROJECT}
-#   GIT_REPOSITORY https://github.com/justinfrankel/WDL.git
-GIT_REPOSITORY https://github.com/heikopanjas/WDL.git
+  GIT_REPOSITORY https://github.com/justinfrankel/WDL.git
   SOURCE_SUBDIR wdl
 )
 FetchContent_GetProperties(${CURRENT_EXTERNAL_PROJECT})

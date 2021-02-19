@@ -115,9 +115,7 @@ set(EXTRA_INCLUDES)
 set(EXTRA_SOURCES ${LIBZ_SOURCE_PATH}/contrib/minizip/ioapi.c ${LIBZ_SOURCE_PATH}/contrib/minizip/unzip.c)
 
 set(PLATFORM_INCLUDES PlatformGateway.h)
-set(PLATFORM_SOURCES
-  ${ULTRASCHALL_TARGET_SYSTEM}/PlatformGateway.cpp
-)
+set(PLATFORM_SOURCES ${ULTRASCHALL_TARGET_SYSTEM}/PlatformGateway.cpp)
 
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
@@ -126,30 +124,12 @@ if(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "win32")
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
   set(EXTRA_LIBRARIES version.lib ws2_32.lib crypt32.lib wldap32.lib mfplat.lib mf.lib mfuuid.lib shlwapi.lib comctl32.lib comdlg32.lib rpcrt4.lib)
 elseif(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "macos")
-  add_compile_options(-mmacosx-version-min=10.11)
+  add_definitions(-DSWELL_PROVIDED_BY_APP)
   set_source_files_properties(macos/PlatformGateway.cpp PROPERTIES COMPILE_FLAGS "-x objective-c++")
-  set(EXTRA_LIBRARIES "-framework AppKit" "-framework Carbon" "-framework IOKit" "-framework Security")
-  set(COCKOS_SOURCES
-    ${LIBSWELL_SOURCE_PATH}/swell.cpp
-    ${LIBSWELL_SOURCE_PATH}/swell-ini.cpp
-    ${LIBSWELL_SOURCE_PATH}/swell-misc.mm
-    ${LIBSWELL_SOURCE_PATH}/swell-wnd.mm
-    ${LIBSWELL_SOURCE_PATH}/swell-gdi.mm
-    ${LIBSWELL_SOURCE_PATH}/swell-dlg.mm
-    ${LIBSWELL_SOURCE_PATH}/swell-kb.mm
-    ${LIBSWELL_SOURCE_PATH}/swell-menu.mm
-  )
+  set(COCKOS_SOURCES ${LIBSWELL_SOURCE_PATH}/swell-modstub.mm)
 elseif(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "linux")
-  set(COCKOS_SOURCES
-    ${LIBSWELL_SOURCE_PATH}/swell.cpp
-    ${LIBSWELL_SOURCE_PATH}/swell-ini.cpp
-    ${LIBSWELL_SOURCE_PATH}/swell-misc-generic.cpp
-    ${LIBSWELL_SOURCE_PATH}/swell-wnd-generic.cpp
-    ${LIBSWELL_SOURCE_PATH}/swell-gdi-generic.cpp
-    ${LIBSWELL_SOURCE_PATH}/swell-dlg-generic.cpp
-    ${LIBSWELL_SOURCE_PATH}/swell-kb-generic.cpp
-    ${LIBSWELL_SOURCE_PATH}/swell-menu-generic.cpp
-  )
+  add_definitions(-DSWELL_PROVIDED_BY_APP)
+  set(COCKOS_SOURCES ${LIBSWELL_SOURCE_PATH}/swell-modstub-generic.cpp)
 endif()
 
 source_group("Header Files"   FILES ${COMMON_INCLUDES} ${PLATFORM_INCLUDES})
