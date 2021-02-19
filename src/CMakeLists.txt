@@ -154,6 +154,7 @@ target_link_libraries(reaper_ultraschall
   ${LIBZ_LIBRARY_PATH}
   ${LIBCURL_LIBRARY_PATH}
   ${LIBTAG_LIBRARY_PATH}
+  ${LIBSSL_LIBRARY_PATH}
   ${EXTRA_LIBRARIES}
 )
 
