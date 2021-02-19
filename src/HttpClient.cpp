@@ -24,9 +24,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifdef _WIN32
-    #define CURL_STATICLIB
-#endif // #ifdef _WIN32
+#define CURL_STATICLIB
 #include <curl/curl.h>
 #include <curl/easy.h>
 
