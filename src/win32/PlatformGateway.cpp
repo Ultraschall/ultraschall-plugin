@@ -49,7 +49,7 @@ UnicodeString PlatformGateway::QueryReaperProfilePath()
         unicodeString = nullptr;
     }
 
-    return directory;
+    return directory + "\\REAPER";
 }
 
 UnicodeChar PlatformGateway::QueryPathSeparator()
