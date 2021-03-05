@@ -26,7 +26,6 @@
 
 #include "BinaryStream.h"
 #include <cstring>
-#include <zlib.h>
 
 namespace ultraschall { namespace reaper {
 

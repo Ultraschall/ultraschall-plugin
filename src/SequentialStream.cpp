@@ -26,7 +26,6 @@
 
 #include "SequentialStream.h"
 #include <cstring>
-#include <zlib.h>
 
 namespace ultraschall { namespace reaper {
 
@@ -60,25 +59,21 @@ bool SequentialStream::Write(const uint8_t* buffer, const size_t bufferSize)
 
     bool spaceAvailable = true;
 
-    if((writePosition_ + bufferSize) > dataSize_)
-    {
+    if((writePosition_ + bufferSize) > dataSize_) {
         uint8_t* pData = data_;
         data_          = new uint8_t[dataSize_ + DEFAULT_CHUNK_SIZE]();
-        if(data_ != nullptr)
-        {
+        if(data_ != nullptr) {
             memmove(data_, pData, dataSize_);
             dataSize_ += DEFAULT_CHUNK_SIZE;
 
             SafeDeleteArray(pData);
         }
-        else
-        {
+        else {
             spaceAvailable = false;
         }
     }
 
-    if(true == spaceAvailable)
-    {
+    if(true == spaceAvailable) {
         const size_t itemSize = sizeof(uint8_t);
         memmove(&data_[writePosition_], buffer, bufferSize * itemSize);
         writePosition_ += bufferSize;
@@ -97,8 +92,7 @@ size_t SequentialStream::Read(uint8_t* buffer, const size_t bufferSize)
     size_t result = 0;
 
     const size_t chunkSize = ((readPosition_ + bufferSize) < dataSize_) ? bufferSize : (dataSize_ - readPosition_);
-    if(chunkSize > 0)
-    {
+    if(chunkSize > 0) {
         memmove(buffer, &data_[readPosition_], chunkSize);
         readPosition_ += chunkSize;
     }
