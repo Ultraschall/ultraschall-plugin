@@ -29,7 +29,6 @@ set(REAPER_INCLUDE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../include/reaper)
 add_definitions(-DWDL_NO_DEFINE_MINMAX)
 
 include_directories(
-  ${LIBZ_INCLUDE_PATH}
   ${LIBCURL_INCLUDE_PATH}
   ${LIBTAG_INCLUDE_PATH}
   ${LIBSWELL_INCLUDE_PATH}
@@ -111,9 +110,6 @@ set(COMMON_SOURCES
   reaper_ultraschall.cpp
 )
 
-set(EXTRA_INCLUDES)
-set(EXTRA_SOURCES ${LIBZ_SOURCE_PATH}/contrib/minizip/ioapi.c ${LIBZ_SOURCE_PATH}/contrib/minizip/unzip.c)
-
 set(PLATFORM_INCLUDES PlatformGateway.h)
 set(PLATFORM_SOURCES ${ULTRASCHALL_TARGET_SYSTEM}/PlatformGateway.cpp)
 
@@ -141,7 +137,6 @@ add_library(reaper_ultraschall SHARED
   ${COMMON_SOURCES}
   ${PLATFORM_INCLUDES}
   ${PLATFORM_SOURCES}
-  ${EXTRA_INCLUDES}
   ${EXTRA_SOURCES}
   ${COCKOS_SOURCES}
 )

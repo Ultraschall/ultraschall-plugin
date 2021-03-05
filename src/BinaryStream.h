@@ -47,8 +47,6 @@ public:
 
     bool Read(const size_t offset, uint8_t* buffer, const size_t bufferSize);
 
-    uint64_t CRC32() const;
-
 protected:
     virtual ~BinaryStream();
 
