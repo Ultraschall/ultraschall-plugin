@@ -136,8 +136,8 @@ _Bei neu angelegten Spuren werden nun standardmäßig diese Effekte in der richt
 
   _Die Effekte sind zunächst deaktiviert. Sie sollten - mit Ausnahme des Dynamics 2 - nur maßvoll angewandt werden und nur dann, wenn auch wirklich Probleme zu beheben sind. Bei sehr gutem Ausgangsmaterial führen Filter ansonsten eher zu einer Verschlechterung der Klangqualität._
 
-- Effekte: **Best of breed Sammlung**  
-_In einem neuen Ordner "Best of Breed" werden einige herausragende, freie Effekte angeboten:_  
+- Effekte: **Best-of-Breed Sammlung**  
+_In einem neuen Ordner "Best-of-Breed" werden einige herausragende, freie Effekte angeboten:_  
   - _**ReEQ** (Equalizer, der an Fabfilter angelehnt ist)_
   - _**Smooth Limiter** (Limiter der Extraklasse, der sehr anschaulich den Grad des Eingreifens visualisiert und auch im neuen LUFS Loudness Metering Effekt verbaut ist - pures Audio-Gold)_
   - _**Spectrum Matcher** (EQ mit Lernfunktion, um den Klang von Mikros aneinander anzupassen)_
@@ -187,6 +187,9 @@ _Die Funktion Dynamic Split Items ist nun wieder direkt über den Shortcut `cmd/
 
 - **Normalisierung**  
 _Der Shortcut `opt`+`shift`+`n` normalisiert selektierte Items auf -23 LUFS. Mit `cmd` + `shift` + `n` wird jegliche Normalisierung aufgehoben._
+
+- **Glue Items**
+_Der Shortcut `cmd`+`shift`+`g` führt nebeneinander liegende Items zu einem großen Item zusammen. Praktisch, wenn man etwa unterschiedlich laut aufgenommene Abschnitte einer Spur zerschnitten hat um sie separat auf -23 LUFS zu normalisieren, danach aber wieder als ein Item im Schnitt behandeln will._
 
 
 &nbsp;
