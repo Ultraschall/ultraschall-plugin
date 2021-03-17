@@ -10,19 +10,17 @@ Die nachfolgenden Features werden ausführlich in unseren Ultraschall-Tutorial-V
 _Ultraschall 5.0 ist für die Version 6.25 von REAPER optimiert. Alle anderen Versionen sind nicht lauffähig. Von einem manuellen Update von REAPER ist daher in Zukunft unbedingt abzusehen, die Ultraschall-Erweiterungen werden dann deaktiviert._
 
 - Apple Silicon: **Optimiert für M1 Macs und MacOs Big Sur**  
-Ultraschall 5 ist bis in die Haarspitzen optimiert für die M1 Prozessoren von Apple. Sämtliche Komponenten (bis auf das VST-Soundboard) laufen nativ auf der ARM-Architektur.
+_Ultraschall 5 ist bis in die Haarspitzen optimiert für die M1 Prozessoren von Apple. Sämtliche Komponenten (bis auf das VST-Soundboard) laufen nativ auf der ARM-Architektur._
 
 - StudioLink: **Aktuelle Versionen von StudioLink und StudioLink OnAir**
 
 - API: **Update der Ultraschall API auf Version 4.2.003**  
-mit 1.385 LUA-Funktionen um Podcasting-Features in REAPER komfortabler programmieren zu können.
+_mit 1.385 LUA-Funktionen um Podcasting-Features in REAPER komfortabler programmieren zu können._
 
 
 &nbsp;
 ## Installer
 
-- **Windows-Installer**  
-_Statt eines Links auf das Ultraschall Theme wird jetzt während der Installation das Theme selber auf den Desktop kopiert._
 - **MacOS-Installer**  
 _Der bisherige Schritt, die Theme-Datei in ein geöffnetes REAPER-Fenster fallen zu lassen, entfällt._
 
@@ -100,7 +98,7 @@ _Die ersten 10 Tracks haben nun dedizierte Mute-Actions, die immer muten/unmuten
 _Mit dem neuen Shortcut `v` aktiviert man für selektierte Items einen Volume-Envelope, der direkt im Item angezeigt wird. Erstellt man nun innerhalb des Items mit gedrücktem Mauszeiger-Ziehen eine Zeitauswahl, kann man danach den Envelope-Abschnitt in der Mitte greifen und leicht anpassen. Das Ergebnis ist eine sehr schnelle Möglichkeit um komplexe Lautstärkeverläufe einstellen zu können, die auch garantiert stabil am Item verbleiben - vergleichbar zu Hindenburg._
 
 - **Double-ender**  
-Ultraschall 5 bietet im neuen Untermenü `Workflows` des Podcast-Menüs zwei Varianten an, um Double-ender einfacher mit einer zeitlich auseinander laufenden lokalen Spur in Einklang zu bringen:
+_Ultraschall 5 bietet im neuen Untermenü `Workflows` des Podcast-Menüs zwei Varianten an, um Double-ender einfacher mit einer zeitlich auseinander laufenden lokalen Spur in Einklang zu bringen:_
   - _**Stretch Marker** können helfen, die Remote-Spur in der Länge an die lokale Spur anzupassen, wenn der Zeitversatz der Remote-Spur konstant ist - also etwa pro Minute der Sendung ein Versatz von einer Sekunde entsteht._
   - _Bei nicht gleichmäßigem Auseinanderlaufen kann der neue **Auto-matching** Workflow helfen, der darauf basiert beide Spuren entlang von Pausen in einzelne Items zu zerschneiden und diese dann auszurichten._
 
@@ -213,7 +211,7 @@ _Der Shortcut `cmd`+`shift`+`g` führt nebeneinander liegende Items zu einem gro
 ## Navigation
 
 - **Optimierung der Trackpad-/Mausradfunktionen**  
-_Trackpads und Mausrad kommen sich leider in den Belegungen in die Quere. Das Mausrad hat nun folgende Belegungen, die so auch in nahezu allen anderen Schnittprogrammen zu finden sind:
+_Trackpads und Mausrad kommen sich leider in den Belegungen in die Quere. Das Mausrad hat nun folgende Belegungen, die so auch in nahezu allen anderen Schnittprogrammen zu finden sind:_
 `Scroll` - Verikales Scrollen des Arbeitsbereichs
 `Scroll` + `Shift` - Horizontales Scrollen des Arbeitsbereichs
 `Scroll` + `Alt` - Horizontaler Zoom
@@ -258,7 +256,7 @@ _Die Lautstärke der Kapitelglocke in den Ultraschall Settings wird nun nicht me
 _Mit der Option "Large marker manager" in den Ultraschall Settings wird der REAPER eigene marker manager im View recording groß an der rechten Fensterseite angezeigt._
 
 - **Marker mit Namen**  
-Wenn mit `shift`+`m` Kapitelmarken mit Namen eingefügt werden, hat man deutlich mehr Platz den Namen zu editieren.
+_Wenn mit `shift`+`m` Kapitelmarken mit Namen eingefügt werden, hat man deutlich mehr Platz den Namen zu editieren._
 
 &nbsp;
 ## Ultraschall Dashboard
