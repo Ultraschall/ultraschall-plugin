@@ -33,99 +33,99 @@ _Die Ultraschall-Fenster Settings, Soundcheck, Marker-Dashboard und Export-Assis
 - Theme: **Dark Mode für MacOS**  
 _Der Dark Mode von MacOS wird nun unterstützt. Dies muss in den REAPER Settings unter `General/Advanced UI` aktiviviert werden. Achtung: ein Mischbetrieb ist leider nicht möglich, bei einem Wechsel zum Light-Theme muss das Setting wieder deaktiviert werden._
 
-- Buttons: **Bereinigung der Buttons in der Export-Leiste**
+- Buttons: **Bereinigung der Buttons in der Export-Leiste**  
 _Der oberste Button startet nun das Marker Dashboard , der Listen-Button startet den Export-Assistent._
 
-- Buttons: **Konsistentz**
+- Buttons: **Konsistentz**  
 _Gelbe Buttons sind nun den äußeren Kontrollflächen vorbehalten. Die FX-Buttons der Kanäle leuchten nun Blau. Aus den Mixer Control Panels (MCP) wurden die redundanten Solo- und Mute-Buttons entfernt._
 
 ## User Interface
 
-- MacOS: **Optimierung der Fluppdizität**
+- MacOS: **Optimierung der Fluppdizität**  
 _Deutlich flüssigeres Scroll- und Zoomverhalten der Timeline sowie der Pegelanzeigen unter MacOS, sofern `Metal` unterstützt wird und ein hochauflösendes Trackpad eingesetzt wird._
 
-- **Automatisches Layout und Einfärbung**
+- **Automatisches Layout und Einfärbung**  
 _In den Settings sind zwei neue Komfort-Funktionen aktiv: automatische Spureinfärbung und automatische Trackhöhe_
   - _Die automatische Spureinfärbung funktioniert ähnlich wie der bekannte `Sonic Rainboom`, aber automagisch im Hintergrund. Normale Spuren erhalten Farben aus dem blauen Spektrum, Remote-Spuren (StudioLink) startet bei Orange. Das Soundboard wird Grau._
   - _Die automatische Trackhöhenanpassung passt die Höhe aller Spuren so an, dass immer alle Spuren sichtbar sind. Die Neuberechnung erfolgt, wenn sich die Spuranzahl ändert, Envelopes sichtbar/unsichtbar geschaltet werden oder man den Shortcut `alt`+`z` verwendet._
 
-- **Dialoge mit Shortcuts schließen**
+- **Dialoge mit Shortcuts schließen**  
 _Alle Ultraschall-Dialoge wie Color-Picker oder Marker-Dashboard sind nun mit `Cmd`+`w` / `Alt`+`F4` schließbar. Alternativ kann auch die `esc` Taste verwendet werden._
 
-- **Persistenz der Button-Zustände**
+- **Persistenz der Button-Zustände**  
 _Die Buttons in den Bereichen Views, Routing, Mouse-Selection und Followmode zeigen nun immer korrekt den aktuellen Status auch - auch nach neu Laden eines Projektes oder dem Wechsel zwischen verschiedenen parallel geöffneten Projekten._
 
-- **Direktverlinkungen im Welcome Screen**
+- **Direktverlinkungen im Welcome Screen**  
 _Die auf dem Startscreen vorgestellten Features verlinken nun direkt auf die jeweilige Stelle im Kurz-Tutorial._
 
-- **Erweitertes Podcast-Menü**
+- **Erweitertes Podcast-Menü**  
 _Das Podcast-Menü wurde um etliche neue Einträge erweitert, etwa solche, die sich auf selektierte Items oder Hilfe und Dokumentation beziehen._
 
-- **Automatisches Speichern**
+- **Automatisches Speichern**  
 _Auf vielfachen Wunsch wird nun alle 10 Minuten eine Sicherheitskopie der Projektdatei (nicht: der Audiofiles, die ohnehin nie verändert werden) im Projektordner abgelegt. Der Name enthält den Zeitstempel so dass man sich im Notfall schnell orientieren kann. Die Sicherheitskopien sind mit Zeitstempel im Namen versehen und im im Projektverzeichnis - Unterordner `backup` zu finden._
 
-- **Ultraschall Workflows**
+- **Ultraschall Workflows**  
 _Zu nicht unbedingt selbsterklärenden, schrittweisen Abläufen gibt es im Podcast-Menü einen neuen Abschnitt `Workflows`, der als Erinnerungsstütze dienen kann. Derzeit werden angeboten:_
   - _Die neue Ultraschall **Automated Mixing Pipeline** (AMP)_
   - _Double-ender_
 
 ## Recording
 
-- **Ripple Insert Recording**
+- **Ripple Insert Recording**  
 _Wenn man merkt, dass irgendwo in der bestehenden Aufnahme noch ein Satz fehlt, kann man diesen nun schnell hinzu fügen: den Edit-Cursor an die entsprechende Stelle setzen, die benötigten Spuren auf `arm` setzen und dann `cmd/strg`+`alt`+`i` drücken. Es wird sofort "Platz" in der Aufnahme gemacht für den neuen Take, so lange bis man die Aufnahme wieder stoppt. Alle Lücken werden danach automatisch geschlossen. An die Start-Endpositionen werden Edit-Marker gesetzt, damit man die Stelle für ein Finetuning besser wiederfindet._
 
-- **Preroll-Recording**
+- **Preroll-Recording**  
 _Zuweilen möchte man eine Passage, die nicht perfekt war, neu aufnehmen bzw. "überschreiben". Hierfür bieten wir nun ein Preroll-Recording an: man platziert den Edit Cursor an die Stelle, ab der man neu aufnehmen möchte. Mit `cmd/strg`+`shift`+`r` wird nun um einige Sekunden zurückgesprungen und das Bisherige Audio abgespielt. Wird die zu verändernde Stelle erreicht, wird dort alles Folgende gelöscht und direkt ein neues Recording gestartet. Der Wert, um wieviel Sekunden zurückgesprungen wird, kann in den Ultraschall Settings angepasst werden. Mit `alt`+`shift`+`r` kann man den Cursor an eine beliebige Stelle setzen, von der aus das Vorhören beginnen soll. Letzteres Verhalten kann auch über einen `Soundcheck` gestartet werden: das Preroll-Recording wird angeboten, wenn man innerhalb einer bestehenden Aufnahme auf `Record` drückt._
 
-- **SafeMode wieder eingeschaltet**
+- **SafeMode wieder eingeschaltet**  
 _In der 4.0 ist die Sicherheitsabfrage beim Stoppen einer Aufnahme aus Versehen ausgeschaltet worden. Diese ist nun wieder aktiv und warnt, bevor eine Aufnahme beendet wird. Das Safemode Recording kann über die Ultraschall Settings eingestellt werden._
 
-- **+18dB Check deaktiviert**
+- **+18dB Check deaktiviert**  
 _Der häufiger zu Problemen führende +18dB Check von REAPER (führte zum Auto-muten von Kanälen) ist nun standardmäßig deaktiviert._
 
-- Actions: **togglemute, mute und unmute pro Track**
+- Actions: **togglemute, mute und unmute pro Track**  
 _Die ersten 10 Tracks haben nun dedizierte Mute-Actions, die immer muten/unmuten, egal auf welchen Automationmode die Mutespur ist und egal, ob sie gerecarmed sind. Die entsprechenden Actions können über die Actions-Liste (`alt`+`,`) beispielsweise Midi-Noten zugewiesen werden für eine Steuerung über externe Controller._
 
 ## Editing
 
-- **Einfache Lautstärkeanpassungen bei Items**
+- **Einfache Lautstärkeanpassungen bei Items**  
 _Mit dem neuen Shortcut `v` aktiviert man für selektierte Items einen Volume-Envelope, der direkt im Item angezeigt wird. Erstellt man nun innerhalb des Items mit gedrücktem Mauszeiger-Ziehen eine Zeitauswahl, kann man danach den Envelope-Abschnitt in der Mitte greifen und leicht anpassen. Das Ergebnis ist eine sehr schnelle Möglichkeit um komplexe Lautstärkeverläufe einstellen zu können, die auch garantiert stabil am Item verbleiben - vergleichbar zu Hindenburg._
 
-- **Double-ender**
+- **Double-ender**  
 _Ultraschall 5 bietet im neuen Untermenü `Workflows` des Podcast-Menüs zwei Varianten an, um Double-ender einfacher mit einer zeitlich auseinander laufenden lokalen Spur in Einklang zu bringen:_
   - _**Stretch Marker** können helfen, die Remote-Spur in der Länge an die lokale Spur anzupassen, wenn der Zeitversatz der Remote-Spur konstant ist - also etwa pro Minute der Sendung ein Versatz von einer Sekunde entsteht._
   - _Bei nicht gleichmäßigem Auseinanderlaufen kann der neue **Auto-matching** Workflow helfen, der darauf basiert beide Spuren entlang von Pausen in einzelne Items zu zerschneiden und diese dann auszurichten._
 
-- Wellenformen: **Spektralansicht der Wellenformen**
+- Wellenformen: **Spektralansicht der Wellenformen**  
 _Mit dem Shortcut `cmd`+`shift`+`h` kann nun eine Sprektralansicht der Wellenform umgeschaltet werden. Diese ist ebenso im Podcastmenü (Untermenü "View") sowie im Kontextmenü von Items zu finden. Diese Ansicht hilft dabei, störende Laute wie Poppen, Atmen oder Zischen farblich zu erkennen._
 
-- **Prepare all tracks...**
+- **Prepare all tracks...**  
 _Die nach jeder fertigen Aufnahme auszuführende `prepare all tracks for editing` Funktion setzt nun den neuen Ultraschall AMP Effekt (siehe oben) deaktiviert auf dem Master für das Tuning auf -16 LUFS und fordert ferner zum Speichern auf, sollte dies noch nicht erfolgt sein. Sind Studio-Link Effekte aktiv, wird dazu aufgefordert, zunächst im Webbrowser alle offenen Anrufe zu beenden._
 
-- **Einfacher Ripple-Cut:**
+- **Einfacher Ripple-Cut:**  
 _Die Taste `Backspace` löst nun einen Ripple-Cut über alle Spuren aus (analog zu `cmd`+`x`), wenn eine Zeitselektion vorliegt. `Del` löscht die Inhalte aus einer Zeitselektion ohne die nachfolgenden Inhalte heranzuschieben._
 
-- **Ripple-Cut mit Kontrolle:**
+- **Ripple-Cut mit Kontrolle:**  
 _Der Shortcut `alt`+`cmd`+`x` macht einen Ripple-Cut mit nachgelagertem Preview des Schnittes._
 
-- **Vereinfachte Schnittfunktionen mit Mausklick:**
+- **Vereinfachte Schnittfunktionen mit Mausklick:**  
   - _`shift` + `cmd` + Linksklick auf Item: Kürzt Item unter Mousecursor am Ende_
   - _`shift` + `alt` + Linksklick auf Item: Kürzt Item unter Mousecursor am Anfang_
   - _`cmd` + Doppelklick: Normalisiert selektierte Items auf -23 LUFS_
   - _`cmd` + `alt` + Doppelklick: setzt alle Normalisierungen wieder zurück._
 
-- Actions: **Neue Schnitt-Funktionen**
+- Actions: **Neue Schnitt-Funktionen**  
 _Über die Actions-Liste (`alt`+`,`) stehen neue Schnittfunktionen zur Verfügung, die man sich bei Bedarf auf Shortcuts legen kann:_
   - _Cut all items within time-selection in selected tracks_
   - _Ripple cut in selected tracks, markers stay at their position_
   - _Ripple cut in selected tracks, moving markers_
 
-- **Magnetische Kanten**
+- **Magnetische Kanten**  
 _Nach all den Jahren: endlich konsistente magnetische Snap-Settings für alle Itemkanten, Marker, Regionen. Wirkt sich erst bei in Ultraschall 5 neu erstellten Projekten aus._
 
 ## Mixing
 
-- Ultraschall AMP: **Neue Effektkette für -16 LUFS Mastering**
+- Ultraschall AMP: **Neue Effektkette für -16 LUFS Mastering**  
   - _Bisher wurde der Dynamics 2 Effekt so voreingestellt, das jede einzelne Spur auf - 16 LUFS Lautheit optimiert wurde. Dies konnte jedoch bei sich überlagernden Spuren - etwa bei gemeinsamen lauten Lachen - dazu führen, dass die Summe der Spuren verzerrt und zu laut wird. Zudem war es oft mühsam, für jede Spur den richtigen `Threshold` zwischen Sprache und unerwünschen Störunen (Atmen etc.) einzustellen._
   - _Daher wird nun eine neue, besser klingende unf einfacher zu handhabende Effektkette angeboten: **Ultraschall AMP** (Automated Mixing Pipeline):_
     - _**Schritt 1:** Alle Spuren die Sprache enthalten werden mit einer Automatisierung auf -23 LUFS gebracht_ (vergleichbar zu Hindenburg).
@@ -133,7 +133,7 @@ _Nach all den Jahren: endlich konsistente magnetische Snap-Settings für alle It
     - _**Schritt 3**: Die fehlenden LUFS Lautheit auf das gewünschte Target (empfohlen für Podcasts: -16 LUFS) erreicht man, indem man den neuen `LUFS Loudness Metering` Effekt auf dem Masterkanal aktiviert. Dieser Effekt visualisiert zum einen die `integrated LUFS` im Zeitverlauf. Je länger die Messung andauert, desto genauer der Mittelwert. Mit `Reset` kann die Messung neu gestartet werden, mit der Auswahl `Target` können verschiedene Lautheits-Profile ausgewählt werden. Eine Umschaltung führt direkt zu einer Anhebung bzw. Absenkung der Lautheit. Ein Korridor von +/- 1 LUFS visualisiert, ob der Podcasts sich innerhalb des gewünschten Ziels bewegt. Blau bedeutet dabei zu leise, Grün genau richtig, Gelb etwas und Rot deutlich zu laut._
     - _**Schritt 4** (optional): sollte die Automatik doch einmal daneben liegen, kann die Lautheit über einen *Gain* Regler korrigiert oder mit einer `Match Gain` Funktion automatisch angepasst werden._
 
-- Effekte: **Neue Effektsammlung für Spuren**
+- Effekte: **Neue Effektsammlung für Spuren**  
 _Bei neu angelegten Spuren werden nun standardmäßig diese Effekte in der richtigen Reihenfolge (deaktiviert) geladen:_
   - _DeNoise (der ReaFir Rauschfilter zum Anlernen von Rauschprofilen)_
   - _DeEsser (ein Multiband-Kompressor zum Reduzieren von Zischlauten)_
@@ -143,7 +143,7 @@ _Bei neu angelegten Spuren werden nun standardmäßig diese Effekte in der richt
 
   _Die Effekte sind zunächst deaktiviert. Sie sollten - mit Ausnahme des Dynamics 2 - nur maßvoll angewandt werden und nur dann, wenn auch wirklich Probleme zu beheben sind. Bei sehr gutem Ausgangsmaterial führen Filter ansonsten eher zu einer Verschlechterung der Klangqualität._
 
-- Effekte: **Best-of-Breed Sammlung**
+- Effekte: **Best-of-Breed Sammlung**  
 _In einem neuen Ordner "Best-of-Breed" werden einige herausragende, freie Effekte angeboten:_
   - _**ReEQ** (Equalizer, der an Fabfilter angelehnt ist)_
   - _**Smooth Limiter** (Limiter der Extraklasse, der sehr anschaulich den Grad des Eingreifens visualisiert und auch im neuen LUFS Loudness Metering Effekt verbaut ist - pures Audio-Gold)_
@@ -153,48 +153,48 @@ _In einem neuen Ordner "Best-of-Breed" werden einige herausragende, freie Effekt
 
 ## Export
 
-- Assistent: **Erweiterter Export-Assistent**
+- Assistent: **Erweiterter Export-Assistent**  
 _Der Export-Assistent wurde um ein Ampel-System erweitert, das noch fehlende oder unvollständige Metadaten anzeigt. Wenn noch Edit-Marker im Projekt sind, wird dies mit einer gelben Warnlampe bei den Markern quittiert._
 
-- Episodenbilder: **Drag-and-Drop**
+- Episodenbilder: **Drag-and-Drop**  
 _Episodenbilder können nun im Export-Assistent direkt per Drag-and-Drop eingefügt werden. Es gibt ferner vier Speicherplätze, in denen man die Cover für unterschiedliche Podcasts hinterlegen kann - um diese dann mit einem Klick für den jeweilig aktuellen Podcast zu aktivieren._
 
-- Rendering: **Ultraschall-Render-Presets nun im Menü auswählbar**
+- Rendering: **Ultraschall-Render-Presets nun im Menü auswählbar**  
 _Man kann nun im File- und im Podcast-Menu ein Untermenü aufrufen, in welchem man den Render to File-Dialog gleich mit richtigem Render-Preset öffnen kann. Unterstützt werden unsere Standard-Render-Presets wie MP3 (mit Kapiteln, Kapitelbildern und - URLs), Auphonic Multichannel und m4a._
 
-- Render Dialog: **Presets optimiert**
+- Render Dialog: **Presets optimiert**  
   - _Auphonic Multichannel erhält das Namensschema `$project-$tracknumber-$track`, MP3 und M4A `$project` für die Dateien._
   - _Mono-Tracks werden immer als Mono gerendert._
 
-- Routing-Check: **Umstellen des Routings**
+- Routing-Check: **Umstellen des Routings**  
 _Vor jedem Export wird geprüft, ob das Routing auf `Schnitt` steht, damit alle Spuren in den Export einfließen._
 
-- Render Settings: **Optimierung für Apple Silicon**
+- Render Settings: **Optimierung für Apple Silicon**  
 _Für den Rendering-Buffer wird der Wert 4096 gesetzt, was insbesondere auf Apple Silicon Macs die Rendergeschwindigkeit dramatisch anhebt (bis zu Faktor 5)_
 
 ## Shortcuts
 
-- Global Shortcuts: **Etliche Tastaturshortcuts sind nun auf global gesetzt**
+- Global Shortcuts: **Etliche Tastaturshortcuts sind nun auf global gesetzt**  
 _Je nach Tastaturfokus konnte es sein, dass Tastaturshortcuts nicht reagiert haben oder anders reagiert haben, als man es gewohnt war. Jetzt sind viele Shortcuts so eingestellt, dass sie auch dann funktionieren, wenn man z.B. etwas im Soundboard angeklickt hat. Dies sollte typische Probleme lösen, wie das nicht reagieren von Shortcuts fürs Marker setzen._
 
-- **Übersicht sämtlicher Shortcuts**
+- **Übersicht sämtlicher Shortcuts**  
 _Im neuen Menüpunkt "Help and Documentation" im Podcast-Menü ist eine automatisch generierte, durchsortierte Liste sämtlicher (!) aktiver Shortcuts und Maus-Modifier zu finden_
 
-- **Aktuelles Projekttab schließen**
+- **Aktuelles Projekttab schließen**  
 _ist auf dem Mac nun mit `cmd`+`w` möglich._
 
-- **Dynamic Split Items**
+- **Dynamic Split Items**  
 _Die Funktion Dynamic Split Items ist nun wieder direkt über den Shortcut `cmd/strg`+`shift`+`d` zu erreichen._
 
-- **Normalisierung**
+- **Normalisierung**  
 _Der Shortcut `opt`+`shift`+`n` normalisiert selektierte Items auf -23 LUFS. Mit `cmd` + `shift` + `n` wird jegliche Normalisierung aufgehoben._
 
-- **Glue Items**
+- **Glue Items**  
 _Der Shortcut `cmd`+`shift`+`g` führt nebeneinander liegende Items zu einem großen Item zusammen. Praktisch, wenn man etwa unterschiedlich laut aufgenommene Abschnitte einer Spur zerschnitten hat um sie separat auf -23 LUFS zu normalisieren, danach aber wieder als ein Item im Schnitt behandeln will. Es wird eine neue Audio-Datei im Format WavPack 32-Bit float geschrieben._
 
 ## Navigation
 
-- **Optimierung der Trackpad-/Mausradfunktionen**
+- **Optimierung der Trackpad-/Mausradfunktionen**  
 _Trackpads und Mausrad kommen sich leider in den Belegungen in die Quere. Das Mausrad hat nun folgende Belegungen, die so auch in nahezu allen anderen Schnittprogrammen zu finden sind:_
 `Scroll` - Verikales Scrollen des Arbeitsbereichs
 `Scroll` + `Shift` - Horizontales Scrollen des Arbeitsbereichs
@@ -203,21 +203,21 @@ _Trackpads und Mausrad kommen sich leider in den Belegungen in die Quere. Das Ma
 `Klick`+ `Drag` - Freies Verschieben des Arbeitsbereichs
 `Klick` - Setzt den Edit-Cursor ohne Auswahl von Spuren/items_
 
-- **Schnitte Prüfen**
+- **Schnitte Prüfen**  
 _Die Shortcuts `alt`+`cmd`+`left` und `alt`+`cmd`+`right` springen zur nächsten Itemkante (bei ausgewählten Tracks nur auf ebendiesen), springen dann noch um den in den Ultraschall Sttings angegebenen Wert des Previews zurück und spielen den Schnitt dann ab. Perfekt zum schnellen Kontrollieren aller Schnitte in einem Projekt._
 
-- **Zoom auf Auswahl und zurück**
+- **Zoom auf Auswahl und zurück**  
 _Der Shortcut `shift`+`z` zoomt den Arrangeview auf eine Zeitauswahl oder auf selektierte Items. Die Auswahl wird dann aufgehoben. Bei nochmaligem Drücken wird auf die ursprüngliche Zoomstufe zurück gesprungen._
 
-- **Zoom auf Edit-Cursor**
+- **Zoom auf Edit-Cursor**  
 _Mit `cmd/strg`+`Pinch` auf dem Trackpad wird nicht an die Position des Mauszeigers gezoomt, sondern an die des Edit-Cursors._
 
 ## Soundcheck 2
 
-- Soundcheck: **Runderneuerung**
+- Soundcheck: **Runderneuerung**  
 _Der Ultraschall-Soundchek wurde im Vergleich zur 4er Version an viele Stellen optimiert: Es werden nur noch die akuten oder pausierten Problembereiche angezeigt, nicht mehr die unproblematischen; eine Erläuterung des jeweiligen Problems ist nun immer sichtbar; der `Ignore` Button wurde von den Buttons zur Problemlösung getrennt; die Fensterposition wird gespeichert; über die Ultraschall-Settings kann der Modus "Graceful Soundcheck" aktiviert werden: schließt man das Soundcheck-Fenster trotz offener Probleme, werden diese auf den Status `Ignored` gesetzt; die Logik hinter einigen Soundchecks wurde optimiert; Falsche Blocksize und unbekannte Soundinterfaces werden nun in der Titelzeile des entsprechenden Soundchecks angezeigt._
 
-- Setup: **Automatische Zuweisung von Inputs**
+- Setup: **Automatische Zuweisung von Inputs**  
 _Ein neuer Soundcheck prüft, ob:_
 _a) mehrere Spuren denselben Input-Kanal eines Soundinterface nutzen und_
 _b) bei einem angeschlossenen Zoom Interface (H4, H5, H6) die ersten beiden Stereo-Aufsatz-Kanäle verwendet werden._  
@@ -225,24 +225,24 @@ _Der Soundcheck schlägt an, sobald irgendein Kanal auf Recarm gesetzt wird. Es 
 
 ## Marker
 
-- Marker Dashboard 2: **Erweiterte Funktionen**
+- Marker Dashboard 2: **Erweiterte Funktionen**  
 _Das Marker Dashboard (`alt`+`shift`+`m`) kann nun in der Höhe verändert werden, so dass mehr Marker sichtbar sind. Ferner wurde eine Blätterlogik eingefügt, so dass beliebig viele Marker bearbeitet werden können. Ein selektierter Marker kann nun auch im Dashboard gelöscht werden. Kapitelbilder werden mit einer Vorschau angezeigt, ein Klick darauf startet die Vollansicht. Ein Hilfebutton erläutert eventuell auftretende Probleme. Die Funktion zum Speichern von Markern in einer Textdatei findet sich nun ebenfalls im Marker Manager._
 
-- **Nächsten Marker auf "planned" setzen**
+- **Nächsten Marker auf "planned" setzen**  
 _Im Podcast-Menü gibt es unter `Recording/Markers` den neuen Eintrag `Set next marker to planning stage`. Dieser setzt den nächsten normalen Kapitel-Marker rechts vom Cursor auf den Status "planned"._
 
-- Settings: **Lautstärke der Kapitelglocke**
+- Settings: **Lautstärke der Kapitelglocke**  
 _Die Lautstärke der Kapitelglocke in den Ultraschall Settings wird nun nicht mehr linear, sondern logarithmisch eingestellt - dies erleichtert die Einstellung von niedrigen Lautstärken._
 
-- Settings: **Mehr Platz für Marker**
+- Settings: **Mehr Platz für Marker**  
 _Mit der Option "Large marker manager" in den Ultraschall Settings wird der REAPER eigene marker manager im View recording groß an der rechten Fensterseite angezeigt._
 
-- **Marker mit Namen**
+- **Marker mit Namen**  
 _Wenn mit `shift`+`m` Kapitelmarken mit Namen eingefügt werden, hat man deutlich mehr Platz den Namen zu editieren._
 
 ## Ultraschall Dashboard
 
-- **Dashboard statt Ultraclock**
+- **Dashboard statt Ultraclock**  
 _Die Ultracklock wurde umbenannt in Dashboard und zeigt nun erweiterte Funktionen an:_
   - _Im unteren Bereich immer den aktuellen Status der **Soundchecks** an (Passed, Ignored, Warning). Ein Klick darauf startet das Soundcheck-Fenster._
   - _Eine **Time Selection** wird im Dashboard standardmäßig angezeigt, aber nur wenn es auch eine gibt._
@@ -250,40 +250,40 @@ _Die Ultracklock wurde umbenannt in Dashboard und zeigt nun erweiterte Funktione
 
 ## Magic Routing
 
-- Routing: **Automagisches Umschalten**
+- Routing: **Automagisches Umschalten**  
 _Ist Magic Routing aktiviert, so springen die Routings-Presets nun automatisch um: Wird eine Aufnahme gestartet, wird das Preset `Recording` ausgewählt. Wird eine bereits erfolgt Aufnahme abgehört (Play), so wird das Preset `Schnitt` ausgewählt. Wurde das Preset `Preshow` ausgewählt, bleibt dieses erhalten bis man manuell auf `Recording` umschaltet._
 
-- Bugfix: **Kein erneutes Setzen der Routing Matrix vor dem Rendern**
+- Bugfix: **Kein erneutes Setzen der Routing Matrix vor dem Rendern**  
 _So bleiben Custom Routings (speicherbar unter dem Schriftzug-Button `Routing`) auch beim Rendern erhalten._
 
 ## Ultraschall Settings
 
-- **Neues Layout**
+- **Neues Layout**  
 _Die Ultraschall-Settings werden nun in drei Tabs organisiert: `General`, `Soundcheck` und `Interfaces`_
 
-- **Slider mit Werten**
+- **Slider mit Werten**  
 _Die Schieberegler in den Ultraschall Settings zeigen nun sinnvolle Werte - etwa Sekunden - an._
 
 ## Interfaces
 
-- Stream Deck: **Support für das Elgato Stream Deck**
+- Stream Deck: **Support für das Elgato Stream Deck**  
 _Ultraschall bietet nun umfassende Unterstützung für das Elgato Stream Deck zur Steuerung beliebiger Funktionen. Eine detailierte Dokumentation wird separat veröffentlicht._
 
 ## Bugfixes
 
-- Plugin: **Fehlende Konvertierung des Projektverzeichnisses von UTF-8 nach Windows-1252 beim exportieren von Kapitelmarken**
+- Plugin: **Fehlende Konvertierung des Projektverzeichnisses von UTF-8 nach Windows-1252 beim exportieren von Kapitelmarken**  
 _Der Name des Projektverzeichnisses auf Windows wird jetzt richtig konvertiert._
 
-- Button: **Projektordner öffnen erlaubt nun Projektordner mit Umlaut im Namen**
+- Button: **Projektordner öffnen erlaubt nun Projektordner mit Umlaut im Namen**  
 _Bei Projektordnern, die Umlaut im Pfad oder eigenen Namen hatten, konnte es sein, dass diese mit dem "Open project folder"-Button nicht geöffnet wurden._
 
-- Routing: **Ducking**
+- Routing: **Ducking**  
 _Im Routing-Preset `Preshow` ist nun das automatische Ducking des Soundboards durch alle anderen Spuren deaktiviert._
 
-- Recording: **Setzen der Playrate**
+- Recording: **Setzen der Playrate**  
 _Die Playrate wird erst bei einer realen Aufnahme automatisch auf 1x gesetzt, nicht wie bisher schon beim Scharfschalten ("arm") eines Tracks._
 
-- FX: **Prepare all tracks for editing**
+- FX: **Prepare all tracks for editing**  
 _Die Funktion `Prepare all tracks for editing` löscht nun auch auf dem Mac zuverlässig den StudioLink OnAir Effekt aus dem Master-Kanal, und nicht mehr nur den ersten sichtbaren Effekt._
 
 ## 4.0 Aicher - 2020-03-09
