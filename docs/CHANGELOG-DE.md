@@ -6,31 +6,31 @@ Die nachfolgenden Features werden ausführlich in unseren Ultraschall-Tutorial-V
 
 ## System
 
-- REAPER: **Unterstützung der Version 6.25**
+- REAPER: **Unterstützung der Version 6.25**  
 _Ultraschall 5.0 ist für die Version 6.25 von REAPER optimiert. Alle anderen Versionen sind nicht lauffähig. Von einem manuellen Update von REAPER ist daher in Zukunft unbedingt abzusehen, die Ultraschall-Erweiterungen werden dann deaktiviert._
 
-- Apple Silicon: **Optimiert für M1 Macs und MacOs Big Sur**
+- Apple Silicon: **Optimiert für M1 Macs und MacOs Big Sur**  
 _Ultraschall 5 ist bis in die Haarspitzen optimiert für die M1 Prozessoren von Apple. Sämtliche Komponenten laufen nativ auf der ARM-Architektur._
 
 - StudioLink: **Aktuelle Versionen von StudioLink und StudioLink OnAir**
 
-- API: **Update der Ultraschall API auf Version 4.2.003**
+- API: **Update der Ultraschall API auf Version 4.2.003**  
 _mit 1.385 LUA-Funktionen um Podcasting-Features in REAPER komfortabler programmieren zu können._
 
 ## Installer
 
-- **1Klick Installer**
+- **1Klick Installer**  
 _Der bisherige Schritt, die Theme-Datei in ein geöffnetes REAPER-Fenster fallen zu lassen, entfällt._
 
-- **Sicherung von Profilen**
+- **Sicherung von Profilen**  
 _Während des Setups werden die alten Einstellungen gesichert - es ist damit grundsätzlich möglich, den Zustand einer vorherigen Installation wiederherzustellen oder auch nachträglich etwa Projektvorlagen zu kopieren. Unter MacOS sind sie in `~/Library/Application Support/Ultraschall/Backups`und unter Windows unter `%APPDATA%\Roaming\Ultraschall\Backups`_ 
 
 ## Theme
 
-- Design: **Ultra Gray**
+- Design: **Ultra Gray**  
 _Die Ultraschall-Fenster Settings, Soundcheck, Marker-Dashboard und Export-Assistent folgen nun einer einheitlichen Bedien- und Formensprache. Noch grauer als Space Gray: ULTRA GRAY! (danke an @twittlik). Gleichzeitig wurde der Ressourcenverbrauch aller Fenster auf 10% des bisherigen Wertes reduziert - die Lüfter eurer Laptops bleiben nun aus._
 
-- Theme: **Dark Mode für MacOS**
+- Theme: **Dark Mode für MacOS**  
 _Der Dark Mode von MacOS wird nun unterstützt. Dies muss in den REAPER Settings unter `General/Advanced UI` aktiviviert werden. Achtung: ein Mischbetrieb ist leider nicht möglich, bei einem Wechsel zum Light-Theme muss das Setting wieder deaktiviert werden._
 
 - Buttons: **Bereinigung der Buttons in der Export-Leiste**
