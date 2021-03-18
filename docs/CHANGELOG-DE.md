@@ -10,7 +10,7 @@ Die nachfolgenden Features werden ausführlich in unseren Ultraschall-Tutorial-V
 _Ultraschall 5.0 ist für die Version 6.25 von REAPER optimiert. Alle anderen Versionen sind nicht lauffähig. Von einem manuellen Update von REAPER ist daher in Zukunft unbedingt abzusehen, die Ultraschall-Erweiterungen werden dann deaktiviert._
 
 - Apple Silicon: **Optimiert für M1 Macs und MacOs Big Sur**
-_Ultraschall 5 ist bis in die Haarspitzen optimiert für die M1 Prozessoren von Apple. Sämtliche Komponenten (bis auf das VST-Soundboard) laufen nativ auf der ARM-Architektur._
+_Ultraschall 5 ist bis in die Haarspitzen optimiert für die M1 Prozessoren von Apple. Sämtliche Komponenten laufen nativ auf der ARM-Architektur._
 
 - StudioLink: **Aktuelle Versionen von StudioLink und StudioLink OnAir**
 
@@ -19,8 +19,11 @@ _mit 1.385 LUA-Funktionen um Podcasting-Features in REAPER komfortabler programm
 
 ## Installer
 
-- **MacOS-Installer**
+- **1Klick Installer**
 _Der bisherige Schritt, die Theme-Datei in ein geöffnetes REAPER-Fenster fallen zu lassen, entfällt._
+
+- **Sicherung von Profilen**
+_Während des Setups werden die alten Einstellungen gesichert - es ist damit grundsätzlich möglich, den Zustand einer vorherigen Installation wiederherzustellen oder auch nachträglich etwa Projektvorlagen zu kopieren. Unter MacOS sind sie in `~/Library/Application Support/Ultraschall/Backups`und unter Windows unter `%APPDATA%\Roaming\Ultraschall\Backups`_ 
 
 ## Theme
 
@@ -162,7 +165,6 @@ _Man kann nun im File- und im Podcast-Menu ein Untermenü aufrufen, in welchem m
 - Render Dialog: **Presets optimiert**
   - _Auphonic Multichannel erhält das Namensschema `$project-$tracknumber-$track`, MP3 und M4A `$project` für die Dateien._
   - _Mono-Tracks werden immer als Mono gerendert._
-  - _Die Option `SilentlyIncrementFilename` ist nun standardmäßig ausgeschaltet._
 
 - Routing-Check: **Umstellen des Routings**
 _Vor jedem Export wird geprüft, ob das Routing auf `Schnitt` steht, damit alle Spuren in den Export einfließen._
@@ -216,10 +218,10 @@ _Mit `cmd/strg`+`Pinch` auf dem Trackpad wird nicht an die Position des Mauszeig
 _Der Ultraschall-Soundchek wurde im Vergleich zur 4er Version an viele Stellen optimiert: Es werden nur noch die akuten oder pausierten Problembereiche angezeigt, nicht mehr die unproblematischen; eine Erläuterung des jeweiligen Problems ist nun immer sichtbar; der `Ignore` Button wurde von den Buttons zur Problemlösung getrennt; die Fensterposition wird gespeichert; über die Ultraschall-Settings kann der Modus "Graceful Soundcheck" aktiviert werden: schließt man das Soundcheck-Fenster trotz offener Probleme, werden diese auf den Status `Ignored` gesetzt; die Logik hinter einigen Soundchecks wurde optimiert; Falsche Blocksize und unbekannte Soundinterfaces werden nun in der Titelzeile des entsprechenden Soundchecks angezeigt._
 
 - Setup: **Automatische Zuweisung von Inputs**
-_Ein neuer Soundcheck prüft, ob:
-a) mehrere Spuren denselben Input-Kanal eines Soundinterface nutzen und
-b) bei einem angeschlossenen Zoom Interface (H4, H5, H6) die ersten beiden Stereo-Aufsatz-Kanäle verwendet werden.
-Der Soundcheck schlägt an, sobald irgendein Kanal auf Recarm gesetzt wird. Es wird eine Autoassign-Funktion angeboten, die sämtlichen normalen, lokalen Spuren (nicht: Soundboard und StudioLink) aufsteigenden Input-Kanälen zuweist. Im Falle der Zoom-Interfaces starten diese mit Kanal 3. Die neue Autoassign-Funktion kann unabhängig vom Soundcheck auch im Bereich Setup des Podcast-Menüs aufgerufen werden._
+_Ein neuer Soundcheck prüft, ob:_
+_a) mehrere Spuren denselben Input-Kanal eines Soundinterface nutzen und_
+_b) bei einem angeschlossenen Zoom Interface (H4, H5, H6) die ersten beiden Stereo-Aufsatz-Kanäle verwendet werden._  
+_Der Soundcheck schlägt an, sobald irgendein Kanal auf Recarm gesetzt wird. Es wird eine Autoassign-Funktion angeboten, die sämtlichen normalen, lokalen Spuren (nicht: Soundboard und StudioLink) aufsteigenden Input-Kanälen zuweist. Im Falle der Zoom-Interfaces starten diese mit Kanal 3. Die neue Autoassign-Funktion kann unabhängig vom Soundcheck auch im Bereich Setup des Podcast-Menüs aufgerufen werden._
 
 ## Marker
 
