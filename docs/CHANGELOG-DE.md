@@ -2,7 +2,7 @@
 
 Die nachfolgenden Features werden ausführlich in unseren Ultraschall-Tutorial-Videos erklärt: [https://ultraschall.fm/tutorials/](https://ultraschall.fm/tutorials/)
 
-## 5.0 Marianne Brandt - 2021-03-20
+## 5.0 Marianne Brandt - 2021-03-21
 
 ## System
 
