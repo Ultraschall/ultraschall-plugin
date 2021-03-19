@@ -1,6 +1,6 @@
-# Installation instructions for Ultraschall 4
+# Installation instructions for Ultraschall 5
 
-The Ultraschall open-source project is an extension for the commercially available REAPER audio production software. 
+The Ultraschall open-source project is an extension for the commercially available REAPER audio production software.
 
 The test version of REAPER is _fully functional for 60 days_ and costs US$ 60 afterwards.
 
@@ -8,9 +8,9 @@ The Ultraschall installation comprises **two mandatory steps (Windows: three)**.
 
 ---
 
-# macOS 10.11 or above
+## macOS 10.11 or above
 
-# 1.
+## 1.
 
 ## Update / Install REAPER
 
@@ -26,8 +26,7 @@ Ultraschall 5 is only compatible to REAPER version 6.25. Since version 6, a spec
 * Download and open the `.dmg`, and install REAPER or update to version 6.25 respectively.
 * Using any other REAPER version will lead to the Ultraschall plugin being deactivated and not being launched. We strongly advise you NOT to update REAPER manually to any other version than 6.25.
 
-
-# 2.
+## 2.
 
 ## Download Ultraschall and launch the Ultraschall installer
 
@@ -61,9 +60,9 @@ In case you want to use purely software-defined N-1 audio-routing for Skype reco
 
 ---
 
-# Windows Version 10 or above
+## Windows Version 10 or later
 
-# 1.
+## 1.
 
 ## Update / Install REAPER
 
@@ -75,7 +74,7 @@ Ultraschall 5 is only compatible to REAPER version 6.25.
 * Using any other REAPER version will lead to the Ultraschall plugin being deactivated and not being launched. We strongly advise you NOT to update REAPER manually to any other version than 6.25.
 * The test version of REAPER is _fully functional for 60 days_ and costs US$ 60 afterwards.
 
-# 2.
+## 2.
 
 ## Download Ultraschall and launch the Ultraschall installer
 
@@ -86,7 +85,7 @@ Download our Ultraschall 5 distribution and open the `.msi` file:
 * Run and finish the Installer.
 * Launch the REAPER app - Ultraschall 5 will start.
 
-# 3.
+## 3.
 
 ## Connect StudioLink and the Ultraschall Soundboard
 

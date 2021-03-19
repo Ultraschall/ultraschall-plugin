@@ -6,41 +6,38 @@ Eine Testversion von REAPER ist _uneingeschränkt 60 Tage lauffähig_, danach fa
 
 Ultraschall selbst ist kostenlos und Open-Source.
 
-Die Installation von Ultraschall umfasst **zwei zwingend notwendige Schritte (Windows: 3)**.
+Die Installation von Ultraschall umfasst **zwei zwingend notwendige Schritte (Windows: drei)**.
 
---
+---
 
-# macOS ab 10.11
+## macOS ab 10.11
 
-# 1.
+## 1.
 
 ## REAPER aktualisieren / installieren
 
- Seit Version 6 wird für REAPER eine spezielle Version angeboten, die für alle MacOS ab Catalina zusätzliche Lizensierungen enthält. Ferner gibt es eine hoch optimierte Version für Apple Silicon M1 Rechner (ARM). Es ist unbedingt die passende Version zu wählen: 
+ Seit Version 6 wird für REAPER eine spezielle Version angeboten, die für alle MacOS ab Catalina zusätzliche Lizensierungen enthält. Ferner gibt es eine hoch optimierte Version für Apple Silicon M1 Rechner (ARM). Es ist unbedingt die passende Version zu wählen:
 
-[**REAPER Version v6.25 OS X 64-bit herunterladen**](https://www.reaper.fm/files/6.x/reaper625_x86_64.dmg)  
+[**REAPER Version v6.25 OS X 64-bit herunterladen**](https://www.reaper.fm/files/6.x/reaper625_x86_64.dmg)
 
 [**REAPER Version v6.25 OS X 64-bit Catalina/Big Sur herunterladen**](https://www.reaper.fm/files/6.x/reaper625_x86_64_catalina.dmg)
 
 [**REAPER Version v6.25 OS X 64-bit ARM für Apple Silicon herunterladen**](https://www.reaper.fm/files/6.x/reaper625-beta_arm64.dmg)
 
-
 * Das `.dmg` laden und starten, dann REAPER installieren bzw. auf die Version 6.25 aktualisieren.
 * Der Einsatz jeder anderen Version von REAPER führt dazu, dass das Ultraschall-Plugin nicht gestartet wird. Von einem manuellen Update von REAPER auf eine andere Version als 6.25 ist daher zwingend abzusehen.
 
-# 2.
+## 2.
 
 ## Ultraschall laden und den Ultraschall-Installer starten.
 
 Unsere Ultraschall 5 Distribution laden und das `.dmg` starten:
 
-[**Ultraschall 4 herunterladen**](http://url.ultraschall-podcast.de/us5mac)
+[**Ultraschall 5 herunterladen**](http://url.ultraschall-podcast.de/us5mac)
 
 * Im sich öffnenden Fenster unser Installationsprogramm `Ultraschall-5.0.pkg` starten und durchlaufen lassen.
 * **Achtung:** Sollte die Installation am Ende eine Fehlermeldung ausgeben, bitte einmal macOS neu booten und den Installer erneut durchlaufen lassen.
 * Danach die REAPER App aus dem Program-Verzeichnis starten - Ultraschall 5 startet.
-
-&nbsp;
 
 ---
 
@@ -64,11 +61,9 @@ Wenn man in Ultraschall eine rein in Software modellierte SKYPE N-1 Schaltung um
 
 ---
 
-&nbsp;
+## Windows ab Version 10
 
-# Windows ab Version 10
-
-# 1.
+## 1.
 
 ## REAPER aktualisieren / installieren
 
@@ -79,24 +74,22 @@ Wenn man in Ultraschall eine rein in Software modellierte SKYPE N-1 Schaltung um
 * Der Einsatz jeder anderen Version von REAPER führt dazu, dass das Ultraschall-Plugin nicht gestartet wird. Von einem manuellen Update von REAPER auf eine andere Version als 6.25 ist daher zwingend abzusehen.
 
 
-# 2.
+## 2.
 
 ## Ultraschall laden und den Ultraschall-Installer starten.
 
 Unsere Ultraschall 5 Distribution laden und das `.msi` starten:
 
-[**Ultraschall-5.msi (24.1 MB) herunterladen**](http://url.ultraschall-podcast.de/us5win)
+[**Ultraschall-5.0.msi herunterladen**](http://url.ultraschall-podcast.de/us5win)
 
 * Den Installer starten und durchlaufen lassen.
 
-# 3.
+## 3.
 
 ## StudioLink und das Ultraschall-Soundboard verbinden
 
 * Unser integriertes Soundboard zum Einspielen von Jingles und Ähnlichem, sowie StudioLink (als Alternative zu Skype-Remoterecordings) und StudioLink OnAir wird automatisch installiert. Man muss dies jedoch REAPER einmalig nach der Installation mitteilen:
 * Im Menü `Options | Preferences… | Plug-ins/VST` anwählen. Nun rechts oben den Button `Auto-detect` drücken und rechts unten mit `Apply` bestätigen. Die Einstellungen können nun wieder geschlossen werden.
-
-&nbsp;
 
 ## Erfolg der Installation kontrollieren
 
