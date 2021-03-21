@@ -64,20 +64,18 @@
 
 #define PRECONDITION(a) \
     {                   \
-        if((a) == 0)    \
-        {               \
+        if((a) == 0) {  \
             return;     \
         }               \
     }
 
 #define PRECONDITION_RETURN(a, b) \
     {                             \
-        if((a) == 0)              \
-        {                         \
+        if((a) == 0) {            \
             return (b);           \
         }                         \
     }
 
-#define ULTRASCHALL_VERSION "5.0.0"
+#define ULTRASCHALL_VERSION "5.0.2"
 
 #endif // #ifndef __ULTRASCHALL_REAPER_COMMON_H_INCL__
