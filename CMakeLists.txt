@@ -51,6 +51,8 @@ elseif(UNIX)
         set(ULTRASCHALL_TARGET_SYSTEM "linux")
     elseif(${UNAME_OUTPUT} MATCHES "[U|u]buntu")
         set(ULTRASCHALL_TARGET_SYSTEM "linux")
+    elseif(${UNAME_OUTPUT} MATCHES "Linux")
+        set(ULTRASCHALL_TARGET_SYSTEM "linux")
     elseif(${UNAME_OUTPUT} MATCHES "[M|m]icrosoft") # WSL
         set(ULTRASCHALL_TARGET_SYSTEM "linux")
     elseif(${UNAME_OUTPUT} MATCHES "[A|a]zure") # Azure DevOps
