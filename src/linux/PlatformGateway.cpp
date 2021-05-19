@@ -51,7 +51,8 @@ size_t PlatformGateway::QueryAvailableDiskSpace(const UnicodeString& directory)
 
     struct statvfs fsi    = {0};
     const int      status = statvfs(directory.c_str(), &fsi);
-    if(status == 0) {
+    if(status == 0)
+    {
         availableSpace = fsi.f_bavail * fsi.f_frsize;
     }
 
@@ -67,18 +68,21 @@ UnicodeString PlatformGateway::SelectChaptersFile(
     const char* pCaption = U2H(dialogCaption).c_str();
 
     const char* pInitialDirectory = nullptr;
-    if(initialDirectory.empty() == false) {
+    if(initialDirectory.empty() == false)
+    {
         pInitialDirectory = U2H(initialDirectory).c_str();
     }
 
     const char* pInitialFile = nullptr;
-    if(initialFile.empty() == false) {
+    if(initialFile.empty() == false)
+    {
         pInitialFile = U2H(initialFile).c_str();
     }
 
     const char* pFileExtensions = "MP4 chapters\0*.chapters.txt\0All files\0*.*\0\0";
     char*       pSelected       = BrowseForFiles(pCaption, pInitialDirectory, pInitialFile, false, pFileExtensions);
-    if(pSelected != 0) {
+    if(pSelected != 0)
+    {
         result = H2U(pSelected);
         free(pSelected);
         pSelected = 0;
@@ -96,18 +100,21 @@ UnicodeString PlatformGateway::SelectAudioFile(
     const char* pCaption = U2H(dialogCaption).c_str();
 
     const char* pInitialDirectory = nullptr;
-    if(initialDirectory.empty() == false) {
+    if(initialDirectory.empty() == false)
+    {
         pInitialDirectory = U2H(initialDirectory).c_str();
     }
 
     const char* pInitialFile = nullptr;
-    if(initialFile.empty() == false) {
+    if(initialFile.empty() == false)
+    {
         pInitialFile = U2H(initialFile).c_str();
     }
 
     const char* pFileExtensions = "MP3 file\0*.mp3\0All files\0*.*\0\0";
     char*       pSelected       = BrowseForFiles(pCaption, pInitialDirectory, pInitialFile, false, pFileExtensions);
-    if(pSelected != 0) {
+    if(pSelected != 0)
+    {
         result = H2U(pSelected);
         free(pSelected);
         pSelected = 0;
@@ -125,18 +132,21 @@ UnicodeString PlatformGateway::SelectPictureFile(
     const char* pCaption = U2H(dialogCaption).c_str();
 
     const char* pInitialDirectory = nullptr;
-    if(initialDirectory.empty() == false) {
+    if(initialDirectory.empty() == false)
+    {
         pInitialDirectory = U2H(initialDirectory).c_str();
     }
 
     const char* pInitialFile = nullptr;
-    if(initialFile.empty() == false) {
+    if(initialFile.empty() == false)
+    {
         pInitialFile = U2H(initialFile).c_str();
     }
 
     const char* pFileExtensions = "JPG file\0*.jpg\0PNG file\0*.png\0All files\0*.*\0\0";
     char*       pSelected       = BrowseForFiles(pCaption, pInitialDirectory, pInitialFile, false, pFileExtensions);
-    if(pSelected != 0) {
+    if(pSelected != 0)
+    {
         result = H2U(pSelected);
         free(pSelected);
         pSelected = 0;
@@ -154,18 +164,21 @@ UnicodeString PlatformGateway::SelectChaptersFileName(
     const char* pCaption = U2H(dialogCaption).c_str();
 
     const char* pInitialDirectory = nullptr;
-    if(initialDirectory.empty() == false) {
+    if(initialDirectory.empty() == false)
+    {
         pInitialDirectory = U2H(initialDirectory).c_str();
     }
 
     const char* pInitialFile = nullptr;
-    if(initialFile.empty() == false) {
+    if(initialFile.empty() == false)
+    {
         pInitialFile = U2H(initialFile).c_str();
     }
 
     const char* pFileExtensions = "MP4 chapters\0*.chapters.txt\0All files\0*.*\0\0";
     char        selected[4096]  = {0};
-    if(BrowseForSaveFile(pCaption, pInitialDirectory, pInitialFile, pFileExtensions, selected, 4096)) {
+    if(BrowseForSaveFile(pCaption, pInitialDirectory, pInitialFile, pFileExtensions, selected, 4096))
+    {
         UnicodeString selectedFile = selected;
         result                     = H2U(selectedFile);
     }
