@@ -54,7 +54,6 @@ endif()
 message(STATUS "${CURRENT_EXTERNAL_PROJECT}<${CMAKE_BUILD_TYPE}>: Done.")
 
 # configure openssl
-set(OPENSSL_USE_STATIC_LIBS TRUE)
 find_package(OpenSSL REQUIRED)
 if(OPENSSL_FOUND)
     set(LIBSSL_LIBRARY_PATH ${OPENSSL_LIBRARIES})
