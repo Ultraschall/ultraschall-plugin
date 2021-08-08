@@ -42,14 +42,14 @@ ReaperProject::~ReaperProject()
     nativeReference_ = nullptr;
 }
 
-ReaperProject::ReaperProject(const ReaperProject& rhs)
+ReaperProject::ReaperProject(const ReaperProject &rhs)
 {
     *this = rhs;
 }
 
-ReaperProject& ReaperProject::operator=(const ReaperProject& rhs)
+ReaperProject &ReaperProject::operator=(const ReaperProject &rhs)
 {
-    if(this != &rhs) {
+    if (this != &rhs) {
         nativeReference_ = rhs.nativeReference_;
     }
 
@@ -61,7 +61,7 @@ bool ReaperProject::IsValid() const
     return nativeReference_ != nullptr;
 }
 
-bool ReaperProject::IsValid(const ReaperProject& project)
+bool ReaperProject::IsValid(const ReaperProject &project)
 {
     return project.IsValid();
 }
@@ -83,13 +83,13 @@ UnicodeString ReaperProject::FolderName() const
     UnicodeString result;
 
     const UnicodeString fullPath = PathName();
-    if(fullPath.empty() == false) {
+    if (fullPath.empty() == false) {
         const char               pathSeparator  = FileManager::PathSeparator();
         const UnicodeStringArray pathComponents = UnicodeStringTokenize(fullPath, pathSeparator);
-        if(pathComponents.empty() == false) {
-            for(size_t i = 0; i < pathComponents.size() - 1; i++) {
+        if (pathComponents.empty() == false) {
+            for (size_t i = 0; i < pathComponents.size() - 1; i++) {
                 result += pathComponents[i];
-                if(i < pathComponents.size() - 2) {
+                if (i < pathComponents.size() - 2) {
                     result += pathSeparator;
                 }
             }
@@ -104,10 +104,10 @@ UnicodeString ReaperProject::FileName() const
     UnicodeString result;
 
     const UnicodeString fullPath = PathName();
-    if(fullPath.empty() == false) {
+    if (fullPath.empty() == false) {
         const char               pathSeparator  = FileManager::PathSeparator();
         const UnicodeStringArray pathComponents = UnicodeStringTokenize(fullPath, pathSeparator);
-        if(pathComponents.empty() == false) {
+        if (pathComponents.empty() == false) {
             result = pathComponents[pathComponents.size() - 1];
         }
     }
@@ -122,14 +122,14 @@ UnicodeString ReaperProject::Name() const
     UnicodeString result;
 
     const UnicodeString file = FileName();
-    if(file.empty() == false) {
+    if (file.empty() == false) {
         result = file.substr(0, file.rfind('.'));
     }
 
     return result;
 }
 
-UnicodeStringArray ReaperProject::SanitizeNotes(const UnicodeString& source)
+UnicodeStringArray ReaperProject::SanitizeNotes(const UnicodeString &source)
 {
     PRECONDITION_RETURN(source.empty() == false, UnicodeStringArray());
 
@@ -139,16 +139,15 @@ UnicodeStringArray ReaperProject::SanitizeNotes(const UnicodeString& source)
     static const size_t      REQUIRED_TOKEN_COUNT = 6;
 
     UnicodeStringArray sanitizedSource = UnicodeStringTokenize(source, TOKEN_DELIMITER);
-    if(sanitizedSource.size() <= REQUIRED_TOKEN_COUNT) {
-        while(sanitizedSource.size() < REQUIRED_TOKEN_COUNT) {
+    if (sanitizedSource.size() <= REQUIRED_TOKEN_COUNT) {
+        while (sanitizedSource.size() < REQUIRED_TOKEN_COUNT) {
             sanitizedSource.push_back("");
         }
 
         std::for_each(sanitizedSource.begin(), sanitizedSource.end(), [&](const UnicodeString str) {
-            if(str == "\n") {
+            if (str == "\n") {
                 result.push_back("");
-            }
-            else {
+            } else {
                 result.push_back(str);
             }
         });
@@ -157,7 +156,7 @@ UnicodeStringArray ReaperProject::SanitizeNotes(const UnicodeString& source)
     return result;
 }
 
-UnicodeString ReaperProject::CreateProjectMetaDataKey(const UnicodeString& prefix, const UnicodeString& name)
+UnicodeString ReaperProject::CreateProjectMetaDataKey(const UnicodeString &prefix, const UnicodeString &name)
 {
     PRECONDITION_RETURN(prefix.empty() == false, UnicodeString());
     PRECONDITION_RETURN(name.empty() == false, UnicodeString());
@@ -199,7 +198,7 @@ UnicodeStringDictionary ReaperProject::ProjectMetaData() const
     return metaData;
 }
 
-bool ReaperProject::InsertChapterMarker(const UnicodeString& name, const double position)
+bool ReaperProject::InsertChapterMarker(const UnicodeString &name, const double position)
 {
     PRECONDITION_RETURN(nativeReference_ != 0, false);
     PRECONDITION_RETURN(name.empty() == false, false);
@@ -215,10 +214,9 @@ double ReaperProject::CurrentPosition() const
 
     double    currentPosition = Globals::INVALID_MARKER_POSITION;
     const int playState       = ReaperGateway::PlayState(nativeReference_);
-    if((playState == 0) || (playState == 2)) {
+    if ((playState == 0) || (playState == 2)) {
         currentPosition = ReaperGateway::CursorPosition(nativeReference_);
-    }
-    else {
+    } else {
         currentPosition = ReaperGateway::PlayPosition(nativeReference_);
     }
 
@@ -253,10 +251,10 @@ ChapterTagArray ReaperProject::ChapterMarkers() const
     static const double POSITION_DEAD_BAND = 2.0;
 
     ChapterTagArray chapters = ReaperGateway::Markers(nativeReference_);
-    if(chapters.empty() == false) {
+    if (chapters.empty() == false) {
         UnicodeStringDictionary images = ReaperGateway::QueryProjectValues(nativeReference_, "chapterimages");
         UnicodeStringDictionary urls   = ReaperGateway::QueryProjectValues(nativeReference_, "chapterurls");
-        std::for_each(chapters.begin(), chapters.end(), [&](ChapterTag& chapter) {
+        std::for_each(chapters.begin(), chapters.end(), [&](ChapterTag &chapter) {
             chapter.SetImage(LookupValueInRange(images, chapter.Position(), POSITION_DEAD_BAND));
             chapter.SetUrl(LookupValueInRange(urls, chapter.Position(), POSITION_DEAD_BAND));
         });
@@ -264,8 +262,8 @@ ChapterTagArray ReaperProject::ChapterMarkers() const
     return chapters;
 }
 
-UnicodeString ReaperProject::LookupValueInRange(
-    const UnicodeStringDictionary& items, const double position, const double range)
+UnicodeString
+ReaperProject::LookupValueInRange(const UnicodeStringDictionary &items, const double position, const double range)
 {
     PRECONDITION_RETURN(items.empty() == false, UnicodeString());
     PRECONDITION_RETURN(position >= 0, UnicodeString());
@@ -274,19 +272,16 @@ UnicodeString ReaperProject::LookupValueInRange(
     UnicodeString result;
 
     double minDelta = std::numeric_limits<double>::max();
-    std::for_each(items.begin(), items.end(), [&](const std::pair<UnicodeString, UnicodeString>& item) {
+    std::for_each(items.begin(), items.end(), [&](const std::pair<UnicodeString, UnicodeString> &item) {
         try {
             const double itemPosition = std::stod(item.first);
             const double delta        = std::fabs(position - itemPosition);
-            if((delta <= range) && (delta < minDelta)) {
+            if ((delta <= range) && (delta < minDelta)) {
                 result   = item.second;
                 minDelta = delta;
             }
-        }
-        catch(std::invalid_argument&) {
-        }
-        catch(std::out_of_range&) {
-        }
+        } catch (std::invalid_argument &) {
+        } catch (std::out_of_range &) {}
     });
     return result;
 }

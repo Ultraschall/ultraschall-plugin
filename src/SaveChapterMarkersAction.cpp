@@ -26,10 +26,10 @@
 
 #include "SaveChapterMarkersAction.h"
 #include "CustomActionFactory.h"
-#include "StringUtilities.h"
 #include "FileManager.h"
-#include "PlatformGateway.h"
 #include "NotificationStore.h"
+#include "PlatformGateway.h"
+#include "StringUtilities.h"
 
 namespace ultraschall { namespace reaper {
 
@@ -45,19 +45,15 @@ ServiceStatus SaveChapterMarkersAction::Execute()
     NotificationStore supervisor(UniqueId());
 
     std::ostringstream os;
-    for(size_t i = 0; i < chapterMarkers_.size(); i++)
-    {
+    for (size_t i = 0; i < chapterMarkers_.size(); i++) {
         const UnicodeString timestamp = SecondsToString(chapterMarkers_[i].Position());
         const UnicodeString item      = timestamp + " " + chapterMarkers_[i].Title();
         os << item << std::endl;
     }
 
-    if(FileManager::WriteTextFile(target_, os.str()) == true)
-    {
+    if (FileManager::WriteTextFile(target_, os.str()) == true) {
         status = SERVICE_SUCCESS;
-    }
-    else
-    {
+    } else {
         supervisor.RegisterError("Failed to export chapter markers.");
     }
 
@@ -69,12 +65,9 @@ bool SaveChapterMarkersAction::ConfigureTargets()
     bool              result = false;
     NotificationStore supervisor(UniqueId());
 
-    target_.clear();
-
-    target_ = PlatformGateway::SelectChaptersFileName(
-        "Export chapter markers", CurrentProjectDirectory(), CurrentProjectName());
-    if(target_.empty() == false)
-    {
+    const std::string targetDirectory = CurrentProjectDirectory();
+    target_ = PlatformGateway::SelectChaptersFileName("Export chapter markers", targetDirectory, CurrentProjectName());
+    if (target_.empty() == false) {
         result = true;
     }
 
@@ -88,20 +81,14 @@ bool SaveChapterMarkersAction::ConfigureSources()
 
     ReaperProject currentProject = ReaperProject::Current();
     chapterMarkers_              = currentProject.ChapterMarkers();
-    if(chapterMarkers_.empty() == false)
-    {
-        if(AreChapterMarkersValid(chapterMarkers_) == true)
-        {
+    if (chapterMarkers_.empty() == false) {
+        if (AreChapterMarkersValid(chapterMarkers_) == true) {
             result = true;
-        }
-        else
-        {
+        } else {
             chapterMarkers_.clear();
             result = false;
         }
-    }
-    else
-    {
+    } else {
         supervisor.RegisterWarning("No chapters have been set.");
         result = false;
     }
