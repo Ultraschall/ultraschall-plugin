@@ -145,9 +145,11 @@ add_dependencies(reaper_ultraschall zlibstatic)
 add_dependencies(reaper_ultraschall libcurl)
 add_dependencies(reaper_ultraschall tag)
 
-set(OPENSSL_USE_STATIC_LIBS TRUE)
-find_package(OpenSSL REQUIRED)
-target_link_libraries(reaper_ultraschall OpenSSL::Crypto)
+if (ULTRASCHALL_TARGET_SYSTEM STREQUAL "linux")
+  set(OPENSSL_USE_STATIC_LIBS TRUE)
+  find_package(OpenSSL REQUIRED)
+  target_link_libraries(reaper_ultraschall OpenSSL::Crypto)
+endif()
 
 target_link_libraries(reaper_ultraschall
   ${LIBZ_LIBRARY_PATH}
