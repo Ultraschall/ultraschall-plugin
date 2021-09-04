@@ -19,7 +19,14 @@ jobs:
     steps:
       - name: Create build timestamp
         id: timestamp
-        run: echo "::set-output name=timestmap::$(date -u +'%Y%m%d%H%M')"
+        run: echo "::set-output name=timestamp::$(date -u +'%Y%m%d%H%M')"
+      - name: Display build timestqmp
+        env:
+          ULTRASCHALL_BUILD_TIMESTAMP0: "${{steps.timestamp.outputs.timestamp}}"
+          ULTRASCHALL_BUILD_ID0: "R5.1_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}"
+        run: |
+          echo $ULTRASCHALL_BUILD_TIMESTAMP0
+          echo $ULTRASCHALL_BUILD_ID0
 
   build:
     needs: before_build
@@ -46,6 +53,8 @@ jobs:
     steps:
       - name: Create build tag
         env:
-          ULTRASCHALL_BUILD_ID: ${{needs.before_build.outputs.build_id}}
+          ULTRASCHALL_BUILD_TIMESTAMP1: "${{needs.before_build.outputs.build_timestamp}}"
+          ULTRASCHALL_BUILD_ID1: "${{needs.before_build.outputs.build_id}}"
         run: |
-          echo $ULTRASCHALL_BUILD_ID
+          echo $ULTRASCHALL_BUILD_TIMESTAMP1
+          echo $ULTRASCHALL_BUILD_ID1
