@@ -16,19 +16,22 @@ jobs:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
-
     steps:
       - uses: actions/checkout@v2
-
       - name: Create Build Environment
         run: cmake -E make_directory ${{runner.workspace}}/build
-
       - name: Configure CMake
         shell: bash
         working-directory: ${{runner.workspace}}/build
         run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
-
       - name: Build
         working-directory: ${{runner.workspace}}/build
         shell: bash
         run: cmake --build . --target $BUILD_TARGET --config $BUILD_TYPE
+
+  release:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create build tag
+      - run: git tag -a v${{ github.ref }} -m "Release v${{ github.ref }}"
