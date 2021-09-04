@@ -19,9 +19,12 @@ jobs:
         id: timestamp
         run: echo "::set-output name=timestmap::$(date +'%+4Y%m%d%H%N')"
       - name: Display build no
-        run: echo $ULTRASCHALL_BUILD_ID
+        run: |
+          echo $ULTRASCHALL_BUILD_ID
+          echo $ULTRASCHALL_BUILD_NO
         env:
-          ULTRASCHALL_BUILD_ID: R5.1_{{github.run_id}}_{ { steps.timestamp.outputs.timestmap } }
+          ULTRASCHALL_BUILD_ID: R5.1_${{github.run_id}}_${{steps.timestamp.outputs.timestmap}}
+          ULTRASCHALL_BUILD_NO: R5.1_${{github.run_number}}_${{steps.timestamp.outputs.timestmap}}
 
   build:
     needs: before_build
