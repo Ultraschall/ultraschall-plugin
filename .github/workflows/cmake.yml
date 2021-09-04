@@ -11,7 +11,16 @@ env:
   ULTRASCHALL_BUILD_TARGET: reaper_ultraschall
 
 jobs:
+  before_build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Display build no
+        shell: bash
+        working-directory: ${{runner.workspace}}
+        run: echo $GITHUB_BUILD_ID
+
   build:
+    needs: before_build
     strategy:
       matrix:
         os: [ubuntu-latest]
