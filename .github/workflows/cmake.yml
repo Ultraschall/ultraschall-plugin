@@ -13,15 +13,13 @@ env:
 jobs:
   before_build:
     runs-on: ubuntu-latest
+    outputs:
+      build_timestamp: ${{steps.timestamp.outputs.timestamp}}
+      build_id: R5.1_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
     steps:
-      - name: Create build no
+      - name: Create build timestamp
         id: timestamp
         run: echo "::set-output name=timestmap::$(date -u +'%Y%m%d%H%M')"
-      - name: Display build no
-        run: |
-          echo $ULTRASCHALL_BUILD_ID
-        env:
-          ULTRASCHALL_BUILD_ID: R5.1_${{github.run_number}}_${{steps.timestamp.outputs.timestmap}}
 
   build:
     needs: before_build
@@ -43,11 +41,11 @@ jobs:
         run: cmake --build . --target $ULTRASCHALL_BUILD_TARGET --config $ULTRASCHALL_BUILD_TYPE
 
   after_build:
-    needs: build
+    needs: [before_build, build]
     runs-on: ubuntu-latest
     steps:
       - name: Create build tag
-        shell: bash
-        working-directory: ${{runner.workspace}}
+        env:
+          ULTRASCHALL_BUILD_ID: ${{before_build.outputs.build_id}}
         run: |
           echo $ULTRASCHALL_BUILD_ID
