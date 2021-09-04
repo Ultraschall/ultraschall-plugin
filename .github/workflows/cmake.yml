@@ -27,6 +27,8 @@ jobs:
         run: |
           echo $ULTRASCHALL_BUILD_TIMESTAMP0
           echo $ULTRASCHALL_BUILD_ID0
+          echo $REPO_OWNER
+          echo $GITHUB_TOKEN
 
   build:
     needs: before_build
