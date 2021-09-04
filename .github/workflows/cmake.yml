@@ -29,9 +29,10 @@ jobs:
         shell: bash
         run: cmake --build . --target $BUILD_TARGET --config $BUILD_TYPE
 
-  release:
-    needs: [build]
+  after_build:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Create build tag
+      - shell: bash
       - run: git tag -a v${{ github.ref }} -m "Release v${{ github.ref }}"
