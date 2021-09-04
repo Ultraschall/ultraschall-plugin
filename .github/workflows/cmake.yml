@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Create Build Environment
         run: cmake -E make_directory ${{runner.workspace}}/build
-      - name: Configure CMake
+      - name: Configure
         shell: bash
         working-directory: ${{runner.workspace}}/build
         run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
@@ -34,5 +34,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create build tag
-      - shell: bash
-      - run: git tag -a v${{ github.ref }} -m "Release v${{ github.ref }}"
+        shell: bash
+        run: git tag -a v${{ github.ref }} -m "Release v${{ github.ref }}"
