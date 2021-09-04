@@ -7,7 +7,6 @@ on:
     branches: [develop]
 
 env:
-  ULTRASCHALL_BUILD_ID: ${{github.run_id}}
   ULTRASCHALL_BUILD_TYPE: Release
   ULTRASCHALL_BUILD_TARGET: reaper_ultraschall
 
@@ -17,14 +16,12 @@ jobs:
     steps:
       - name: Create build no
         id: timestamp
-        run: echo "::set-output name=timestmap::$(date +'%+4Y%m%d%H%N')"
+        run: echo "::set-output name=timestmap::$(date -u +'%Y%m%d%H%M')"
       - name: Display build no
         run: |
           echo $ULTRASCHALL_BUILD_ID
-          echo $ULTRASCHALL_BUILD_NO
         env:
-          ULTRASCHALL_BUILD_ID: R5.1_${{github.run_id}}_${{steps.timestamp.outputs.timestmap}}
-          ULTRASCHALL_BUILD_NO: R5.1_${{github.run_number}}_${{steps.timestamp.outputs.timestmap}}
+          ULTRASCHALL_BUILD_ID: R5.1_${{github.run_number}}_${{steps.timestamp.outputs.timestmap}}
 
   build:
     needs: before_build
@@ -53,6 +50,4 @@ jobs:
         shell: bash
         working-directory: ${{runner.workspace}}
         run: |
-          export ULTRASCHALL_BUILD_DATE="202109041500"
-          export ULTRASCHALL_BUILD_NO="R5.1_$GITHUB_RUN_ID_$ULTRASCHALL_BUILD_DATE"
-          echo "Release $ULTRASCHALL_BUILD_NO"
+          echo $ULTRASCHALL_BUILD_ID
