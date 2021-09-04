@@ -7,14 +7,14 @@ on:
     branches: [develop]
 
 env:
-  BUILD_TYPE: Release
-  BUILD_TARGET: reaper_ultraschall
+  ULTRASCHALL_BUILD_TYPE: Release
+  ULTRASCHALL_BUILD_TARGET: reaper_ultraschall
 
 jobs:
   build:
     strategy:
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+        os: ubuntu-latest
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -23,11 +23,11 @@ jobs:
       - name: Configure
         shell: bash
         working-directory: ${{runner.workspace}}/build
-        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+        run: cmake $GITHUB_WORKSPACE -Wno-dev -DCMAKE_BUILD_TYPE=$ULTRASCHALL_BUILD_TYPE
       - name: Build
         working-directory: ${{runner.workspace}}/build
         shell: bash
-        run: cmake --build . --target $BUILD_TARGET --config $BUILD_TYPE
+        run: cmake --build . --target $ULTRASCHALL_BUILD_TARGET --config $ULTRASCHALL_BUILD_TYPE
 
   after_build:
     needs: build
@@ -35,4 +35,8 @@ jobs:
     steps:
       - name: Create build tag
         shell: bash
-        run: git tag -a v${{ github.ref }} -m "Release v${{ github.ref }}"
+        working-directory: ${{runner.workspace}}
+        run: |
+          export ULTRASCHALL_BUILD_DATE=$(date -u +"%+4Y%m%d%H%M")
+          export ULTRASCHALL_BUILD_NO="R5.1_$GITHUB_BUILD_ID_$ULTRASCHALL_BUILD_DATE"
+          echo "Release $ULTRASCHALL_BUILD_NO"
