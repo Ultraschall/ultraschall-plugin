@@ -46,6 +46,6 @@ jobs:
     steps:
       - name: Create build tag
         env:
-          ULTRASCHALL_BUILD_ID: ${{before_build.outputs.build_id}}
+          ULTRASCHALL_BUILD_ID: ${{needs.before_build.outputs.build_id}}
         run: |
           echo $ULTRASCHALL_BUILD_ID
