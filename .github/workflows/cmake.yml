@@ -53,3 +53,9 @@ jobs:
           path: ${{runner.workspace}}/artifacts
       - name: display
         run: ls -l ${{runner.workspace}}/artifacts
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{secrets.GITHUB_TOKEN}}"
+          automatic_release_tag: "${{needs.configure.outputs.build_id}"
+          prerelease: true
+          files: artifacts/*
