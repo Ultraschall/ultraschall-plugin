@@ -11,14 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       build_timestamp: ${{steps.timestamp.outputs.timestamp}}
-      build_id: R5.1_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
+      build_id: R050100_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
     steps:
       - name: Create build timestamp
         id: timestamp
         run: echo "::set-output name=timestamp::$(date -u +'%Y%m%d%H%M')"
       - name: Display build timestqmp
         env:
-          ULTRASCHALL_BUILD_TIMESTAMP0: "${{steps.timestamp.outputs.timestamp}}"
           ULTRASCHALL_BUILD_ID0: "R050100_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}"
         run: |
           echo $ULTRASCHALL_BUILD_ID0
@@ -27,7 +26,8 @@ jobs:
     needs: before_build
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, macos-latest]
+        target: ["linux", "macos"]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -46,7 +46,7 @@ jobs:
         run: cmake --build ${{runner.workspace}}/build --target reaper_ultraschall --config Release
       - uses: actions/upload-artifact@v2
         with:
-          name: build-artifacts-${{ matrix.os }}
+          name: ${{needs.before_build.outputs.build_id}}-${{ matrix.target }}
           path: ${{runner.workspace}}/build/artifacts/*
 
   after_build:
@@ -55,7 +55,6 @@ jobs:
     steps:
       - name: Create build tag
         env:
-          ULTRASCHALL_BUILD_TIMESTAMP1: "${{needs.before_build.outputs.build_timestamp}}"
           ULTRASCHALL_BUILD_ID1: "${{needs.before_build.outputs.build_id}}"
         run: |
           echo $ULTRASCHALL_BUILD_ID1
