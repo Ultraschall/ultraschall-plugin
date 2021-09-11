@@ -27,8 +27,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-      matrix:
-        target: ["linux", "macos"]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -41,13 +39,13 @@ jobs:
       - name: install (macos)
         run: brew install ninja
         if: matrix.os == 'macos-latest'
-      - name: Configure
+      - name: configure
         run: cmake -G Ninja -B ${{runner.workspace}}/build -Wno-dev -DCMAKE_BUILD_TYPE=Release
-      - name: Build
+      - name: build
         run: cmake --build ${{runner.workspace}}/build --target reaper_ultraschall --config Release
       - uses: actions/upload-artifact@v2
         with:
-          name: ${{needs.before_build.outputs.build_id}}-${{ matrix.target }}
+          name: ${{needs.before_build.outputs.build_id}}
           path: ${{runner.workspace}}/build/artifacts/*
 
   after_build:
