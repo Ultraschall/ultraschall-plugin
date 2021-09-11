@@ -13,7 +13,7 @@ jobs:
       build_timestamp: ${{steps.timestamp.outputs.timestamp}}
       build_id: R050100_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
     steps:
-      - name: create build id
+      - name: configure build id
         id: timestamp
         run: echo "::set-output name=timestamp::$(date -u +'%Y%m%d%H%M')"
 
@@ -21,7 +21,7 @@ jobs:
     needs: configure
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -40,7 +40,7 @@ jobs:
         run: cmake --build ${{runner.workspace}}/build --target reaper_ultraschall --config Release
       - uses: actions/upload-artifact@v2
         with:
-          name: ${{needs.before_build.outputs.build_id}}
+          name: ${{needs.configure.outputs.build_id}}
           path: ${{runner.workspace}}/build/artifacts/*
 
   release:
@@ -49,7 +49,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v2
         with:
-          name: ${{needs.before_build.outputs.build_id}}
+          name: ${{needs.configure.outputs.build_id}}
           path: ${{runner.workspace}}/artifacts
       - name: display
         run: ls -l ${{runner.workspace}}/artifacts
