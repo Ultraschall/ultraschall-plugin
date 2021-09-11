@@ -47,7 +47,6 @@ jobs:
     needs: [configure, build]
     runs-on: ubuntu-latest
     steps:
-      - name: download
       - uses: actions/download-artifact@v2
         with:
           name: ${{needs.before_build.outputs.build_id}}
