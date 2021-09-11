@@ -7,23 +7,18 @@ on:
     branches: [develop]
 
 jobs:
-  before_build:
+  configure:
     runs-on: ubuntu-latest
     outputs:
       build_timestamp: ${{steps.timestamp.outputs.timestamp}}
       build_id: R050100_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
     steps:
-      - name: Create build timestamp
+      - name: create build id
         id: timestamp
         run: echo "::set-output name=timestamp::$(date -u +'%Y%m%d%H%M')"
-      - name: Display build timestqmp
-        env:
-          ULTRASCHALL_BUILD_ID0: "R050100_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}"
-        run: |
-          echo $ULTRASCHALL_BUILD_ID0
 
   build:
-    needs: before_build
+    needs: configure
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
@@ -48,12 +43,14 @@ jobs:
           name: ${{needs.before_build.outputs.build_id}}
           path: ${{runner.workspace}}/build/artifacts/*
 
-  after_build:
-    needs: [before_build, build]
+  release:
+    needs: [configure, build]
     runs-on: ubuntu-latest
     steps:
-      - name: Create build tag
-        env:
-          ULTRASCHALL_BUILD_ID1: "${{needs.before_build.outputs.build_id}}"
-        run: |
-          echo $ULTRASCHALL_BUILD_ID1
+      - name: download
+      - uses: actions/download-artifact@v2
+        with:
+          name: ${{needs.before_build.outputs.build_id}}
+          path: ${{runner.workspace}}/artifacts
+      - name: display
+        run: ls -l ${{runner.workspace}}/artifacts
