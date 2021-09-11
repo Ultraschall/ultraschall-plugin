@@ -6,10 +6,6 @@ on:
   pull_request:
     branches: [develop]
 
-env:
-  ULTRASCHALL_BUILD_TYPE: Release
-  ULTRASCHALL_BUILD_TARGET: reaper_ultraschall
-
 jobs:
   before_build:
     runs-on: ubuntu-latest
@@ -25,10 +21,7 @@ jobs:
           ULTRASCHALL_BUILD_TIMESTAMP0: "${{steps.timestamp.outputs.timestamp}}"
           ULTRASCHALL_BUILD_ID0: "R5.1_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}"
         run: |
-          echo $ULTRASCHALL_BUILD_TIMESTAMP0
           echo $ULTRASCHALL_BUILD_ID0
-          echo $REPO_OWNER
-          echo $GITHUB_TOKEN
 
   build:
     needs: before_build
@@ -39,9 +32,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: configure
-        run: cmake -B ${{runner.workspace}}/build -Wno-dev -DCMAKE_BUILD_TYPE=$ULTRASCHALL_BUILD_TYPE
+        run: cmake -B ${{runner.workspace}}/build -Wno-dev -DCMAKE_BUILD_TYPE=Release
       - name: build
-        run: cmake --build ${{runner.workspace}}/build --target $ULTRASCHALL_BUILD_TARGET --config $ULTRASCHALL_BUILD_TYPE
+        run: cmake --build ${{runner.workspace}}/build --target reaper_ultraschall --config Release
       - uses: actions/upload-artifact@v2
         with:
           name: build-artifacts-${{ matrix.os }}
@@ -56,5 +49,4 @@ jobs:
           ULTRASCHALL_BUILD_TIMESTAMP1: "${{needs.before_build.outputs.build_timestamp}}"
           ULTRASCHALL_BUILD_ID1: "${{needs.before_build.outputs.build_id}}"
         run: |
-          echo $ULTRASCHALL_BUILD_TIMESTAMP1
           echo $ULTRASCHALL_BUILD_ID1
