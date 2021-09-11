@@ -19,7 +19,7 @@ jobs:
       - name: Display build timestqmp
         env:
           ULTRASCHALL_BUILD_TIMESTAMP0: "${{steps.timestamp.outputs.timestamp}}"
-          ULTRASCHALL_BUILD_ID0: "R5.1_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}"
+          ULTRASCHALL_BUILD_ID0: "R050100_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}"
         run: |
           echo $ULTRASCHALL_BUILD_ID0
 
@@ -27,13 +27,22 @@ jobs:
     needs: before_build
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
-      - name: configure
-        run: cmake -B ${{runner.workspace}}/build -Wno-dev -DCMAKE_BUILD_TYPE=Release
-      - name: build
+      - name: install (linux)
+        run: sudo apt-get install ninja-build
+        if: matrix.os == ubuntu-latest
+      - name: install (windows)
+        run: choco install ninja
+        if: matrix.os == windows-latest
+      - name: install (macos)
+        run: brew install ninja
+        if: matrix.os == macos-latest
+      - name: Configure
+        run: cmake -GNinja -B ${{runner.workspace}}/build -Wno-dev -DCMAKE_BUILD_TYPE=Release
+      - name: Build
         run: cmake --build ${{runner.workspace}}/build --target reaper_ultraschall --config Release
       - uses: actions/upload-artifact@v2
         with:
