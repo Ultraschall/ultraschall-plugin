@@ -38,20 +38,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
-      - name: configure
+      - name: setup
         run: cmake -E make_directory ${{runner.workspace}}/build
+      - name: configure
         working-directory: ${{runner.workspace}}/build
         run: cmake $GITHUB_WORKSPACE -Wno-dev -DCMAKE_BUILD_TYPE=$ULTRASCHALL_BUILD_TYPE
-
       - name: build
         working-directory: ${{runner.workspace}}/build
         run: cmake --build . --target $ULTRASCHALL_BUILD_TARGET --config $ULTRASCHALL_BUILD_TYPE
-
-      - uses: actions/upload-artifact@v2
-      - name: publish artifacts
-        with:
-          name: reaper_ultraschall_name
-          path: ${{runner.workspace}}/build/src/
 
   after_build:
     needs: [before_build, build]
