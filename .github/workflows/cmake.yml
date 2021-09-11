@@ -41,7 +41,8 @@ jobs:
       # - name: setup
       #   run: cmake -E make_directory ${{runner.workspace}}/build
       - name: configure
-        run: cmake -S ${{runner.workspace}} -B ${{runner.workspace}}/build -Wno-dev -DCMAKE_BUILD_TYPE=$ULTRASCHALL_BUILD_TYPE
+        working_directory: ${{runner.workspace}}
+        run: cmake -B ${{runner.workspace}}/build -Wno-dev -DCMAKE_BUILD_TYPE=$ULTRASCHALL_BUILD_TYPE
       - name: build
         run: cmake --build ${{runner.workspace}}/build --target $ULTRASCHALL_BUILD_TARGET --config $ULTRASCHALL_BUILD_TYPE
       - uses: actions/upload-artifact@v2
