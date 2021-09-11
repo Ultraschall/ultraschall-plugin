@@ -49,7 +49,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: build-artifacts-${{ matrix.os }}
-          path: ${{runner.workspace}}/build/src
+          path: ${{runner.workspace}}/build/src/**/reaper_ultraschall*/*
 
   after_build:
     needs: [before_build, build]
