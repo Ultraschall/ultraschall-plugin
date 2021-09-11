@@ -34,15 +34,12 @@ jobs:
     needs: before_build
     strategy:
       matrix:
-        os: [windows-latest]
+        os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
-      # - name: setup
-      #   run: cmake -E make_directory ${{runner.workspace}}/build
       - name: configure
-        working_directory: ${{runner.workspace}}
-        run: cmake -B ${{runner.workspace}}/build -Wno-dev -DCMAKE_BUILD_TYPE=$ULTRASCHALL_BUILD_TYPE
+        run: cmake -S ${{runner.workspace}} -B ${{runner.workspace}}/build -Wno-dev -DCMAKE_BUILD_TYPE=$ULTRASCHALL_BUILD_TYPE
       - name: build
         run: cmake --build ${{runner.workspace}}/build --target $ULTRASCHALL_BUILD_TARGET --config $ULTRASCHALL_BUILD_TYPE
       - uses: actions/upload-artifact@v2
