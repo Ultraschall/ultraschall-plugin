@@ -46,6 +46,10 @@ jobs:
       - name: build
         working-directory: ${{runner.workspace}}/build
         run: cmake --build . --target $ULTRASCHALL_BUILD_TARGET --config $ULTRASCHALL_BUILD_TYPE
+      - uses: actions/upload-artifact@v2
+        with:
+          name: build-artifacts-${{ matrix.os }}
+          path: ${{runner.workspace}}/build/src
 
   after_build:
     needs: [before_build, build]
