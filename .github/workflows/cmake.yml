@@ -52,7 +52,7 @@ jobs:
         run: cmake --build . --target $ULTRASCHALL_BUILD_TARGET --config $ULTRASCHALL_BUILD_TYPE
 
       - name: Publish
-        uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v2
         with:
           name: reaper_ultraschall.so
           path: ${{runner.workspace}}/build/src/reaper_ultraschall.so
