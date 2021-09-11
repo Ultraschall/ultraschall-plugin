@@ -27,6 +27,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
+      matrix:
         target: ["linux", "macos"]
     runs-on: ${{ matrix.os }}
     steps:
