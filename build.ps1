@@ -60,7 +60,7 @@ If ($args.Count -gt 0) {
 }
 
 $LocalCMakeDirectory = $ToolsDirectory + "/cmake"
-$RequiredCMakeVersion = "3.12.0"
+$RequiredCMakeVersion = "3.20.5"
 $CMakeFound = $False
 
 Write-Host Looking for CMake $RequiredCMakeVersion"."
@@ -92,29 +92,29 @@ If ($CMakeFound -eq $False) {
 }
 
 If ($CMakeFound -eq $False) {
-  Write-Host -ForegroundColor Red Failed to find the required CMake version. Only 3.12.0 and higher is supported.
+  Write-Host -ForegroundColor Red Failed to find the required CMake version. Only 3.20.5 and higher is supported.
   Return
 }
 
 $VisualStudioFound = $False
 $CMakeGenerator = "<unknown>"
 
-Write-Host "Looking for Visual Studio 2019 or 2017..."
+Write-Host "Looking for Visual Studio 2022 or 2019..."
 If ($VisualStudioFound -eq $False) {
   $VisualStudioVersion = Find-VisualStudioVersion
   Write-Host Found Visual Studio $VisualStudioVersion"."
-  If ($VisualStudioVersion -eq "2019") {
-    $CMakeGenerator = "Visual Studio 16 2019"
+  If ($VisualStudioVersion -eq "2022") {
+    $CMakeGenerator = "Visual Studio 17 2022"
     $VisualStudioFound = $True
   }
-  ElseIf ($VisualStudioVersion -eq "2017") {
-    $CMakeGenerator = "Visual Studio 15 2017"
+  ElseIf ($VisualStudioVersion -eq "2019") {
+    $CMakeGenerator = "Visual Studio 16 2019"
     $VisualStudioFound = $True
   }
 }
 
 If ($VisualStudioFound -eq $False) {
-  Write-Host -ForegroundColor Red "Failed to find the required Visual Studio version. Only '2017' and '2019' are supported."
+  Write-Host -ForegroundColor Red "Failed to find the required Visual Studio version. Only '2022' and '2019' are supported."
   Return
 }
 
