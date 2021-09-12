@@ -33,7 +33,15 @@ Function Remove-Directory ($Directory) {
 Function Find-VisualStudioVersion {
   $Version = "<unknown>"
   If (Get-Command "vswhere.exe" -ErrorAction SilentlyContinue) {
-    $Version = & vswhere.exe -prerelease -latest -property catalog_productLineVersion | Out-String -NoNewline
+    $Version = & vswhere.exe -latest -property catalog_productLineVersion | Out-String -NoNewline
+  }
+  Return $Version.Trim()
+}
+
+Function Find-VisualStudioDirectory {
+  $Version = "<unknown>"
+  If (Get-Command "vswhere.exe" -ErrorAction SilentlyContinue) {
+    $Version = & vswhere.exe -latest -property installationPath | Out-String -NoNewline
   }
   Return $Version.Trim()
 }
