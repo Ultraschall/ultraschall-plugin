@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       build_timestamp: ${{steps.timestamp.outputs.timestamp}}
-      build_id: R050100_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
+      build_id: R05.1.0_UPI_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
     steps:
       - name: configure build id
         id: timestamp
