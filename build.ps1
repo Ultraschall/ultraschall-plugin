@@ -126,7 +126,7 @@ Write-Host Entering build directory"..."
 Push-Location $BuildDirectory | Out-Null
 
 Write-Host Configuring projects using $CMakeGenerator"..."
-& cmake -G"$CMakeGenerator" -DCMAKE_BUILD_TYPE=Debug ../
+& cmake -GNinja -DCMAKE_BUILD_TYPE=Debug ../
 If ($LastExitCode -eq 0) {
   Write-Host Done"."
   Write-Host Building projects using $CMakeGenerator"..."
