@@ -25,6 +25,7 @@
 ################################################################################
 
 . "./scripts/BuildTools.ps1"
+. "./scripts/BuildVars.ps1"
 
 $ToolsDirectory = "./tools"
 $BuildDirectory = "./build"
