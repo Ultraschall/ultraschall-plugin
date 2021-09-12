@@ -41,6 +41,10 @@ jobs:
           Enter-VsDevShell -VsInstallPath $vsPath -SkipAutomaticLocation -DevCmdArguments "-arch=x64"
         if: matrix.os == 'windows-latest'
 
+      - name: install 3 of 2 (windows)
+        run: cl.exe
+        if: matrix.os == 'windows-latest'
+
       - name: install (macos)
         run: brew install ninja
         if: matrix.os == 'macos-latest'
