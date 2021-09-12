@@ -39,10 +39,7 @@ jobs:
           $vsPath = & (Join-Path ${env:ProgramFiles(x86)} '\\Microsoft Visual Studio\\Installer\\vswhere.exe') -property installationPath
           Import-Module (Join-Path $vsPath 'Common7\\Tools\\Microsoft.VisualStudio.DevShell.dll')
           Enter-VsDevShell -VsInstallPath $vsPath -SkipAutomaticLocation -DevCmdArguments "-arch=x64"
-        if: matrix.os == 'windows-latest'
-
-      - name: install 3 of 2 (windows)
-        run: cl.exe
+          cl.exe
         if: matrix.os == 'windows-latest'
 
       - name: install (macos)
