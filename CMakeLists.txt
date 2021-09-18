@@ -27,16 +27,15 @@
 cmake_minimum_required(VERSION 3.19)
 
 project(reaper_ultraschall
-  VERSION 4.1.0
+  VERSION 5.1.0
   DESCRIPTION "Podcasting extensions for REAPER"
   LANGUAGES C CXX
 )
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   set(CMAKE_CXX_EXTENSIONS OFF)
-  set(CMAKE_CXX_STANDARD 17)
+  set(CMAKE_CXX_STANDARD 20)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
   set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 endif()
 
@@ -47,19 +46,11 @@ elseif(APPLE)
 elseif(UNIX)
   execute_process(COMMAND uname -a RESULT_VARIABLE UNAME_RESULT OUTPUT_VARIABLE UNAME_OUTPUT OUTPUT_STRIP_TRAILING_WHITESPACE)
   if(UNAME_RESULT EQUAL 0)
-    if(${UNAME_OUTPUT} MATCHES "[A|a]rch")
-        set(ULTRASCHALL_TARGET_SYSTEM "linux")
-    elseif(${UNAME_OUTPUT} MATCHES "[U|u]buntu")
-        set(ULTRASCHALL_TARGET_SYSTEM "linux")
-    elseif(${UNAME_OUTPUT} MATCHES "Linux")
-        set(ULTRASCHALL_TARGET_SYSTEM "linux")
-    elseif(${UNAME_OUTPUT} MATCHES "[M|m]icrosoft") # WSL
-        set(ULTRASCHALL_TARGET_SYSTEM "linux")
-    elseif(${UNAME_OUTPUT} MATCHES "[A|a]zure") # Azure DevOps
+    if(${UNAME_OUTPUT} MATCHES "[U|u]buntu")
         set(ULTRASCHALL_TARGET_SYSTEM "linux")
     else()
       message(STATUS "Unsupported platform: " ${UNAME_OUTPUT})
-      message(FATAL_ERROR "Supported platforms are Windows, macOS, Arch Linux and Ubuntu Linux")
+      message(FATAL_ERROR "Supported platforms are Windows, macOS and Ubuntu Linux")
     endif()
   else()
     message(FATAL_ERROR "Failed to run uname, result: ${UNAME_RESULT}")
