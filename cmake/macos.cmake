@@ -33,6 +33,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "$ENV{HOME}/Library/Application\ Suppor
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/artifacts")
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+  add_compile_options(-Wno-delete-abstract-non-virtual-dtor)
   set(EXTRA_LIBRARIES "-framework AppKit" "-framework Carbon" "-framework IOKit" "-framework Security")
   if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 12)
     message(STATUS "Building for x86_64 using clang ${CMAKE_CXX_COMPILER_VERSION}.")
@@ -41,9 +42,9 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
     add_compile_options(-mmacosx-version-min=10.11)
   else()
     message(STATUS "Building for x86_64 and arm64 using clang ${CMAKE_CXX_COMPILER_VERSION}.")
-    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.14 CACHE INTERNAL "")
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.15 CACHE INTERNAL "")
     set(CMAKE_OSX_ARCHITECTURES arm64 x86_64 CACHE INTERNAL "")
-    add_compile_options(-mmacosx-version-min=10.14)
+    add_compile_options(-mmacosx-version-min=10.15)
   endif()
 else()
     message(FATAL_ERROR "macOS builds require clang.")
@@ -71,7 +72,7 @@ endif()
 set(CURRENT_EXTERNAL_PROJECT libcurl)
 FetchContent_Declare(${CURRENT_EXTERNAL_PROJECT}
   GIT_REPOSITORY https://github.com/curl/curl.git
-  GIT_TAG curl-7_63_0
+  GIT_TAG curl-7_80_0
 )
 FetchContent_GetProperties(${CURRENT_EXTERNAL_PROJECT})
 if(NOT ${CURRENT_EXTERNAL_PROJECT}_POPULATED)
@@ -85,7 +86,7 @@ if(NOT ${CURRENT_EXTERNAL_PROJECT}_POPULATED)
   set(BUILD_CURL_EXE      OFF CACHE INTERNAL "")
   set(BUILD_BINDINGS      OFF CACHE INTERNAL "")
   set(BUILD_TESTING       OFF CACHE INTERNAL "")
-  set(CMAKE_USE_DARWINSSL ON  CACHE INTERNAL "")
+  set(CMAKE_USE_SECTRANSP ON  CACHE INTERNAL "")
   set(CMAKE_USE_LIBSSH2   OFF CACHE INTERNAL "")
   set(CMAKE_USE_OPENSSL   OFF CACHE INTERNAL "")
   set(CMAKE_USE_WINSSL    OFF CACHE INTERNAL "")
@@ -102,7 +103,7 @@ endif()
 set(CURRENT_EXTERNAL_PROJECT libtag)
 FetchContent_Declare(${CURRENT_EXTERNAL_PROJECT}
   GIT_REPOSITORY https://github.com/taglib/taglib.git
-  GIT_TAG v1.11.1
+  GIT_TAG v1.12
 )
 FetchContent_GetProperties(${CURRENT_EXTERNAL_PROJECT})
 if(NOT ${CURRENT_EXTERNAL_PROJECT}_POPULATED)
