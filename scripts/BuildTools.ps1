@@ -35,15 +35,21 @@ Function Find-VisualStudioVersion {
   If (Get-Command "vswhere.exe" -ErrorAction SilentlyContinue) {
     $Version = & vswhere.exe -latest -property catalog_productLineVersion | Out-String -NoNewline
   }
+  else {
+    $Version = & (Join-Path ${env:ProgramFiles(x86)} '\\Microsoft Visual Studio\\Installer\\vswhere.exe') -latest -property catalog_productLineVersion | Out-String -NoNewline
+  }
   Return $Version.Trim()
 }
 
 Function Find-VisualStudioDirectory {
-  $Version = "<unknown>"
+  $Directory = "<unknown>"
   If (Get-Command "vswhere.exe" -ErrorAction SilentlyContinue) {
-    $Version = & vswhere.exe -latest -property installationPath | Out-String -NoNewline
+    $Directory = & vswhere.exe -latest -property installationPath | Out-String -NoNewline
   }
-  Return $Version.Trim()
+  else {
+    $Directory = & (Join-Path ${env:ProgramFiles(x86)} '\\Microsoft Visual Studio\\Installer\\vswhere.exe') -latest -property installationPath | Out-String -NoNewline
+  }
+  Return $Directory.Trim()
 }
 
 Function Parse-CMakeVersion ($VersionString) {
