@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       build_timestamp: ${{steps.timestamp.outputs.timestamp}}
-      build_id: R050100_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
+      build_id: R5.1.0_UPI_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
     steps:
       - name: configure build id
         id: timestamp
@@ -63,9 +63,6 @@ jobs:
         with:
           name: ${{needs.configure.outputs.build_id}}
           path: ${{runner.workspace}}/artifacts
-
-      - name: display
-        run: ls -l ${{runner.workspace}}/artifacts
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:

@@ -35,30 +35,41 @@ namespace ultraschall { namespace reaper {
 class FileManager
 {
 public:
-    static UnicodeChar PathSeparator();
+   static UnicodeChar PathSeparator();
 
-    static UnicodeString      AppendPath(const UnicodeString& prefix, const UnicodeString& appendix);
-    static UnicodeString      StripPath(const UnicodeString& path);
-    static UnicodeStringArray SplitPath(const UnicodeString& path);
+   static UnicodeString AppendPath(const UnicodeString& prefix, const UnicodeString& appendix);
+   static UnicodeString StripPath(const UnicodeString& path);
+   static UnicodeStringArray SplitPath(const UnicodeString& path);
 
-    static bool   FileExists(const UnicodeString& path);
-    static size_t FileExists(const UnicodeStringArray& paths);
+   static bool FileExists(const UnicodeString& path);
+   static size_t FileExists(const UnicodeStringArray& paths);
 
-    static UnicodeString QueryFileDirectory(const UnicodeString& filename);
+   static std::string FindFile(const UnicodeString& path, const UnicodeString& name);
+   static std::string FindFile(const UnicodeString& path, const UnicodeStringArray& names);
 
-    enum class FILE_TYPE { MP4CHAPS, MP3, JPEG, PNG, UNKNOWN_FILE_TYPE, MAX_FILE_TYPE = UNKNOWN_FILE_TYPE };
-    static FILE_TYPE QueryFileType(const UnicodeString& filename);
+   static UnicodeString QueryFileDirectory(const UnicodeString& filename);
 
-    static size_t QueryFileSize(const UnicodeString& filename);
-    static bool   IsDiskSpaceAvailable(const UnicodeString& filename, const size_t requiredBytes);
+   enum class FILE_TYPE
+   {
+      MP4CHAPS,
+      MP3,
+      JPEG,
+      PNG,
+      UNKNOWN_FILE_TYPE,
+      MAX_FILE_TYPE = UNKNOWN_FILE_TYPE
+   };
+   static FILE_TYPE QueryFileType(const UnicodeString& filename);
 
-    static BinaryStream*      ReadBinaryFile(const UnicodeString& filename);
-    static UnicodeStringArray ReadTextFile(const UnicodeString& filename);
+   static size_t QueryFileSize(const UnicodeString& filename);
+   static bool IsDiskSpaceAvailable(const UnicodeString& filename, const size_t requiredBytes);
 
-    static bool WriteTextFile(const UnicodeString& filename, const UnicodeString& str);
+   static BinaryStream* ReadBinaryFile(const UnicodeString& filename);
+   static UnicodeStringArray ReadTextFile(const UnicodeString& filename);
+
+   static bool WriteTextFile(const UnicodeString& filename, const UnicodeString& str);
 
 private:
-    static UnicodeString NormalizeFileName(const UnicodeString& targetName);
+   static UnicodeString NormalizeFileName(const UnicodeString& targetName);
 };
 
 }} // namespace ultraschall::reaper

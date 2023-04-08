@@ -24,10 +24,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Application.h"
 #include "FileManager.h"
-#include "StringUtilities.h"
+
+#include "Application.h"
 #include "PlatformGateway.h"
+#include "StringUtilities.h"
+
+#include <filesystem>
 
 namespace ultraschall { namespace reaper {
 
@@ -47,13 +50,11 @@ UnicodeString FileManager::StripPath(const UnicodeString& path)
 
     UnicodeString shortName;
 
-    if(path.empty() == false)
-    {
-        shortName = path;
+    if (path.empty() == false) {
+        shortName                             = path;
 
         const UnicodeString::size_type offset = path.rfind(FileManager::PathSeparator());
-        if(offset != UnicodeString::npos)
-        {
+        if (offset != UnicodeString::npos) {
             shortName = path.substr(offset + 1, path.size()); // skip separator
         }
     }
@@ -73,8 +74,7 @@ bool FileManager::FileExists(const UnicodeString& filename)
     bool fileExists = false;
 
     std::ifstream is(U2H(filename), std::ios::in | std::ios::binary);
-    if(is.is_open() == true)
-    {
+    if (is.is_open() == true) {
         fileExists = true;
         is.close();
     }
@@ -88,15 +88,59 @@ size_t FileManager::FileExists(const UnicodeStringArray& paths)
 
     size_t offset = -1;
 
-    for(size_t i = 0; (i < paths.size()) && (offset == -1); i++)
-    {
-        if(FileExists(paths[i]) == true)
-        {
+    for (size_t i = 0; (i < paths.size()) && (offset == -1); i++) {
+        if (FileExists(paths[i]) == true) {
             offset = i;
         }
     }
 
     return offset;
+}
+
+static std::string str_tolower(std::string s)
+{
+    std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::tolower(c); });
+    return s;
+}
+
+static std::string str_toupper(std::string s)
+{
+    std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::toupper(c); });
+    return s;
+}
+
+UnicodeString FileManager::FindFile(const UnicodeString& path, const UnicodeString& name)
+{
+    PRECONDITION_RETURN(path.empty() == false, UnicodeString());
+    PRECONDITION_RETURN(name.empty() == false, UnicodeString());
+
+    std::string result;
+    auto directoryEntries = std::filesystem::directory_iterator{std::filesystem::path(path)};
+    for (auto& directoryEntry : directoryEntries) {
+        if (directoryEntry.is_regular_file()) {
+            const std::string lhs = str_tolower(directoryEntry.path().filename().string());
+            const std::string rhs = str_tolower(name);
+            if (lhs == rhs) {
+                result = directoryEntry.path().filename().string();
+            }
+        }
+    }
+    return result;
+}
+
+UnicodeString FileManager::FindFile(const UnicodeString& path, const UnicodeStringArray& names)
+{
+    PRECONDITION_RETURN(path.empty() == false, UnicodeString());
+    PRECONDITION_RETURN(names.empty() == false, UnicodeString());
+
+    UnicodeString result;
+    for (size_t i = 0; (i < names.size()) && (result.empty() == true); i++) {
+        const std::string file = FindFile(path, names[i]);
+        if (file.empty() == false) {
+            result = names[i];
+        }
+    }
+    return result;
 }
 
 UnicodeString FileManager::QueryFileDirectory(const UnicodeString& filename)
@@ -105,9 +149,8 @@ UnicodeString FileManager::QueryFileDirectory(const UnicodeString& filename)
 
     UnicodeString directory = ".";
 
-    size_t offset = filename.find_last_of(PlatformGateway::QueryPathSeparator());
-    if(offset != std::string::npos)
-    {
+    size_t offset           = filename.find_last_of(PlatformGateway::QueryPathSeparator());
+    if (offset != std::string::npos) {
         directory = filename.substr(0, offset);
     }
 
@@ -122,8 +165,7 @@ size_t FileManager::QueryFileSize(const UnicodeString& filename)
     size_t size = -1;
 
     std::ifstream file(U2H(filename), std::ios::in | std::ios::binary | std::ios::ate);
-    if(file.is_open() == true)
-    {
+    if (file.is_open() == true) {
         size = file.tellg();
         file.close();
     }
@@ -142,33 +184,25 @@ FileManager::FILE_TYPE FileManager::QueryFileType(const UnicodeString& filename)
 {
     PRECONDITION_RETURN(filename.empty() == false, FILE_TYPE::UNKNOWN_FILE_TYPE);
 
-    FILE_TYPE           type             = FILE_TYPE::UNKNOWN_FILE_TYPE;
+    FILE_TYPE type                       = FILE_TYPE::UNKNOWN_FILE_TYPE;
     const UnicodeString cookedTargetName = NormalizeFileName(filename);
-    const size_t        extensionOffset  = cookedTargetName.rfind(".");
-    if(extensionOffset != UnicodeString::npos)
-    {
-        const UnicodeString fileExtension =
-            cookedTargetName.substr(extensionOffset + 1, cookedTargetName.length() - extensionOffset);
-        if(fileExtension.empty() == false)
-        {
-            if((fileExtension == "txt") || (fileExtension == "mp4chaps"))
-            {
+    const size_t extensionOffset         = cookedTargetName.rfind(".");
+    if (extensionOffset != UnicodeString::npos) {
+        const UnicodeString fileExtension = cookedTargetName.substr(extensionOffset + 1, cookedTargetName.length() - extensionOffset);
+        if (fileExtension.empty() == false) {
+            if ((fileExtension == "txt") || (fileExtension == "mp4chaps")) {
                 type = FILE_TYPE::MP4CHAPS;
             }
-            else if(fileExtension == "mp3")
-            {
+            else if (fileExtension == "mp3") {
                 type = FILE_TYPE::MP3;
             }
-            else if((fileExtension == "jpg") || (fileExtension == "jpeg"))
-            {
+            else if ((fileExtension == "jpg") || (fileExtension == "jpeg")) {
                 type = FILE_TYPE::JPEG;
             }
-            else if(fileExtension == "png")
-            {
+            else if (fileExtension == "png") {
                 type = FILE_TYPE::PNG;
             }
-            else
-            {
+            else {
                 type = FILE_TYPE::UNKNOWN_FILE_TYPE;
             }
         }
@@ -182,11 +216,10 @@ bool FileManager::IsDiskSpaceAvailable(const UnicodeString& filename, const size
     PRECONDITION_RETURN(filename.empty() == false, false);
     PRECONDITION_RETURN(requiredBytes != -1, false);
 
-    bool isAvailable = false;
+    bool isAvailable            = false;
 
     const size_t availableSpace = PlatformGateway::QueryAvailableDiskSpace(QueryFileDirectory(filename));
-    if(availableSpace != -1)
-    {
+    if (availableSpace != -1) {
         isAvailable = (requiredBytes <= availableSpace);
     }
 
@@ -200,23 +233,17 @@ BinaryStream* FileManager::ReadBinaryFile(const UnicodeString& filename)
     BinaryStream* pStream = nullptr;
 
     const size_t fileSize = QueryFileSize(filename);
-    if(fileSize != -1)
-    {
+    if (fileSize != -1) {
         std::ifstream file(U2H(filename), std::ios::in | std::ios::binary);
-        if(file.is_open() == true)
-        {
+        if (file.is_open() == true) {
             uint8_t* buffer = new uint8_t[fileSize];
-            if(buffer != nullptr)
-            {
+            if (buffer != nullptr) {
                 file.read(reinterpret_cast<char*>(buffer), fileSize);
-                if(file)
-                {
+                if (file) {
                     pStream = new BinaryStream(fileSize);
-                    if(pStream != nullptr)
-                    {
+                    if (pStream != nullptr) {
                         const bool succeeded = pStream->Write(0, buffer, fileSize);
-                        if(succeeded == false)
-                        {
+                        if (succeeded == false) {
                             SafeRelease(pStream);
                         }
                     }
@@ -241,8 +268,7 @@ UnicodeStringArray FileManager::ReadTextFile(const UnicodeString& filename)
 
     std::ifstream is(U2H(filename).c_str());
     UnicodeString line;
-    while(std::getline(is, line))
-    {
+    while (std::getline(is, line)) {
         lines.push_back(line);
     }
 
@@ -258,8 +284,7 @@ bool FileManager::WriteTextFile(const UnicodeString& filename, const UnicodeStri
     bool status = false;
 
     std::ofstream os(U2H(filename).c_str());
-    if(os.is_open() == true)
-    {
+    if (os.is_open() == true) {
         os << str;
         os.close();
         status = true;
@@ -267,5 +292,4 @@ bool FileManager::WriteTextFile(const UnicodeString& filename, const UnicodeStri
 
     return status;
 }
-
 }} // namespace ultraschall::reaper

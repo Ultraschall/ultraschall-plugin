@@ -31,6 +31,7 @@ source scripts/BuildTools.sh
 TOOLS_DIRECTORY=`pwd`/tools
 BUILD_DIRECTORY=`pwd`/build
 BUILD_CONFIGURATION=Debug
+BUILD_GENERATOR=Ninja
 CMAKE_EXTRA_ARGS=""
 
 if [ "$1" = "--help" ]; then
@@ -86,15 +87,8 @@ if [ $CMAKE_INSTALL_FOUND -eq 0 ]; then
 fi
 
 if [ $CMAKE_INSTALL_FOUND -ne 0 ]; then
-  if [ ! -d $BUILD_DIRECTORY ]; then
-    mkdir $BUILD_DIRECTORY
-  fi
-
-  echo "Entering build directory..."
-  pushd $BUILD_DIRECTORY > /dev/null
-
   echo "Configuring projects using $CMAKE_GENERATOR..."
-  cmake -GNinja -Wno-dev --warn-uninitialized --warn-unused-vars -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION ../
+  cmake -B "$BUILD_DIRECTORY" -G "$BUILD_GENERATOR" -Wno-dev --warn-uninitialized --warn-unused-vars -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION
   if [ $? -ne 0 ]; then
     echo "Failed to configure projects."
     exit -1
@@ -102,15 +96,12 @@ if [ $CMAKE_INSTALL_FOUND -ne 0 ]; then
   echo "Done."
 
   echo "Building projects using $CMAKE_GENERATOR..."
-  cmake --build . $CMAKE_EXTRA_ARGS --target reaper_ultraschall --config $BUILD_CONFIGURATION -j 8
+  cmake --build "$BUILD_DIRECTORY" $CMAKE_EXTRA_ARGS --target reaper_ultraschall --config $BUILD_CONFIGURATION -j
   if [ $? -ne 0 ]; then
     echo "Failed to build projects."
     exit -1
   fi
   echo "Done."
-
-  echo "Leaving build directory..."
-  popd > /dev/null
 fi
 
 exit 0
