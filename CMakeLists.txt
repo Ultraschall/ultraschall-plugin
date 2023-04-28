@@ -25,6 +25,7 @@
 ################################################################################
 
 cmake_minimum_required(VERSION 3.19)
+cmake_policy(SET CMP0091 NEW)
 
 project(reaper_ultraschall
   VERSION 5.1.0
@@ -57,11 +58,12 @@ elseif(UNIX)
   endif()
 endif()
 
-set(CMAKE_POSITION_INDEPENDENT_CODE ON  CACHE INTERNAL  "")
+set(CMAKE_POSITION_INDEPENDENT_CODE ON  CACHE INTERNAL "")
 set(CMAKE_WARN_DEPRECATED           OFF CACHE INTERNAL "")
 set(BUILD_SHARED_LIBS               OFF CACHE INTERNAL "")
 
-message(STATUS "ULTRASCHALL_TARGET_SYSTEM = " ${ULTRASCHALL_TARGET_SYSTEM})
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
 include(cmake/${ULTRASCHALL_TARGET_SYSTEM}.cmake)
 
 add_subdirectory(src)
