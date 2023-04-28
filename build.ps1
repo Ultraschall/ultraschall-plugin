@@ -24,124 +24,135 @@
 #
 ################################################################################
 
-. "./scripts/BuildTools.ps1"
-. "./scripts/BuildVars.ps1"
+$CMakeRequiredVersion = "3.25.0"
+$CMakeBuildDirectory = ".\_build"
+$CMakeGenerator = "Ninja"
+$CMakeBuildConfig = "Debug"
+$CMakeCleanRebuild = $False
 
-$ToolsDirectory = "./tools"
-$BuildDirectory = "./build"
-$BuildConfig = "Debug"
-$CMakeExtraArgs = ""
-
-If ($args.Count -gt 0) {
-  If ($args[0] -eq "--help") {
-    Write-Host "Usage: build.ps1 [ --bootstrap | --rebuild | --clean | --clean-all ]"
-    Return
+if ($args.Count -gt 0) {
+  if ($args[0] -eq "--help") {
+    Write-Host "Usage: build.ps1 [ --clean | --rebuild | --release ]"
+    return
   }
-  ElseIf ($args[0] -eq "--bootstrap") {
-    Remove-Directory $BuildDirectory
-    Remove-Directory $ToolsDirectory
-    . "bootstrap.ps1"
-    Return
+  elseif ($args[0] -eq "--clean") {
+    if ((Test-Path -PathType Container $CMakeBuildDirectory) -ne $False) {
+      Remove-Item $CMakeBuildDirectory -Force -Recurse
+    }
+    return
   }
-  ElseIf ($args[0] -eq "--cleanall") {
-    Remove-Directory $BuildDirectory
-    Remove-Directory $ToolsDirectory
-    Return
+  elseif ($args[0] -eq "--rebuild") {
+    $CMakeCleanRebuild = $True
   }
-  ElseIf ($args[0] -eq "--clean") {
-    Remove-Directory $BuildDirectory
-    Return
-  }
-  ElseIf ($args[0] -eq "--rebuild") {
-    $CMakeExtraArgs = "--clean-first"
-  }
-  ElseIf ($args[0] -eq "--release") {
-    $BuildConfig = "Release"
+  elseif ($args[0] -eq "--release") {
+    $CMakeBuildConfig = "Release"
   }
 }
 
-$LocalCMakeDirectory = $ToolsDirectory + "/cmake"
-$RequiredCMakeVersion = "3.20.5"
-$CMakeFound = $False
+function Select-CMakeVersion {
+  param (
+    $VersionString
+  )
+  $VersionStringLines = $VersionString.Split("`n`r")
+  $FirstLine = $VersionStringLines[0]
+  $VersionTokens = $FirstLine.Split(" ")
+  $Version = $VersionTokens[2]
+  return $Version.Trim()
+}
 
-Write-Host Looking for CMake $RequiredCMakeVersion"."
-Write-Host Checking system install...
-If ($CMakeFound -eq $False) {
+function Find-CMakeVersion ($CMakePath) {
+  $VersionString = & $CMakePath --version | Out-String
+  $Version = Select-CMakeVersion -VersionString $VersionString
+  return $Version.Trim()
+}
+
+function Compare-Versions($CurrentVersion, $RequiredVersion) {
+  $CurrentVersionTokens = $CurrentVersion.Split(".")
+  $RequiredVersionTokens = $RequiredVersion.Split(".")
+  if ($CurrentVersionTokens.Count -ge $RequiredVersionTokens.Count) {
+    $TokenCount = $CurrentVersionTokens.count
+  }
+  else {
+    $TokenCount = $RequiredVersionTokens.count
+  }
+  For ($i = 0; $i -lt $TokenCount; $i++) {
+    $CompareResult = $CurrentVersionTokens[$i].CompareTo($RequiredVersionTokens[$i])
+    if ($CompareResult -eq -1) {
+      return -1
+    }
+    elseif ($CompareResult -eq 1) {
+      return 1
+    }
+  }
+  return 0
+}
+
+###############################################################################
+# Check whether a useable version of cmake is available.
+if ($CMakeFound -eq $False) {
   $CMakeInstallPath = "cmake.exe"
-  If (Get-Command $CMakeInstallPath -ErrorAction SilentlyContinue) {
+  if (Get-Command $CMakeInstallPath -ErrorAction SilentlyContinue) {
     $CurrentCMakeVersion = Find-CMakeVersion $CMakeInstallPath
-    Write-Host Found CMake version $CurrentCMakeVersion"."
-    $CompareResult = Compare-Versions $CurrentCMakeVersion $RequiredCMakeVersion
-    If ($CompareResult -ne 2) {
+    $CompareResult = Compare-Versions $CurrentCMakeVersion $CMakeRequiredVersion
+    if ($CompareResult -gt -1) {
       $CMakeFound = $True
     }
   }
 }
-
-If ($CMakeFound -eq $False) {
-  Write-Host CMake $RequiredCMakeVersion does not seem to be installed on this system.
-  Write-Host Checking local install...
-  $CMakeInstallPath = $LocalCMakeDirectory + "/bin/cmake"
-  If (Get-Command $CMakeInstallPath -ErrorAction SilentlyContinue) {
-    $CurrentCMakeVersion = Find-CMakeVersion $CMakeInstallPath
-    Write-Host Found CMake version $CurrentCMakeVersion"."
-    $CompareResult = Compare-Versions $CurrentCMakeVersion $RequiredCMakeVersion
-    If ($CompareResult -ne 2) {
-      $CMakeFound = $True
-    }
-  }
-}
-
-If ($CMakeFound -eq $False) {
+if ($CMakeFound -eq $False) {
   Write-Host -ForegroundColor Red Failed to find the required CMake version. Only 3.20.5 and higher is supported.
-  Return
+  return
 }
 
-$VisualStudioFound = $False
-$CMakeGenerator = "<unknown>"
-
-Write-Host "Looking for Visual Studio 2022 or 2019..."
-If ($VisualStudioFound -eq $False) {
-  $VisualStudioVersion = Find-VisualStudioVersion
-  Write-Host Found Visual Studio $VisualStudioVersion"."
-  If ($VisualStudioVersion -eq "2022") {
-    $CMakeGenerator = "Visual Studio 17 2022"
-    $VisualStudioFound = $True
+###############################################################################
+# Check whether a useable version of Microsoft C++ is available.
+if ($Null -eq (Get-Command "cl.exe")) {
+  $visualStudioPath = $Null
+  if (Test-Path -Path (Join-Path ${env:ProgramFiles(x86)} '\\Microsoft Visual Studio\\Installer\\vswhere.exe') -PathType Leaf) {
+    $visualStudioPath = & (Join-Path ${env:ProgramFiles(x86)} '\\Microsoft Visual Studio\\Installer\\vswhere.exe') -prerelease -latest -property installationPath
   }
-  ElseIf ($VisualStudioVersion -eq "2019") {
-    $CMakeGenerator = "Visual Studio 16 2019"
-    $VisualStudioFound = $True
+  if ($Null -eq $visualStudioPath) {
+    if (Test-Path -Path (Join-Path ${env:ProgramFiles(x86)} '\\Microsoft Visual Studio\\2022\\BuildTools') -PathType Container) {
+      $visualStudioPath = (Join-Path ${env:ProgramFiles(x86)} '\\Microsoft Visual Studio\\2022\\BuildTools')
+    }
+    else {
+      if (Test-Path -Path (Join-Path ${env:ProgramFiles(x86)} '\\Microsoft Visual Studio\\2019\\BuildTools') -PathType Container) {
+        $visualStudioPath = (Join-Path ${env:ProgramFiles(x86)} '\\Microsoft Visual Studio\\2019\\BuildTools')
+      }
+      else {
+        if (Test-Path -Path (Join-Path ${env:ProgramFiles(x86)} '\\Microsoft Visual Studio\\2017\\BuildTools') -PathType Container) {
+          $visualStudioPath = (Join-Path ${env:ProgramFiles(x86)} '\\Microsoft Visual Studio\\2017\\BuildTools')
+        }
+      }
+    }
   }
-}
-
-If ($VisualStudioFound -eq $False) {
-  Write-Host -ForegroundColor Red "Failed to find the required Visual Studio version. Only '2022' and '2019' are supported."
-  Return
-}
-
-If ((Test-Path -PathType Container $BuildDirectory) -eq $False) {
-  New-Item -ItemType Directory $BuildDirectory | Out-Null
-}
-
-Write-Host Entering build directory"..."
-Push-Location $BuildDirectory | Out-Null
-
-Write-Host Configuring projects using $CMakeGenerator"..."
-& cmake -GNinja -DCMAKE_BUILD_TYPE=Debug ../
-If ($LastExitCode -eq 0) {
-  Write-Host Done"."
-  Write-Host Building projects using $CMakeGenerator"..."
-  &cmake --build . $CMakeExtraArgs --target reaper_ultraschall --config Debug -j
-  If ($LastExitCode -eq 0) {
-    Write-Host Done"."
+  if ($Null -ne $visualStudioPath) {
+    Import-Module (Join-Path $visualStudioPath 'Common7\\Tools\\Microsoft.VisualStudio.DevShell.dll')
+    Enter-VsDevShell -VsInstallPath $visualStudioPath -SkipAutomaticLocation -DevCmdArguments "-arch=x64 -host_arch=x64" | Out-Null
   }
-  Else {
-    Write-Host -ForegroundColor Red Failed to build projects"."
+  else {
+    Write-Host -ForegroundColor Red "Failed to find the required Visual Studio version. Only '2022', '2019' and '2017' are supported."
+    return
   }
 }
-Else {
-  Write-Host -ForegroundColor Red Failed to configure projects"."
+
+###############################################################################
+# Configure project.
+Write-Host "Configuring projects using $CMakeGenerator..."
+cmake -B"$CMakeBuildDirectory" -G"$CMakeGenerator" -DCMAKE_BUILD_TYPE="$CMakeBuildConfig" -Wno-dev
+if ($LastExitCode -ne 0) {
+  Write-Host "Building projects using $CMakeGenerator..."
+  return
 }
 
-Write-Host Leaving build directory"..."
-Pop-Location | Out-Null
+###############################################################################
+# Build project.
+if ($True -eq $CMakeCleanRebuild) {
+  cmake --build "$CMakeBuildDirectory" --clean-first --target reaper_ultraschall --config "$CMakeBuildConfig" -j
+}
+else {
+  cmake --build "$CMakeBuildDirectory" --target reaper_ultraschall --config "$CMakeBuildConfig" -j
+}
+if ($LastExitCode -ne 0) {
+  Write-Host -ForegroundColor Red "Failed to build project."
+}
