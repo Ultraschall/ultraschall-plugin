@@ -1,19 +1,19 @@
-name: CMake
+name: build
 
 on:
   push:
-    branches: [develop]
+    branches: [main, develop]
   pull_request:
-    branches: [develop]
+    branches: [main, develop]
   workflow_dispatch:
-    branches: [develop]
+    branches: [main, develop]
 
 jobs:
   configure:
     runs-on: ubuntu-latest
     outputs:
       build_timestamp: ${{steps.timestamp.outputs.timestamp}}
-      build_id: R5.1.0_UPI_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
+      build_id: R5.1.0_PLUGIN_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
     steps:
       - name: configure build id
         id: timestamp
