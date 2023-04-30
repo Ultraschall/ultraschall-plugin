@@ -24,7 +24,7 @@
 #
 ################################################################################
 
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.24)
 cmake_policy(SET CMP0091 NEW)
 
 project(reaper_ultraschall
@@ -34,24 +34,24 @@ project(reaper_ultraschall
 )
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-  set(CMAKE_CXX_EXTENSIONS OFF)
-  set(CMAKE_CXX_STANDARD 20)
+  set(CMAKE_CXX_EXTENSIONS        OFF)
+  set(CMAKE_CXX_STANDARD          20)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
   set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 endif()
 
 if(WIN32)
-    set(ULTRASCHALL_TARGET_SYSTEM "win32")
+    set(ULTRASCHALL_TARGET_SYSTEM "windows")
 elseif(APPLE)
     set(ULTRASCHALL_TARGET_SYSTEM "macos")
 elseif(UNIX)
-  execute_process(COMMAND uname -a RESULT_VARIABLE UNAME_RESULT OUTPUT_VARIABLE UNAME_OUTPUT OUTPUT_STRIP_TRAILING_WHITESPACE)
+  execute_process(COMMAND uname RESULT_VARIABLE UNAME_RESULT OUTPUT_VARIABLE UNAME_OUTPUT OUTPUT_STRIP_TRAILING_WHITESPACE)
   if(UNAME_RESULT EQUAL 0)
-    if(${UNAME_OUTPUT} MATCHES "[U|u]buntu")
+    if(${UNAME_OUTPUT} MATCHES "[L|l]inux")
         set(ULTRASCHALL_TARGET_SYSTEM "linux")
     else()
       message(STATUS "Unsupported platform: " ${UNAME_OUTPUT})
-      message(FATAL_ERROR "Supported platforms are Windows, macOS and Ubuntu Linux")
+      message(FATAL_ERROR "Supported platforms are Linux, Windows and macOS")
     endif()
   else()
     message(FATAL_ERROR "Failed to run uname, result: ${UNAME_RESULT}")
@@ -63,6 +63,10 @@ set(CMAKE_WARN_DEPRECATED           OFF CACHE INTERNAL "")
 set(BUILD_SHARED_LIBS               OFF CACHE INTERNAL "")
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
+set(LIBZ_VERSION_TAG    "v1.2.13")
+set(LIBCURL_VERSION_TAG "curl-8_0_1")
+set(LIBTAG_VERSION_TAG  "v1.13")
 
 include(cmake/${ULTRASCHALL_TARGET_SYSTEM}.cmake)
 

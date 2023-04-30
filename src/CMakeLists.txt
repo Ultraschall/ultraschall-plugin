@@ -115,7 +115,7 @@ set(PLATFORM_SOURCES ${ULTRASCHALL_TARGET_SYSTEM}/PlatformGateway.cpp)
 
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
-if(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "win32")
+if(${ULTRASCHALL_TARGET_SYSTEM} STREQUAL "windows")
   set(EXTRA_SOURCES ${EXTRA_SOURCES} reaper_ultraschall.rc)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
   set(EXTRA_LIBRARIES version.lib ws2_32.lib crypt32.lib wldap32.lib mfplat.lib mf.lib mfuuid.lib shlwapi.lib comctl32.lib comdlg32.lib rpcrt4.lib)

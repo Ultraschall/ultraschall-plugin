@@ -2,18 +2,18 @@ name: build
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, develop, github-actions]
   pull_request:
-    branches: [main, develop]
+    branches: [main, develop, github-actions]
   workflow_dispatch:
-    branches: [main, develop]
+    branches: [main, develop, github-actions]
 
 jobs:
   configure:
     runs-on: ubuntu-latest
     outputs:
       build_timestamp: ${{steps.timestamp.outputs.timestamp}}
-      build_id: R5.1.0_PLUGIN_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
+      build_id: build-${{github.run_number}}-${{steps.timestamp.outputs.timestamp}}
     steps:
       - name: configure build id
         id: timestamp
@@ -29,16 +29,16 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: install (linux)
-        run: sudo apt-get install ninja-build
         if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get install ninja-build
 
       - name: install (windows)
-        run: choco install ninja
         if: matrix.os == 'windows-latest'
+        run: choco install ninja
 
       - name: install (macos)
-        run: brew install ninja
         if: matrix.os == 'macos-latest'
+        run: brew install ninja
 
       - uses: ilammy/msvc-dev-cmd@v1
         with:
