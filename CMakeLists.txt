@@ -64,9 +64,9 @@ set(BUILD_SHARED_LIBS               OFF CACHE INTERNAL "")
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
-set(LIBZ_VERSION_TAG    "v1.2.13")
-set(LIBCURL_VERSION_TAG "curl-8_0_1")
-set(LIBTAG_VERSION_TAG  "v1.13")
+set(LIBZ_VERSION_TAG    "v1.3")
+set(LIBCURL_VERSION_TAG "curl-8_4_0")
+set(LIBTAG_VERSION_TAG  "v1.13.1")
 
 include(cmake/${ULTRASCHALL_TARGET_SYSTEM}.cmake)
 
