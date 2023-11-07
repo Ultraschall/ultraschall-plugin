@@ -142,8 +142,6 @@ add_library(reaper_ultraschall SHARED
   ${COCKOS_SOURCES}
 )
 
-add_dependencies(reaper_ultraschall zlibstatic)
-add_dependencies(reaper_ultraschall libcurl)
 add_dependencies(reaper_ultraschall tag)
 
 if (ULTRASCHALL_TARGET_SYSTEM STREQUAL "linux")
