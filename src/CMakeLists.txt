@@ -74,8 +74,9 @@ set(COMMON_INCLUDES
   NotificationClass.h
   NotificationQueue.h
   NotificationStore.h
-  UpdateHandler.h
   UnicodeString.h
+  UpdateHandler.h
+  Version.h
 )
 
 set(COMMON_SOURCES
@@ -105,8 +106,9 @@ set(COMMON_SOURCES
   Notification.cpp
   NotificationQueue.cpp
   NotificationStore.cpp
-  UpdateHandler.cpp
   UnicodeString.cpp
+  UpdateHandler.cpp
+  Version.cpp
   reaper_ultraschall.cpp
 )
 

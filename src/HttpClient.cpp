@@ -36,130 +36,126 @@ HttpClient::HttpClient() : handle_(curl_easy_init()) {}
 
 HttpClient::~HttpClient()
 {
-    if(handle_ != nullptr)
-    {
-        curl_easy_cleanup(handle_);
-        handle_ = nullptr;
-    }
+   if (handle_ != nullptr) {
+      curl_easy_cleanup(handle_);
+      handle_ = nullptr;
+   }
 }
 
-UnicodeString HttpClient::DownloadUrl(const UnicodeString& url)
+UnicodeString HttpClient::ReadString(const UnicodeString& url)
 {
-    PRECONDITION_RETURN(handle_ != nullptr, UnicodeString());
-    PRECONDITION_RETURN(url.empty() == false, UnicodeString());
+   PRECONDITION_RETURN(handle_ != nullptr, UnicodeString());
+   PRECONDITION_RETURN(url.empty() == false, UnicodeString());
 
-    UnicodeString result;
+   UnicodeString result;
 
-    curl_easy_setopt(handle_, CURLOPT_URL, url.c_str());
-    curl_easy_setopt(handle_, CURLOPT_FOLLOWLOCATION, 1L);
-    curl_easy_setopt(handle_, CURLOPT_NOSIGNAL, 1);
-    curl_easy_setopt(handle_, CURLOPT_ACCEPT_ENCODING, "deflate");
-    curl_easy_setopt(handle_, CURLOPT_WRITEFUNCTION, ReceiveDataHandler);
+   curl_easy_setopt(handle_, CURLOPT_URL, url.c_str());
+   curl_easy_setopt(handle_, CURLOPT_FOLLOWLOCATION, 1L);
+   curl_easy_setopt(handle_, CURLOPT_NOSIGNAL, 1);
+   curl_easy_setopt(handle_, CURLOPT_ACCEPT_ENCODING, "deflate");
+   curl_easy_setopt(handle_, CURLOPT_CONNECTTIMEOUT, 3);
+   curl_easy_setopt(handle_, CURLOPT_WRITEFUNCTION, ReceiveDataHandler);
 
-    SequentialStream* pStream = new SequentialStream();
-    if(pStream != nullptr)
-    {
-        curl_easy_setopt(handle_, CURLOPT_WRITEDATA, pStream);
-        const CURLcode curlResult = curl_easy_perform(handle_);
-        if(CURLE_OK == curlResult)
-        {
-            result = StreamToString(pStream);
-        }
+   SequentialStream* pStream = new SequentialStream();
+   if (pStream != nullptr) {
+      curl_easy_setopt(handle_, CURLOPT_WRITEDATA, pStream);
+      const CURLcode curlResult = curl_easy_perform(handle_);
+      if (CURLE_OK == curlResult) {
+         result = StreamToString(pStream);
+      }
 
-        SafeRelease(pStream);
-    }
+      SafeRelease(pStream);
+   }
 
-    return result;
+   return result;
+}
+
+SequentialStream* HttpClient::ReadData(const UnicodeString& url)
+{
+   return 0;
 }
 
 size_t HttpClient::ReceiveDataHandler(void* pData, size_t dataSize, size_t itemSize, void* pParam)
 {
-    PRECONDITION_RETURN(pData != 0, 0);
-    PRECONDITION_RETURN(itemSize > 0, 0);
-    PRECONDITION_RETURN(pParam != 0, 0);
+   PRECONDITION_RETURN(pData != 0, 0);
+   PRECONDITION_RETURN(itemSize > 0, 0);
+   PRECONDITION_RETURN(pParam != 0, 0);
 
-    size_t result = -1;
+   size_t result             = -1;
 
-    SequentialStream* pStream = reinterpret_cast<SequentialStream*>(pParam);
-    if(pStream != nullptr)
-    {
-        if(pStream->Write(reinterpret_cast<uint8_t*>(pData), dataSize * itemSize) == true)
-        {
-            result = dataSize * itemSize;
-        }
-    }
+   SequentialStream* pStream = reinterpret_cast<SequentialStream*>(pParam);
+   if (pStream != nullptr) {
+      if (pStream->Write(reinterpret_cast<uint8_t*>(pData), dataSize * itemSize) == true) {
+         result = dataSize * itemSize;
+      }
+   }
 
-    return result;
+   return result;
 }
 
 UnicodeString HttpClient::StreamToString(const SequentialStream* pStream)
 {
-    PRECONDITION_RETURN(pStream != nullptr, UnicodeString());
-    PRECONDITION_RETURN(pStream->Data() != nullptr, UnicodeString());
-    PRECONDITION_RETURN(pStream->DataSize() > 0, UnicodeString());
+   PRECONDITION_RETURN(pStream != nullptr, UnicodeString());
+   PRECONDITION_RETURN(pStream->Data() != nullptr, UnicodeString());
+   PRECONDITION_RETURN(pStream->DataSize() > 0, UnicodeString());
 
-    UnicodeString result;
+   UnicodeString result;
 
-    const size_t stringSize = pStream->DataSize() + sizeof(UnicodeChar);
-    UnicodeChar* pString    = new UnicodeChar[stringSize];
-    if(pString != nullptr)
-    {
-        memset(pString, 0, stringSize);
-        memcpy(pString, pStream->Data(), pStream->DataSize());
-        result = pString;
+   const size_t stringSize = pStream->DataSize() + sizeof(UnicodeChar);
+   UnicodeChar* pString    = new UnicodeChar[stringSize];
+   if (pString != nullptr) {
+      memset(pString, 0, stringSize);
+      memcpy(pString, pStream->Data(), pStream->DataSize());
+      result = pString;
 
-        SafeDeleteArray(pString);
-    }
+      SafeDeleteArray(pString);
+   }
 
-    return result;
+   return result;
 }
 
 UnicodeString HttpClient::EncodeUrl(const UnicodeString& url)
 {
-    PRECONDITION_RETURN(url.empty() == false, UnicodeString());
+   PRECONDITION_RETURN(url.empty() == false, UnicodeString());
 
-    UnicodeString encodedUrl;
+   UnicodeString encodedUrl;
 
-    void* curlHandle = curl_easy_init();
-    if(curlHandle != nullptr)
-    {
-        char* urlBuffer = curl_easy_escape(curlHandle, url.c_str(), static_cast<int>(url.length()));
-        if(urlBuffer != nullptr)
-        {
-            encodedUrl = urlBuffer;
-            curl_free(urlBuffer);
-            urlBuffer = nullptr;
-        }
+   void* curlHandle = curl_easy_init();
+   if (curlHandle != nullptr) {
+      char* urlBuffer = curl_easy_escape(curlHandle, url.c_str(), static_cast<int>(url.length()));
+      if (urlBuffer != nullptr) {
+         encodedUrl = urlBuffer;
+         curl_free(urlBuffer);
+         urlBuffer = nullptr;
+      }
 
-        curl_easy_cleanup(curlHandle);
-        curlHandle = nullptr;
-    }
+      curl_easy_cleanup(curlHandle);
+      curlHandle = nullptr;
+   }
 
-    return encodedUrl;
+   return encodedUrl;
 }
 
 UnicodeString HttpClient::DecodeUrl(const UnicodeString& url)
 {
-    PRECONDITION_RETURN(url.empty() == false, UnicodeString());
+   PRECONDITION_RETURN(url.empty() == false, UnicodeString());
 
-    UnicodeString decodedUrl;
+   UnicodeString decodedUrl;
 
-    void* curlHandle = curl_easy_init();
-    if(curlHandle != nullptr)
-    {
-        char* urlBuffer = curl_easy_unescape(curlHandle, url.c_str(), static_cast<int>(url.length()), nullptr);
-        if(urlBuffer != nullptr)
-        {
-            decodedUrl = urlBuffer;
-            curl_free(urlBuffer);
-            urlBuffer = nullptr;
-        }
+   void* curlHandle = curl_easy_init();
+   if (curlHandle != nullptr) {
+      char* urlBuffer = curl_easy_unescape(curlHandle, url.c_str(), static_cast<int>(url.length()), nullptr);
+      if (urlBuffer != nullptr) {
+         decodedUrl = urlBuffer;
+         curl_free(urlBuffer);
+         urlBuffer = nullptr;
+      }
 
-        curl_easy_cleanup(curlHandle);
-        curlHandle = nullptr;
-    }
+      curl_easy_cleanup(curlHandle);
+      curlHandle = nullptr;
+   }
 
-    return decodedUrl;
+   return decodedUrl;
 }
 
 }} // namespace ultraschall::reaper

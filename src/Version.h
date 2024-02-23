@@ -24,38 +24,36 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__
-#define __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__
+#ifndef __ULTRASCHALL_REAPER_VERSION_H_INCL__
+#define __ULTRASCHALL_REAPER_VERSION_H_INCL__
 
 #include "Common.h"
-#include "SequentialStream.h"
-#include "SharedObject.h"
 
 namespace ultraschall { namespace reaper {
 
-class HttpClient : public SharedObject
+class Version
 {
 public:
-   HttpClient();
-   virtual ~HttpClient();
-
-   UnicodeString ReadString(const UnicodeString& url);
-   SequentialStream* ReadData(const UnicodeString& url);
-
-   static UnicodeString EncodeUrl(const UnicodeString& url);
-   static UnicodeString DecodeUrl(const UnicodeString& url);
+   Version(const std::string& version);
 
 private:
-   void* handle_                            = nullptr;
+   int32_t major_ = 0;
+   int32_t minor_ = 0;
+   int32_t patch_ = 0;
 
-   HttpClient(const HttpClient&)            = delete;
-   HttpClient& operator=(const HttpClient&) = delete;
+   std::vector<std::string> SplitString(const std::string& str, const char delimiter = ' ');
+   int32_t PositiveIntegerOrNull(const std::string& str);
 
-   static size_t ReceiveDataHandler(void* pData, size_t dataSize, size_t itemSize, void* pParam);
+   friend bool operator==(const Version& lhs, const Version& rhs);
+   friend bool operator!=(const Version& lhs, const Version& rhs);
 
-   static UnicodeString StreamToString(const SequentialStream* pStream);
+   friend bool operator<(const Version& lhs, const Version& rhs);
+   friend bool operator<=(const Version& lhs, const Version& rhs);
+
+   friend bool operator>(const Version& lhs, const Version& rhs);
+   friend bool operator>=(const Version& lhs, const Version& rhs);
 };
 
 }} // namespace ultraschall::reaper
 
-#endif // #ifndef __ULTRASCHALL_REAPER_HTTP_CLIENT_H_INCL__
+#endif // #ifndef __ULTRASCHALL_REAPER_VERSION_H_INCL__

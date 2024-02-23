@@ -28,8 +28,8 @@
 #define __ULTRASCHALL_REAPER_COMMON_H_INCL__
 
 #ifdef __GNUC__
-    #undef min
-    #undef max
+   #undef min
+   #undef max
 #endif // #ifdef __GNUC__
 
 #include <cctype>
@@ -37,18 +37,18 @@
 #include <cstdlib>
 #include <cstring>
 
+#include <deque>
 #include <map>
 #include <string>
 #include <vector>
-#include <deque>
 
 #include <algorithm>
-#include <functional>
 #include <cmath>
+#include <functional>
 
-#include <sstream>
 #include <fstream>
 #include <iomanip>
+#include <sstream>
 
 #include <atomic>
 #include <mutex>
@@ -56,26 +56,26 @@
 #include <chrono>
 #include <ctime>
 
-#include "Malloc.h"
 #include "Globals.h"
+#include "Malloc.h"
 #include "ServiceStatus.h"
 #include "SharedObject.h"
 #include "UnicodeString.h"
 
 #define PRECONDITION(a) \
-    {                   \
-        if((a) == 0) {  \
-            return;     \
-        }               \
-    }
+   {                    \
+      if ((a) == 0) {   \
+         return;        \
+      }                 \
+   }
 
 #define PRECONDITION_RETURN(a, b) \
-    {                             \
-        if((a) == 0) {            \
-            return (b);           \
-        }                         \
-    }
+   {                              \
+      if ((a) == 0) {             \
+         return (b);              \
+      }                           \
+   }
 
-#define ULTRASCHALL_VERSION "5.0.2"
+#define ULTRASCHALL_VERSION "5.1.0"
 
 #endif // #ifndef __ULTRASCHALL_REAPER_COMMON_H_INCL__
