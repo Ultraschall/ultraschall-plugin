@@ -153,6 +153,7 @@ if ($True -eq $CMakeCleanRebuild) {
 else {
   cmake --build "$CMakeBuildDirectory" --target reaper_ultraschall --config "$CMakeBuildConfig" -j
 }
+
 if ($LastExitCode -ne 0) {
   Write-Host -ForegroundColor Red "Failed to build project."
 }
