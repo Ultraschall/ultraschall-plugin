@@ -31,8 +31,8 @@ jobs:
       - name: install (linux)
         if: matrix.os == 'ubuntu-latest'
         run: |
-          apt-get update
-          apt-get install ninja-build libcurl4-openssl-dev
+          sudo apt-get update
+          sudo apt-get install ninja-build libcurl4-openssl-dev
 
       - name: install (windows)
         if: matrix.os == 'windows-latest'
