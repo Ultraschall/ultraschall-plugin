@@ -54,7 +54,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{needs.configure.outputs.build_id}}-${{matrix.runs-on}}
+          name: ${{needs.configure.outputs.build_id}}-${{ matrix.runs-on }}
           path: |
             ${{runner.workspace}}/build/artifacts/*
             !${{runner.workspace}}/build/artifacts/reaper_ultraschall.dll.manifest
