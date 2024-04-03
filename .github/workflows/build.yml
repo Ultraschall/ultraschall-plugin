@@ -59,6 +59,8 @@ jobs:
 
   release:
     needs: [configure, build]
+    if :
+      contains('refs/heads/main refs/heads/develop', github.ref)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v3
