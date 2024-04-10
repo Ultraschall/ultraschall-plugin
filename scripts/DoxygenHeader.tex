@@ -47,18 +47,19 @@
   \usepackage{textcomp}
   \usepackage[nointegrals]{wasysym}
   \usepackage{ifxetex}
+  \usepackage{lineno}
 
   % NLS support packages
   $languagesupport
 
   % Define default fonts
   % Font selection
-%%BEGIN LATEX_FONTENC
-  \usepackage[$latexfontenc]{fontenc}
-%%END LATEX_FONTENC
+  %%BEGIN LATEX_FONTENC
+    \usepackage[$latexfontenc]{fontenc}
+  %%END LATEX_FONTENC
 
-  % set main and monospaced font
-  $latexfont
+    % set main and monospaced font
+    $latexfont
 
   \doxyallsectionsfont{%
     \fontseries{bc}\selectfont%
@@ -126,12 +127,14 @@
     \fancyhead[LE, RO]{\bfseries\thepage}
     \fancyhead[LO]{\bfseries\rightmark}
     \fancyhead[RE]{\bfseries\leftmark}
-    \fancyfoot[LO, RE]{\bfseries\scriptsize $generatedby Doxygen }
+    % \fancyfoot[LO, RE]{\bfseries\scriptsize $generatedby Doxygen }
+    \fancyfoot[LO, RE]{\bfseries\scriptsize Generated on $datetime for $projectname $projectnumber }
   }
 
   \fancypagestyle{plain}{
     \fancyhf{}
-    \fancyfoot[LO, RE]{\bfseries\scriptsize $generatedby Doxygen }
+    % \fancyfoot[LO, RE]{\bfseries\scriptsize $generatedby Doxygen }
+    \fancyfoot[LO, RE]{\bfseries\scriptsize Generated on $datetime for $projectname $projectnumber }
     \renewcommand{\headrulewidth}{0pt}
   }
 
@@ -199,7 +202,6 @@
   \usepackage{caption}
   \captionsetup{labelsep=space,justification=centering,font={bf},singlelinecheck=off,skip=4pt,position=top}
 
-
   % in page table of contents
   \IfFormatAtLeastTF{2023/05/01}{\usepackage[deeplevels]{etoc}}{\usepackage[deeplevels]{etoc_doxygen}}
   \etocsettocstyle{\doxytocparskip}{\doxynormalparskip}
@@ -213,59 +215,59 @@
   % prevent numbers overlap the titles in toc
   \renewcommand{\numberline}[1]{#1~}
 
+
 % End of preamble, now comes the document contents
 %===== C O N T E N T S =====
 
 \begin{document}
-  \raggedbottom
+\raggedbottom
 
-  $latexdocumentpre
+$latexdocumentpre
 
-  % Titlepage & ToC
+% Titlepage & ToC
 %%BEGIN PDF_HYPERLINKS
 %%BEGIN USE_PDFLATEX
-    % To avoid duplicate page anchors due to reuse of same numbers for
-    % the index (be it as roman numbers)
-    \hypersetup{pageanchor=false,
-                bookmarksnumbered=true,
-                pdfencoding=unicode
-               }
+% To avoid duplicate page anchors due to reuse of same numbers for
+% the index (be it as roman numbers)
+\hypersetup{pageanchor=false,
+  bookmarksnumbered=true,
+  pdfencoding=unicode
+}
 %%END USE_PDFLATEX
 %%END PDF_HYPERLINKS
-  \pagenumbering{alph}
-  \begin{titlepage}
+\pagenumbering{alph}
+\begin{titlepage}
   \vspace*{7cm}
   \begin{center}%
-  {\Large $title}\\
-%%BEGIN PROJECT_NUMBER
-  [1ex]\large $projectnumber \\
-%%END PROJECT_NUMBER
-  % \vspace*{1cm}
-  % {\large $generatedby Ultraschall $doxygenversion}\\
-  \vspace*{1cm}
-  {\large https://ultraschall.fm}\\
-%%BEGIN TIMESTAMP
+    {\Large $title}\\
+      %%BEGIN PROJECT_NUMBER
+      [1ex]\large $projectnumber \\
+    %%END PROJECT_NUMBER
+    \vspace*{0.5cm}
+    % {\large https://ultraschall.fm}\\
+    {\large $projectbrief }\\
+    %%BEGIN TIMESTAMP
     \vspace*{0.5cm}
     {\small $datetime}
-%%END TIMESTAMP
+    %%END TIMESTAMP
   \end{center}
-  \end{titlepage}
+\end{titlepage}
 
 %%BEGIN !COMPACT_LATEX
-  \clearemptydoublepage
+\clearemptydoublepage
 %%END !COMPACT_LATEX
-  \pagenumbering{roman}
+\pagenumbering{roman}
 
-  \tableofcontents
+\tableofcontents
 %%BEGIN !COMPACT_LATEX
-  \clearemptydoublepage
+\clearemptydoublepage
 %%END !COMPACT_LATEX
-  \pagenumbering{arabic}
+\pagenumbering{arabic}
 
 %%BEGIN PDF_HYPERLINKS
 %%BEGIN USE_PDFLATEX
-  % re-enable anchors again
-  \hypersetup{pageanchor=true}
+% re-enable anchors again
+\hypersetup{pageanchor=true}
 %%END USE_PDFLATEX
 %%END PDF_HYPERLINKS
 
