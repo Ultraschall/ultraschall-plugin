@@ -46,7 +46,6 @@ set(COMMON_INCLUDES
   FileManager.h
   Globals.h
   HttpClient.h
-  ICommand.h
   ICustomAction.h
   ID3V2.h
   ID3V2Context.h

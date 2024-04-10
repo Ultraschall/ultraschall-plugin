@@ -73,19 +73,25 @@
 
 namespace reaper_api {
 #include "reaper_plugin_functions.h"
-}
+} // namespace reaper_api
 
 namespace ultraschall { namespace reaper {
 
+/// @brief The ReaperEntryPoints class provides functions for setting up the REAPER entry points.
 class ReaperEntryPoints
 {
 public:
-    static REAPER_PLUGIN_HINSTANCE instance_;
+   /// @brief The REAPER plugin instance.
+   static REAPER_PLUGIN_HINSTANCE instance_;
 
-    static bool Setup(REAPER_PLUGIN_HINSTANCE instance, reaper_plugin_info_t* pPluginInfo);
+   /// @brief Initializes the REAPER entry points.
+   /// @param instance The REAPER plugin instance.
+   /// @param pPluginInfo The plugin information.
+   /// @return <b>true</b> if the entry points could be set up, <b>false</b> otherwise.
+   static bool Setup(REAPER_PLUGIN_HINSTANCE instance, reaper_plugin_info_t* pPluginInfo);
 
 private:
-    static bool LoadEntryPoints(REAPER_PLUGIN_HINSTANCE instance, reaper_plugin_info_t* pPluginInfo);
+   static bool LoadEntryPoints(REAPER_PLUGIN_HINSTANCE instance, reaper_plugin_info_t* pPluginInfo);
 };
 
 }} // namespace ultraschall::reaper

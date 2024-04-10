@@ -31,63 +31,80 @@
 
 namespace ultraschall { namespace reaper {
 
+/// @brief The ChapterTag class represents a single chapter tag.
 class ChapterTag
 {
 public:
-    ChapterTag() : position_(Globals::INVALID_MARKER_POSITION) {}
+   /// @brief The default constructor initializes a new ChapterTag instance.
+   ChapterTag() : position_(Globals::INVALID_MARKER_POSITION) {}
 
-    ChapterTag(const double position, const UnicodeString& title) : position_(position), title_(title) {}
+   /// @brief  The constructor initializes a new ChapterTag instance.
+   ChapterTag(const double position, const UnicodeString& title) : position_(position), title_(title) {}
 
-    ChapterTag(
-        const double position, const UnicodeString& title, const UnicodeString& image, const UnicodeString& url) :
-        position_(position),
-        title_(title), image_(image), url_(url)
-    {}
+   /// @brief  The constructor initializes a new ChapterTag instance.
+   ChapterTag(const double position, const UnicodeString& title, const UnicodeString& image, const UnicodeString& url) :
+      position_(position), title_(title), image_(image), url_(url)
+   {}
 
-    double Position() const
-    {
-        return position_;
-    }
+   /// @brief Returns the starting position of the chapter
+   double Position() const
+   {
+      return position_;
+   }
 
-    const UnicodeString& Title() const
-    {
-        return title_;
-    }
+   /// @brief Returns the title of the chapter
+   const UnicodeString& Title() const
+   {
+      return title_;
+   }
 
-    const UnicodeString& Image() const
-    {
-        return image_;
-    }
+   /// @brief Returns the file path of the chapter image
+   const UnicodeString& Image() const
+   {
+      return image_;
+   }
 
-    void SetImage(const UnicodeString& image)
-    {
-        image_ = image;
-    }
+   /// @brief Sets the file path of the chapter image
+   void SetImage(const UnicodeString& image)
+   {
+      image_ = image;
+   }
 
-    const UnicodeString& Url() const
-    {
-        return url_;
-    }
+   /// @brief Returns the URL of the chapter reference
+   const UnicodeString& Url() const
+   {
+      return url_;
+   }
 
-    void SetUrl(const UnicodeString& url)
-    {
-        url_ = url;
-    }
+   /// @brief Sets the URL of the chapter reference
+   void SetUrl(const UnicodeString& url)
+   {
+      url_ = url;
+   }
 
 private:
-    double        position_;
-    UnicodeString title_;
-    UnicodeString image_;
-    UnicodeString url_;
+   double position_;
+   UnicodeString title_;
+   UnicodeString image_;
+   UnicodeString url_;
 };
 
-typedef std::vector<ChapterTag>      ChapterTagArray;
+/// @brief The ChapterTagArray type represents an array of chapter tags.
+typedef std::vector<ChapterTag> ChapterTagArray;
+
+/// @brief The ChapterTagDictionary type represents a dictionary of chapter tags.
 typedef std::map<double, ChapterTag> ChapterTagDictionary;
 
-typedef std::vector<UnicodeString>      ChapterImageArray;
+/// @brief The ChapterImageArray type represents an array of chapter images.
+typedef std::vector<UnicodeString> ChapterImageArray;
+
+/// @brief The ChapterImageDictionary type represents a dictionary of chapter images.
 typedef std::map<double, UnicodeString> ChapterImageDictionary;
 
-typedef std::vector<UnicodeString>      ChapterUrlArray;
+/// @brief The ChapterUrlArray type represents an array of chapter URLs.
+typedef std::vector<UnicodeString> ChapterUrlArray;
+
+/// @brief The ChapterUrlDictionary type represents a dictionary of chapter URLs.
 typedef std::map<double, UnicodeString> ChapterUrlDictionary;
 
 }} // namespace ultraschall::reaper

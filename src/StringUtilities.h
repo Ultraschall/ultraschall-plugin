@@ -32,29 +32,90 @@
 namespace ultraschall { namespace reaper {
 
 #define _MAKE_TEXT(str) #str
-#define MAKE_TEXT(str) _MAKE_TEXT(str)
+#define MAKE_TEXT(str)  _MAKE_TEXT(str)
 
+/// @brief Split a string into an array of strings.
+/// @param input The input string.
+/// @param delimiter The delimiter character.
+/// @return An array of strings.
 UnicodeStringArray UnicodeStringTokenize(const UnicodeString& input, const char delimiter);
 
+/// @brief Removes leading whitespaces from a string.
+/// @param str The string to be processed.
+/// @return The processed string.
 void UnicodeStringTrimLeft(UnicodeString& str);
+
+/// @brief Removes trailing whitespaces from a string.
+/// @param str The string to be processed.
+/// @return The processed string.
 void UnicodeStringTrimRight(UnicodeString& str);
+
+/// @brief Removes leading and trailing whitespaces from a string.
+/// @param str The string to be processed.
+/// @return The processed string.
 void UnicodeStringTrim(UnicodeString& str);
 
+/// @brief Copies a string and removes leading whitespaces.
+/// @param str The string to be processed.
+/// @return The processed string.
 UnicodeString UnicodeStringCopyTrimLeft(UnicodeString str);
+
+/// @brief Copies a string and removes trailing whitespaces.
+/// @param str The string to be processed.
+/// @return The processed string.
 UnicodeString UnicodeStringCopyTrimRight(UnicodeString str);
+
+/// @brief Copies a string and removes leading and trailing whitespaces.
+/// @param str The string to be processed.
+/// @return The processed string.
 UnicodeString UnicodeStringCopyTrim(UnicodeString str);
 
+/// @brief Replaces all occurrences of a substring in a string.
+/// @param str The string to be processed.
+/// @param source The substring to be replaced.
+/// @param target The replacement substring.
 void UnicodeStringReplace(UnicodeString& str, const UnicodeString& source, const UnicodeString& target);
 
+/// @brief Converts a string to an integer.
+/// @param str The string to be converted.
+/// @return The converted integer.
 int UnicodeStringToInt(const UnicodeString& str);
+
+/// @brief Converts an integer to a string.
+/// @param value The integer to be converted.
+/// @return The converted string.
 UnicodeString UnicodeStringFromInt(const int value);
 
+/// @brief Converts a string to lower case.
+/// @param str The string to be converted.
+/// @return The converted string.
 UnicodeString StringLowercase(const UnicodeString& str);
+
+/// @brief Converts a string to upper case.
+/// @param str The string to be converted.
+/// @return The converted string.
 UnicodeString StringUppercase(const UnicodeString& str);
 
+/// @brief Converts a timestamp to a string.
+/// @param milliseconds The timestamp to be converted.
+/// @param roundSeconds Determines whether the seconds should be rounded.
+/// @return The converted string.
 UnicodeString MillisecondsToString(const uint32_t milliseconds, const bool roundSeconds = false);
+
+/// @brief Converts a string to a timestamp.
+/// @param str The string to be converted.
+/// @return The converted timestamp.
 uint32_t StringToMilliseconds(const UnicodeString& str);
+
+/// @brief Converts a timestamp to a string.
+/// @param seconds The timestamp to be converted.
+/// @param roundSeconds Determines whether the seconds should be rounded.
+/// @return The converted string.
 UnicodeString SecondsToString(const double seconds, const bool roundSeconds = false);
+
+/// @brief Converts a string to a timestamp.
+/// @param str The string to be converted.
+/// @return The converted timestamp.
 double StringToSeconds(const UnicodeString& str);
 
 }} // namespace ultraschall::reaper

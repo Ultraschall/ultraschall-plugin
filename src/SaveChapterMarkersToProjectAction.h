@@ -32,32 +32,33 @@
 
 namespace ultraschall { namespace reaper {
 
+/// @brief The SaveChapterMarkersToProjectAction class implements the action that saves chapter markers from a REAPER project.
 class SaveChapterMarkersToProjectAction : public CustomAction
 {
 public:
-    static const UnicodeChar* UniqueId()
-    {
-        return "ULTRASCHALL_SAVE_CHAPTERS_TO_PROJECT";
-    }
+   static const UnicodeChar* UniqueId()
+   {
+      return "ULTRASCHALL_SAVE_CHAPTERS_TO_PROJECT";
+   }
 
-    static const UnicodeChar* UniqueName()
-    {
-        return "ULTRASCHALL: Save chapter markers to project folder";
-    }
+   static const UnicodeChar* UniqueName()
+   {
+      return "ULTRASCHALL: Save chapter markers to project folder";
+   }
 
-    static ICustomAction* CreateCustomAction()
-    {
-        return new SaveChapterMarkersToProjectAction();
-    }
+   static ICustomAction* CreateCustomAction()
+   {
+      return new SaveChapterMarkersToProjectAction();
+   }
 
-    virtual ServiceStatus Execute() override;
+   virtual ServiceStatus Execute() override;
 
 private:
-    UnicodeString target_;
-    ChapterTagArray   chapterMarkers_;
+   UnicodeString target_;
+   ChapterTagArray chapterMarkers_;
 
-    bool ConfigureSources();
-    bool ConfigureTargets();
+   bool ConfigureSources();
+   bool ConfigureTargets();
 };
 
 }} // namespace ultraschall::reaper

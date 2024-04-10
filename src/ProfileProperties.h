@@ -34,55 +34,84 @@
 
 namespace ultraschall { namespace reaper {
 
+/// @brief The ProfileProperty class provides functions for working with profile properties.
+/// @tparam T The type of the profile property.
 template<class T> class ProfileProperty
 {
 public:
-    typedef T value_type;
+   /// @brief The value_type type definition.
+   typedef T value_type;
 
-    static bool Exists(const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key)
-    {
-        PRECONDITION_RETURN(profile.empty() == false, false);
-        PRECONDITION_RETURN(section.empty() == false, false);
-        PRECONDITION_RETURN(key.empty() == false, false);
+   /// @brief Checks whether a profile property exists.
+   /// @param profile The name of the profile.
+   /// @param section The name of the section.
+   /// @param key The name of the key.
+   /// @return <b>true</b> if the profile property exists, <b>false</b> otherwise.
+   static bool Exists(const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key)
+   {
+      PRECONDITION_RETURN(profile.empty() == false, false);
+      PRECONDITION_RETURN(section.empty() == false, false);
+      PRECONDITION_RETURN(key.empty() == false, false);
 
-        return ReaperGateway::HasProfileValue(profile, section, key);
-    }
+      return ReaperGateway::HasProfileValue(profile, section, key);
+   }
 
-    static void Save(
-        const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key, const value_type& value);
+   /// @brief Saves a profile property.
+   /// @param profile The name of the profile.
+   /// @param section The name of the section.
+   /// @param key The name of the key.
+   /// @param value The value of the profile property.
+   static void Save(const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key, const value_type& value);
 
-    static void Set(
-        const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key, const value_type& value);
+   /// @brief Sets a profile property.
+   /// @param profile The name of the profile.
+   /// @param section The name of the section.
+   /// @param key The name of the key.
+   /// @param value The value of the profile property.
+   static void Set(const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key, const value_type& value);
 
-    static value_type Query(const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key);
+   /// @brief Queries a profile property.
+   /// @param profile The name of the profile.
+   /// @param section The name of the section.
+   /// @param key The name of the key.
+   /// @return The value of the profile property.
+   static value_type Query(const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key);
 
-    static void Clear(const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key)
-    {
-        PRECONDITION(profile.empty() == false);
-        PRECONDITION(section.empty() == false);
-        PRECONDITION(key.empty() == false);
+   /// @brief Clears a profile property.
+   /// @param profile The name of the profile.
+   /// @param section The name of the section.
+   /// @param key The name of the key.
+   static void Clear(const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key)
+   {
+      PRECONDITION(profile.empty() == false);
+      PRECONDITION(section.empty() == false);
+      PRECONDITION(key.empty() == false);
 
-        ReaperGateway::ClearProfileValue(profile, section, key);
-    }
+      ReaperGateway::ClearProfileValue(profile, section, key);
+   }
 
-    static void Delete(const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key)
-    {
-        PRECONDITION(profile.empty() == false);
-        PRECONDITION(section.empty() == false);
-        PRECONDITION(key.empty() == false);
+   /// @brief Deletes a profile property.
+   /// @param profile The name of the profile.
+   /// @param section The name of the section.
+   /// @param key The name of the key.
+   static void Delete(const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key)
+   {
+      PRECONDITION(profile.empty() == false);
+      PRECONDITION(section.empty() == false);
+      PRECONDITION(key.empty() == false);
 
-        ReaperGateway::DeleteProfileValue(profile, section, key);
-    }
+      ReaperGateway::DeleteProfileValue(profile, section, key);
+   }
 
 private:
-    static UnicodeString RawValue(const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key)
-    {
-        PRECONDITION_RETURN(profile.empty() == false, UnicodeString());
-        PRECONDITION_RETURN(section.empty() == false, UnicodeString());
-        PRECONDITION_RETURN(key.empty() == false, UnicodeString());
+   static UnicodeString RawValue(const UnicodeString& profile, const UnicodeString& section, const UnicodeString& key)
+   {
+      PRECONDITION_RETURN(profile.empty() == false, UnicodeString());
+      PRECONDITION_RETURN(section.empty() == false, UnicodeString());
+      PRECONDITION_RETURN(key.empty() == false, UnicodeString());
 
-        return ReaperGateway::ProfileValue(profile, section, key);
-    }
+      return ReaperGateway::ProfileValue(profile, section, key);
+   }
 };
 
 static UnicodeString UPDATE_SECTION_NAME = "ultraschall_update";

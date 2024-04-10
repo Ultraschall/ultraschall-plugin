@@ -31,32 +31,37 @@
 
 namespace ultraschall { namespace reaper {
 
+/// @brief This interface provides the basic functionality for reference counting.
 class SharedObject
 {
 public:
-    SharedObject() : refCount_(1) {}
+   /// @brief Constructor
+   SharedObject() : refCount_(1) {}
 
-    const uint32_t AddRef()
-    {
-        return ++refCount_;
-    }
+   /// @brief Increments the reference count.
+   /// @return The new reference count.
+   const uint32_t AddRef()
+   {
+      return ++refCount_;
+   }
 
-    const uint32_t Release()
-    {
-        const uint32_t refCount = --refCount_;
-        if (refCount == 0)
-        {
-            delete this;
-        }
+   // @brief Decrements the reference count.
+   /// @return The new reference count.
+   const uint32_t Release()
+   {
+      const uint32_t refCount = --refCount_;
+      if (refCount == 0) {
+         delete this;
+      }
 
-        return refCount;
-    }
+      return refCount;
+   }
 
 protected:
-    virtual ~SharedObject() {}
+   virtual ~SharedObject() {}
 
 private:
-    std::atomic<uint32_t> refCount_;
+   std::atomic<uint32_t> refCount_;
 };
 
 }} // namespace ultraschall::reaper

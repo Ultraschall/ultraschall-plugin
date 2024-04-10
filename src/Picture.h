@@ -31,24 +31,55 @@
 
 namespace ultraschall { namespace reaper {
 
+/// @brief The Picture class provides functions for working with pictures.
 class Picture
 {
 public:
-    enum class FORMAT
-    {
-        JPEG,
-        PNG,
-        UNKNOWN_PICTURE,
-        MAX_FORMAT = UNKNOWN_PICTURE
-    };
+   /// @brief The FORMAT enumeration represents the supported picture formats.
+   enum class FORMAT
+   {
+      /// @brief The picture format is JPEG.
+      JPEG,
 
-    static FORMAT Format(const uint8_t* data, const size_t dataSize);
-    static FORMAT Format(const BinaryStream* pStream);
-    static FORMAT Format(const UnicodeString& filename);
+      /// @brief The picture format is PNG.
+      PNG,
 
-    static UnicodeString FormatString(const uint8_t* data, const size_t dataSize);
-    static UnicodeString FormatString(const BinaryStream* pStream);
-    static UnicodeString FormatString(const UnicodeString& filename);
+      /// @brief The picture format is unknown.
+      UNKNOWN_PICTURE,
+      MAX_FORMAT = UNKNOWN_PICTURE
+   };
+
+   /// @brief Returns the format of the specified picture data.
+   /// @param data The picture data.
+   /// @param dataSize The size of the picture data.
+   /// @return The format of the picture data.
+   static FORMAT Format(const uint8_t* data, const size_t dataSize);
+
+   /// @brief Returns the format of the specified picture data.
+   /// @param pStream The picture data.
+   /// @return The format of the picture data.
+   static FORMAT Format(const BinaryStream* pStream);
+
+   /// @brief Returns the format of the specified picture file based on the file extension.
+   /// @param filename The picture file.
+   /// @return The format of the picture file.
+   static FORMAT Format(const UnicodeString& filename);
+
+   /// @brief Returns the format of the specified picture data as a string.
+   /// @param data The picture data.
+   /// @param dataSize The size of the picture data.
+   /// @return The format of the picture data.
+   static UnicodeString FormatString(const uint8_t* data, const size_t dataSize);
+
+   /// @brief Returns the format of the specified picture data as a string
+   /// @param pStream The picture data.
+   /// @return The format of the picture data.
+   static UnicodeString FormatString(const BinaryStream* pStream);
+
+   /// @brief Returns the format of the specified picture file as a string based on the file extension.
+   /// @param filename The picture file.
+   /// @return The format of the picture file.
+   static UnicodeString FormatString(const UnicodeString& filename);
 };
 
 }} // namespace ultraschall::reaper

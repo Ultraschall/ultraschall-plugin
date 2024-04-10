@@ -32,10 +32,14 @@
 
 namespace ultraschall { namespace reaper {
 
+/// brief The TagWriterFactory class implements a factory for tag writers.
 class TagWriterFactory
 {
 public:
-    static ITagWriter* Create(const UnicodeString& targetName);
+   /// @brief Creates a tag writer for the specified target.
+   /// @param targetName The name of the target.
+   /// @return <b>ITagWriter*</b> The tag writer instance.
+   static ITagWriter* Create(const UnicodeString& targetName);
 };
 
 }} // namespace ultraschall::reaper

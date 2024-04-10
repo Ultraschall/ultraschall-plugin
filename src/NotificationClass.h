@@ -29,13 +29,26 @@
 
 namespace ultraschall { namespace reaper {
 
-enum class NotificationClass {
-    NOTIFICATION_SUCCESS = 0,
-    NOTIFICATION_WARNING,
-    NOTIFICATION_ERROR,
-    NOTIFICATION_FATAL_ERROR,
-    INVALID_NOTIFICATION_CLASS,
-    MAX_NOTIFICATION_CLASS = INVALID_NOTIFICATION_CLASS
+/// @brief The NotificationClass enumeration
+enum class NotificationClass
+{
+   /// @brief The notification is a success notification.
+   NOTIFICATION_SUCCESS = 0,
+
+   /// @brief The notification is a warning notification.
+   NOTIFICATION_WARNING,
+
+   /// @brief The notification is an error notification.
+   NOTIFICATION_ERROR,
+
+   /// @brief The notification is a fatal error notification.
+   NOTIFICATION_FATAL_ERROR,
+
+   /// @brief The notification is invalid.
+   INVALID_NOTIFICATION_CLASS,
+
+   /// @brief The maximum value of the enumeration.
+   MAX_NOTIFICATION_CLASS = INVALID_NOTIFICATION_CLASS
 };
 
 }} // namespace ultraschall::reaper

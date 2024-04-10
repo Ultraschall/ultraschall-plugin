@@ -31,19 +31,22 @@
 
 namespace ultraschall { namespace reaper {
 
+/// @brief The ICustomAction interface represents the base interface for all custom actions.
 class ICustomAction : public SharedObject
 {
 public:
-    virtual ServiceStatus Execute() = 0;
+   /// @brief Executes the custom action.
+   /// @return <b>ServiceStatus</b> The result of the custom action execution.
+   virtual ServiceStatus Execute() = 0;
 
 protected:
-    ICustomAction() {}
+   ICustomAction() {}
 
-    virtual ~ICustomAction() {}
+   virtual ~ICustomAction() {}
 
 private:
-    ICustomAction(const ICustomAction&) = delete;
-    ICustomAction& operator=(const ICustomAction&) = delete;
+   ICustomAction(const ICustomAction&)            = delete;
+   ICustomAction& operator=(const ICustomAction&) = delete;
 };
 
 }} // namespace ultraschall::reaper

@@ -34,37 +34,46 @@ namespace ultraschall { namespace reaper {
 
 class ITagWriter;
 
+/// @brief The InsertMediaPropertiesAction class implements the action that inserts media properties into a MP3 file.
 class InsertMediaPropertiesAction : public CustomAction
 {
 public:
-    static const UnicodeChar* UniqueId()
-    {
-        return "ULTRASCHALL_INSERT_MEDIA_PROPERTIES";
-    }
+   /// @brief Returns the unique identifier of the action.
+   /// @return The unique identifier of the action.
+   static const UnicodeChar* UniqueId()
+   {
+      return "ULTRASCHALL_INSERT_MEDIA_PROPERTIES";
+   }
 
-    static const UnicodeChar* UniqueName()
-    {
-        return "ULTRASCHALL: Insert media properties into target...";
-    }
+   /// @brief Returns the unique name of the action.
+   /// @return The unique name of the action.
+   static const UnicodeChar* UniqueName()
+   {
+      return "ULTRASCHALL: Insert media properties into target...";
+   }
 
-    static ICustomAction* CreateCustomAction()
-    {
-        return new InsertMediaPropertiesAction();
-    }
+   /// @brief Creates a new instance of the action.
+   /// @return A new instance of the action.
+   static ICustomAction* CreateCustomAction()
+   {
+      return new InsertMediaPropertiesAction();
+   }
 
-    virtual ServiceStatus Execute() override;
+   /// @brief Executes the action.
+   /// @return The status of the action.
+   virtual ServiceStatus Execute() override;
 
 private:
-    bool ConfigureTargets();
-    bool ConfigureSources();
+   bool ConfigureTargets();
+   bool ConfigureSources();
 
-    UnicodeString FindCoverImage();
-    UnicodeStringArray   FindMissingMediaData();
+   UnicodeString FindCoverImage();
+   UnicodeStringArray FindMissingMediaData();
 
-    UnicodeStringArray      targets_;
-    UnicodeString           coverImage_;
-    ChapterTagArray         chapterMarkers_;
-    UnicodeStringDictionary mediaData_;
+   UnicodeStringArray targets_;
+   UnicodeString coverImage_;
+   ChapterTagArray chapterMarkers_;
+   UnicodeStringDictionary mediaData_;
 };
 
 }} // namespace ultraschall::reaper

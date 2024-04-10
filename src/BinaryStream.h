@@ -32,27 +32,45 @@
 
 namespace ultraschall { namespace reaper {
 
+/// @brief The BinaryStream class implements a simple binary stream.
 class BinaryStream : public SharedObject
 {
 public:
-    static const size_t INVALID_DATA_SIZE = -1;
+   /// @brief A constant that specifies an invalid data size.
+   static const size_t INVALID_DATA_SIZE = -1;
 
-    BinaryStream(const size_t dataSize);
+   /// @brief The constructor initializes a new BinaryStream instance.
+   /// @param dataSize Specifies the initial size of the binary stream.
+   BinaryStream(const size_t dataSize);
 
-    size_t DataSize() const;
+   /// @brief Returns the data size of the binary stream.
+   /// @return <b>size_t</b> The data size of the binary stream if the data size is valid; otherwise <b>INVALID_DATA_SIZE</b>.
+   size_t DataSize() const;
 
-    const uint8_t* Data() const;
+   /// @brief Returns the data of the binary stream.
+   /// @return <b>const uint8_t*</b> The data of the binary stream if the data size is valid; otherwise <b>nullptr</b>.
+   const uint8_t* Data() const;
 
-    bool Write(const size_t offset, const uint8_t* buffer, const size_t bufferSize);
+   /// @brief Writes the specified data to the binary stream.
+   /// @param offset Specifies the offset in the binary stream.
+   /// @param buffer  Specifies the data to be written.
+   /// @param bufferSize Specifies the size of the data to be written.
+   /// @return <b>bool</b> Returns <b>true</b> if the data has been written successfully; otherwise <b>false</b>.
+   bool Write(const size_t offset, const uint8_t* buffer, const size_t bufferSize);
 
-    bool Read(const size_t offset, uint8_t* buffer, const size_t bufferSize);
+   /// @brief Reads the specified data from the binary stream.
+   /// @param offset Specifies the offset in the binary stream.
+   /// @param buffer Specifies the buffer to store the data.
+   /// @param bufferSize Specifies the size of the buffer.
+   /// @return <b>bool</b> Returns <b>true</b> if the data has been read successfully; otherwise <b>false</b>.
+   bool Read(const size_t offset, uint8_t* buffer, const size_t bufferSize);
 
 protected:
-    virtual ~BinaryStream();
+   virtual ~BinaryStream();
 
 private:
-    size_t   dataSize_ = INVALID_DATA_SIZE;
-    uint8_t* data_     = nullptr;
+   size_t dataSize_ = INVALID_DATA_SIZE;
+   uint8_t* data_   = nullptr;
 };
 
 }} // namespace ultraschall::reaper

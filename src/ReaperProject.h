@@ -27,55 +27,106 @@
 #ifndef __ULTRASCHALL_REAPER_PROJECT_H_INCL__
 #define __ULTRASCHALL_REAPER_PROJECT_H_INCL__
 
-#include "Common.h"
 #include "ChapterTag.h"
+#include "Common.h"
 #include "ReaperGateway.h"
 
 namespace ultraschall { namespace reaper {
 
+/// @brief The ReaperProject class provides access to the current Reaper project.
 class ReaperProject
 {
 public:
-    ReaperProject();
-    ReaperProject(ProjectReference nativeReference);
-    virtual ~ReaperProject();
+   /// @brief Creates a new ReaperProject instance.
+   ReaperProject();
 
-    ReaperProject(const ReaperProject& rhs);
-    ReaperProject& operator=(const ReaperProject& rhs);
+   /// @brief Creates a new ReaperProject instance.
+   /// @param nativeReference
+   ReaperProject(ProjectReference nativeReference);
 
-    static bool IsValid(const ReaperProject& project);
-    bool        IsValid() const;
+   /// @brief Destructor
+   virtual ~ReaperProject();
 
-    static ReaperProject Current();
+   /// @brief Copy constructor
+   /// @param rhs The instance to be copied.
+   ReaperProject(const ReaperProject& rhs);
 
-    UnicodeString PathName() const;
-    UnicodeString FolderName() const;
-    UnicodeString FileName() const;
-    UnicodeString Name() const;
+   /// @brief Assignment operator
+   /// @param rhs The instance to be assigned.
+   /// @return The assigned instance.
+   ReaperProject& operator=(const ReaperProject& rhs);
 
-    double CurrentPosition() const;
-    double MinPosition() const;
-    double MaxPosition() const;
-    bool   IsValidPosition(const double position);
+   /// @brief Checks whether the given project is valid.
+   /// @param project The project to be checked.
+   /// @return <b>true</b> if the project is valid, <b>false</b> otherwise.
+   static bool IsValid(const ReaperProject& project);
 
-    bool InsertChapterMarker(const UnicodeString& name, const double position = Globals::INVALID_MARKER_POSITION);
+   /// @brief Checks whether the current project is valid.
+   /// @return <b>true</b> if the project is valid, <b>false</b> otherwise.
+   bool IsValid() const;
 
-    ChapterTagArray ChapterMarkers() const;
+   /// @brief Retrieves the current project.
+   /// @return The current project.
+   static ReaperProject Current();
 
-    UnicodeStringDictionary ProjectMetaData() const;
+   /// @brief Retrieves the current project path.
+   /// @return The current project path.
+   UnicodeString PathName() const;
+
+   /// @brief Retrieves the current project folder name.
+   /// @return The current project folder name.
+   UnicodeString FolderName() const;
+
+   /// @brief Retrieves the current project file name.
+   /// @return The current project file name.
+   UnicodeString FileName() const;
+
+   /// @brief Retrieves the current project name.
+   /// @return The current project name.
+   UnicodeString Name() const;
+
+   /// @brief Retrieves the current cursor position.
+   /// @return The current cursor position.
+   double CurrentPosition() const;
+
+   /// @brief Retrieves the minimum position of the current project.
+   /// @return The minimum position of the current project.
+   double MinPosition() const;
+
+   /// @brief Retrieves the maximum position of the current project.
+   /// @return The maximum position of the current project.
+   double MaxPosition() const;
+
+   /// @brief Checks whether the given position is with the valid position range.
+   /// @param position The position to be checked.
+   /// @return <b>true</b> if the position is valid, <b>false</b> otherwise.
+   bool IsValidPosition(const double position);
+
+   /// @brief Inserts a new chapter marker at the given position.
+   /// @param name The name of the chapter marker.
+   /// @param position The position of the chapter marker.
+   /// @return <b>true</b> if the chapter marker was inserted successfully, <b>false</b> otherwise.
+   bool InsertChapterMarker(const UnicodeString& name, const double position = Globals::INVALID_MARKER_POSITION);
+
+   /// @brief Returns the chapter markers of the current project.
+   /// @return The chapter markers of the current project.
+   ChapterTagArray ChapterMarkers() const;
+
+   /// @brief Returns the metadata of the current project.
+   /// @return The metadata of the current project.
+   UnicodeStringDictionary ProjectMetaData() const;
 
 private:
-    ProjectReference nativeReference_ = nullptr;
+   ProjectReference nativeReference_ = nullptr;
 
-    static UnicodeStringArray SanitizeNotes(const UnicodeString& notes);
+   static UnicodeStringArray SanitizeNotes(const UnicodeString& notes);
 
-    ChapterImageDictionary ChapterImages() const;
-    ChapterUrlDictionary   ChapterUrls() const;
+   ChapterImageDictionary ChapterImages() const;
+   ChapterUrlDictionary ChapterUrls() const;
 
-    static UnicodeString LookupValueInRange(
-        const UnicodeStringDictionary& items, const double position, const double range);
+   static UnicodeString LookupValueInRange(const UnicodeStringDictionary& items, const double position, const double range);
 
-    static UnicodeString CreateProjectMetaDataKey(const UnicodeString& prefix, const UnicodeString& name);
+   static UnicodeString CreateProjectMetaDataKey(const UnicodeString& prefix, const UnicodeString& name);
 };
 
 }} // namespace ultraschall::reaper

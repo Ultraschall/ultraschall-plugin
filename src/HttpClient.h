@@ -33,26 +33,40 @@
 
 namespace ultraschall { namespace reaper {
 
+/// @brief The HttpClient class provides a set of HTTP client functions.
 class HttpClient : public SharedObject
 {
 public:
-    HttpClient();
-    virtual ~HttpClient();
+   /// @brief The HttpClient constructor.
+   HttpClient();
 
-    UnicodeString DownloadUrl(const UnicodeString& url);
+   /// @brief The HttpClient destructor.
+   virtual ~HttpClient();
 
-    static UnicodeString EncodeUrl(const UnicodeString& url);
-    static UnicodeString DecodeUrl(const UnicodeString& url);
+   /// @brief Downloads the specified URL.
+   /// @param url The URL to be downloaded.
+   /// @return <b>UnicodeString</b> The downloaded content.
+   UnicodeString DownloadUrl(const UnicodeString& url);
+
+   /// @brief Encodes the specified URL.
+   /// @param url The URL to be encoded.
+   /// @return <b>UnicodeString</b> The encoded URL.
+   static UnicodeString EncodeUrl(const UnicodeString& url);
+
+   /// @brief Decodes the specified URL.
+   /// @param url The URL to be decoded.
+   /// @return <b>UnicodeString</b> The decoded URL.
+   static UnicodeString DecodeUrl(const UnicodeString& url);
 
 private:
-    void* handle_ = nullptr;
+   void* handle_                            = nullptr;
 
-    HttpClient(const HttpClient&) = delete;
-    HttpClient& operator=(const HttpClient&) = delete;
+   HttpClient(const HttpClient&)            = delete;
+   HttpClient& operator=(const HttpClient&) = delete;
 
-    static size_t ReceiveDataHandler(void* pData, size_t dataSize, size_t itemSize, void* pParam);
+   static size_t ReceiveDataHandler(void* pData, size_t dataSize, size_t itemSize, void* pParam);
 
-    static UnicodeString StreamToString(const SequentialStream* pStream);
+   static UnicodeString StreamToString(const SequentialStream* pStream);
 };
 
 }} // namespace ultraschall::reaper

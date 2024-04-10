@@ -33,50 +33,70 @@ namespace ultraschall { namespace reaper {
 
 class ICustomAction;
 
+/// @brief The CustomActionFactory class implements a simple factory for custom actions.
 class CustomActionFactory
 {
 public:
-    static CustomActionFactory& Instance();
+   /// @brief Returns the singleton instance of the CustomActionFactory class.
+   /// @return <b>CustomActionFactory&</b> The singleton instance of the CustomActionFactory class.
+   static CustomActionFactory& Instance();
 
-    typedef ICustomAction* (*CREATE_CUSTOM_ACTION_FUNCTION)();
+   /// @brief Defines the function signature for creating custom actions.
+   typedef ICustomAction* (*CREATE_CUSTOM_ACTION_FUNCTION)();
 
-    ServiceStatus RegisterCustomAction(const UnicodeString& id, CREATE_CUSTOM_ACTION_FUNCTION pfn);
+   /// @brief Registers a custom action with the factory.
+   /// @param id The unique identifier of the custom action.
+   /// @param pfn The function that creates the custom action.
+   /// @return <b>ServiceStatus</b> The status of the operation.
+   ServiceStatus RegisterCustomAction(const UnicodeString& id, CREATE_CUSTOM_ACTION_FUNCTION pfn);
 
-    void UnregisterCustomAction(const UnicodeString& id);
-    void UnregisterAllCustomActions();
+   /// @brief Unregisters a custom action from the factory.
+   /// @param id The unique identifier of the custom action.
+   void UnregisterCustomAction(const UnicodeString& id);
 
-    ServiceStatus CreateCustomAction(const UnicodeString& id, ICustomAction*& pCustomAction) const;
+   /// @brief Unregisters all custom actions from the factory.
+   void UnregisterAllCustomActions();
+
+   /// @brief Creates a custom action with the specified unique identifier.
+   /// @param id The unique identifier of the custom action.
+   /// @param pCustomAction The custom action that has been created.
+   /// @return <b>ServiceStatus</b> The status of the operation.
+   ServiceStatus CreateCustomAction(const UnicodeString& id, ICustomAction*& pCustomAction) const;
 
 protected:
-    virtual ~CustomActionFactory();
+   virtual ~CustomActionFactory();
 
 private:
-    CustomActionFactory();
+   CustomActionFactory();
 
-    CustomActionFactory(const CustomActionFactory&);
-    CustomActionFactory& operator=(const CustomActionFactory&);
+   CustomActionFactory(const CustomActionFactory&);
+   CustomActionFactory& operator=(const CustomActionFactory&);
 
-    typedef std::map<UnicodeString, CREATE_CUSTOM_ACTION_FUNCTION> FunctionDictionary;
-    FunctionDictionary                                           functions_;
-    mutable std::recursive_mutex                                 functionsLock_;
+   typedef std::map<UnicodeString, CREATE_CUSTOM_ACTION_FUNCTION> FunctionDictionary;
+   FunctionDictionary functions_;
+   mutable std::recursive_mutex functionsLock_;
 };
 
+/// @brief The DeclareCustomAction class template simplifies the registration of custom actions.
 template<class C> class DeclareCustomAction
 {
 public:
-    typedef C custom_action_type;
+   /// @brief Defines the custom action type
+   typedef C custom_action_type;
 
-    DeclareCustomAction()
-    {
-        CustomActionFactory& factory = CustomActionFactory::Instance();
-        factory.RegisterCustomAction(custom_action_type::UniqueId(), custom_action_type::CreateCustomAction);
-    }
+   /// @brief Initializes the custom action factory with the custom action type.
+   DeclareCustomAction()
+   {
+      CustomActionFactory& factory = CustomActionFactory::Instance();
+      factory.RegisterCustomAction(custom_action_type::UniqueId(), custom_action_type::CreateCustomAction);
+   }
 
-    virtual ~DeclareCustomAction()
-    {
-        CustomActionFactory& factory = CustomActionFactory::Instance();
-        factory.UnregisterCustomAction(custom_action_type::UniqueId());
-    }
+   /// @brief Unregisters the custom action type from the custom action factory.
+   virtual ~DeclareCustomAction()
+   {
+      CustomActionFactory& factory = CustomActionFactory::Instance();
+      factory.UnregisterCustomAction(custom_action_type::UniqueId());
+   }
 };
 
 }} // namespace ultraschall::reaper

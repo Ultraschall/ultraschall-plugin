@@ -32,35 +32,44 @@
 
 namespace ultraschall { namespace reaper {
 
+/// @brief The InsertChapterMarkersAction class implements the action that inserts chapter markers into a REAPER project.
 class InsertChapterMarkersAction : public CustomAction
 {
 public:
-    static const UnicodeChar* UniqueId()
-    {
-        return "ULTRASCHALL_INSERT_CHAPTERS";
-    }
+   /// @brief Returns the unique identifier of the action.
+   /// @return The unique identifier of the action.
+   static const UnicodeChar* UniqueId()
+   {
+      return "ULTRASCHALL_INSERT_CHAPTERS";
+   }
 
-    static const UnicodeChar* UniqueName()
-    {
-        return "ULTRASCHALL: Import chapter markers...";
-    }
+   /// @brief Returns the unique name of the action.
+   /// @return The unique name of the action.
+   static const UnicodeChar* UniqueName()
+   {
+      return "ULTRASCHALL: Import chapter markers...";
+   }
 
-    static ICustomAction* CreateCustomAction()
-    {
-        return new InsertChapterMarkersAction();
-    }
+   /// @brief Creates a new instance of the action.
+   /// @return A new instance of the action.
+   static ICustomAction* CreateCustomAction()
+   {
+      return new InsertChapterMarkersAction();
+   }
 
-    virtual ServiceStatus Execute() override;
+   /// @brief Executes the action.
+   /// @return The status of the action.
+   virtual ServiceStatus Execute() override;
 
 private:
-    UnicodeString source_;
-    ChapterTagArray   chapterMarkers_;
+   UnicodeString source_;
+   ChapterTagArray chapterMarkers_;
 
-    bool ConfigureTargets();
-    bool ConfigureSources();
+   bool ConfigureTargets();
+   bool ConfigureSources();
 
-    static ChapterTagArray ReadTextFile(const UnicodeString& filename);
-    static ChapterTagArray ReadMP3File(const UnicodeString& filename);
+   static ChapterTagArray ReadTextFile(const UnicodeString& filename);
+   static ChapterTagArray ReadMP3File(const UnicodeString& filename);
 };
 
 }} // namespace ultraschall::reaper

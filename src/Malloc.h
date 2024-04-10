@@ -24,6 +24,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+/// @file
+/// @brief Defines memory allocation functions.
+
 #ifndef __ULTRASCHALL_REAPER_MALLOC_H_INCL__
 #define __ULTRASCHALL_REAPER_MALLOC_H_INCL__
 
@@ -31,49 +34,61 @@
 
 namespace ultraschall { namespace reaper {
 
+/// @brief  Allocates a new instance of the specified type and initializes it with zeros.
+/// @tparam T The type of the instance to be allocated.
+/// @return A pointer to the allocated instance if the allocation was successful, otherwise nullptr.
 template<class T> inline static T* SafeAlloc()
 {
-    T* ptr = new T();
-    if(ptr != nullptr)
-    {
-        memset(ptr, 0, sizeof(T));
-    }
-    return ptr;
+   T* ptr = new T();
+   if (ptr != nullptr) {
+      memset(ptr, 0, sizeof(T));
+   }
+   return ptr;
 }
 
+/// @brief Allocates a new array of the specified type and initializes it with zeros.
+/// @tparam T The type of the array to be allocated.
+/// @param itemCount The number of items in the array.
+/// @return A pointer to the allocated array if the allocation was successful, otherwise nullptr.
 template<class T> inline static T* SafeAllocArray(const size_t itemCount)
 {
-    T* ptr = nullptr;
-    if(itemCount > 0)
-    {
-        ptr = new T[itemCount]();
-        if(ptr != nullptr)
-        {
-            memset(ptr, 0, sizeof(T) * itemCount);
-        }
-    }
-    return ptr;
+   T* ptr = nullptr;
+   if (itemCount > 0) {
+      ptr = new T[itemCount]();
+      if (ptr != nullptr) {
+         memset(ptr, 0, sizeof(T) * itemCount);
+      }
+   }
+   return ptr;
 }
 
+/// @brief Deallocates the specified array.
+/// @tparam T The type of the array to be deallocated.
+/// @param ptr A reference to the pointer to the array to be deallocated.
 template<class T> inline static void SafeDeleteArray(T*& ptr)
 {
-    delete[] ptr;
-    ptr = nullptr;
+   delete[] ptr;
+   ptr = nullptr;
 }
 
+/// @brief Deallocates the specified instance.
+/// @tparam T The type of the instance to be deallocated.
+/// @param ptr A reference to the pointer to the instance to be deallocated.
 template<class T> inline static void SafeDelete(T*& ptr)
 {
-    delete ptr;
-    ptr = nullptr;
+   delete ptr;
+   ptr = nullptr;
 }
 
+/// @brief Releases the specified shared object.
+/// @tparam T The type of the shared object to be released.
+/// @param ptr A reference to the pointer to the shared object to be released.
 template<class T> inline static void SafeRelease(T*& ptr)
 {
-    if(ptr != nullptr)
-    {
-        ptr->Release();
-        ptr = nullptr;
-    }
+   if (ptr != nullptr) {
+      ptr->Release();
+      ptr = nullptr;
+   }
 }
 
 }} // namespace ultraschall::reaper

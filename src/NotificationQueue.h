@@ -32,25 +32,42 @@
 
 namespace ultraschall { namespace reaper {
 
+/// @brief The NotificationQueue class implements a queue for notifications.
 class NotificationQueue
 {
 public:
-    NotificationQueue();
-    ~NotificationQueue();
+   /// @brief The NotificationQueue constructor.
+   NotificationQueue();
 
-    void Add(const Notification& message);
-    void Add(const NotificationClass severity, const UnicodeString& str);
-    void Clear();
+   /// @brief The NotificationQueue destructor.
+   ~NotificationQueue();
 
-    const NotificationArray& Items() const;
-    size_t                   ItemCount() const;
+   /// @brief Adds a new notification to the queue.
+   /// @param message The notification to be added.
+   void Add(const Notification& message);
+
+   /// @brief Adds a new notification to the queue.
+   /// @param severity The severity of the notification.
+   /// @param str The notification message.
+   void Add(const NotificationClass severity, const UnicodeString& str);
+
+   /// @brief Clears the queue.
+   void Clear();
+
+   /// @brief Returns the notifications in the queue.
+   /// @return The notifications in the queue.
+   const NotificationArray& Items() const;
+
+   /// @brief Returns the number of notifications in the queue.
+   /// @return The number of notifications in the queue.
+   size_t ItemCount() const;
 
 private:
-    NotificationQueue(const NotificationQueue&) = delete;
-    NotificationQueue& operator=(const NotificationQueue&) = delete;
+   NotificationQueue(const NotificationQueue&)            = delete;
+   NotificationQueue& operator=(const NotificationQueue&) = delete;
 
-    NotificationArray            items_;
-    mutable std::recursive_mutex itemsLock_;
+   NotificationArray items_;
+   mutable std::recursive_mutex itemsLock_;
 };
 
 }} // namespace ultraschall::reaper

@@ -34,87 +34,98 @@
 
 namespace ultraschall { namespace reaper {
 
+/// @class Application
+/// @brief The Application class represents the main plug-in entry point. It handles command registration and invocation
 class Application
 {
 public:
-    virtual ~Application();
+   virtual ~Application();
 
-    static Application& Instance();
+   static Application& Instance();
 
-    ServiceStatus Start(intptr_t handle);
-    void          Stop();
+   /// @brief Initializes the application with a module handle that is provided by REAPER during plug-in initialization
+   /// @param handle The module handle that is provided by REAPER
+   /// @return <b>SERVICE_SUCCESS</b> if the operation completed successfully, <b>SERVICE_FAILURE</b> otherwise
+   ServiceStatus Start(intptr_t handle);
 
-    template<class CustomActionType> ServiceStatus RegisterCustomAction() const;
-    template<class CustomActionType> void          InvokeCustomAction() const;
-    static bool                                    OnCustomAction(const int32_t id);
+   /// @brief Uninitializes the application
+   void Stop();
 
-    inline intptr_t Handle() const;
+   /// @brief Registers a custom action for use in REAPER
+   template<class CustomActionType> ServiceStatus RegisterCustomAction() const;
+
+   /// @brief Remove a custom action from REAPER
+   template<class CustomActionType> void InvokeCustomAction() const;
+
+   /// @brief Invoke a custom action
+   /// @param id The unique identifier of the custom action provided by REAPER
+   /// @return <b>true</b> if the custom action was executed successfully, <b>false</b> otherwise
+   static bool OnCustomAction(const int32_t id);
+
+   inline intptr_t Handle() const;
 
 private:
-    intptr_t                     handle_ = 0;
-    mutable std::recursive_mutex lock_;
+   intptr_t handle_ = 0;
+   mutable std::recursive_mutex lock_;
 
-    Application();
+   Application();
 };
 
 typedef struct
 {
-    int uniqueSectionId; // 0/100=main/main alt, 32063=media explorer, 32060=midi editor, 32061=midi event list editor,
-                         // 32062=midi inline editor, etc
-    const char* idStr;   // must be unique across all sections
-    const char* name;
-    void*       extra; // reserved for future use
+   int uniqueSectionId; // 0/100=main/main alt, 32063=media explorer, 32060=midi editor, 32061=midi event list editor,
+                        // 32062=midi inline editor, etc
+   const char* idStr;   // must be unique across all sections
+   const char* name;
+   void* extra; // reserved for future use
 } custom_action_register_t;
 
 template<class T> ServiceStatus Application::RegisterCustomAction() const
 {
-    PRECONDITION_RETURN(T::UniqueId() != nullptr, SERVICE_INVALID_ARGUMENT);
-    PRECONDITION_RETURN(T::UniqueName() != nullptr, SERVICE_INVALID_ARGUMENT);
+   PRECONDITION_RETURN(T::UniqueId() != nullptr, SERVICE_INVALID_ARGUMENT);
+   PRECONDITION_RETURN(T::UniqueName() != nullptr, SERVICE_INVALID_ARGUMENT);
 
-    typedef T custom_action_type;
+   typedef T custom_action_type;
 
-    ServiceStatus status = SERVICE_FAILURE;
+   ServiceStatus status         = SERVICE_FAILURE;
 
-    const UnicodeChar*   uniqueId      = custom_action_type::UniqueId();
-    CustomActionFactory& factory       = CustomActionFactory::Instance();
-    ICustomAction*       pCustomAction = 0;
-    status                             = factory.CreateCustomAction(uniqueId, pCustomAction);
-    if(ServiceSucceeded(status) && (pCustomAction != 0))
-    {
-        custom_action_register_t action = {0};
-        action.idStr                    = uniqueId;
-        action.name                     = custom_action_type::UniqueName();
-        const int32_t id                = ReaperGateway::RegisterCustomAction("custom_action", (void*)&action);
-        if(id != 0)
-        {
-            CustomActionManager& manager = CustomActionManager::Instance();
-            status                       = manager.RegisterCustomAction(uniqueId, id, pCustomAction);
-        }
+   const UnicodeChar* uniqueId  = custom_action_type::UniqueId();
+   CustomActionFactory& factory = CustomActionFactory::Instance();
+   ICustomAction* pCustomAction = 0;
+   status                       = factory.CreateCustomAction(uniqueId, pCustomAction);
+   if (ServiceSucceeded(status) && (pCustomAction != 0)) {
+      custom_action_register_t action = {0};
+      action.idStr                    = uniqueId;
+      action.name                     = custom_action_type::UniqueName();
+      const int32_t id                = ReaperGateway::RegisterCustomAction("custom_action", (void*)&action);
+      if (id != 0) {
+         CustomActionManager& manager = CustomActionManager::Instance();
+         status                       = manager.RegisterCustomAction(uniqueId, id, pCustomAction);
+      }
 
-        SafeRelease(pCustomAction);
-    }
+      SafeRelease(pCustomAction);
+   }
 
-    return status;
+   return status;
 }
 
 template<class T> void Application::InvokeCustomAction() const
 {
-    typedef T custom_action_type;
+   typedef T custom_action_type;
 
-    CustomActionManager& manager       = CustomActionManager::Instance();
-    ICustomAction*       pCustomAction = 0;
-    ServiceStatus        status        = manager.LookupCustomAction(custom_action_type::UniqueId(), pCustomAction);
-    if(ServiceSucceeded(status) && (pCustomAction != 0))
-    {
-        pCustomAction->Execute();
-        SafeRelease(pCustomAction);
-    }
+   CustomActionManager& manager = CustomActionManager::Instance();
+   ICustomAction* pCustomAction = 0;
+   ServiceStatus status         = manager.LookupCustomAction(custom_action_type::UniqueId(), pCustomAction);
+   if (ServiceSucceeded(status) && (pCustomAction != 0)) {
+      pCustomAction->Execute();
+      SafeRelease(pCustomAction);
+   }
 }
 
 inline intptr_t Application::Handle() const
 {
-    std::lock_guard<std::recursive_mutex> cs(lock_);
-    return handle_;
+   std::lock_guard<std::recursive_mutex> cs(lock_);
+   return handle_;
 }
 
 }} // namespace ultraschall::reaper

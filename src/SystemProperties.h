@@ -32,49 +32,74 @@
 
 namespace ultraschall { namespace reaper {
 
+/// @brief The SystemProperty class implements a wrapper for system properties.
+/// @tparam T The type of the system property.
 template<class T> class SystemProperty
 {
 public:
-    typedef T value_type;
+   /// @brief The value type of the system property.
+   typedef T value_type;
 
-    static bool Exists(const UnicodeString& section, const UnicodeString& key)
-    {
-        PRECONDITION_RETURN(section.empty() == false, false);
-        PRECONDITION_RETURN(key.empty() == false, false);
+   /// @brief Checks whether a system property exists.
+   /// @param section The section of the system property.
+   /// @param key The key of the system property.
+   /// @return <b>true</b> if the system property exists, <b>false</b> otherwise.
+   static bool Exists(const UnicodeString& section, const UnicodeString& key)
+   {
+      PRECONDITION_RETURN(section.empty() == false, false);
+      PRECONDITION_RETURN(key.empty() == false, false);
 
-        return ReaperGateway::HasSystemValue(section, key);
-    }
+      return ReaperGateway::HasSystemValue(section, key);
+   }
 
-    static void Save(const UnicodeString& section, const UnicodeString& key, const value_type& value);
+   /// @brief Saves a system property.
+   /// @param section The section of the system property.
+   /// @param key The key of the system property.
+   /// @param value The value of the system property.
+   static void Save(const UnicodeString& section, const UnicodeString& key, const value_type& value);
 
-    static void Set(const UnicodeString& section, const UnicodeString& key, const value_type& value);
+   /// @brief Sets a system property.
+   /// @param section The section of the system property.
+   /// @param key The key of the system property.
+   /// @param value The value of the system property.
+   static void Set(const UnicodeString& section, const UnicodeString& key, const value_type& value);
 
-    static value_type Query(const UnicodeString& section, const UnicodeString& key);
+   /// @brief Queries a system property.
+   /// @param section The section of the system property.
+   /// @param key The key of the system property.
+   /// @return The value of the system property.
+   static value_type Query(const UnicodeString& section, const UnicodeString& key);
 
-    static void Clear(const UnicodeString& section, const UnicodeString& key)
-    {
-        PRECONDITION(section.empty() == false);
-        PRECONDITION(key.empty() == false);
+   /// @brief Clears a system property.
+   /// @param section The section of the system property.
+   /// @param key The key of the system property.
+   static void Clear(const UnicodeString& section, const UnicodeString& key)
+   {
+      PRECONDITION(section.empty() == false);
+      PRECONDITION(key.empty() == false);
 
-        ReaperGateway::ClearSystemValue(section, key);
-    }
+      ReaperGateway::ClearSystemValue(section, key);
+   }
 
-    static void Delete(const UnicodeString& section, const UnicodeString& key)
-    {
-        PRECONDITION(section.empty() == false);
-        PRECONDITION(key.empty() == false);
+   /// @brief Deletes a system property.
+   /// @param section The section of the system property.
+   /// @param key The key of the system property.
+   static void Delete(const UnicodeString& section, const UnicodeString& key)
+   {
+      PRECONDITION(section.empty() == false);
+      PRECONDITION(key.empty() == false);
 
-        ReaperGateway::DeleteSystemValue(section, key);
-    }
+      ReaperGateway::DeleteSystemValue(section, key);
+   }
 
 private:
-    static UnicodeString RawValue(const UnicodeString& section, const UnicodeString& key)
-    {
-        PRECONDITION_RETURN(section.empty() == false, UnicodeString());
-        PRECONDITION_RETURN(key.empty() == false, UnicodeString());
+   static UnicodeString RawValue(const UnicodeString& section, const UnicodeString& key)
+   {
+      PRECONDITION_RETURN(section.empty() == false, UnicodeString());
+      PRECONDITION_RETURN(key.empty() == false, UnicodeString());
 
-        return ReaperGateway::SystemValue(section, key);
-    }
+      return ReaperGateway::SystemValue(section, key);
+   }
 };
 
 }} // namespace ultraschall::reaper

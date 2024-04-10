@@ -32,34 +32,45 @@
 
 namespace ultraschall { namespace reaper {
 
+/// @brief The Notification class represents a notification that can be used to inform the user about the current state of the application.
 class Notification
 {
 public:
-    Notification(const NotificationClass severity, const UnicodeString& str);
+   /// @brief The Notification constructor.
+   /// @param severity The severity of the notification.
+   /// @param str The notification message.
+   Notification(const NotificationClass severity, const UnicodeString& str);
 
-    inline NotificationClass    Severity() const;
-    inline const UnicodeString& Str() const;
+   /// @brief Returns the severity of the notification.
+   /// @return The severity of the notification.
+   inline NotificationClass Severity() const;
 
-    inline bool IsValid() const;
+   /// @brief Returns the notification message.
+   /// @return The notification message.
+   inline const UnicodeString& Str() const;
+
+   /// @brief Checks whether the notification is valid.
+   /// @return <b>true</b> if the notification is valid, <b>false</b> otherwise.
+   inline bool IsValid() const;
 
 private:
-    const NotificationClass severity_ = NotificationClass::INVALID_NOTIFICATION_CLASS;
-    const UnicodeString     str_;
+   const NotificationClass severity_ = NotificationClass::INVALID_NOTIFICATION_CLASS;
+   const UnicodeString str_;
 };
 
 inline NotificationClass Notification::Severity() const
 {
-    return severity_;
+   return severity_;
 }
 
 inline const UnicodeString& Notification::Str() const
 {
-    return str_;
+   return str_;
 }
 
 inline bool Notification::IsValid() const
 {
-    return (Str().empty() == false) && (Severity() != NotificationClass::INVALID_NOTIFICATION_CLASS);
+   return (Str().empty() == false) && (Severity() != NotificationClass::INVALID_NOTIFICATION_CLASS);
 }
 
 typedef std::vector<Notification> NotificationArray;

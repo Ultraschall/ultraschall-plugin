@@ -27,29 +27,51 @@
 #ifndef __ULTRASCHALL_REAPER_CUSTOM_ACTION_H_INCL__
 #define __ULTRASCHALL_REAPER_CUSTOM_ACTION_H_INCL__
 
+#include "ChapterTag.h"
 #include "Common.h"
 #include "ICustomAction.h"
 #include "ReaperProject.h"
-#include "ChapterTag.h"
 
 namespace ultraschall { namespace reaper {
 
+/// @brief The CustomAction class represents the base class for all custom actions.
 class CustomAction : public ICustomAction
 {
 public:
-    static const int32_t INVALID_CUSTOM_ACTION_ID = -1;
+   /// @brief A constant that specifies an invalid custom action ID.
+   static const int32_t INVALID_CUSTOM_ACTION_ID = -1;
 
-    static bool IsValidCustomActionId(const int32_t id);
+   /// @brief Checks whether the specified custom action ID is valid.
+   /// @param id The custom action ID to be checked.
+   /// @return <b>bool</b> Returns <b>true</b> if the custom action ID is valid; otherwise <b>false</b>.
+   static bool IsValidCustomActionId(const int32_t id);
 
 protected:
-    static bool HasValidProject();
-    static bool AreChapterMarkersValid(const ChapterTagArray& markers);
+   /// @brief Checks whether the current REAPER project has already been saved to disk
+   /// @return <b>bool</b> Returns <b>true</b> if the current project has been saved; otherwise <b>false</b>.
+   static bool HasValidProject();
 
-protected:
-    static ReaperProject CurrentProject();
-    static UnicodeString CurrentProjectDirectory();
-    static UnicodeString CurrentProjectName();
-    static UnicodeString CreateProjectPath(const UnicodeString& extension = "");
+   /// @brief Checks whether the specified chapter marker positions are within the range of the current recorded audio track.
+   /// @param markers The chapter markers to be checked.
+   /// @return <b>bool</b> Returns <b>true</b> if the chapter markers are valid; otherwise <b>false</b>.
+   static bool AreChapterMarkersValid(const ChapterTagArray& markers);
+
+   /// @brief Returns the current REAPER project.
+   /// @return <b>ReaperProject</b> The current REAPER project.
+   static ReaperProject CurrentProject();
+
+   /// @brief Returns the directory of the current REAPER project.
+   /// @return <b>UnicodeString</b> The directory of the current REAPER project.
+   static UnicodeString CurrentProjectDirectory();
+
+   /// @brief Returns the name of the current REAPER project.
+   /// @return <b>UnicodeString</b> The name of the current REAPER project.
+   static UnicodeString CurrentProjectName();
+
+   /// @brief Creates a project path with the specified extension.
+   /// @param extension The optional extension to be used.
+   /// @return <b>UnicodeString</b> The project path.
+   static UnicodeString CreateProjectPath(const UnicodeString& extension = "");
 };
 
 }} // namespace ultraschall::reaper

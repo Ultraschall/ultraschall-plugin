@@ -33,34 +33,58 @@
 
 namespace ultraschall { namespace reaper {
 
+/// @brief The CustomActionManager class implements a simple manager for custom actions.
 class CustomActionManager
 {
 public:
-    static CustomActionManager& Instance();
+   /// @brief Returns the singleton instance of the CustomActionManager class.
+   /// @return <b>CustomActionManager&</b> The singleton instance of the CustomActionManager class.
+   static CustomActionManager& Instance();
 
-    ServiceStatus RegisterCustomAction(const UnicodeString& name, const int32_t id, ICustomAction* pCustomAction);
+   /// @brief Registers a custom action with the manager.
+   /// @param name The unique name of the custom action.
+   /// @param id The unique identifier of the custom action.
+   /// @param pCustomAction The custom action to be registered.
+   /// @return <b>ServiceStatus</b> The status of the operation.
+   ServiceStatus RegisterCustomAction(const UnicodeString& name, const int32_t id, ICustomAction* pCustomAction);
 
-    void UnregisterCustomAction(const int32_t id);
-    void UnregisterCustomAction(const UnicodeString& name);
-    void UnregisterAllCustomActions();
+   /// @brief Unregisters a custom action from the manager.
+   /// @param id The unique identifier of the custom action.
+   void UnregisterCustomAction(const int32_t id);
 
-    ServiceStatus LookupCustomAction(const int32_t id, ICustomAction*& pCustomAction) const;
-    ServiceStatus LookupCustomAction(const UnicodeString& name, ICustomAction*& pCustomAction) const;
+   /// @brief Unregisters a custom action from the manager.
+   /// @param name The unique name of the custom action.
+   void UnregisterCustomAction(const UnicodeString& name);
+
+   /// @brief Unregisters all custom actions from the manager.
+   void UnregisterAllCustomActions();
+
+   /// @brief Creates a custom action with the specified unique identifier.
+   /// @param id The unique identifier of the custom action.
+   /// @param pCustomAction The custom action that has been created.
+   /// @return <b>ServiceStatus</b> The status of the operation.
+   ServiceStatus LookupCustomAction(const int32_t id, ICustomAction*& pCustomAction) const;
+
+   /// @brief Creates a custom action with the specified unique name.
+   /// @param name The unique name of the custom action.
+   /// @param pCustomAction The custom action that has been created.
+   /// @return <b>ServiceStatus</b> The status of the operation.
+   ServiceStatus LookupCustomAction(const UnicodeString& name, ICustomAction*& pCustomAction) const;
 
 protected:
-    virtual ~CustomActionManager();
+   virtual ~CustomActionManager();
 
 private:
-    CustomActionManager();
+   CustomActionManager();
 
-    CustomActionManager(const CustomActionManager&);
-    CustomActionManager& operator=(const CustomActionManager&);
+   CustomActionManager(const CustomActionManager&);
+   CustomActionManager& operator=(const CustomActionManager&);
 
-    typedef std::map<int32_t, ICustomAction*> CustomActionDictionary; 
-    CustomActionDictionary                    customActions_;
-    typedef std::map<UnicodeString, int32_t>    CustomActionIdDictionary;
-    CustomActionIdDictionary customActionIds_;
-    mutable std::recursive_mutex      customActionsLock_;
+   typedef std::map<int32_t, ICustomAction*> CustomActionDictionary;
+   CustomActionDictionary customActions_;
+   typedef std::map<UnicodeString, int32_t> CustomActionIdDictionary;
+   CustomActionIdDictionary customActionIds_;
+   mutable std::recursive_mutex customActionsLock_;
 };
 
 }} // namespace ultraschall::reaper

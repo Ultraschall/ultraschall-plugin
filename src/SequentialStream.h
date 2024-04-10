@@ -32,30 +32,46 @@
 
 namespace ultraschall { namespace reaper {
 
+/// @brief The SequentialStream class implements a simple sequential stream.
 class SequentialStream : public SharedObject
 {
 public:
-    static const size_t INVALID_DATA_SIZE = -1;
+   /// @brief A constant that represents an invalid data size.
+   static const size_t INVALID_DATA_SIZE = -1;
 
-    SequentialStream();
+   /// @brief Creates a new SequentialStream instance.
+   SequentialStream();
 
-    size_t DataSize() const;
+   /// @brief Returns the current size of the data.
+   /// @return The current size of the data.
+   size_t DataSize() const;
 
-    const uint8_t* Data() const;
+   /// @brief Returns the current data.
+   /// @return A pointer to the current data, or nullptr if no data is available.
+   const uint8_t* Data() const;
 
-    bool Write(const uint8_t* buffer, const size_t bufferSize);
-    size_t Read(uint8_t* buffer, const size_t bufferSize);
+   /// @brief Writes the specified data to the stream.
+   /// @param buffer The buffer that contains the data to be written.
+   /// @param bufferSize The size of the buffer.
+   /// @return <b>true</b> if the data was written successfully, <b>false</b> otherwise.
+   bool Write(const uint8_t* buffer, const size_t bufferSize);
+
+   /// @brief Reads the specified data from the stream.
+   /// @param buffer The buffer that receives the data.
+   /// @param bufferSize The size of the buffer.
+   /// @return The number of bytes that were read.
+   size_t Read(uint8_t* buffer, const size_t bufferSize);
 
 protected:
-    virtual ~SequentialStream();
+   virtual ~SequentialStream();
 
 private:
-    static const size_t DEFAULT_CHUNK_SIZE = 4096;
+   static const size_t DEFAULT_CHUNK_SIZE = 4096;
 
-    size_t   writePosition_ = 0;
-    size_t   readPosition_  = 0;
-    size_t   dataSize_      = INVALID_DATA_SIZE;
-    uint8_t* data_          = nullptr;
+   size_t writePosition_                  = 0;
+   size_t readPosition_                   = 0;
+   size_t dataSize_                       = INVALID_DATA_SIZE;
+   uint8_t* data_                         = nullptr;
 };
 
 }} // namespace ultraschall::reaper

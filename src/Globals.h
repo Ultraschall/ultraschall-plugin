@@ -29,17 +29,23 @@
 
 namespace ultraschall { namespace reaper {
 
+/// @brief The Globals class provides a set of global constants.
 struct Globals
 {
-    static constexpr size_t MAX_CHAPTER_TITLE_LENGTH = 62;
+   /// @brief The maximum length of a chapter title.
+   static constexpr size_t MAX_CHAPTER_TITLE_LENGTH             = 62;
 
-    static constexpr const double INVALID_MARKER_POSITION = -1;
+   /// @brief A constant that represents an invalid marker position.
+   static const constexpr double INVALID_MARKER_POSITION        = -1;
 
-    static constexpr const int DEFAULT_EDIT_MARKER_COLOR = 0x010000ff;
+   /// @brief A constant that represents the default color of a edit marker.
+   static const constexpr int DEFAULT_EDIT_MARKER_COLOR         = 0x010000ff;
 
-    static constexpr const int DEFAULT_CHAPTER_MARKER_COLOR = 0x00000000;
+   /// @brief A constant that represents the default color of a chapter marker.
+   static const constexpr int DEFAULT_CHAPTER_MARKER_COLOR      = 0x00000000;
 
-    static constexpr const size_t MIN_CHAPTER_MARKER_LINE_LENGTH = 5;  
+   /// @brief A constant that represents the minimum length of a chapter marker title.
+   static const constexpr size_t MIN_CHAPTER_MARKER_LINE_LENGTH = 5;
 };
 
 }} // namespace ultraschall::reaper

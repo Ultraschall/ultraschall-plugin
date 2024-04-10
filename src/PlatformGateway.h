@@ -30,37 +30,69 @@
 #include "Common.h"
 
 #ifdef _MSC_VER
-#define FastByteSwap16(x) _byteswap_ushort(x)
-#define FastByteSwap32(x) _byteswap_ulong(x)
-#define FastByteSwap64(x) _byteswap_uint64(x)
+   /// @brief Swaps the bytes of a 16-bit value.
+   #define FastByteSwap16(x) _byteswap_ushort(x)
+   /// @brief Swaps the bytes of a 32-bit value.
+   #define FastByteSwap32(x) _byteswap_ulong(x)
+   /// @brief Swaps the bytes of a 64-bit value.
+   #define FastByteSwap64(x) _byteswap_uint64(x)
 #else
-#define FastByteSwap16(x) __builtin_bswap16(x)
-#define FastByteSwap32(x) __builtin_bswap32(x)
-#define FastByteSwap64(x) __builtin_bswap64(x)
+   /// @brief Swaps the bytes of a 16-bit value.
+   #define FastByteSwap16(x) __builtin_bswap16(x)
+   /// @brief Swaps the bytes of a 32-bit value.
+   #define FastByteSwap32(x) __builtin_bswap32(x)
+   /// @brief Swaps the bytes of a 64-bit value.
+   #define FastByteSwap64(x) __builtin_bswap64(x)
 #endif // #ifdef _MSC_VER
 
 namespace ultraschall { namespace reaper {
 
+/// @brief The PlatformGateway class provides functions for platform-specific operations.
 class PlatformGateway
 {
 public:
-    static UnicodeString QueryReaperProfilePath();
+   /// @brief Returns the path to the REAPER profile.
+   /// @return The path to the REAPER profile.
+   static UnicodeString QueryReaperProfilePath();
 
-    static UnicodeChar QueryPathSeparator();
-    static size_t      QueryAvailableDiskSpace(const UnicodeString& directory);
+   /// @brief Returns the current platform's path separator.
+   /// @return The current platform's path separator.
+   static UnicodeChar QueryPathSeparator();
 
-    static UnicodeString SelectChaptersFile(
-        const UnicodeString& dialogCaption, const UnicodeString& initialDirectory = "",
-        const UnicodeString& initialFile = "");
-    static UnicodeString SelectAudioFile(
-        const UnicodeString& dialogCaption, const UnicodeString& initialDirectory = "",
-        const UnicodeString& initialFile = "");
-    static UnicodeString SelectPictureFile(
-        const UnicodeString& dialogCaption, const UnicodeString& initialDirectory = "",
-        const UnicodeString& initialFile = "");
+   /// @brief Returns the currently available disk space (checked against the user's quota).
+   /// @param directory The directory for which the available disk space will be checked.
+   /// @return The currently available disk space.
+   static size_t QueryAvailableDiskSpace(const UnicodeString& directory);
 
-    static UnicodeString SelectChaptersFileName(
-        const UnicodeString& dialogCaption, const UnicodeString& initialDirectory, const UnicodeString& initialFile);
+   /// @brief Selects a chapter file for opening.
+   /// @param dialogCaption The caption of the dialog.
+   /// @param initialDirectory The initial directory.
+   /// @param initialFile The initial file name.
+   /// @return The selected file name.
+   static UnicodeString
+   SelectChaptersFile(const UnicodeString& dialogCaption, const UnicodeString& initialDirectory = "", const UnicodeString& initialFile = "");
+
+   /// @brief Selects an audio file for opening.
+   /// @param dialogCaption The caption of the dialog.
+   /// @param initialDirectory The initial directory.
+   /// @param initialFile The initial file name.
+   /// @return The selected file name.
+   static UnicodeString SelectAudioFile(const UnicodeString& dialogCaption, const UnicodeString& initialDirectory = "", const UnicodeString& initialFile = "");
+
+   /// @brief Selects a picture file for opening.
+   /// @param dialogCaption The caption of the dialog.
+   /// @param initialDirectory The initial directory.
+   /// @param initialFile The initial file name.
+   /// @return The selected file name.
+   static UnicodeString
+   SelectPictureFile(const UnicodeString& dialogCaption, const UnicodeString& initialDirectory = "", const UnicodeString& initialFile = "");
+
+   /// @brief Selects a chapter file for saving.
+   /// @param dialogCaption The caption of the dialog.
+   /// @param initialDirectory The initial directory.
+   /// @param initialFile The initial file name.
+   /// @return The selected file name.
+   static UnicodeString SelectChaptersFileName(const UnicodeString& dialogCaption, const UnicodeString& initialDirectory, const UnicodeString& initialFile);
 };
 
 }} // namespace ultraschall::reaper

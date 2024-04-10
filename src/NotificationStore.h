@@ -36,48 +36,62 @@ namespace ultraschall { namespace reaper {
 class NotificationStore
 {
 public:
-    NotificationStore(const UnicodeString& messageContext);
-    ~NotificationStore();
+   /// @brief The NotificationStore constructor.
+   /// @param messageContext The context of the notification messages.
+   NotificationStore(const UnicodeString& messageContext);
 
-    inline void RegisterSuccess(const UnicodeString& str);
-    inline void RegisterWarning(const UnicodeString& str);
-    inline void RegisterError(const UnicodeString& str);
-    inline void RegisterFatalError(const UnicodeString& str);
+   /// @brief The NotificationStore destructor.
+   ~NotificationStore();
+
+   /// @brief Registers a new success notification.
+   /// @param str The notification message.
+   inline void RegisterSuccess(const UnicodeString& str);
+
+   /// @brief Registers a new warning notification.
+   /// @param str The notification message.
+   inline void RegisterWarning(const UnicodeString& str);
+
+   /// @brief Registers a new error notification.
+   /// @param str The notification message.
+   inline void RegisterError(const UnicodeString& str);
+
+   /// @brief Registers a new fatal error notification.
+   /// @param str The notification message.
+   inline void RegisterFatalError(const UnicodeString& str);
 
 private:
-    static const UnicodeString NOTIFICATION_SECTION_NAME;
-    static const UnicodeString NOTIFICATION_VALUE_COUNT_NAME;
-    static const UnicodeString NOTIFICATION_KEY_PREFIX_NAME;
+   static const UnicodeString NOTIFICATION_SECTION_NAME;
+   static const UnicodeString NOTIFICATION_VALUE_COUNT_NAME;
+   static const UnicodeString NOTIFICATION_KEY_PREFIX_NAME;
 
-    void RegisterNotification(const NotificationClass severity, const UnicodeString& str);
-    void DispatchNotifications();
-    void ClearNotifications();
+   void RegisterNotification(const NotificationClass severity, const UnicodeString& str);
+   void DispatchNotifications();
+   void ClearNotifications();
 
-    void DisplayNotifications();
+   void DisplayNotifications();
 
-    UnicodeString messageContext_;
-    NotificationQueue messageQueue_;
-    //void*               projectReference_;
+   UnicodeString messageContext_;
+   NotificationQueue messageQueue_;
 };
 
 inline void NotificationStore::RegisterSuccess(const UnicodeString& str)
 {
-    RegisterNotification(NotificationClass::NOTIFICATION_SUCCESS, str);
+   RegisterNotification(NotificationClass::NOTIFICATION_SUCCESS, str);
 }
 
 inline void NotificationStore::RegisterWarning(const UnicodeString& str)
 {
-    RegisterNotification(NotificationClass::NOTIFICATION_WARNING, str);
+   RegisterNotification(NotificationClass::NOTIFICATION_WARNING, str);
 }
 
 inline void NotificationStore::RegisterError(const UnicodeString& str)
 {
-    RegisterNotification(NotificationClass::NOTIFICATION_ERROR, str);
+   RegisterNotification(NotificationClass::NOTIFICATION_ERROR, str);
 }
 
 inline void NotificationStore::RegisterFatalError(const UnicodeString& str)
 {
-    RegisterNotification(NotificationClass::NOTIFICATION_FATAL_ERROR, str);
+   RegisterNotification(NotificationClass::NOTIFICATION_FATAL_ERROR, str);
 }
 
 }} // namespace ultraschall::reaper
