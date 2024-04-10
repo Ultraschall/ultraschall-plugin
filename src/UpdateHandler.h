@@ -31,57 +31,32 @@
 
 namespace ultraschall { namespace reaper {
 
-struct VERSION_TUPLE
-{
-    static const int INVALID_VERSION = -1;
-
-    static const int MIN_MAJOR_VERSION = 1;
-    static const int MIN_MINOR_VERSION = 0;
-    static const int MIN_PATCH_VERSION = 0;
-
-    int MAJOR;
-    int MINOR;
-    int PATCH;
-
-    static VERSION_TUPLE ParseString(const UnicodeString& versionString);
-
-    static bool IsValid(const VERSION_TUPLE version);
-
-private:
-    VERSION_TUPLE() : MAJOR(INVALID_VERSION), MINOR(INVALID_VERSION), PATCH(INVALID_VERSION) {}
-
-    static bool TryEvaluateValue(const UnicodeString& valueString, const int minValue, int& value);
-};
-
-bool operator==(const VERSION_TUPLE& lhs, const VERSION_TUPLE& rhs);
-bool operator<(const VERSION_TUPLE& lhs, const VERSION_TUPLE& rhs);
-
 class UpdateHandler
 {
 public:
-    static bool IsUpdateCheckRequired();
-    static void Check();
+   static bool IsUpdateCheckRequired();
+   static void Check();
 
 private:
-    static const UnicodeString CHECK_ENABLED_PROFILE_NAME;
-    static const UnicodeString CHECK_ENABLED_SECTION_NAME;
-    static const UnicodeString CHECK_ENABLED_VALUE_NAME;
+   static const UnicodeString CHECK_ENABLED_PROFILE_NAME;
+   static const UnicodeString CHECK_ENABLED_SECTION_NAME;
+   static const UnicodeString CHECK_ENABLED_VALUE_NAME;
 
-    static const UnicodeString LAST_CHECKPOINT_PROFILE_NAME;
-    static const UnicodeString LAST_CHECKPOINT_SECTION_NAME;
-    static const UnicodeString LAST_CHECKPOINT_VALUE_NAME;
+   static const UnicodeString LAST_CHECKPOINT_PROFILE_NAME;
+   static const UnicodeString LAST_CHECKPOINT_SECTION_NAME;
+   static const UnicodeString LAST_CHECKPOINT_VALUE_NAME;
 
-    static const double ONE_DAY_IN_SECONDS;
+   static const double ONE_DAY_IN_SECONDS;
 
-    static UnicodeStringArray DownloadServerUrls();
-    static UnicodeString      SanitizeVersionString(const UnicodeString& versionString);
+   static UnicodeStringArray DownloadServerUrls();
+   static UnicodeString SanitizeVersionString(const UnicodeString& versionString);
 
-    static bool   WriteLastUpdateTimestamp(const double timestamp);
-    static double ReadLastUpdateTimestamp();
+   static bool WriteLastUpdateTimestamp(const double timestamp);
+   static double ReadLastUpdateTimestamp();
 
-    static size_t ReceiveDataHandler(void* pData, size_t dataSize, size_t itemSize, void* pStream);
+   static size_t ReceiveDataHandler(void* pData, size_t dataSize, size_t itemSize, void* pStream);
 
-    static double QueryCurrentTimeAsSeconds();
+   static double QueryCurrentTimeAsSeconds();
 };
 
 }} // namespace ultraschall::reaper

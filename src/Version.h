@@ -24,58 +24,36 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ULTRASCHALL_REAPER_COMMON_H_INCL__
-#define __ULTRASCHALL_REAPER_COMMON_H_INCL__
+#ifndef __ULTRASCHALL_REAPER_VERSION_H_INCL__
+#define __ULTRASCHALL_REAPER_VERSION_H_INCL__
 
-#ifdef __GNUC__
-   #undef min
-   #undef max
-#endif // #ifdef __GNUC__
+#include "Common.h"
 
-#include <cctype>
-#include <cstdint>
-#include <cstdlib>
-#include <cstring>
+namespace ultraschall { namespace reaper {
 
-#include <deque>
-#include <map>
-#include <string>
-#include <vector>
+class Version
+{
+public:
+   Version(const std::string& version);
 
-#include <algorithm>
-#include <cmath>
-#include <functional>
+private:
+   int32_t major_ = 0;
+   int32_t minor_ = 0;
+   int32_t patch_ = 0;
 
-#include <fstream>
-#include <iomanip>
-#include <sstream>
+   std::vector<std::string> SplitString(const std::string& str, const char delimiter = ' ');
+   int32_t PositiveIntegerOrNull(const std::string& str);
 
-#include <atomic>
-#include <mutex>
+   friend bool operator==(const Version& lhs, const Version& rhs);
+   friend bool operator!=(const Version& lhs, const Version& rhs);
 
-#include <chrono>
-#include <ctime>
+   friend bool operator<(const Version& lhs, const Version& rhs);
+   friend bool operator<=(const Version& lhs, const Version& rhs);
 
-#include "Globals.h"
-#include "Malloc.h"
-#include "ServiceStatus.h"
-#include "SharedObject.h"
-#include "UnicodeString.h"
+   friend bool operator>(const Version& lhs, const Version& rhs);
+   friend bool operator>=(const Version& lhs, const Version& rhs);
+};
 
-#define PRECONDITION(a) \
-   {                    \
-      if ((a) == 0) {   \
-         return;        \
-      }                 \
-   }
+}} // namespace ultraschall::reaper
 
-#define PRECONDITION_RETURN(a, b) \
-   {                              \
-      if ((a) == 0) {             \
-         return (b);              \
-      }                           \
-   }
-
-#define ULTRASCHALL_VERSION "5.1.0"
-
-#endif // #ifndef __ULTRASCHALL_REAPER_COMMON_H_INCL__
+#endif // #ifndef __ULTRASCHALL_REAPER_VERSION_H_INCL__
