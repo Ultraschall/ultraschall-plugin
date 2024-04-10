@@ -31,6 +31,7 @@ source scripts/BuildTools.sh
 TOOLS_DIRECTORY=`pwd`/tools
 BUILD_DIRECTORY=`pwd`/build
 BUILD_CONFIGURATION=Debug
+BUILD_DOCUMENTATION=0
 BUILD_GENERATOR=Ninja
 CMAKE_EXTRA_ARGS=""
 
@@ -49,6 +50,8 @@ elif [ "$1" = "--cleanall" ]; then
 elif [ "$1" = "--clean" ]; then
   RemoveDirectory $BUILD_DIRECTORY
   exit 0
+elif [ "$1" = "--docs" ]; then
+  BUILD_DOCUMENTATION=1
 elif [ "$1" == "--rebuild" ]; then
   CMAKE_EXTRA_ARGS="--clean-first"
 elif [ "$1" == "--release" ]; then
@@ -86,6 +89,8 @@ if [ $CMAKE_INSTALL_FOUND -eq 0 ]; then
   fi
 fi
 
+
+
 if [ $CMAKE_INSTALL_FOUND -ne 0 ]; then
   echo "Configuring projects using $CMAKE_GENERATOR..."
   cmake -B "$BUILD_DIRECTORY" -G "$BUILD_GENERATOR" -Wno-dev --warn-uninitialized --warn-unused-vars -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION
@@ -102,6 +107,19 @@ if [ $CMAKE_INSTALL_FOUND -ne 0 ]; then
     exit -1
   fi
   echo "Done."
+
+  if [ $BUILD_DOCUMENTATION -ne 0 ]; then
+    echo "Building documentation using doxygen..."
+    cmake --build "$BUILD_DIRECTORY" --target doxygen
+    if [ $? -eq 0 ]; then
+      cd $BUILD_DIRECTORY/docs/latex && make && cp refman.pdf ../../../reaper_ultraschall.pdf && cd -
+    else
+      echo "Failed to build documentation."
+      exit -1
+    fi
+    echo "Done."
+  fi
+
 fi
 
 exit 0
