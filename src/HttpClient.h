@@ -46,7 +46,7 @@ public:
    /// @brief Downloads the specified URL.
    /// @param url The URL to be downloaded.
    /// @return <b>UnicodeString</b> The downloaded content.
-   UnicodeString DownloadUrl(const UnicodeString& url);
+   UnicodeString ReadString(const UnicodeString& url);
 
    /// @brief Encodes the specified URL.
    /// @param url The URL to be encoded.

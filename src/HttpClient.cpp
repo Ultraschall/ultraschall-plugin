@@ -70,11 +70,6 @@ UnicodeString HttpClient::ReadString(const UnicodeString& url)
    return result;
 }
 
-SequentialStream* HttpClient::ReadData(const UnicodeString& url)
-{
-   return 0;
-}
-
 size_t HttpClient::ReceiveDataHandler(void* pData, size_t dataSize, size_t itemSize, void* pParam)
 {
    PRECONDITION_RETURN(pData != 0, 0);
