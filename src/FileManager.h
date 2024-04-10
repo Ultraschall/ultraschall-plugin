@@ -96,6 +96,7 @@ public:
       PNG,
       /// @brief The file type is unknown.
       UNKNOWN_FILE_TYPE,
+      /// @brief The file type is not specified.
       MAX_FILE_TYPE = UNKNOWN_FILE_TYPE
    };
 

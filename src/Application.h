@@ -52,6 +52,7 @@ public:
    void Stop();
 
    /// @brief Registers a custom action for use in REAPER
+   /// @return <b>SERVICE_SUCCESS</b> if the operation completed successfully, <b>SERVICE_FAILURE</b> otherwise
    template<class CustomActionType> ServiceStatus RegisterCustomAction() const;
 
    /// @brief Remove a custom action from REAPER

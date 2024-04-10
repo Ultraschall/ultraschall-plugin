@@ -39,44 +39,56 @@ public:
    ChapterTag() : position_(Globals::INVALID_MARKER_POSITION) {}
 
    /// @brief  The constructor initializes a new ChapterTag instance.
+   /// @param  position The starting position of the chapter.
+   /// @param  title The title of the chapter.
    ChapterTag(const double position, const UnicodeString& title) : position_(position), title_(title) {}
 
    /// @brief  The constructor initializes a new ChapterTag instance.
+   /// @param  position The starting position of the chapter.
+   /// @param  title The title of the chapter.
+   /// @param  image The file path of the chapter image.
+   /// @param  url The URL of the chapter reference.
    ChapterTag(const double position, const UnicodeString& title, const UnicodeString& image, const UnicodeString& url) :
       position_(position), title_(title), image_(image), url_(url)
    {}
 
    /// @brief Returns the starting position of the chapter
+   /// @return The starting position of the chapter
    double Position() const
    {
       return position_;
    }
 
    /// @brief Returns the title of the chapter
+   /// @return The title of the chapter
    const UnicodeString& Title() const
    {
       return title_;
    }
 
    /// @brief Returns the file path of the chapter image
+   /// @return The file path of the chapter image
    const UnicodeString& Image() const
    {
       return image_;
    }
 
    /// @brief Sets the file path of the chapter image
+   /// @param image The file path of the chapter image
    void SetImage(const UnicodeString& image)
    {
       image_ = image;
    }
 
    /// @brief Returns the URL of the chapter reference
+   /// @return The URL of the chapter reference
    const UnicodeString& Url() const
    {
       return url_;
    }
 
    /// @brief Sets the URL of the chapter reference
+   /// @param url The URL of the chapter reference
    void SetUrl(const UnicodeString& url)
    {
       url_ = url;
