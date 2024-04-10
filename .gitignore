@@ -13,3 +13,10 @@ _build/
 
 .vscode/
 .vs/
+
+# latex intermediate files
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+reaper_ultraschall.pdf
