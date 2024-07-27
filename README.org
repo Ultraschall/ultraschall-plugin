@@ -63,7 +63,7 @@ reaper_ultraschall.dylib
 By default, the build script creates a development version of the plug-in, which includes debug symbols and runtime checks. The build targets are copied into the REAPER configuration so you can start using the debugger immediately. The REAPER configuration is located in different places on each platform. On Windows, it’s
 
 #+begin_src
-$ENV{APPDATA}/REAPER/UserPlugins
+$ENV:APPDATA/REAPER/UserPlugins
 #+end_src
 
 on Ubuntu, it’s
