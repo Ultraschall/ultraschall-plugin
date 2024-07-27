@@ -13,23 +13,24 @@ The source code of the Ultraschall REAPER Plug-in is managed with CMake. Therefo
 And of course, you also need a reasonably current version of Git. We always use the latest version, which is currently /Git 2.45.2/.
 
 ** Additionally Required Packages
+
 On Ubuntu, the Ultraschall REAPER plug-in additionally requires the package /libcurl4-openssl-dev/.
 
 * Build Instructions
 
-1) First, you need to download the source code
+First, open a terminal and navigate to the directory where you want to save the source code. On Windows, please use PowerShell, as the rest of this guide relies on it. Next, you need to download the source code
 
 #+begin_src
 git clone https://github.com/Ultraschall/ultraschall-plugin.git
 #+end_src
 
-2) Then switch to the Ultraschall-plugin directory.
+Then switch to the Ultraschall-plugin directory.
 
 #+begin_src
 cd ultraschall-plugin
 #+end_src
 
-3) Run the build script. On Windows use
+Run the build script. On Windows use
 
 #+begin_src
 ./build.ps1
@@ -41,9 +42,7 @@ and on Ubuntu and macOS use
 ./build.sh
 #+end_src
 
-The build script creates a platform-specific target.
-
-On Windows, it’s called
+The build script creates a platform-specific target. On Windows, it’s called
 
 #+begin_src
 reaper_ultraschall.dll
@@ -61,9 +60,7 @@ and on macOS, it’s
 reaper_ultraschall.dylib
 #+end_src
 
-By default, the build script creates a development version of the plug-in, which includes debug symbols and runtime checks. The build targets are copied into the REAPER configuration so you can start using the debugger immediately. The REAPER configuration is located in different places on each platform.
-
-On Windows, it’s
+By default, the build script creates a development version of the plug-in, which includes debug symbols and runtime checks. The build targets are copied into the REAPER configuration so you can start using the debugger immediately. The REAPER configuration is located in different places on each platform. On Windows, it’s
 
 #+begin_src
 $ENV{APPDATA}/REAPER/UserPlugins
