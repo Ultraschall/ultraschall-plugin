@@ -40,12 +40,11 @@ public:
    {
       /// @brief The picture format is JPEG.
       JPEG,
-
       /// @brief The picture format is PNG.
       PNG,
-
       /// @brief The picture format is unknown.
       UNKNOWN_PICTURE,
+      /// @brief The picture format is unsupported.
       MAX_FORMAT = UNKNOWN_PICTURE
    };
 
