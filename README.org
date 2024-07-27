@@ -1,0 +1,49 @@
+#+title: README
+#+author: Heiko Panjas <heiko@panjas.com>
+#+date: <2024-07-27 Sat>
+
+This repository contains the Ultraschall REAPER Plug-in. The Ultraschall REAPER Plug-in is a collection of extensions for the REAPER digital audio workstation that are designed to make podcasting with REAPER easier and more efficient.
+
+* Build Prerequisites
+
+The Ultraschall REAPER plug-in is written in C and C++, so you need a C/C++ compiler first. We recommend the latest version of the most commonly used compiler on each platform. That is *Microsoft Visual Studio 2022 17.10.5* for Windows, *GCC 13.2* for Ubuntu, and *Xcode 15.4* for macOS.
+
+The source code of the Ultraschall REAPER Plug-in is managed with /CMake/. Therefore, you need /CMake/ and a build tool. We use /Ninja/ because it works the same on every platform - Windows, Ubuntu, and macOS. Alternatively, you can use /MSBuild/ on Windows, and /GNU Make/ on Ubuntu and macOS. We recommend installing the latest versions of /CMake/ and /Ninja/. Currently, that’s *CMake 3.30.1* and *Ninja 1.12.1*.
+
+Of course, you also need a reasonably current version of /Git/. We always use the latest version, which is currently *Git 2.45.2*.
+
+** Additionally Required Packages
+On Ubuntu, the Ultraschall REAPER plug-in additionally requires the package /libcurl4-openssl-dev/.
+
+* Build Instructions
+
+1) First, you need to download the source code
+
+#+begin_src
+git clone https://github.com/Ultraschall/ultraschall-plugin.git
+#+end_src
+
+2) Then switch to the Ultraschall-plugin directory.
+
+#+begin_src
+cd ultraschall-plugin
+#+end_src
+
+3) Run the build script. On Windows use
+
+#+begin_src
+./build.ps1
+#+end_src
+and on Ubuntu and macOS use
+
+#+begin_src
+./build.sh
+#+end_src
+
+The build script creates a platform-specific target. On Windows, it’s called *reaper_ultraschall.dll*; on Ubuntu, it’s *reaper_ultraschall.so*; and on macOS, it’s *reaper_ultraschall.dylib*.
+
+By default, the build scripts create a development version of the plug-in, which includes debug symbols and runtime checks. The build targets are copied into the REAPER configuration so you can start using the debugger immediately. The REAPER configuration is located in different places on each platform. On Windows, it’s *$ENV{APPDATA}/REAPER/UserPlugins*; on Ubuntu, it’s *${HOME}/.config/REAPER/UserPlugins* and on macOS, it’s *${HOME}/Library/Application\ Support/REAPER/UserPlugins*.
+
+* Installation Instructions
+
+ An installation after the build is only necessary if you need a release version of the plug-in or if you want to distribute the plug-in after the build. To build a release version, you need to run the build script with the parameter *–release*. You can find the finished plug-in after the release build in the *./build/artifacts/* subdirectory. From this subdirectory, you only need to copy the plug-in - *reaper_ultraschall.dll*, *reaper_ultraschall.so*, or *reaper_ultraschall.dylib* - into the REAPER configuration (see above).
